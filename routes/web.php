@@ -18,23 +18,8 @@ use App\Http\Controllers\Admin\{
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/admin/login'); // เปลี่ยนเส้นทางไปยัง /admin/login
 });
-
-
-Route::get('/test-mail',function(){
-
-    $message = "Testing mail";
-
-    \Mail::raw('Hi, welcome!', function ($message) {
-      $message->to('ajayydavex@gmail.com')
-        ->subject('Testing mail');
-    });
-
-    dd('sent');
-
-});
-
 
 Route::get('/dashboard', function () {
     return view('front.dashboard');
