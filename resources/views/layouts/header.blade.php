@@ -22,7 +22,7 @@
         </div>
     </div>
 
-    <div class="flex items-center">    
+    <div class="flex items-center">
         <div x-data="{ dropdownOpen: false }" class="relative">
             <button @click="dropdownOpen = ! dropdownOpen"
                 class="relative block h-8 w-8 rounded-full overflow-hidden shadow focus:outline-none">
