@@ -7,7 +7,7 @@
                   @csrf
                   @method('post')
                 <div class="flex flex-col space-y-2">
-                  <label for="role_name" class="text-gray-700 select-none font-medium">Role Name</label>
+                  <label for="role_name" class="text-gray-700 select-none font-medium">ชื่อ Role</label>
                   <input
                     id="role_name"
                     type="text"
@@ -18,7 +18,7 @@
                   />
                 </div>
 
-                <h3 class="text-xl my-4 text-gray-600">Permissions</h3>
+                <h3 class="text-xl mt-6 my-4 text-gray-600">รายชื่อสิทธิ์</h3>
                 <div class="grid grid-cols-3 gap-4">
                   @foreach($permissions as $permission)
                       <div class="flex flex-col justify-cente">
@@ -32,13 +32,23 @@
                   @endforeach
                 </div>
                 <div class="text-center mt-16">
-                  <button type="submit" class="bg-blue-500 text-white font-bold px-5 py-1 rounded focus:outline-none shadow hover:bg-blue-500 transition-colors ">Submit</button>
+                  <button type="submit" class="bg-blue-500 text-white font-bold px-5 py-1 rounded focus:outline-none shadow hover:bg-blue-500 transition-colors ">บันทึก</button>
                 </div>
               </div>
-
-             
             </div>
         </main>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@if(session('success'))
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'สำเร็จ!',
+        text: '{{ session('success') }}',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'ตกลง'
+    });
+</script>
+@endif
 </x-app-layout>
