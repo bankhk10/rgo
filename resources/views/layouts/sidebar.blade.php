@@ -25,10 +25,10 @@
                             d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path>
                     </svg>
 
-                    <span class="mx-3">หน้าแรก</span>
+                    <span class="mx-3">All</span>
                 </a>
 
-                {{-- @canany('Role access','Role add','Role edit','Role delete')
+                @canany('Role access','Role add','Role edit','Role delete')
                 <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.roles.index') ? 'active' : '' }}"
                     href="{{ route('admin.roles.index') }}">
                     <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -40,9 +40,9 @@
 
                     <span class="mx-3">Role</span>
                 </a>
-                @endcanany --}}
+                @endcanany
 
-                {{-- @canany('Permission access','Permission add','Permission edit','Permission delete')
+                @canany('Permission access','Permission add','Permission edit','Permission delete')
                  <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.permissions.index') ? 'active' : '' }}"
                     href="{{ route('admin.permissions.index') }}">
                     <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -54,7 +54,7 @@
 
                     <span class="mx-3">Permission</span>
                 </a>
-                @endcanany --}}
+                @endcanany
 
                 @canany('User access','User add','User edit','User delete')
                 <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.users.index') ? 'active' : '' }}"
@@ -63,11 +63,11 @@
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                 </span>
 
-                    <span class="mx-3">ผู้ใช้งาน</span>
+                    <span class="mx-3">User</span>
                 </a>
                 @endcanany
 
-                {{-- @canany('Post access','Post add','Post edit','Post delete')
+                @canany('Post access','Post add','Post edit','Post delete')
                  <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.posts.index') ? 'active' : '' }}"
                     href="{{ route('admin.posts.index')}}">
                     <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -78,9 +78,9 @@
                     </svg>
                     <span class="mx-3">Post</span>
                 </a>
-                @endcanany --}}
+                @endcanany
 
-{{--
+
                 @canany('Mail access','Mail edit')
                  <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 {{ Route::currentRouteNamed('admin.mail.index') ? 'active' : '' }}"
                     href="{{ route('admin.mail.index')}}">
@@ -92,7 +92,7 @@
                     </svg>
                     <span class="mx-3">Setting</span>
                 </a>
-                @endcanany --}}
+                @endcanany
 
 
 
