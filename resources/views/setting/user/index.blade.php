@@ -67,11 +67,49 @@
                             @endcan
                         </tbody>
                     </table>
+                   <div class="px-6 py-4 bg-white border-t border-gray-200">
+                        @if ($users->hasPages())
+                            <div class="text-center">
+                                <nav class="inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+                                    {{-- Previous Page Link --}}
+                                    @if ($users->onFirstPage())
+                                        <span
+                                            class="px-3 py-2 text-sm text-gray-400 bg-white border border-gray-300 rounded-l-md cursor-not-allowed">&laquo;</span>
+                                    @else
+                                        <a href="{{ $users->previousPageUrl() }}"
+                                            class="px-3 py-2 text-sm text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 rounded-l-md">&laquo;</a>
+                                    @endif
+
+                                    {{-- Page Numbers --}}
+                                    @foreach ($users->getUrlRange(1, $users->lastPage()) as $page => $url)
+                                        @if ($page == $users->currentPage())
+                                            <span
+                                                class="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 border border-indigo-600">{{ $page }}</span>
+                                        @else
+                                            <a href="{{ $url }}"
+                                                class="px-4 py-2 text-sm text-gray-700 bg-white border border-gray-300 hover:bg-gray-50">{{ $page }}</a>
+                                        @endif
+                                    @endforeach
+
+                                    {{-- Next Page Link --}}
+                                    @if ($users->hasMorePages())
+                                        <a href="{{ $users->nextPageUrl() }}"
+                                            class="px-3 py-2 text-sm text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 rounded-r-md">&raquo;</a>
+                                    @else
+                                        <span
+                                            class="px-3 py-2 text-sm text-gray-400 bg-white border border-gray-300 rounded-r-md cursor-not-allowed">&raquo;</span>
+                                    @endif
+                                </nav>
+                            </div>
+                        @endif
+
+                    </div>
                 </div>
             </div>
         </main>
     </div>
 </x-app-layout>
+
 
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
