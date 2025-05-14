@@ -23,6 +23,7 @@ class CreateMailsettingsTable extends Migration
             $table->string('mail_encryption');
             $table->string('mail_from');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
