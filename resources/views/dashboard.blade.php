@@ -1,8 +1,5 @@
 @php
     $expiredCount = 2;
-    $nearExpiryCount = 3;
-    $activeCount = 5;
-
     $nearExpiryDrugs = collect([
         (object)[
             'name' => 'ยาเม็ดวิตามินรวม',
@@ -19,9 +16,66 @@
             'registration_number' => '987654',
             'expiry_date' => \Carbon\Carbon::now()->addDays(5),
         ],
+        (object)[
+            'name' => 'ยาเม็ดวิตามินรวม',
+            'registration_number' => '123456',
+            'expiry_date' => \Carbon\Carbon::now()->addDays(10),
+        ],
+        (object)[
+            'name' => 'น้ำมันตับปลาชนิดแคปซูล',
+            'registration_number' => '654321',
+            'expiry_date' => \Carbon\Carbon::now()->addDays(20),
+        ],
+        (object)[
+            'name' => 'ยาแก้ปวดพาราเซตามอล',
+            'registration_number' => '987654',
+            'expiry_date' => \Carbon\Carbon::now()->addDays(5),
+        ],
+        (object)[
+            'name' => 'ยาเม็ดวิตามินรวม',
+            'registration_number' => '123456',
+            'expiry_date' => \Carbon\Carbon::now()->addDays(10),
+        ],
+        (object)[
+            'name' => 'น้ำมันตับปลาชนิดแคปซูล',
+            'registration_number' => '654321',
+            'expiry_date' => \Carbon\Carbon::now()->addDays(20),
+        ],
+        (object)[
+            'name' => 'ยาแก้ปวดพาราเซตามอล',
+            'registration_number' => '987654',
+            'expiry_date' => \Carbon\Carbon::now()->addDays(5),
+        ],
+        (object)[
+            'name' => 'ยาเม็ดวิตามินรวม',
+            'registration_number' => '123456',
+            'expiry_date' => \Carbon\Carbon::now()->addDays(10),
+        ],
+        (object)[
+            'name' => 'น้ำมันตับปลาชนิดแคปซูล',
+            'registration_number' => '654321',
+            'expiry_date' => \Carbon\Carbon::now()->addDays(20),
+        ],
+        (object)[
+            'name' => 'ยาแก้ปวดพาราเซตามอล',
+            'registration_number' => '987654',
+            'expiry_date' => \Carbon\Carbon::now()->addDays(5),
+        ],
     ]);
-@endphp
+    $nearExpiryCount = $nearExpiryDrugs->count();
+    $activeCount = 5;
 
+    // Manually paginate the collection
+    $perPage = 10;
+    $currentPage = request()->get('page', 1);
+    $paginatedNearExpiryDrugs = new \Illuminate\Pagination\LengthAwarePaginator(
+        $nearExpiryDrugs->forPage($currentPage, $perPage),
+        $nearExpiryDrugs->count(),
+        $perPage,
+        $currentPage,
+        ['path' => request()->url()]
+    );
+@endphp
 
 <x-app-layout>
     <div>
@@ -50,7 +104,7 @@
 
                 {{-- รายการทะเบียนใกล้หมดอายุ --}}
                 <div class="bg-white shadow-md rounded-lg overflow-hidden">
-                    <h2 class="text-2xl font-semibold text-gray-700 bg-indigo-100 px-6 py-4">ทะเบียนใกล้หมดอายุ</h2>
+                    <h2 class="text-2xl font-semibold text-gray-700 px-6 py-4">ทะเบียนใกล้หมดอายุ</h2>
                     <table class="min-w-full bg-white">
                         <thead>
                             <tr class="bg-indigo-600 text-white text-left">
@@ -62,9 +116,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($nearExpiryDrugs as $index => $drug)
+                            @forelse ($paginatedNearExpiryDrugs as $index => $drug)
                                 <tr class="border-b hover:bg-gray-100">
-                                    <td class="py-3 px-6">{{ $index + 1 }}</td>
+                                    <td class="py-3 px-6">{{ ($paginatedNearExpiryDrugs->currentPage() - 1) * $paginatedNearExpiryDrugs->perPage() + $index + 1 }}</td>
                                     <td class="py-3 px-6">{{ $drug->name }}</td>
                                     <td class="py-3 px-6">{{ $drug->registration_number }}</td>
                                     <td class="py-3 px-6">{{ $drug->expiry_date->format('d/m/Y') }}</td>
@@ -79,6 +133,10 @@
                             @endforelse
                         </tbody>
                     </table>
+
+                    <div class="px-6 py-4 bg-white border-t border-gray-200">
+                        {{ $paginatedNearExpiryDrugs->links() }}
+                    </div>
                 </div>
 
             </div>
