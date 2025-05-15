@@ -1,40 +1,191 @@
 <x-app-layout>
-   <div>
-        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
-            <div class="container mx-auto px-6 py-1 pb-16">
-              <div class="bg-white shadow-md rounded my-6 p-5">
-                <form method="POST" action="{{ route('admin.posts.store') }}">
-                  @csrf
-                  <div class="flex flex-col space-y-2">
-                    <label for="title" class="text-gray-700 select-none font-medium">Title</label>
-                    <input id="title" type="text" name="title" value="{{ old('title') }}"
-                      placeholder="Enter title" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200"
-                    />
+    <div class="min-h-screen flex items-center justify-center bg-gradient-to-tr from-purple-200 to-blue-100">
+        <main class="w-full max-w-5xl bg-white rounded-3xl shadow-lg p-10">
+            <!-- Stepper -->
+            <div class="flex justify-between items-center mb-8">
+                <div class="flex-1 flex flex-col items-center">
+                    <span class="text-sm font-semibold mb-1">Registration</span>
+                    <div id="stepIndicator1" class="w-6 h-6 flex items-center justify-center rounded-full border-2 border-blue-500 bg-green-400 text-white font-bold transition-all duration-200">1</div>
                 </div>
-        
-                <div class="flex flex-col space-y-2">
-                    <label for="description" class="text-gray-700 select-none font-medium">Description</label>
-                    <textarea name="description" id="description" placeholder="Enter description" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200" rows="5">{{ old('description') }}</textarea>
+                <div class="flex-1 flex flex-col items-center">
+                    <span class="text-sm font-semibold mb-1">Protocol (Efficacy)</span>
+                    <div id="stepIndicator2" class="w-6 h-6 flex items-center justify-center rounded-full border-2 border-gray-300 bg-gray-200 text-gray-400 font-bold transition-all duration-200">2</div>
                 </div>
-    
-                <h3 class="text-xl my-4 text-gray-600">Role</h3>
-                <div class="grid grid-cols-3 gap-4">
-                  <div class="relative inline-flex">
-                    <svg class="w-2 h-2 absolute top-0 right-0 m-4 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 412 232"><path d="M206 171.144L42.678 7.822c-9.763-9.763-25.592-9.763-35.355 0-9.763 9.764-9.763 25.592 0 35.355l181 181c4.88 4.882 11.279 7.323 17.677 7.323s12.796-2.441 17.678-7.322l181-181c9.763-9.764 9.763-25.592 0-35.355-9.763-9.763-25.592-9.763-35.355 0L206 171.144z" fill="#648299" fill-rule="nonzero"/></svg>
-                    <select class="border border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none" name="publish">
-                      <option value="0">Draft</option>
-                      <option value="1">Publish</option>
-                    </select>
-                  </div>
+                <div class="flex-1 flex flex-col items-center">
+                    <span class="text-sm font-semibold mb-1">Report (Efficacy)</span>
+                    <div id="stepIndicator3" class="w-6 h-6 flex items-center justify-center rounded-full border-2 border-gray-300 bg-gray-200 text-gray-400 font-bold transition-all duration-200">3</div>
                 </div>
-                <div class="text-center mt-16 mb-16">
-                  <button type="submit" class="bg-blue-500 text-white font-bold px-5 py-1 rounded focus:outline-none shadow hover:bg-blue-500 transition-colors ">Submit</button>
+                <div class="flex-1 flex flex-col items-center">
+                    <span class="text-sm font-semibold mb-1">Protocol (Residue)</span>
+                    <div id="stepIndicator4" class="w-6 h-6 flex items-center justify-center rounded-full border-2 border-gray-300 bg-gray-200 text-gray-400 font-bold transition-all duration-200">4</div>
                 </div>
-              </div>
-
-             
+                <div class="flex-1 flex flex-col items-center">
+                    <span class="text-sm font-semibold mb-1">Report (Residue)</span>
+                    <div id="stepIndicator5" class="w-6 h-6 flex items-center justify-center rounded-full border-2 border-gray-300 bg-gray-200 text-gray-400 font-bold transition-all duration-200">5</div>
+                </div>
             </div>
+            <hr class="mb-8">
+
+            <form method="POST" action="{{ route('admin.posts.store') }}" id="multiStepForm">
+                @csrf
+
+                <!-- Step 1 -->
+                <div id="step1">
+                    <div class="grid grid-cols-2 gap-x-10 gap-y-6">
+                        <label class="flex items-center justify-end text-lg font-medium text-gray-700">ชื่อสามัญ (Eng) :</label>
+                        <input type="text" name="common_name" class="border rounded-lg px-4 py-2 w-full" placeholder="-" />
+
+                        <label class="flex items-center justify-end text-lg font-medium text-gray-700">เปอร์เซ็นและสูตร :</label>
+                        <input type="text" name="percent_formula" class="border rounded-lg px-4 py-2 w-full" placeholder="-" />
+
+                        <label class="flex items-center justify-end text-lg font-medium text-gray-700">ชื่อการค้า :</label>
+                        <input type="text" name="trade_name" class="border rounded-lg px-4 py-2 w-full" placeholder="-" />
+
+                        <label class="flex items-center justify-end text-lg font-medium text-gray-700">ผู้ยื่นขอขึ้นทะเบียน :</label>
+                        <input type="text" name="registrant" class="border rounded-lg px-4 py-2 w-full" placeholder="-" />
+
+                        <label class="flex items-center justify-end text-lg font-medium text-gray-700">ผู้จำหน่าย :</label>
+                        <input type="text" name="distributor" class="border rounded-lg px-4 py-2 w-full" placeholder="-" />
+
+                        <label class="flex items-center justify-end text-lg font-medium text-gray-700">ผู้นำเข้า :</label>
+                        <input type="text" name="importer" class="border rounded-lg px-4 py-2 w-full" placeholder="-" />
+
+                        <label class="flex items-center justify-end text-lg font-medium text-gray-700">Trial (สรุปฝ่ายขาย) :</label>
+                        <input type="text" name="trial" class="border rounded-lg px-4 py-2 w-full" placeholder="-" />
+                    </div>
+                    <div class="flex justify-end mt-10">
+                        <button type="button" id="nextBtn"
+                            class="bg-indigo-600 text-white font-bold px-10 py-2 rounded-full shadow hover:bg-indigo-700 transition-colors text-lg">ถัดไป</button>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div id="step2" class="hidden">
+                    <div class="text-center text-2xl text-gray-600 mb-10">Protocol (Efficacy)</div>
+                    <div class="grid grid-cols-2 gap-x-10 gap-y-6">
+                        <label class="flex items-center justify-end text-lg font-medium text-gray-700">รายละเอียด Protocol :</label>
+                        <input type="text" name="protocol_detail" class="border rounded-lg px-4 py-2 w-full" placeholder="-" />
+                    </div>
+                    <div class="flex justify-between mt-10">
+                        <button type="button" id="prevBtn"
+                            class="bg-gray-400 text-white font-bold px-10 py-2 rounded-full shadow hover:bg-gray-500 transition-colors text-lg">ย้อนกลับ</button>
+                        <button type="button" id="nextBtn2"
+                            class="bg-indigo-600 text-white font-bold px-10 py-2 rounded-full shadow hover:bg-indigo-700 transition-colors text-lg">ถัดไป</button>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div id="step3" class="hidden">
+                    <div class="text-center text-2xl text-gray-600 mb-10">Report (Efficacy)</div>
+                    <div class="grid grid-cols-2 gap-x-10 gap-y-6">
+                        <label class="flex items-center justify-end text-lg font-medium text-gray-700">รายละเอียด Report (Efficacy) :</label>
+                        <input type="text" name="report_efficacy_detail" class="border rounded-lg px-4 py-2 w-full" placeholder="-" />
+                    </div>
+                    <div class="flex justify-between mt-10">
+                        <button type="button" id="prevBtn3"
+                            class="bg-gray-400 text-white font-bold px-10 py-2 rounded-full shadow hover:bg-gray-500 transition-colors text-lg">ย้อนกลับ</button>
+                        <button type="button" id="nextBtn3"
+                            class="bg-indigo-600 text-white font-bold px-10 py-2 rounded-full shadow hover:bg-indigo-700 transition-colors text-lg">ถัดไป</button>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div id="step4" class="hidden">
+                    <div class="text-center text-2xl text-gray-600 mb-10">Protocol (Residue)</div>
+                    <div class="grid grid-cols-2 gap-x-10 gap-y-6">
+                        <label class="flex items-center justify-end text-lg font-medium text-gray-700">รายละเอียด Protocol (Residue) :</label>
+                        <input type="text" name="protocol_residue_detail" class="border rounded-lg px-4 py-2 w-full" placeholder="-" />
+                    </div>
+                    <div class="flex justify-between mt-10">
+                        <button type="button" id="prevBtn4"
+                            class="bg-gray-400 text-white font-bold px-10 py-2 rounded-full shadow hover:bg-gray-500 transition-colors text-lg">ย้อนกลับ</button>
+                        <button type="submit"
+                            class="bg-indigo-600 text-white font-bold px-10 py-2 rounded-full shadow hover:bg-indigo-700 transition-colors text-lg">บันทึก</button>
+                    </div>
+                </div>
+
+
+            </form>
         </main>
     </div>
-</div>
+
+    <script>
+        // Stepper logic
+        const steps = [
+            document.getElementById('step1'),
+            document.getElementById('step2'),
+            document.getElementById('step3'),
+            document.getElementById('step4')
+        ];
+        const indicators = [
+            document.getElementById('stepIndicator1'),
+            document.getElementById('stepIndicator2'),
+            document.getElementById('stepIndicator3'),
+            document.getElementById('stepIndicator4'),
+            document.getElementById('stepIndicator5')
+        ];
+        let currentStep = 0;
+
+        function showStep(idx) {
+            steps.forEach((step, i) => {
+                if (step) step.classList.toggle('hidden', i !== idx);
+            });
+            indicators.forEach((ind, i) => {
+                // Reset all indicators
+                ind.classList.remove('bg-green-400', 'text-white', 'border-blue-500', 'bg-gray-200', 'text-gray-400', 'border-gray-300');
+                ind.innerHTML = (i + 1).toString();
+                // Completed steps
+                if (i < idx) {
+                    ind.classList.add('bg-green-400', 'text-white', 'border-blue-500');
+                    ind.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg>`;
+                }
+                // Current step
+                else if (i === idx) {
+                    ind.classList.add('bg-green-400', 'text-white', 'border-blue-500');
+                }
+                // Next steps
+                else {
+                    ind.classList.add('bg-gray-200', 'text-gray-400', 'border-gray-300');
+                }
+            });
+        }
+
+        document.getElementById('nextBtn').onclick = function () {
+            if (currentStep < steps.length - 1) {
+                currentStep++;
+                showStep(currentStep);
+            }
+        };
+        document.getElementById('nextBtn2').onclick = function () {
+            if (currentStep < steps.length - 1) {
+                currentStep++;
+                showStep(currentStep);
+            }
+        };
+        document.getElementById('nextBtn3').onclick = function () {
+            if (currentStep < steps.length - 1) {
+                currentStep++;
+                showStep(currentStep);
+            }
+        };
+        document.getElementById('prevBtn').onclick = function () {
+            if (currentStep > 0) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        };
+        document.getElementById('prevBtn3').onclick = function () {
+            if (currentStep > 0) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        };
+        document.getElementById('prevBtn4').onclick = function () {
+            if (currentStep > 0) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        };
+        showStep(currentStep);
+    </script>
 </x-app-layout>
