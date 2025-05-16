@@ -1,0 +1,23 @@
+{
+  "tabWidth": 4,
+  "useTabs": false,
+  "semi": true,
+  "singleQuote": true,
+  "printWidth": 100,
+  "trailingComma": "es5",
+  "bracketSpacing": true,
+  "arrowParens": "always",
+  "plugins": ["./node_modules/prettier-plugin-blade"],
+  "overrides": [
+    {
+      "files": "*.blade.php",
+      "options": {
+        "parser": "blade",
+        "printWidth": 100,
+        "tabWidth": 4,
+        "wrapAttributes": "force-aligned",
+        "endWithNewline": true
+      }
+    }
+  ]
+}
