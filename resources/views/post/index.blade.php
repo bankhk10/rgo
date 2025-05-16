@@ -8,7 +8,7 @@
                     </h1>
                     @can('Post create')
                         <a href="{{ route('admin.posts.create') }}"
-                            class="bg-blue-500 text-white font-bold px-5 py-2 rounded-lg shadow hover:bg-blue-600 transition duration-300">
+                           class="bg-blue-500 text-white font-bold px-5 py-2 rounded-lg shadow hover:bg-blue-600 transition duration-300">
                             + สร้างโพสต์ใหม่
                         </a>
                     @endcan
@@ -33,30 +33,31 @@
                                         <td class="py-3 px-6 text-left">
                                             @if ($post->publish)
                                                 <span
-                                                    class="inline-block bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">Publish</span>
+                                                      class="inline-block bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">Publish</span>
                                             @else
                                                 <span
-                                                    class="inline-block bg-gray-500 text-white text-xs font-bold px-2 py-1 rounded-full">Draft</span>
+                                                      class="inline-block bg-gray-500 text-white text-xs font-bold px-2 py-1 rounded-full">Draft</span>
                                             @endif
                                         </td>
                                         <td class="py-3 px-6 text-right">
                                             <div class="flex justify-end space-x-2">
                                                 @can('Post edit')
                                                     <a href="{{ route('admin.posts.edit', $post->id) }}"
-                                                        class="bg-yellow-500 text-white font-bold py-2 px-4 rounded-lg shadow hover:bg-yellow-600 transition duration-300">
+                                                       class="bg-yellow-500 text-white font-bold py-2 px-4 rounded-lg shadow hover:bg-yellow-600 transition duration-300">
                                                         แก้ไข
                                                     </a>
                                                 @endcan
 
                                                 @can('Post delete')
                                                     <button onclick="confirmDelete({{ $post->id }})"
-                                                        class="bg-red-500 text-white font-bold py-2 px-4 rounded-lg shadow hover:bg-red-600 transition duration-300">
+                                                            class="bg-red-500 text-white font-bold py-2 px-4 rounded-lg shadow hover:bg-red-600 transition duration-300">
                                                         ลบ
                                                     </button>
 
                                                     <form id="delete-form-{{ $post->id }}"
-                                                        action="{{ route('admin.posts.destroy', $post->id) }}" method="POST"
-                                                        style="display: none;">
+                                                          action="{{ route('admin.posts.destroy', $post->id) }}"
+                                                          method="POST"
+                                                          style="display: none;">
                                                         @csrf
                                                         @method('delete')
                                                     </form>
