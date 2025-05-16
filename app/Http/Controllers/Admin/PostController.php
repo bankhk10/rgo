@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use Auth;
+
 class PostController extends Controller
 {
     /**
@@ -14,9 +16,9 @@ class PostController extends Controller
      */
     function __construct()
     {
-        $this->middleware('role_or_permission:Post access|Post create|Post edit|Post delete', ['only' => ['index','show']]);
-        $this->middleware('role_or_permission:Post create', ['only' => ['create','store']]);
-        $this->middleware('role_or_permission:Post edit', ['only' => ['edit','update']]);
+        $this->middleware('role_or_permission:Post access|Post create|Post edit|Post delete', ['only' => ['index', 'show']]);
+        $this->middleware('role_or_permission:Post create', ['only' => ['create', 'store']]);
+        $this->middleware('role_or_permission:Post edit', ['only' => ['edit', 'update']]);
         $this->middleware('role_or_permission:Post delete', ['only' => ['destroy']]);
     }
 
@@ -27,9 +29,9 @@ class PostController extends Controller
      */
     public function index()
     {
-        $Post= Post::paginate(4);
+        $Post = Post::paginate(4);
 
-        return view('post.index',['posts'=>$Post]);
+        return view('post.index', ['posts' => $Post]);
     }
 
     /**
@@ -50,7 +52,7 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $data= $request->all();
+        $data = $request->all();
         $data['user_id'] = Auth::user()->id;
         $Post = Post::create($data);
         return redirect()->back()->withSuccess('Post created !!!');
@@ -75,7 +77,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-       return view('post.edit',['post' => $post]);
+        return view('post.edit', ['post' => $post]);
     }
 
     /**
