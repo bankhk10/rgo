@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use Auth;
+use Illuminate\Support\Facades\Log;
 
 class PostController extends Controller
 {
@@ -29,8 +30,9 @@ class PostController extends Controller
      */
     public function index()
     {
-        $Post = Post::paginate(4);
-
+        $Post = Post::paginate(10);
+        // $permissions = Permission::latest()->paginate(10);
+        // return view('setting.permission.index', ['permissions' => $permissions]);
         return view('post.index', ['posts' => $Post]);
     }
 
@@ -53,7 +55,12 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
+        // dd($data);
+        // Log::info("message", $data);
         $data['user_id'] = Auth::user()->id;
+        $data['title'] = 'admin';
+        $data['description'] = 'admin';
+        // $data['title'] = 'admin';
         $Post = Post::create($data);
         return redirect()->back()->withSuccess('Post created !!!');
     }

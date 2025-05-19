@@ -16,7 +16,7 @@
                 <table class="min-w-full bg-white rounded-lg shadow">
                     <thead>
                         <tr>
-                            <th class="px-4 py-2 text-left text-gray-700 font-semibold">#</th>
+                            <th class="px-4 py-2 text-left text-gray-700 font-semibold">ลำดับ</th>
                             <th class="px-4 py-2 text-left text-gray-700 font-semibold">ชื่อสามัญ (Eng)</th>
                             <th class="px-4 py-2 text-left text-gray-700 font-semibold">ชื่อการค้า</th>
                             <th class="px-4 py-2 text-left text-gray-700 font-semibold">ผู้ยื่นขอ</th>
@@ -28,9 +28,10 @@
                         @forelse($posts as $post)
                             <tr class="border-b hover:bg-blue-50 transition">
                                 <td class="px-4 py-2">{{ $loop->iteration }}</td>
-                                <td class="px-4 py-2">{{ $post->common_name }}</td>
+                                <td class="px-4 py-2">{{ $post->common_name_eng }}</td>
                                 <td class="px-4 py-2">{{ $post->trade_name }}</td>
                                 <td class="px-4 py-2">{{ $post->registrant }}</td>
+                                {{-- <td class="px-4 py-2">{{ $post->registrant }}</td> --}}
                                 <td class="px-4 py-2">
                                     <span
                                           class="inline-block px-3 py-1 rounded-full
@@ -66,6 +67,43 @@
                         @endforelse
                     </tbody>
                 </table>
+                <div class="px-6 py-4 bg-white border-t border-gray-200">
+                    @if ($posts->hasPages())
+                        <div class="text-center">
+                            <nav class="inline-flex -space-x-px rounded-md shadow-sm"
+                                 aria-label="Pagination">
+                                {{-- Previous Page Link --}}
+                                @if ($posts->onFirstPage())
+                                    <span
+                                          class="px-3 py-2 text-sm text-gray-400 bg-white border border-gray-300 rounded-l-md cursor-not-allowed">&laquo;</span>
+                                @else
+                                    <a href="{{ $posts->previousPageUrl() }}"
+                                       class="px-3 py-2 text-sm text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 rounded-l-md">&laquo;</a>
+                                @endif
+
+                                {{-- Page Numbers --}}
+                                @foreach ($posts->getUrlRange(1, $posts->lastPage()) as $page => $url)
+                                    @if ($page == $posts->currentPage())
+                                        <span
+                                              class="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 border border-indigo-600">{{ $page }}</span>
+                                    @else
+                                        <a href="{{ $url }}"
+                                           class="px-4 py-2 text-sm text-gray-700 bg-white border border-gray-300 hover:bg-gray-50">{{ $page }}</a>
+                                    @endif
+                                @endforeach
+
+                                {{-- Next Page Link --}}
+                                @if ($posts->hasMorePages())
+                                    <a href="{{ $posts->nextPageUrl() }}"
+                                       class="px-3 py-2 text-sm text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 rounded-r-md">&raquo;</a>
+                                @else
+                                    <span
+                                          class="px-3 py-2 text-sm text-gray-400 bg-white border border-gray-300 rounded-r-md cursor-not-allowed">&raquo;</span>
+                                @endif
+                            </nav>
+                        </div>
+                    @endif
+                </div>
             </div>
         </main>
     </div>

@@ -49,43 +49,43 @@
                         <input type="text"
                                name="common_name_eng"
                                class="col-span-1 border rounded-lg px-4 py-2 w-full"
-                               placeholder="-" />
+                               placeholder="" />
 
                         <label class="col-span-1 text-lg font-medium text-gray-700">เปอร์เซ็นและสูตร :</label>
                         <input type="text"
                                name="percent_formula"
                                class="col-span-1 border rounded-lg px-4 py-2 w-full"
-                               placeholder="-" />
+                               placeholder="" />
 
                         <label class="col-span-1 text-lg font-medium text-gray-700">ชื่อการค้า :</label>
                         <input type="text"
                                name="trade_name"
                                class="col-span-1 border rounded-lg px-4 py-2 w-full"
-                               placeholder="-" />
+                               placeholder="" />
 
                         <label class="col-span-1 text-lg font-medium text-gray-700">ผู้ยื่นขอขึ้นทะเบียน :</label>
                         <input type="text"
                                name="registrant"
                                class="col-span-1 border rounded-lg px-4 py-2 w-full"
-                               placeholder="-" />
+                               placeholder="" />
 
                         <label class="col-span-1 text-lg font-medium text-gray-700">ผู้จำหน่าย :</label>
                         <input type="text"
                                name="distributor"
                                class="col-span-1 border rounded-lg px-4 py-2 w-full"
-                               placeholder="-" />
+                               placeholder="" />
 
                         <label class="col-span-1 text-lg font-medium text-gray-700">ผู้นำเข้า :</label>
                         <input type="text"
                                name="importer"
                                class="col-span-1 border rounded-lg px-4 py-2 w-full"
-                               placeholder="-" />
+                               placeholder="" />
 
                         <label class="col-span-1 text-lg font-medium text-gray-700">Trial (สรุปฝ่ายขาย) :</label>
                         <input type="text"
                                name="trial_summary"
                                class="col-span-1 border rounded-lg px-4 py-2 w-full"
-                               placeholder="-" />
+                               placeholder="" />
 
                         <label
                                class="col-span-1 text-lg font-medium text-gray-700">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
@@ -99,33 +99,33 @@
                         <input type="text"
                                name="crop"
                                class="col-span-1 border rounded-lg px-4 py-2 w-full"
-                               placeholder="-" />
+                               placeholder="" />
 
                         <label class="col-span-1 text-lg font-medium text-gray-700">Pest :</label>
                         <input type="text"
                                name="pest"
                                class="col-span-1 border rounded-lg px-4 py-2 w-full"
-                               placeholder="-" />
+                               placeholder="" />
 
                         <label class="col-span-1 text-lg font-medium text-gray-700">ส่งแผนการทดลองให้แผนกทะเบียน
                             :</label>
                         <input type="text"
                                name="protocol_sent"
                                class="col-span-1 border rounded-lg px-4 py-2 w-full"
-                               placeholder="-" />
+                               placeholder="" />
 
                         <label class="col-span-1 text-lg font-medium text-gray-700">Inspector ให้แก้ไขแผนการทดลอง
                             (Status):</label>
                         <input type="text"
                                name="protocol_inspector_status"
                                class="col-span-1 border rounded-lg px-4 py-2 w-full"
-                               placeholder="-" />
+                               placeholder="" />
 
                         <label class="col-span-1 text-lg font-medium text-gray-700">แผนการทดลอง (Approved) :</label>
                         <input type="text"
                                name="protocol_approved"
                                class="col-span-1 border rounded-lg px-4 py-2 w-full"
-                               placeholder="-" />
+                               placeholder="" />
 
                         <label
                                class="col-span-1 text-lg font-medium text-gray-700">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
@@ -139,27 +139,27 @@
                         <input type="text"
                                name="efficacy_report_sent"
                                class="col-span-1 border rounded-lg px-4 py-2 w-full"
-                               placeholder="-" />
+                               placeholder="" />
 
                         <label class="col-span-1 text-lg font-medium text-gray-700">Efficacy Status :</label>
                         <input type="text"
                                name="efficacy_status"
                                class="col-span-1 border rounded-lg px-4 py-2 w-full"
-                               placeholder="-" />
+                               placeholder="" />
 
                         <label class="col-span-1 text-lg font-medium text-gray-700">Report Approval (ผ่านประชุม
                             สอพ/พืชสวน) :</label>
                         <input type="text"
                                name="efficacy_report_approval"
                                class="col-span-1 border rounded-lg px-4 py-2 w-full"
-                               placeholder="-" />
+                               placeholder="" />
 
                         <label class="col-span-1 text-lg font-medium text-gray-700"> ผู้รับผิดชอบหลัก/ผู้ควบคุมแปลง
                             :</label>
                         <input type="text"
                                name="efficacy_responsible_person"
                                class="col-span-1 border rounded-lg px-4 py-2 w-full"
-                               placeholder="-" />
+                               placeholder="" />
 
                         <label
                                class="col-span-1 text-lg font-medium text-gray-700">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
@@ -174,20 +174,20 @@
                         <input type="text"
                                name="residue_protocol_sent"
                                class="col-span-1 border rounded-lg px-4 py-2 w-full"
-                               placeholder="-" />
+                               placeholder="" />
 
                         <label class="col-span-1 text-lg font-medium text-gray-700">Inspector ให้แก้ไขแผนพิษตกค้าง
                             (Status) :</label>
                         <input type="text"
                                name="residue_protocol_inspector_status"
                                class="col-span-1 border rounded-lg px-4 py-2 w-full"
-                               placeholder="-" />
+                               placeholder="" />
 
                         <label class="col-span-1 text-lg font-medium text-gray-700">แผนพิษตกค้าง (Approved) :</label>
                         <input type="text"
                                name="residue_protocol_approved"
                                class="col-span-1 border rounded-lg px-4 py-2 w-full"
-                               placeholder="-" />
+                               placeholder="" />
 
                         <label
                                class="col-span-1 text-lg font-medium text-gray-700">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
@@ -201,27 +201,27 @@
                         <input type="text"
                                name="residue_report_sent"
                                class="col-span-1 border rounded-lg px-4 py-2 w-full"
-                               placeholder="-" />
+                               placeholder="" />
 
                         <label class="col-span-1 text-lg font-medium text-gray-700">Residue Status :</label>
                         <input type="text"
                                name="residue_status"
                                class="col-span-1 border rounded-lg px-4 py-2 w-full"
-                               placeholder="-" />
+                               placeholder="" />
 
                         <label class="col-span-1 text-lg font-medium text-gray-700">Report Approval (ผ่าน กปผ)
                             :</label>
                         <input type="text"
                                name="residue_report_approval"
                                class="col-span-1 border rounded-lg px-4 py-2 w-full"
-                               placeholder="-" />
+                               placeholder="" />
 
                         <label class="col-span-1 text-lg font-medium text-gray-700">ผู้รับผิดชอบหลัก/ผู้ควบคุมแปลง
                             :</label>
                         <input type="text"
                                name="residue_responsible_person"
                                class="col-span-1 border rounded-lg px-4 py-2 w-full"
-                               placeholder="-" />
+                               placeholder="" />
 
                         <label
                                class="col-span-1 text-lg font-medium text-gray-700">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
