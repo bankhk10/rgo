@@ -2,7 +2,7 @@
     <div class="min-h-screen flex items-center justify-center bg-gradient-to-tr from-purple-200 to-blue-100">
         <main class="w-full max-w-5xl bg-white rounded-3xl shadow-lg p-10 flex flex-col items-start justify-center">
             <div class="flex justify-between items-center w-full mb-8">
-                <h1 class="text-2xl font-bold text-gray-700">รายการทะเบียนออนไลน์</h1>
+                <h1 class="text-2xl font-bold text-gray-700">ข้อมูลทะเบียนออนไลน์</h1>
                 @can('Post create')
                     <a href="{{ route('admin.posts.create') }}"
                        class="bg-indigo-600 text-white font-bold px-6 py-2 rounded-full shadow hover:bg-indigo-700 transition-colors text-lg">
@@ -44,8 +44,8 @@
                                 <td class="px-4 py-2 text-center">
                                     <a href="{{ route('admin.posts.show', $post->id) }}"
                                        class="text-blue-600 hover:underline font-semibold">ดู</a>
-                                    <a href="{{ route('admin.posts.edit', $post->id) }}"
-                                       class="ml-3 text-indigo-600 hover:underline font-semibold">แก้ไข</a>
+                                    {{-- <a href="{{ route('admin.posts.edit', $post->id) }}"
+                                       class="ml-3 text-indigo-600 hover:underline font-semibold">แก้ไข</a> --}}
                                     @can('Post delete')
                                         <form action="{{ route('admin.posts.destroy', $post->id) }}"
                                               method="POST"
