@@ -12,7 +12,7 @@
         <div class="side-nav__devider my-6"></div>
         <ul>
             <li>
-                <a href="side-menu-light-post.html"
+                <a href="{{ route('admin.dashboard') }}"
                    class="side-menu">
                     <div class="side-menu__icon"> <i data-lucide="file-text"></i> </div>
                     <div class="side-menu__title"> Post </div>
