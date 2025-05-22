@@ -1,62 +1,62 @@
 @php
     $expiredCount = 2;
     $nearExpiryDrugs = collect([
-        (object)[
+        (object) [
             'name' => 'ยาเม็ดวิตามินรวม',
             'registration_number' => '123456',
             'expiry_date' => \Carbon\Carbon::now()->addDays(10),
         ],
-        (object)[
+        (object) [
             'name' => 'น้ำมันตับปลาชนิดแคปซูล',
             'registration_number' => '654321',
             'expiry_date' => \Carbon\Carbon::now()->addDays(20),
         ],
-        (object)[
+        (object) [
             'name' => 'ยาแก้ปวดพาราเซตามอล',
             'registration_number' => '987654',
             'expiry_date' => \Carbon\Carbon::now()->addDays(5),
         ],
-        (object)[
+        (object) [
             'name' => 'ยาเม็ดวิตามินรวม',
             'registration_number' => '123456',
             'expiry_date' => \Carbon\Carbon::now()->addDays(10),
         ],
-        (object)[
+        (object) [
             'name' => 'น้ำมันตับปลาชนิดแคปซูล',
             'registration_number' => '654321',
             'expiry_date' => \Carbon\Carbon::now()->addDays(20),
         ],
-        (object)[
+        (object) [
             'name' => 'ยาแก้ปวดพาราเซตามอล',
             'registration_number' => '987654',
             'expiry_date' => \Carbon\Carbon::now()->addDays(5),
         ],
-        (object)[
+        (object) [
             'name' => 'ยาเม็ดวิตามินรวม',
             'registration_number' => '123456',
             'expiry_date' => \Carbon\Carbon::now()->addDays(10),
         ],
-        (object)[
+        (object) [
             'name' => 'น้ำมันตับปลาชนิดแคปซูล',
             'registration_number' => '654321',
             'expiry_date' => \Carbon\Carbon::now()->addDays(20),
         ],
-        (object)[
+        (object) [
             'name' => 'ยาแก้ปวดพาราเซตามอล',
             'registration_number' => '987654',
             'expiry_date' => \Carbon\Carbon::now()->addDays(5),
         ],
-        (object)[
+        (object) [
             'name' => 'ยาเม็ดวิตามินรวม',
             'registration_number' => '123456',
             'expiry_date' => \Carbon\Carbon::now()->addDays(10),
         ],
-        (object)[
+        (object) [
             'name' => 'น้ำมันตับปลาชนิดแคปซูล',
             'registration_number' => '654321',
             'expiry_date' => \Carbon\Carbon::now()->addDays(20),
         ],
-        (object)[
+        (object) [
             'name' => 'ยาแก้ปวดพาราเซตามอล',
             'registration_number' => '987654',
             'expiry_date' => \Carbon\Carbon::now()->addDays(5),
@@ -66,80 +66,149 @@
     $activeCount = 5;
 
     // Manually paginate the collection
-    $perPage = 10;
+    $perPage = 6;
     $currentPage = request()->get('page', 1);
     $paginatedNearExpiryDrugs = new \Illuminate\Pagination\LengthAwarePaginator(
         $nearExpiryDrugs->forPage($currentPage, $perPage),
         $nearExpiryDrugs->count(),
         $perPage,
         $currentPage,
-        ['path' => request()->url()]
+        ['path' => request()->url()],
     );
 @endphp
 
 <x-app-layout>
-    <div>
-        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
-            <div class="container mx-auto px-6 py-8">
+    <main class="flex-1 overflow-x-hidden overflow-y-auto">
+        <div class="container mx-auto px-6 py-8">
 
-                <h1 class="text-4xl font-bold text-center text-indigo-600 mt-8 mb-8">
+            <h1 class="text-4xl font-extrabold text-center text-indigo-700 mt-5 mb-10 tracking-wide drop-shadow">
+                <span class="inline-flex items-center gap-2">
+                    <svg class="w-10 h-10 text-indigo-400"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         viewBox="0 0 24 24">
+                        <path stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="M12 8c-1.657 0-3 1.343-3 3v1c0 1.657 1.343 3 3 3s3-1.343 3-3v-1c0-1.657-1.343-3-3-3z" />
+                        <path stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="M12 2v2m0 16v2m8-10h2M2 12H4m15.364-7.364l1.414 1.414M4.222 19.778l1.414-1.414m12.728 0l1.414 1.414M4.222 4.222l1.414 1.414" />
+                    </svg>
                     รายงานทะเบียนยา
-                </h1>
+                </span>
+            </h1>
 
-                {{-- สรุปสถานะทะเบียน --}}
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <div class="bg-white p-6 rounded-lg shadow text-center">
-                        <h2 class="text-xl font-semibold text-gray-700 mb-2">ทะเบียนหมดอายุ</h2>
-                        <p class="text-3xl text-red-600 font-bold">{{ $expiredCount }}</p>
+            {{-- สรุปสถานะทะเบียน --}}
+            <div class="flex flex-row justify-around mb-10">
+                <div
+                     class="group h-full bg-gradient-to-br from-red-100 to-red-50 p-6 rounded-3xl shadow-xl text-center border-2 border-red-200 hover:scale-105 hover:shadow-2xl transition-all duration-300">
+                    <div class="flex justify-center mb-2">
+                        <div class="bg-red-200 rounded-full p-3 shadow-lg group-hover:bg-red-300 transition">
+                            <svg class="w-8 h-8 text-red-600"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 viewBox="0 0 24 24">
+                                <path stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      d="M12 8v4l3 3" />
+                                <circle cx="12"
+                                        cy="12"
+                                        r="10" />
+                            </svg>
+                        </div>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow text-center">
-                        <h2 class="text-xl font-semibold text-gray-700 mb-2">ทะเบียนใกล้หมดอายุ</h2>
-                        <p class="text-3xl text-yellow-600 font-bold">{{ $nearExpiryCount }}</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg shadow text-center">
-                        <h2 class="text-xl font-semibold text-gray-700 mb-2">ทะเบียนใช้งานอยู่</h2>
-                        <p class="text-3xl text-green-600 font-bold">{{ $activeCount }}</p>
-                    </div>
+                    <h2 class="text-lg font-bold text-red-700 mb-1 tracking-wide">ทะเบียนหมดอายุ</h2>
+                    <p class="text-4xl text-red-600 font-extrabold drop-shadow mb-1">{{ $expiredCount }}</p>
+
                 </div>
+                <div
+                     class="group h-full bg-gradient-to-br from-yellow-100 to-yellow-50 p-6 rounded-3xl shadow-xl text-center border-2 border-yellow-200 hover:scale-105 hover:shadow-2xl transition-all duration-300">
+                    <div class="flex justify-center mb-2">
+                        <div class="bg-yellow-200 rounded-full p-3 shadow-lg group-hover:bg-yellow-300 transition">
+                            <svg class="w-8 h-8 text-yellow-500"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 viewBox="0 0 24 24">
+                                <path stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      d="M12 8v4l3 3" />
+                                <circle cx="12"
+                                        cy="12"
+                                        r="10" />
+                            </svg>
+                        </div>
+                    </div>
+                    <h2 class="text-lg font-bold text-yellow-700 mb-1 tracking-wide">ทะเบียนใกล้หมดอายุ</h2>
+                    <p class="text-4xl text-yellow-600 font-extrabold drop-shadow mb-1">{{ $nearExpiryCount }}</p>
 
-                {{-- รายการทะเบียนใกล้หมดอายุ --}}
-                <div class="bg-white shadow-md rounded-lg overflow-hidden">
-                    <h2 class="text-2xl font-semibold text-gray-700 px-6 py-4">ทะเบียนใกล้หมดอายุ</h2>
+                </div>
+                <div
+                     class="group h-full bg-gradient-to-br from-green-100 to-green-50 p-6 rounded-3xl shadow-xl text-center border-2 border-green-200 hover:scale-105 hover:shadow-2xl transition-all duration-300">
+                    <div class="flex justify-center mb-2">
+                        <div class="bg-green-200 rounded-full p-3 shadow-lg group-hover:bg-green-300 transition">
+                            <svg class="w-8 h-8 text-green-600"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 viewBox="0 0 24 24">
+                                <path stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                    </div>
+                    <h2 class="text-lg font-bold text-green-700 mb-1 tracking-wide">ทะเบียนใช้งานอยู่</h2>
+                    <p class="text-4xl text-green-600 font-extrabold drop-shadow mb-1">{{ $activeCount }}</p>
+
+                </div>
+            </div>
+
+            {{-- รายการทะเบียนใกล้หมดอายุ --}}
+            <div class="bg-white shadow-xl rounded-2xl overflow-hidden border border-gray-200">
+                <div class="overflow-x-auto">
                     <table class="min-w-full bg-white">
                         <thead>
                             <tr class="bg-indigo-600 text-white text-left">
-                                <th class="py-3 px-6">ลำดับ</th>
-                                <th class="py-3 px-6">ชื่อสามัญ</th>
-                                <th class="py-3 px-6">เลขที่ทะเบียน</th>
-                                <th class="py-3 px-6">วันหมดอายุ</th>
-                                <th class="py-3 px-6">สถานะ</th>
+                                <th class="py-4 px-8 rounded-tl-2xl">ลำดับ</th>
+                                <th class="py-4 px-8">ชื่อสามัญ</th>
+                                <th class="py-4 px-8">เลขที่ทะเบียน</th>
+                                <th class="py-4 px-8">วันหมดอายุ</th>
+                                <th class="py-4 px-12 rounded-tr-2xl">สถานะ</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse ($paginatedNearExpiryDrugs as $index => $drug)
-                                <tr class="border-b hover:bg-gray-100">
-                                    <td class="py-3 px-6">{{ ($paginatedNearExpiryDrugs->currentPage() - 1) * $paginatedNearExpiryDrugs->perPage() + $index + 1 }}</td>
-                                    <td class="py-3 px-6">{{ $drug->name }}</td>
-                                    <td class="py-3 px-6">{{ $drug->registration_number }}</td>
-                                    <td class="py-3 px-6">{{ $drug->expiry_date->format('d/m/Y') }}</td>
-                                    <td class="py-3 px-6">
-                                        <span class="bg-yellow-200 text-yellow-800 py-1 px-3 rounded-full text-xs">ใกล้หมดอายุ</span>
+                                <tr class="border-b hover:bg-yellow-50 transition">
+                                    <td class="py-4 px-8 font-semibold text-gray-700">
+                                        {{ ($paginatedNearExpiryDrugs->currentPage() - 1) * $paginatedNearExpiryDrugs->perPage() + $index + 1 }}
+                                    </td>
+                                    <td class="py-4 px-8">{{ $drug->name }}</td>
+                                    <td class="py-4 px-8">{{ $drug->registration_number }}</td>
+                                    <td class="py-4 px-8">{{ $drug->expiry_date->format('d/m/Y') }}</td>
+                                    <td class="py-4 px-8">
+                                        <span
+                                              class="bg-yellow-200 text-yellow-900 py-1 px-4 rounded-full text-xs font-bold shadow">
+                                            ใกล้หมดอายุ
+                                        </span>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="py-4 px-6 text-center text-gray-500">ไม่มีทะเบียนใกล้หมดอายุ</td>
+                                    <td colspan="5"
+                                        class="py-6 px-8 text-center text-gray-400">ไม่มีทะเบียนใกล้หมดอายุ</td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
-
-                    <div class="px-6 py-4 bg-white border-t border-gray-200">
-                        {{ $paginatedNearExpiryDrugs->links() }}
-                    </div>
                 </div>
-
+                <div class="px-8 py-6 bg-white border-t border-gray-100 rounded-b-2xl">
+                    {{ $paginatedNearExpiryDrugs->links() }}
+                </div>
             </div>
-        </main>
-    </div>
+
+        </div>
+    </main>
 </x-app-layout>
