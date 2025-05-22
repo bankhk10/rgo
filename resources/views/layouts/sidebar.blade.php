@@ -18,7 +18,7 @@
                     <div class="side-menu__title mt-1">รายงาน</div>
                 </a>
             </li>
-            {{-- @canany('Post access', 'Post add', 'Post edit', 'Post delete')
+            {{-- @canany('Post read', 'Post create', 'Post update', 'Post delete')
                 <li x-data="{ open: {{ Route::is('admin.posts.*', 'admin.production.*', 'admin.import.*') ? 'true' : 'false' }} }">
                     <a href="javascript:;"
                        @click="open = !open"
@@ -59,7 +59,7 @@
                     </ul>
                 </li>
             @endcanany --}}
-            {{-- @canany('Permission access', 'Permission add', 'Permission edit', 'Permission delete')
+            {{-- @canany('Permission read', 'Permission create', 'Permission update', 'Permission delete')
                 <li>
                     <a href="{{ route('admin.permissions.index') }}"
                        class="side-menu"
@@ -69,7 +69,7 @@
                     </a>
                 </li>
             @endcanany --}}
-            @canany('Role access', 'Role add', 'Role edit', 'Role delete')
+            @canany('Role read', 'Role create', 'Role update', 'Role delete')
                 <li>
                     <a href="{{ route('admin.roles.index') }}"
                        class="side-menu"
@@ -80,7 +80,7 @@
                     </a>
                 </li>
             @endcanany
-            @canany('User access', 'User add', 'User edit', 'User delete')
+            @canany('User read', 'User create', 'User update', 'User delete')
                 <li>
                     <a href="{{ route('admin.users.index') }}"
                        class="side-menu"
