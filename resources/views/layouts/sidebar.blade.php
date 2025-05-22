@@ -15,10 +15,10 @@
                    class="side-menu"
                    id="menu-dashboard">
                     <div class="side-menu__icon"><i data-lucide="home"></i></div>
-                    <div class="side-menu__title">Dashboard</div>
+                    <div class="side-menu__title mt-1">รายงาน</div>
                 </a>
             </li>
-            @canany('Post access', 'Post add', 'Post edit', 'Post delete')
+            {{-- @canany('Post access', 'Post add', 'Post edit', 'Post delete')
                 <li x-data="{ open: {{ Route::is('admin.posts.*', 'admin.production.*', 'admin.import.*') ? 'true' : 'false' }} }">
                     <a href="javascript:;"
                        @click="open = !open"
@@ -58,8 +58,8 @@
                         </li>
                     </ul>
                 </li>
-            @endcanany
-            @canany('Permission access', 'Permission add', 'Permission edit', 'Permission delete')
+            @endcanany --}}
+            {{-- @canany('Permission access', 'Permission add', 'Permission edit', 'Permission delete')
                 <li>
                     <a href="{{ route('admin.permissions.index') }}"
                        class="side-menu"
@@ -68,14 +68,15 @@
                         <div class="side-menu__title">Permission</div>
                     </a>
                 </li>
-            @endcanany
+            @endcanany --}}
             @canany('Role access', 'Role add', 'Role edit', 'Role delete')
                 <li>
                     <a href="{{ route('admin.roles.index') }}"
                        class="side-menu"
                        id="menu-roles">
-                        <div class="side-menu__icon"><i data-lucide="shield"></i></div>
-                        <div class="side-menu__title">Role</div>
+                        <div class="side-menu__icon"><i data-lucide="shield-check"></i></div>
+
+                        <div class="side-menu__title">สิทธื์</div>
                     </a>
                 </li>
             @endcanany
@@ -85,7 +86,7 @@
                        class="side-menu"
                        id="menu-users">
                         <div class="side-menu__icon"><i data-lucide="users"></i></div>
-                        <div class="side-menu__title">User</div>
+                        <div class="side-menu__title">ผู้ใช้งาน</div>
                     </a>
                 </li>
             @endcanany

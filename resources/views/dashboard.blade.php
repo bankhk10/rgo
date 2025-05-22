@@ -66,7 +66,7 @@
     $activeCount = 5;
 
     // Manually paginate the collection
-    $perPage = 6;
+    $perPage = 5;
     $currentPage = request()->get('page', 1);
     $paginatedNearExpiryDrugs = new \Illuminate\Pagination\LengthAwarePaginator(
         $nearExpiryDrugs->forPage($currentPage, $perPage),
@@ -102,7 +102,7 @@
             {{-- สรุปสถานะทะเบียน --}}
             <div class="flex flex-row justify-around mb-10">
                 <div
-                     class="group h-full bg-gradient-to-br from-red-100 to-red-50 p-6 rounded-3xl shadow-xl text-center border-2 border-red-200 hover:scale-105 hover:shadow-2xl transition-all duration-300">
+                     class="group h-full bg-gradient-to-br from-red-100 to-red-50 p-4 rounded-3xl shadow-xl text-center border-2 border-red-200 hover:scale-105 hover:shadow-2xl transition-all duration-300">
                     <div class="flex justify-center mb-2">
                         <div class="bg-red-200 rounded-full p-3 shadow-lg group-hover:bg-red-300 transition">
                             <svg class="w-8 h-8 text-red-600"
@@ -121,10 +121,9 @@
                     </div>
                     <h2 class="text-lg font-bold text-red-700 mb-1 tracking-wide">ทะเบียนหมดอายุ</h2>
                     <p class="text-4xl text-red-600 font-extrabold drop-shadow mb-1">{{ $expiredCount }}</p>
-
                 </div>
                 <div
-                     class="group h-full bg-gradient-to-br from-yellow-100 to-yellow-50 p-6 rounded-3xl shadow-xl text-center border-2 border-yellow-200 hover:scale-105 hover:shadow-2xl transition-all duration-300">
+                     class="group h-full bg-gradient-to-br from-yellow-100 to-yellow-50 p-4 rounded-3xl shadow-xl text-center border-2 border-yellow-200 hover:scale-105 hover:shadow-2xl transition-all duration-300">
                     <div class="flex justify-center mb-2">
                         <div class="bg-yellow-200 rounded-full p-3 shadow-lg group-hover:bg-yellow-300 transition">
                             <svg class="w-8 h-8 text-yellow-500"
@@ -146,7 +145,7 @@
 
                 </div>
                 <div
-                     class="group h-full bg-gradient-to-br from-green-100 to-green-50 p-6 rounded-3xl shadow-xl text-center border-2 border-green-200 hover:scale-105 hover:shadow-2xl transition-all duration-300">
+                     class="group h-full bg-gradient-to-br from-green-100 to-green-50 p-4 rounded-3xl shadow-xl text-center border-2 border-green-200 hover:scale-105 hover:shadow-2xl transition-all duration-300">
                     <div class="flex justify-center mb-2">
                         <div class="bg-green-200 rounded-full p-3 shadow-lg group-hover:bg-green-300 transition">
                             <svg class="w-8 h-8 text-green-600"
