@@ -1,18 +1,19 @@
+{{-- <x-app-layout> --}}
 <div class="flex mt-[4.7rem] md:mt-0">
     <!-- BEGIN: Side Menu -->
-    <nav class="side-nav bg-blue-800 text-white w-64 min-h-screen">
+    <nav class="side-nav">
         <a href="{{ route('admin.dashboard') }}"
            class="intro-x flex items-center pl-5 pt-4">
             <img alt="Logo"
-                 class="w-10"
+                 class="w-22"
                  src="/images/logo.png" />
-            <span class="hidden xl:block text-white text-lg ml-3"> RGO </span>
         </a>
         <div class="side-nav__devider my-6"></div>
         <ul>
             <li>
                 <a href="{{ route('admin.dashboard') }}"
-                   class="side-menu {{ Route::currentRouteNamed('admin.dashboard') ? 'side-menu--active' : '' }}">
+                   class="side-menu"
+                   id="menu-dashboard">
                     <div class="side-menu__icon"><i data-lucide="home"></i></div>
                     <div class="side-menu__title">Dashboard</div>
                 </a>
@@ -58,31 +59,31 @@
                     </ul>
                 </li>
             @endcanany
-
             @canany('Permission access', 'Permission add', 'Permission edit', 'Permission delete')
                 <li>
                     <a href="{{ route('admin.permissions.index') }}"
-                       class="side-menu {{ Route::currentRouteNamed('admin.permissions.index') ? 'side-menu--active' : '' }}">
+                       class="side-menu"
+                       id="menu-permissions">
                         <div class="side-menu__icon"><i data-lucide="key"></i></div>
                         <div class="side-menu__title">Permission</div>
                     </a>
                 </li>
             @endcanany
-
             @canany('Role access', 'Role add', 'Role edit', 'Role delete')
                 <li>
                     <a href="{{ route('admin.roles.index') }}"
-                       class="side-menu {{ Route::currentRouteNamed('admin.roles.index') ? 'side-menu--active' : '' }}">
+                       class="side-menu"
+                       id="menu-roles">
                         <div class="side-menu__icon"><i data-lucide="shield"></i></div>
                         <div class="side-menu__title">Role</div>
                     </a>
                 </li>
             @endcanany
-
             @canany('User access', 'User add', 'User edit', 'User delete')
                 <li>
                     <a href="{{ route('admin.users.index') }}"
-                       class="side-menu {{ Route::currentRouteNamed('admin.users.index') ? 'side-menu--active' : '' }}">
+                       class="side-menu"
+                       id="menu-users">
                         <div class="side-menu__icon"><i data-lucide="users"></i></div>
                         <div class="side-menu__title">User</div>
                     </a>
@@ -90,9 +91,30 @@
             @endcanany
         </ul>
     </nav>
-
 </div>
 
 <link rel="stylesheet"
       href="{{ asset('stype_c/app.css') }}">
 <script src="{{ asset('stype_c/app.js') }}"></script>
+<script>
+    window.addEventListener('load', function() {
+        const currentUrl = window.location.pathname;
+        // ตรวจสอบและ active เมนูหลังโหลดหน้าเสร็จ
+        if (currentUrl === "{{ route('admin.dashboard', [], false) }}") {
+            document.getElementById('menu-dashboard')?.classList.add('side-menu--active');
+        }
+        if (currentUrl === "{{ route('admin.permissions.index', [], false) }}") {
+            document.getElementById('menu-permissions')?.classList.add('side-menu--active');
+        }
+        if (currentUrl === "{{ route('admin.production.index', [], false) }}") {
+            document.getElementById('menu-production')?.classList.add('side-menu--active');
+        }
+        if (currentUrl === "{{ route('admin.roles.index', [], false) }}") {
+            document.getElementById('menu-roles')?.classList.add('side-menu--active');
+        }
+        if (currentUrl === "{{ route('admin.users.index', [], false) }}") {
+            document.getElementById('menu-users')?.classList.add('side-menu--active');
+        }
+    });
+</script>
+{{-- </x-app-layout> --}}
