@@ -8,7 +8,7 @@ use App\Http\Controllers\Admin\{
 
 use App\Http\Controllers\ImportController;
 use App\Http\Controllers\ProductionController;
-
+use App\Http\Controllers\InRegisterController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -53,5 +53,9 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
         Route::get('/mail', [MailSettingController::class, 'index'])->name('mail.index');
         Route::put('/mail-update/{mailsetting}', [MailSettingController::class, 'update'])->name('mail.update');
         Route::get('/production', [ProductionController::class, 'index'])->name('production.index');
-        Route::get('/import', [ImportController::class, 'index'])->name('import.index');
+        // Route::get('/import', [ImportController::class, 'index'])->name('import.index');
     });
+
+Route::get('/import', [ImportController::class, 'index'])->name('import.index');
+Route::get('/import/create', [ImportController::class, 'create'])->name('import.create');
+Route::post('/import/store', [ImportController::class, 'store'])->name('import.store');

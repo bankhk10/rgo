@@ -18,6 +18,17 @@
                     <div class="side-menu__title mt-1">รายงาน</div>
                 </a>
             </li>
+            @canany('Inregister read', 'Inregister create', 'Inregister update', 'Inregister delete')
+                <li>
+                    <a href="{{ route('import.index') }}"
+                       class="side-menu"
+                       id="menu-inregister">
+                        <div class="side-menu__icon"><i data-lucide="file-text"></i></div>
+
+                        <div class="side-menu__title">ทะเบียนนำเข้า</div>
+                    </a>
+                </li>
+            @endcanany
             {{-- @canany('Post read', 'Post create', 'Post update', 'Post delete')
                 <li x-data="{ open: {{ Route::is('admin.posts.*', 'admin.production.*', 'admin.import.*') ? 'true' : 'false' }} }">
                     <a href="javascript:;"
@@ -59,7 +70,7 @@
                     </ul>
                 </li>
             @endcanany --}}
-            {{-- @canany('Permission read', 'Permission create', 'Permission update', 'Permission delete')
+            @canany('Permission read', 'Permission create', 'Permission update', 'Permission delete')
                 <li>
                     <a href="{{ route('admin.permissions.index') }}"
                        class="side-menu"
@@ -68,7 +79,7 @@
                         <div class="side-menu__title">Permission</div>
                     </a>
                 </li>
-            @endcanany --}}
+            @endcanany
             @canany('Role read', 'Role create', 'Role update', 'Role delete')
                 <li>
                     <a href="{{ route('admin.roles.index') }}"
@@ -103,6 +114,9 @@
         // ตรวจสอบและ active เมนูหลังโหลดหน้าเสร็จ
         if (currentUrl === "{{ route('admin.dashboard', [], false) }}") {
             document.getElementById('menu-dashboard')?.classList.add('side-menu--active');
+        }
+        if (currentUrl === "{{ route('import.index', [], false) }}") {
+            document.getElementById('menu-inregister')?.classList.add('side-menu--active');
         }
         if (currentUrl === "{{ route('admin.permissions.index', [], false) }}") {
             document.getElementById('menu-permissions')?.classList.add('side-menu--active');
