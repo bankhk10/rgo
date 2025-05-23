@@ -79,9 +79,8 @@
 
 <x-app-layout>
     <main class="flex-1 overflow-x-hidden overflow-y-auto">
-        <div class="container mx-auto px-6 py-8">
-
-            <h1 class="text-4xl font-extrabold text-center text-indigo-700 mt-5 mb-10 tracking-wide drop-shadow">
+        <div class="container mx-auto px-6 py-6">
+            <h1 class="text-4xl font-extrabold text-center text-indigo-700 mt-5 mb-10 tracking-wide">
                 <span class="inline-flex items-center gap-2">
                     <svg class="w-10 h-10 text-indigo-400"
                          fill="none"
@@ -102,9 +101,9 @@
             {{-- สรุปสถานะทะเบียน --}}
             <div class="flex flex-row justify-around mb-10">
                 <div
-                     class="group h-full bg-gradient-to-br from-red-100 to-red-50 p-4 rounded-3xl shadow-xl text-center border-2 border-red-200 hover:scale-105 hover:shadow-2xl transition-all duration-300">
+                     class="group h-full bg-gradient-to-br from-red-100 to-red-50 p-4 rounded-3xl text-center border-2 border-red-200 hover:scale-105 transition-all duration-300">
                     <div class="flex justify-center mb-2">
-                        <div class="bg-red-200 rounded-full p-3 shadow-lg group-hover:bg-red-300 transition">
+                        <div class="bg-red-200 rounded-full p-3 group-hover:bg-red-300 transition">
                             <svg class="w-8 h-8 text-red-600"
                                  fill="none"
                                  stroke="currentColor"
@@ -120,12 +119,12 @@
                         </div>
                     </div>
                     <h2 class="text-lg font-bold text-red-700 mb-1 tracking-wide">ทะเบียนหมดอายุ</h2>
-                    <p class="text-4xl text-red-600 font-extrabold drop-shadow mb-1">{{ $expiredCount }}</p>
+                    <p class="text-4xl text-red-600 font-extrabold mb-1">{{ $expiredCount }}</p>
                 </div>
                 <div
-                     class="group h-full bg-gradient-to-br from-yellow-100 to-yellow-50 p-4 rounded-3xl shadow-xl text-center border-2 border-yellow-200 hover:scale-105 hover:shadow-2xl transition-all duration-300">
+                     class="group h-full bg-gradient-to-br from-yellow-100 to-yellow-50 p-4 rounded-3xl text-center border-2 border-yellow-200 hover:scale-105 transition-all duration-300">
                     <div class="flex justify-center mb-2">
-                        <div class="bg-yellow-200 rounded-full p-3 shadow-lg group-hover:bg-yellow-300 transition">
+                        <div class="bg-yellow-200 rounded-full p-3 group-hover:bg-yellow-300 transition">
                             <svg class="w-8 h-8 text-yellow-500"
                                  fill="none"
                                  stroke="currentColor"
@@ -141,13 +140,13 @@
                         </div>
                     </div>
                     <h2 class="text-lg font-bold text-yellow-700 mb-1 tracking-wide">ทะเบียนใกล้หมดอายุ</h2>
-                    <p class="text-4xl text-yellow-600 font-extrabold drop-shadow mb-1">{{ $nearExpiryCount }}</p>
+                    <p class="text-4xl text-yellow-600 font-extrabold mb-1">{{ $nearExpiryCount }}</p>
 
                 </div>
                 <div
-                     class="group h-full bg-gradient-to-br from-green-100 to-green-50 p-4 rounded-3xl shadow-xl text-center border-2 border-green-200 hover:scale-105 hover:shadow-2xl transition-all duration-300">
+                     class="group h-full bg-gradient-to-br from-green-100 to-green-50 p-4 rounded-3xl text-center border-2 border-green-200 hover:scale-105 transition-all duration-300">
                     <div class="flex justify-center mb-2">
-                        <div class="bg-green-200 rounded-full p-3 shadow-lg group-hover:bg-green-300 transition">
+                        <div class="bg-green-200 rounded-full p-3 group-hover:bg-green-300 transition">
                             <svg class="w-8 h-8 text-green-600"
                                  fill="none"
                                  stroke="currentColor"
@@ -160,13 +159,13 @@
                         </div>
                     </div>
                     <h2 class="text-lg font-bold text-green-700 mb-1 tracking-wide">ทะเบียนใช้งานอยู่</h2>
-                    <p class="text-4xl text-green-600 font-extrabold drop-shadow mb-1">{{ $activeCount }}</p>
+                    <p class="text-4xl text-green-600 font-extrabold mb-1">{{ $activeCount }}</p>
 
                 </div>
             </div>
 
             {{-- รายการทะเบียนใกล้หมดอายุ --}}
-            <div class="bg-white shadow-xl rounded-2xl overflow-hidden border border-gray-200">
+            <div class="bg-white rounded-2xl overflow-hidden border border-gray-200">
                 <div class="overflow-x-auto">
                     <table class="min-w-full bg-white">
                         <thead>
@@ -189,7 +188,7 @@
                                     <td class="py-4 px-8">{{ $drug->expiry_date->format('d/m/Y') }}</td>
                                     <td class="py-4 px-8">
                                         <span
-                                              class="bg-yellow-200 text-yellow-900 py-1 px-4 rounded-full text-xs font-bold shadow">
+                                              class="bg-yellow-200 text-yellow-900 py-1 px-4 rounded-full text-xs font-bold">
                                             ใกล้หมดอายุ
                                         </span>
                                     </td>

@@ -1,7 +1,7 @@
 <x-app-layout>
     <div>
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
-            <div class="container mx-auto px-6 py-6">
+             <div class="container mx-auto px-6 py-6">
                 <div class="flex justify-between items-center mb-6">
                     <h1 class="text-4xl font-extrabold text-gray-800 tracking-wide">
                         <span class="text-gray-600">จัดการ Permissions</span>

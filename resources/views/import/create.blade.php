@@ -118,12 +118,34 @@
                           class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                           name="note"></textarea>
             </div>
-
-            <div class="md:col-span-2 text-center">
+            <div class="text-right mt-8">
+                <a href="{{ route('import.index') }}"
+                   class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg shadow transition duration-300 ">
+                    <i class="fa-solid fa-arrow-left mr-2"></i> ย้อนกลับ
+                </a>
+            </div>
+            <div class="text-left mt-6">
                 <button type="submit"
-                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">บันทึกข้อมูล</button>
+                        class="bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline shadow-md">
+                    บันทึก
+                </button>
             </div>
 
         </form>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'สำเร็จ!',
+                text: '{{ session('success') }}',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'ตกลง'
+            });
+        </script>
+    @endif
+
+
 </x-app-layout>

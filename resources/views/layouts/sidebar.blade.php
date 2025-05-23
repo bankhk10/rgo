@@ -1,6 +1,6 @@
 {{-- <x-app-layout> --}}
+
 <div class="flex mt-[4.7rem] md:mt-0">
-    <!-- BEGIN: Side Menu -->
     <nav class="side-nav">
         <a href="{{ route('admin.dashboard') }}"
            class="intro-x flex items-center pl-5 pt-4">
@@ -8,7 +8,7 @@
                  class="w-22"
                  src="/images/logo.png" />
         </a>
-        <div class="side-nav__devider my-6"></div>
+        {{-- <div class="side-nav__devider my-6"></div> --}}
         <ul>
             <li>
                 <a href="{{ route('admin.dashboard') }}"
@@ -29,6 +29,7 @@
                     </a>
                 </li>
             @endcanany
+
             {{-- @canany('Post read', 'Post create', 'Post update', 'Post delete')
                 <li x-data="{ open: {{ Route::is('admin.posts.*', 'admin.production.*', 'admin.import.*') ? 'true' : 'false' }} }">
                     <a href="javascript:;"
@@ -104,6 +105,8 @@
         </ul>
     </nav>
 </div>
+
+
 
 <link rel="stylesheet"
       href="{{ asset('stype_c/app.css') }}">
