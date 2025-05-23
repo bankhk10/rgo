@@ -1,14 +1,12 @@
-{{-- <x-app-layout> --}}
-
 <div class="flex mt-[4.7rem] md:mt-0">
-    <nav class="side-nav">
-        <a href="{{ route('admin.dashboard') }}"
-           class="intro-x flex items-center pl-5 pt-4">
+    <nav class="side-nav w-[220px] bg-blue-800 text-white min-h-screen">
+        <!-- ✅ Logo อยู่ด้านบนสุดของเมนู -->
+        <div class="flex items-center justify-center py-6">
             <img alt="Logo"
-                 class="w-22"
-                 src="/images/logo.png" />
-        </a>
-        {{-- <div class="side-nav__devider my-6"></div> --}}
+                 class="h-21"
+                 src="{{ asset('images/logo.png') }}" />
+        </div>
+        <div class="side-nav__devider my-2"></div>
         <ul>
             <li>
                 <a href="{{ route('admin.dashboard') }}"
@@ -135,4 +133,6 @@
         }
     });
 </script>
+
+
 {{-- </x-app-layout> --}}
