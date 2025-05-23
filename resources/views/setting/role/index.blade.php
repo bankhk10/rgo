@@ -25,7 +25,7 @@
                             </tr>
                         </thead>
                         <tbody class="text-gray-700 text-sm font-light">
-                            @can('Role access')
+                            @can('Role read')
                                 @foreach ($roles as $role)
                                     <tr class="border-b border-gray-200 hover:bg-gray-100">
                                         <td class="py-3 px-6 text-left whitespace-nowrap">
@@ -35,7 +35,7 @@
                                             <div class="flex flex-wrap gap-2">
                                                 @foreach ($role->permissions as $permission)
                                                     <span
-                                                     class="inline-block bg-gray-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                                                          class="inline-block bg-gray-500 text-white text-xs font-bold px-2 py-1 rounded-full">
                                                         {{-- class="inline-block bg-gradient-to-r from-indigo-400 to-pink-400 text-white text-xs font-bold px-3 py-1 rounded-full shadow"> --}}
                                                         {{ $permission->name }}
                                                     </span>
@@ -43,7 +43,7 @@
                                             </div>
                                         </td>
                                         <td class="py-3 px-6 text-right">
-                                            @can('Role edit')
+                                            @can('Role update')
                                                 <a href="{{ route('admin.roles.edit', $role->id) }}"
                                                    class="bg-yellow-500 text-white font-bold py-2 px-4 rounded-lg shadow hover:bg-yellow-600 transition duration-300 mr-2">
                                                     แก้ไข
@@ -57,7 +57,8 @@
                                                 </button>
 
                                                 <form id="delete-form-{{ $role->id }}"
-                                                      action="{{ route('admin.roles.destroy', $role->id) }}" method="POST"
+                                                      action="{{ route('admin.roles.destroy', $role->id) }}"
+                                                      method="POST"
                                                       style="display: none;">
                                                     @csrf
                                                     @method('delete')
