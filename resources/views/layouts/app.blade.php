@@ -31,9 +31,9 @@
              class="fixed z-20 inset-0 bg-black opacity-50 transition-opacity lg:hidden"></div>
 
         @include('layouts.sidebar')
-        <div class="flex-1 flex flex-col overflow-hidden">
+        <div class="flex-1 flex flex-col overflow-hidden ">
             <main class="overflow-y-auto">
-                <div class="p-4 content">
+                <div class="p-4 content aa">
                     @include('layouts.header')
 
                     {{-- @if (\Session::has('success'))
@@ -102,5 +102,11 @@
         </div> --}}
     </div>
 </body>
+
+<style>
+    .aa {
+        background-color: #f8f8f8;
+    }
+</style>
 
 </html>

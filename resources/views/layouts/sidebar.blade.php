@@ -1,5 +1,5 @@
 <div class="flex mt-[4.7rem] md:mt-0">
-    <nav class="side-nav w-[220px] bg-blue-800 text-white min-h-screen">
+    <nav class="side-nav w-[220px] text-white min-h-screen">
         <!-- ✅ Logo อยู่ด้านบนสุดของเมนู -->
         <div class="flex items-center justify-center py-6">
             <img alt="Logo"
