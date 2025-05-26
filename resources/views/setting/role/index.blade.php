@@ -14,62 +14,66 @@
                     @endcan
                 </div>
 
-                <div class="bg-white shadow-md rounded-lg overflow-hidden">
-                    <table class="min-w-full bg-white">
-                        <thead>
-                            <tr class="bg-gray-200 text-gray-600 text-sm leading-normal">
-                                <th class="py-3 px-6 text-left w-1/6 min-w-[180px]">ชื่อสิทธิ์การใช้งาน</th>
-                                <th class="py-3 px-6 text-left">สิทธิ์</th>
-                                <th class="py-3 px-6 text-right w-1/6 min-w-[180px]">การดำเนินการ</th>
-                                {{-- <th class="py-3 px-6 text-right">การดำเนินการ</th> --}}
-                            </tr>
-                        </thead>
-                        <tbody class="text-gray-700 text-sm font-light">
-                            @can('Role read')
-                                @foreach ($roles as $role)
-                                    <tr class="border-b border-gray-200 hover:bg-gray-100">
-                                        <td class="py-3 px-6 text-left whitespace-nowrap">
-                                            <span class="font-medium">{{ $role->name }}</span>
-                                        </td>
-                                        <td class="py-3 px-6 text-left">
-                                            <div class="flex flex-wrap gap-2">
-                                                @foreach ($role->permissions as $permission)
-                                                    <span
-                                                          class="inline-block bg-gray-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                                                        {{-- class="inline-block bg-gradient-to-r from-indigo-400 to-pink-400 text-white text-xs font-bold px-3 py-1 rounded-full shadow"> --}}
-                                                        {{ $permission->name }}
-                                                    </span>
-                                                @endforeach
-                                            </div>
-                                        </td>
-                                        <td class="py-3 px-6 text-right">
-                                            @can('Role update')
-                                                <a href="{{ route('admin.roles.edit', $role->id) }}"
-                                                   class="bg-green-500 text-white font-bold py-2 px-4 rounded-lg shadow hover:bg-green-600 transition duration-300 mr-2">
-                                                    แก้ไข
-                                                </a>
-                                            @endcan
+                <div class="bg-white rounded-2xl overflow-hidden border border-gray-200">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white">
+                            <thead>
+                                <tr class="bg-indigo-600 text-white text-left">
+                                    <th class="py-4 px-8 rounded-tl-2xl">ลำดับ</th>
+                                    <th class="py-3 px-6 text-left w-1/6 min-w-[180px]">ชื่อสิทธิ์การใช้งาน</th>
+                                    <th class="py-3 px-6 text-left">สิทธิ์</th>
+                                    <th class="py-3 px-6 text-right w-1/6 min-w-[180px]">การดำเนินการ</th>
+                                    {{-- <th class="py-3 px-6 text-right">การดำเนินการ</th> --}}
+                                </tr>
+                            </thead>
+                            <tbody class="text-gray-700 text-sm font-light">
+                                @can('Role read')
+                                    @foreach ($roles as $index => $role)
+                                        <tr class="border-b border-gray-200 hover:bg-gray-100">
+                                            <td class="py-4 px-8 font-semibold text-gray-700">{{ $index + 1 }}</td>
+                                            <td class="py-3 px-6 text-left whitespace-nowrap">
+                                                <span class="font-medium">{{ $role->name }}</span>
+                                            </td>
+                                            <td class="py-3 px-6 text-left">
+                                                <div class="flex flex-wrap gap-2">
+                                                    @foreach ($role->permissions as $permission)
+                                                        <span
+                                                              class="inline-block bg-gray-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                                                            {{-- class="inline-block bg-gradient-to-r from-indigo-400 to-pink-400 text-white text-xs font-bold px-3 py-1 rounded-full shadow"> --}}
+                                                            {{ $permission->name }}
+                                                        </span>
+                                                    @endforeach
+                                                </div>
+                                            </td>
+                                            <td class="py-3 px-6 text-right">
+                                                @can('Role update')
+                                                    <a href="{{ route('admin.roles.edit', $role->id) }}"
+                                                       class="bg-green-500 text-white font-bold py-2 px-4 rounded-lg shadow hover:bg-green-600 transition duration-300 mr-2">
+                                                        แก้ไข
+                                                    </a>
+                                                @endcan
 
-                                            @can('Role delete')
-                                                <button onclick="confirmDelete({{ $role->id }})"
-                                                        class="bg-red-500 text-white font-bold py-2 px-4 rounded-lg shadow hover:bg-red-600 transition duration-300">
-                                                    ลบ
-                                                </button>
+                                                @can('Role delete')
+                                                    <button onclick="confirmDelete({{ $role->id }})"
+                                                            class="bg-red-500 text-white font-bold py-2 px-4 rounded-lg shadow hover:bg-red-600 transition duration-300">
+                                                        ลบ
+                                                    </button>
 
-                                                <form id="delete-form-{{ $role->id }}"
-                                                      action="{{ route('admin.roles.destroy', $role->id) }}"
-                                                      method="POST"
-                                                      style="display: none;">
-                                                    @csrf
-                                                    @method('delete')
-                                                </form>
-                                            @endcan
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @endcan
-                        </tbody>
-                    </table>
+                                                    <form id="delete-form-{{ $role->id }}"
+                                                          action="{{ route('admin.roles.destroy', $role->id) }}"
+                                                          method="POST"
+                                                          style="display: none;">
+                                                        @csrf
+                                                        @method('delete')
+                                                    </form>
+                                                @endcan
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endcan
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </main>

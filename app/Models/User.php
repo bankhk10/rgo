@@ -24,7 +24,12 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'profile'
+        'profile',
+        'department', // เพิ่มแผนก
+        'position',   // เพิ่มตำแหน่ง
+        'employee_id', // เพิ่มรหัสพนักงาน
+        'phone_number', // เพิ่มเบอร์โทรศัพท์
+        'employment_status', // เพิ่มสถานะการทำงาน
     ];
 
     /**

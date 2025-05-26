@@ -61,18 +61,33 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed'
+            'password' => 'required|confirmed',
+            'department' => 'nullable|string|max:255', // เพิ่มการตรวจสอบแผนก
+            'position' => 'nullable|string|max:255',   // เพิ่มการตรวจสอบตำแหน่ง
+            'employee_id' => 'nullable|string|max:255|unique:users', // เพิ่มการตรวจสอบรหัสพนักงาน (unique)
+            'phone_number' => 'nullable|string|max:20', // เพิ่มการตรวจสอบเบอร์โทรศัพท์
+            'employment_status' => 'nullable|string|max:255', // เพิ่มการตรวจสอบสถานะการทำงาน
+            'roles' => 'nullable|array', // ให้แน่ใจว่ามี validation สำหรับ roles ด้วย (ถ้าจำเป็น)
         ]);
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
+            'department' => $request->department,     // เพิ่มแผนก
+            'position' => $request->position,       // เพิ่มตำแหน่ง
+            'employee_id' => $request->employee_id,   // เพิ่มรหัสพนักงาน
+            'phone_number' => $request->phone_number, // เพิ่มเบอร์โทรศัพท์
+            'employment_status' => $request->employment_status, // เพิ่มสถานะการทำงาน
         ]);
-        $user->syncRoles($request->roles);
+
+        if ($request->has('roles')) {
+            $user->syncRoles($request->roles);
+        }
+
         return redirect()->back()->withSuccess('User created !!!');
     }
 

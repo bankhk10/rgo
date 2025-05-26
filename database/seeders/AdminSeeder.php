@@ -6,7 +6,7 @@ use Illuminate\Database\Seeder;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-
+use Illuminate\Support\Facades\DB;
 
 class AdminSeeder extends Seeder
 {
@@ -17,52 +17,70 @@ class AdminSeeder extends Seeder
      */
     public function run()
     {
+        // สร้าง Admin User
         $admin = User::create([
-            'name'=>'Admin',
-            'email'=>'admin@admin.com',
-            'password'=>bcrypt('password'),
-            'profile' => 'user.avif'
+            'employee_id' => 'AD001',
+            'name' => 'Admin',
+            'department' => 'IT',
+            'position' => 'Administrator',
+            'phone_number' => '0812345678',
+            'email' => 'admin@admin.com',
+            'profile' => 'user.avif',
+            'password' => bcrypt('password'),
+            'employment_status' => 'active',
         ]);
 
+        // สร้าง Writer User
         $writer = User::create([
-            'name'=>'writer',
-            'email'=>'writer@writer.com',
-            'password'=>bcrypt('password')
+            'employee_id' => 'WR001',
+            'name' => 'Writer',
+            'department' => 'Content',
+            'position' => 'Content Creator',
+            'phone_number' => '0898765432',
+            'email' => 'writer@writer.com',
+            'password' => bcrypt('password'),
+            'employment_status' => 'active',
         ]);
 
-
+        // สร้าง Roles
         $admin_role = Role::create(['name' => 'admin']);
         $writer_role = Role::create(['name' => 'writer']);
 
-        $permission = Permission::create(['name' => 'Post access']);
-        $permission = Permission::create(['name' => 'Post edit']);
-        $permission = Permission::create(['name' => 'Post create']);
-        $permission = Permission::create(['name' => 'Post delete']);
+        // สร้าง Permissions จากข้อมูลที่คุณให้มา
+        $permissionsData = [
+            ['name' => 'Report read', 'guard_name' => 'web'],
+            ['name' => 'Report update', 'guard_name' => 'web'],
+            ['name' => 'Report create', 'guard_name' => 'web'],
+            ['name' => 'Report delete', 'guard_name' => 'web'],
+            ['name' => 'Role read', 'guard_name' => 'web'],
+            ['name' => 'Role update', 'guard_name' => 'web'],
+            ['name' => 'Role create', 'guard_name' => 'web'],
+            ['name' => 'Role delete', 'guard_name' => 'web'],
+            ['name' => 'User read', 'guard_name' => 'web'],
+            ['name' => 'User update', 'guard_name' => 'web'],
+            ['name' => 'User create', 'guard_name' => 'web'],
+            ['name' => 'User delete', 'guard_name' => 'web'],
+            ['name' => 'Mail access', 'guard_name' => 'web'],
+            ['name' => 'Mail edit', 'guard_name' => 'web'],
+            ['name' => 'Permission read', 'guard_name' => 'web'],
+            ['name' => 'Permission create', 'guard_name' => 'web'],
+            ['name' => 'Permission update', 'guard_name' => 'web'],
+            ['name' => 'Permission delete', 'guard_name' => 'web'],
+            ['name' => 'Inregister read', 'guard_name' => 'web'],
+            ['name' => 'Inregister create', 'guard_name' => 'web'],
+            ['name' => 'Inregister update', 'guard_name' => 'web'],
+            ['name' => 'Inregister delete', 'guard_name' => 'web'],
+        ];
 
-        $permission = Permission::create(['name' => 'Role access']);
-        $permission = Permission::create(['name' => 'Role edit']);
-        $permission = Permission::create(['name' => 'Role create']);
-        $permission = Permission::create(['name' => 'Role delete']);
+        foreach ($permissionsData as $permissionItem) {
+            Permission::create(['name' => $permissionItem['name'], 'guard_name' => $permissionItem['guard_name']]);
+        }
 
-        $permission = Permission::create(['name' => 'User access']);
-        $permission = Permission::create(['name' => 'User edit']);
-        $permission = Permission::create(['name' => 'User create']);
-        $permission = Permission::create(['name' => 'User delete']);
-
-        $permission = Permission::create(['name' => 'Permission access']);
-        $permission = Permission::create(['name' => 'Permission edit']);
-        $permission = Permission::create(['name' => 'Permission create']);
-        $permission = Permission::create(['name' => 'Permission delete']);
-
-        $permission = Permission::create(['name' => 'Mail access']);
-        $permission = Permission::create(['name' => 'Mail edit']);
-
-
-
+        // กำหนด Role ให้ User
         $admin->assignRole($admin_role);
         $writer->assignRole($writer_role);
 
-
+        // ให้ Admin Role มีทุก Permissions
         $admin_role->givePermissionTo(Permission::all());
     }
 }
