@@ -105,10 +105,33 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        $permission = Permission::get();
-        $role->permissions;
-        return view('setting.role.edit', ['role' => $role, 'permissions' => $permission]);
+        $permissions = Permission::get();
+        $actions = ['read', 'create', 'update', 'delete'];
+
+        // กำหนดชื่อเมนูภาษาไทย
+        $menuNames = [
+            'Report' => 'รายงาน',
+            'Role' => 'สิทธิ์',
+            'User' => 'ผู้ใช้',
+            // เพิ่มเมนูอื่นๆ ตามต้องการ
+        ];
+
+        $menus = [];
+        foreach ($permissions as $permission) {
+            [$menu, $action] = explode(' ', $permission->name . ' ');
+
+            if (in_array($action, $actions)) {
+                $menuDisplay = $menuNames[$menu] ?? $menu;
+                $menus[$menuDisplay][$action] = $permission;
+            }
+        }
+
+        return view('setting.role.edit', [
+            'role' => $role,
+            'permissions' => $menus
+        ]);
     }
+
 
     /**
      * Update the specified resource in storage.

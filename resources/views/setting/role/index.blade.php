@@ -4,12 +4,12 @@
             <div class="container mx-auto px-6 py-6">
                 <div class="flex justify-between items-center mb-6">
                     <h1 class="text-4xl font-extrabold text-gray-800 tracking-wide">
-                        <span class="text-gray-600">จัดการ Roles</span>
+                        <span class="text-gray-600">จัดการสิทธิ์การใช้งาน</span>
                     </h1>
                     @can('Role create')
                         <a href="{{ route('admin.roles.create') }}"
                            class="bg-blue-500 text-white font-bold px-5 py-2 rounded-lg shadow hover:bg-blue-600 transition duration-300">
-                            + สร้าง Role
+                            + สร้างสิทธิ์การใช้งาน
                         </a>
                     @endcan
                 </div>
@@ -18,7 +18,7 @@
                     <table class="min-w-full bg-white">
                         <thead>
                             <tr class="bg-gray-200 text-gray-600 text-sm leading-normal">
-                                <th class="py-3 px-6 text-left w-1/6 min-w-[180px]">ชื่อ Role</th>
+                                <th class="py-3 px-6 text-left w-1/6 min-w-[180px]">ชื่อสิทธิ์การใช้งาน</th>
                                 <th class="py-3 px-6 text-left">สิทธิ์</th>
                                 <th class="py-3 px-6 text-right w-1/6 min-w-[180px]">การดำเนินการ</th>
                                 {{-- <th class="py-3 px-6 text-right">การดำเนินการ</th> --}}
@@ -45,7 +45,7 @@
                                         <td class="py-3 px-6 text-right">
                                             @can('Role update')
                                                 <a href="{{ route('admin.roles.edit', $role->id) }}"
-                                                   class="bg-yellow-500 text-white font-bold py-2 px-4 rounded-lg shadow hover:bg-yellow-600 transition duration-300 mr-2">
+                                                   class="bg-green-500 text-white font-bold py-2 px-4 rounded-lg shadow hover:bg-green-600 transition duration-300 mr-2">
                                                     แก้ไข
                                                 </a>
                                             @endcan

@@ -37,7 +37,7 @@
                                 <th class="py-4 px-8">ชื่อวัตถุอันตราย (ไทย)</th>
                                 <th class="py-4 px-8">ชื่อการค้า</th>
                                 <th class="py-4 px-8">ปริมาณนำเข้า</th>
-                                <th class="py-4 px-8 rounded-tr-2xl text-center">ตัวเลือก</th>
+                                <th class="py-4 px-8 rounded-tr-2xl text-center">การดำเนินการ</th>
                             </tr>
                         </thead>
                         <tbody>
