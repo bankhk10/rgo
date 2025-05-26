@@ -37,7 +37,7 @@
                                 <th class="py-4 px-8">ชื่อวัตถุอันตราย (ไทย)</th>
                                 <th class="py-4 px-8">ชื่อการค้า</th>
                                 <th class="py-4 px-8">ปริมาณนำเข้า</th>
-                                <th class="py-4 px-8 rounded-tr-2xl">Actions</th>
+                                <th class="py-4 px-8 rounded-tr-2xl text-center">ตัวเลือก</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -50,10 +50,28 @@
                                     <td class="py-4 px-8">{{ $import->trade_name }}</td>
                                     <td class="py-4 px-8">{{ $import->import_quantity }}</td>
                                     <td class="py-4 px-8 text-right">
-                                        <ahref="#"
-                                        class="text-indigo-600 hover:text-indigo-900">แก้ไข</a>
-                                        <a href="#"
-                                           class="text-red-600 hover:text-red-900 ml-2">ลบ</a>
+                                        <div class="flex items-center justify-end gap-2">
+                                            <a href="{{ route('import.show', $import->id) }}"
+                                               class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-150 ease-in-out">
+                                                ดู
+                                            </a>
+                                            <a href="{{ route('import.edit', $import->id) }}"
+                                               class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-green-500 rounded-md hover:bg-geen-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition duration-150 ease-in-out">
+                                                แก้ไข
+                                            </a>
+                                            <form action="{{ route('import.destroy', $import->id) }}"
+                                                  method="POST"
+                                                  class="inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                        class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-red-500 rounded-md border border-red-600 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-150 ease-in-out"
+                                                        {{-- class="inline-flex items-center px-3 py-2 text-sm font-medium text-red-700 bg-red-100 rounded-md hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-150 ease-in-out" --}}
+                                                        onclick="return confirm('คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?')">
+                                                    ลบ
+                                                </button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                             @empty
@@ -65,10 +83,9 @@
                         </tbody>
                     </table>
                 </div>
-                {{-- Pagination (ถ้ามี) --}}
-                {{-- <div class="px-8 py-6 bg-white border-t border-gray-100 rounded-b-2xl">
+                <div class="px-8 py-6 bg-white border-t border-gray-100 rounded-b-2xl">
                     {{ $imports->links() }}
-                </div> --}}
+                </div>
             </div>
 
         </div>

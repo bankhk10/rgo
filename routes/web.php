@@ -59,3 +59,7 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
 Route::get('/import', [ImportController::class, 'index'])->name('import.index');
 Route::get('/import/create', [ImportController::class, 'create'])->name('import.create');
 Route::post('/import/store', [ImportController::class, 'store'])->name('import.store');
+Route::get('/import/{import}/edit', [ImportController::class, 'edit'])->name('import.edit');
+Route::put('/import/{import}', [ImportController::class, 'update'])->name('import.update');
+Route::delete('/import/{import}', [ImportController::class, 'destroy'])->name('import.destroy');
+Route::get('/import/{import}', [ImportController::class, 'show'])->name('import.show');
