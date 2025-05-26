@@ -127,9 +127,15 @@ class UserController extends Controller
         $validated = $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users,email,' . $user->id . ',id',
+            'department' => 'nullable|string|max:255',
+            'position' => 'nullable|string|max:255',
+            'employee_id' => 'nullable|string|max:255|unique:users,employee_id,' . $user->id . ',id',
+            'phone_number' => 'nullable|string|max:20',
+            'employment_status' => 'nullable|string|max:255',
+            'roles' => 'nullable|array',
         ]);
 
-        if ($request->password != null) {
+        if ($request->filled('password')) {
             $request->validate([
                 'password' => 'required|confirmed'
             ]);
@@ -138,7 +144,10 @@ class UserController extends Controller
 
         $user->update($validated);
 
-        $user->syncRoles($request->roles);
+        if ($request->has('roles')) {
+            $user->syncRoles($request->roles);
+        }
+
         return redirect()->back()->withSuccess('User updated !!!');
     }
 
