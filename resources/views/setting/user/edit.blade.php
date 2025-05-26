@@ -72,23 +72,6 @@
                     <p class="text-red-500 text-sm">{{ $message }}</p>
                 @enderror
             </div>
-{{--
-            <div>
-                <label class="block text-gray-700 mb-1">สถานะการทำงาน</label>
-                <select name="employment_status"
-                        class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="">-- เลือกสถานะ --</option>
-                    <option value="active"
-                            {{ old('employment_status', $user->employment_status) == 'active' ? 'selected' : '' }}>
-                        Active</option>
-                    <option value="inactive"
-                            {{ old('employment_status', $user->employment_status) == 'inactive' ? 'selected' : '' }}>
-                        Inactive</option>
-                </select>
-                @error('employment_status')
-                    <p class="text-red-500 text-sm">{{ $message }}</p>
-                @enderror
-            </div> --}}
 
             <div>
                 <label class="block text-gray-700 mb-1">รหัสผ่าน</label>
@@ -161,11 +144,16 @@
         <script>
             Swal.fire({
                 icon: 'success',
-                title: 'สำเร็จ!',
-                text: '{{ session('success') }}',
+                title: 'บันทึกสำเร็จ!',
+                // text: '{{ session('success') }}',
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'ตกลง'
-            });
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    window.location.href = "{{ route('admin.users.index') }}";
+                }
+            })
         </script>
     @endif
 </x-app-layout>

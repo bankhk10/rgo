@@ -98,7 +98,7 @@ class ImportController extends Controller
 
         $import->update($request->all());
 
-        return redirect()->route('import.index')->with('success', 'แก้ไขข้อมูลทะเบียนนำเข้าสำเร็จ');
+        return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จ');
     }
 
     /**
@@ -109,8 +109,11 @@ class ImportController extends Controller
      */
     public function destroy(Import $import)
     {
-        $import->delete();
+        // $import->delete();
 
-        return redirect()->route('import.index')->with('success', 'ลบข้อมูลทะเบียนนำเข้าสำเร็จ');
+        // return redirect()->route('import.index')->with('success', 'ลบข้อมูลทะเบียนนำเข้าสำเร็จ');
+
+          $import->delete();
+        return redirect()->back()->withSuccess('Deleted !!!');
     }
 }

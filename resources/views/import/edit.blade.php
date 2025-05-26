@@ -146,7 +146,7 @@
             <div class="text-left mt-6">
                 <button type="submit"
                         class="bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline shadow-md">
-                    บันทึกการแก้ไข
+                    บันทึก
                 </button>
             </div>
 
@@ -158,11 +158,15 @@
         <script>
             Swal.fire({
                 icon: 'success',
-                title: 'สำเร็จ!',
-                text: '{{ session('success') }}',
+                title: 'บันทึกสำเร็จ!',
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'ตกลง'
-            });
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    window.location.href = "{{ route('import.index') }}";
+                }
+            })
         </script>
     @endif
 </x-app-layout>

@@ -56,17 +56,17 @@
                                                     @endcan
 
                                                     @can('User delete')
+                                                        <button onclick="confirmDelete({{ $user->id }})"
+                                                                class="bg-red-500 text-white font-bold py-2 px-4 rounded-lg shadow hover:bg-red-600 transition duration-300">
+                                                            ลบ
+                                                        </button>
+
                                                         <form id="delete-form-{{ $user->id }}"
                                                               action="{{ route('admin.users.destroy', $user->id) }}"
                                                               method="POST"
-                                                              class="inline">
+                                                              style="display: none;">
                                                             @csrf
                                                             @method('delete')
-                                                            <button type="submit"
-                                                                    class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-red-500 rounded-md border border-red-600 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-150 ease-in-out"
-                                                                    onclick="return confirm('คุณแน่ใจหรือไม่ว่าต้องการลบผู้ใช้งานนี้?')">
-                                                                ลบ
-                                                            </button>
                                                         </form>
                                                     @endcan
                                                 </div>
@@ -121,7 +121,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        function confirmDelete(userId) {
+        function confirmDelete(roleId) {
             Swal.fire({
                 title: 'คุณแน่ใจหรือไม่?',
                 text: "คุณจะไม่สามารถกู้คืนข้อมูลนี้ได้!",
@@ -134,7 +134,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     // ส่งฟอร์มลบ
-                    document.getElementById(`delete-form-${userId}`).submit();
+                    document.getElementById(`delete-form-${roleId}`).submit();
                 }
             });
         }

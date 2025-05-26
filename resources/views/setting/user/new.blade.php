@@ -150,11 +150,16 @@
         <script>
             Swal.fire({
                 icon: 'success',
-                title: 'สำเร็จ!',
-                text: '{{ session('success') }}',
+                title: 'บันทึกสำเร็จ!',
+                // text: '{{ session('success') }}',
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'ตกลง'
-            });
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    window.location.href = "{{ route('admin.users.index') }}";
+                }
+            })
         </script>
     @endif
 </x-app-layout>

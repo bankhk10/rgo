@@ -59,17 +59,18 @@
                                                class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-green-500 rounded-md hover:bg-geen-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition duration-150 ease-in-out">
                                                 แก้ไข
                                             </a>
-                                            <form action="{{ route('import.destroy', $import->id) }}"
+
+                                            <button onclick="confirmDelete({{ $import->id }})"
+                                                    class="bg-red-500 text-white font-bold py-2 px-4 rounded-lg shadow hover:bg-red-600 transition duration-300">
+                                                ลบ
+                                            </button>
+
+                                            <form id="delete-form-{{ $import->id }}"
+                                                  action="{{ route('import.destroy', $import->id) }}"
                                                   method="POST"
-                                                  class="inline">
+                                                  style="display: none;">
                                                 @csrf
-                                                @method('DELETE')
-                                                <button type="submit"
-                                                        class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-red-500 rounded-md border border-red-600 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-150 ease-in-out"
-                                                        {{-- class="inline-flex items-center px-3 py-2 text-sm font-medium text-red-700 bg-red-100 rounded-md hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-150 ease-in-out" --}}
-                                                        onclick="return confirm('คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?')">
-                                                    ลบ
-                                                </button>
+                                                @method('delete')
                                             </form>
                                         </div>
                                     </td>
@@ -90,4 +91,25 @@
 
         </div>
     </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function confirmDelete(roleId) {
+            Swal.fire({
+                title: 'คุณแน่ใจหรือไม่?',
+                text: "คุณจะไม่สามารถกู้คืนข้อมูลนี้ได้!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'ใช่, ลบเลย!',
+                cancelButtonText: 'ยกเลิก'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // ส่งฟอร์มลบ
+                    document.getElementById(`delete-form-${roleId}`).submit();
+                }
+            });
+        }
+    </script>
 </x-app-layout>

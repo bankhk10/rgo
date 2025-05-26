@@ -13,7 +13,8 @@
                         </a>
                     </div> --}}
                 </div>
-                <form method="POST" action="{{ route('admin.roles.update', $role->id) }}">
+                <form method="POST"
+                      action="{{ route('admin.roles.update', $role->id) }}">
                     @csrf
                     @method('put')
                     <div class="mb-4">
@@ -66,7 +67,7 @@
                         </div>
                     </div>
 
-                      <div class="text-center mt-8">
+                    <div class="text-center mt-8">
                         <a href="{{ route('admin.roles.index') }}"
                            class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg shadow transition duration-300 mr-2">
                             <i class="fa-solid fa-arrow-left mr-2"></i> ย้อนกลับ
@@ -85,11 +86,15 @@
         <script>
             Swal.fire({
                 icon: 'success',
-                title: 'สำเร็จ!',
-                text: '{{ session('success') }}',
+                title: 'บันทึกสำเร็จ!',
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'ตกลง'
-            });
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    window.location.href = "{{ route('admin.roles.index') }}";
+                }
+            })
         </script>
     @endif
 </x-app-layout>
