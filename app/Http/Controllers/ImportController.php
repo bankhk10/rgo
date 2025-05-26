@@ -109,11 +109,8 @@ class ImportController extends Controller
      */
     public function destroy(Import $import)
     {
-        // $import->delete();
 
-        // return redirect()->route('import.index')->with('success', 'ลบข้อมูลทะเบียนนำเข้าสำเร็จ');
-
-          $import->delete();
+        $import->delete();
         return redirect()->back()->withSuccess('Deleted !!!');
     }
 }

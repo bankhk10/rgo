@@ -18,14 +18,14 @@
                     ข้อมูลทะเบียนนำเข้า
                 </span>
             </h1>
-
-            <div class="mb-6 text-right">
-                <a href="{{ route('import.create') }}"
-                   class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 shadow-md">
-                    + เพิ่มข้อมูลทะเบียน
-                </a>
-            </div>
-
+            @can('Inregister create')
+                <div class="mb-6 text-right">
+                    <a href="{{ route('import.create') }}"
+                       class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 shadow-md">
+                        + เพิ่มข้อมูลทะเบียน
+                    </a>
+                </div>
+            @endcan
             <div class="bg-white rounded-2xl overflow-hidden border border-gray-200">
                 <div class="overflow-x-auto">
                     <table class="min-w-full bg-white">
@@ -41,46 +41,53 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($imports as $index => $import)
-                                <tr class="border-b hover:bg-indigo-50 transition">
-                                    <td class="py-4 px-8 font-semibold text-gray-700">{{ $index + 1 }}</td>
-                                    <td class="py-4 px-8">{{ $import->company }}</td>
-                                    <td class="py-4 px-8">{{ $import->registration_number }}</td>
-                                    <td class="py-4 px-8">{{ $import->hazardous_name_th }}</td>
-                                    <td class="py-4 px-8">{{ $import->trade_name }}</td>
-                                    <td class="py-4 px-8">{{ $import->import_quantity }}</td>
-                                    <td class="py-4 px-8 text-right">
-                                        <div class="flex items-center justify-end gap-2">
-                                            <a href="{{ route('import.show', $import->id) }}"
-                                               class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-150 ease-in-out">
-                                                ดู
-                                            </a>
-                                            <a href="{{ route('import.edit', $import->id) }}"
-                                               class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-green-500 rounded-md hover:bg-geen-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition duration-150 ease-in-out">
-                                                แก้ไข
-                                            </a>
+                            @can('Inregister read')
+                                @forelse ($imports as $index => $import)
+                                    <tr class="border-b hover:bg-indigo-50 transition">
+                                        <td class="py-4 px-8 font-semibold text-gray-700">{{ $index + 1 }}</td>
+                                        <td class="py-4 px-8">{{ $import->company }}</td>
+                                        <td class="py-4 px-8">{{ $import->registration_number }}</td>
+                                        <td class="py-4 px-8">{{ $import->hazardous_name_th }}</td>
+                                        <td class="py-4 px-8">{{ $import->trade_name }}</td>
+                                        <td class="py-4 px-8">{{ $import->import_quantity }}</td>
+                                        <td class="py-4 px-8 text-right">
+                                            <div class="flex items-center justify-end gap-2">
+                                                @can('Inregister read')
+                                                    <a href="{{ route('import.show', $import->id) }}"
+                                                       class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-150 ease-in-out">
+                                                        ดู
+                                                    </a>
+                                                @endcan
+                                                @can('Inregister update')
+                                                    <a href="{{ route('import.edit', $import->id) }}"
+                                                       class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-green-500 rounded-md hover:bg-geen-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition duration-150 ease-in-out">
+                                                        แก้ไข
+                                                    </a>
+                                                @endcan
+                                                @can('Inregister delete')
+                                                    <button onclick="confirmDelete({{ $import->id }})"
+                                                            class="bg-red-500 text-white font-bold py-2 px-4 rounded-lg shadow hover:bg-red-600 transition duration-300">
+                                                        ลบ
+                                                    </button>
 
-                                            <button onclick="confirmDelete({{ $import->id }})"
-                                                    class="bg-red-500 text-white font-bold py-2 px-4 rounded-lg shadow hover:bg-red-600 transition duration-300">
-                                                ลบ
-                                            </button>
-
-                                            <form id="delete-form-{{ $import->id }}"
-                                                  action="{{ route('import.destroy', $import->id) }}"
-                                                  method="POST"
-                                                  style="display: none;">
-                                                @csrf
-                                                @method('delete')
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="7"
-                                        class="py-6 px-8 text-center text-gray-400">ไม่มีข้อมูลทะเบียนนำเข้า</td>
-                                </tr>
-                            @endforelse
+                                                    <form id="delete-form-{{ $import->id }}"
+                                                          action="{{ route('import.destroy', $import->id) }}"
+                                                          method="POST"
+                                                          style="display: none;">
+                                                        @csrf
+                                                        @method('delete')
+                                                    </form>
+                                                @endcan
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="7"
+                                            class="py-6 px-8 text-center text-gray-400">ไม่มีข้อมูลทะเบียนนำเข้า</td>
+                                    </tr>
+                                @endforelse
+                            @endcan
                         </tbody>
                     </table>
                 </div>

@@ -52,6 +52,7 @@ class RoleController extends Controller
             'Report' => 'รายงาน',
             'Role' => 'สิทธิ์',
             'User' => 'ผู้ใช้',
+            'Inregister' => 'ทะเบียนนำเข้า',
             // เพิ่มเมนูอื่นๆ ตามต้องการ
         ];
 
@@ -113,6 +114,7 @@ class RoleController extends Controller
             'Report' => 'รายงาน',
             'Role' => 'สิทธิ์',
             'User' => 'ผู้ใช้',
+            'Inregister' => 'ทะเบียนนำเข้า',
             // เพิ่มเมนูอื่นๆ ตามต้องการ
         ];
 
