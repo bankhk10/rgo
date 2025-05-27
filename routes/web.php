@@ -32,7 +32,7 @@ Route::get('/dashboard', function () {
 })->middleware(['front'])->name('dashboard');
 
 
-require __DIR__ . '/front_auth.php';
+// require __DIR__ . '/front_auth.php';
 
 // Admin routes
 Route::get('/admin/dashboard', function () {
