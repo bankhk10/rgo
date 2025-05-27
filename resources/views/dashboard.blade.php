@@ -82,39 +82,27 @@
         <div class="container mx-auto px-6 py-6">
             <h1 class="text-4xl font-extrabold text-center text-indigo-700 mt-5 mb-10 tracking-wide">
                 <span class="inline-flex items-center gap-2">
-                    <svg class="w-10 h-10 text-indigo-400"
-                         fill="none"
-                         stroke="currentColor"
-                         stroke-width="2"
-                         viewBox="0 0 24 24">
-                        <path stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M12 8c-1.657 0-3 1.343-3 3v1c0 1.657 1.343 3 3 3s3-1.343 3-3v-1c0-1.657-1.343-3-3-3z" />
-                        <path stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M12 2v2m0 16v2m8-10h2M2 12H4m15.364-7.364l1.414 1.414M4.222 19.778l1.414-1.414m12.728 0l1.414 1.414M4.222 4.222l1.414 1.414" />
+                    <svg class="w-10 h-10 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 8c-1.657 0-3 1.343-3 3v1c0 1.657 1.343 3 3 3s3-1.343 3-3v-1c0-1.657-1.343-3-3-3z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 2v2m0 16v2m8-10h2M2 12H4m15.364-7.364l1.414 1.414M4.222 19.778l1.414-1.414m12.728 0l1.414 1.414M4.222 4.222l1.414 1.414" />
                     </svg>
-                    รายงานทะเบียนยา
+                    Dashboard
                 </span>
             </h1>
 
             {{-- สรุปสถานะทะเบียน --}}
             <div class="flex flex-row justify-around mb-10">
                 <div
-                     class="group h-full bg-gradient-to-br from-red-100 to-red-50 p-4 rounded-3xl text-center border-2 border-red-200 hover:scale-105 transition-all duration-300">
+                    class="group h-full bg-gradient-to-br from-red-100 to-red-50 p-4 rounded-3xl text-center border-2 border-red-200 hover:scale-105 transition-all duration-300">
                     <div class="flex justify-center mb-2">
                         <div class="bg-red-200 rounded-full p-3 group-hover:bg-red-300 transition">
-                            <svg class="w-8 h-8 text-red-600"
-                                 fill="none"
-                                 stroke="currentColor"
-                                 stroke-width="2"
-                                 viewBox="0 0 24 24">
-                                <path stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                      d="M12 8v4l3 3" />
-                                <circle cx="12"
-                                        cy="12"
-                                        r="10" />
+                            <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3" />
+                                <circle cx="12" cy="12" r="10" />
                             </svg>
                         </div>
                     </div>
@@ -122,20 +110,13 @@
                     <p class="text-4xl text-red-600 font-extrabold mb-1">{{ $expiredCount }}</p>
                 </div>
                 <div
-                     class="group h-full bg-gradient-to-br from-yellow-100 to-yellow-50 p-4 rounded-3xl text-center border-2 border-yellow-200 hover:scale-105 transition-all duration-300">
+                    class="group h-full bg-gradient-to-br from-yellow-100 to-yellow-50 p-4 rounded-3xl text-center border-2 border-yellow-200 hover:scale-105 transition-all duration-300">
                     <div class="flex justify-center mb-2">
                         <div class="bg-yellow-200 rounded-full p-3 group-hover:bg-yellow-300 transition">
-                            <svg class="w-8 h-8 text-yellow-500"
-                                 fill="none"
-                                 stroke="currentColor"
-                                 stroke-width="2"
-                                 viewBox="0 0 24 24">
-                                <path stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                      d="M12 8v4l3 3" />
-                                <circle cx="12"
-                                        cy="12"
-                                        r="10" />
+                            <svg class="w-8 h-8 text-yellow-500" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3" />
+                                <circle cx="12" cy="12" r="10" />
                             </svg>
                         </div>
                     </div>
@@ -144,17 +125,12 @@
 
                 </div>
                 <div
-                     class="group h-full bg-gradient-to-br from-green-100 to-green-50 p-4 rounded-3xl text-center border-2 border-green-200 hover:scale-105 transition-all duration-300">
+                    class="group h-full bg-gradient-to-br from-green-100 to-green-50 p-4 rounded-3xl text-center border-2 border-green-200 hover:scale-105 transition-all duration-300">
                     <div class="flex justify-center mb-2">
                         <div class="bg-green-200 rounded-full p-3 group-hover:bg-green-300 transition">
-                            <svg class="w-8 h-8 text-green-600"
-                                 fill="none"
-                                 stroke="currentColor"
-                                 stroke-width="2"
-                                 viewBox="0 0 24 24">
-                                <path stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                      d="M5 13l4 4L19 7" />
+                            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                             </svg>
                         </div>
                     </div>
@@ -188,15 +164,15 @@
                                     <td class="py-4 px-8">{{ $drug->expiry_date->format('d/m/Y') }}</td>
                                     <td class="py-4 px-8">
                                         <span
-                                              class="bg-yellow-200 text-yellow-900 py-1 px-4 rounded-full text-xs font-bold">
+                                            class="bg-yellow-200 text-yellow-900 py-1 px-4 rounded-full text-xs font-bold">
                                             ใกล้หมดอายุ
                                         </span>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5"
-                                        class="py-6 px-8 text-center text-gray-400">ไม่มีทะเบียนใกล้หมดอายุ</td>
+                                    <td colspan="5" class="py-6 px-8 text-center text-gray-400">
+                                        ไม่มีทะเบียนใกล้หมดอายุ</td>
                                 </tr>
                             @endforelse
                         </tbody>

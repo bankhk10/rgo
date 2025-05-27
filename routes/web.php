@@ -9,6 +9,9 @@ use App\Http\Controllers\Admin\{
 use App\Http\Controllers\ImportController;
 use App\Http\Controllers\ProductionController;
 use App\Http\Controllers\InRegisterController;
+use App\Http\Controllers\ManufactureRegisController;
+use App\Http\Controllers\NewRegisController;
+use App\Http\Controllers\RenewRegisController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -63,3 +66,8 @@ Route::get('/import/{import}/edit', [ImportController::class, 'edit'])->name('im
 Route::put('/import/{import}', [ImportController::class, 'update'])->name('import.update');
 Route::delete('/import/{import}', [ImportController::class, 'destroy'])->name('import.destroy');
 Route::get('/import/{import}', [ImportController::class, 'show'])->name('import.show');
+
+Route::get('/new/product', [NewRegisController::class, 'index'])->name('newregis.index');
+Route::get('/renew/product', [RenewRegisController::class, 'index'])->name('renewregis.index');
+Route::get('/manufactture/product', [ManufactureRegisController::class, 'index'])->name('manufactureregis.index');
+
