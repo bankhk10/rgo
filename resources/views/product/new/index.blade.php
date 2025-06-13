@@ -1,93 +1,3 @@
-@php
-    $expiredCount = 2;
-    $nearExpiryDrugs = collect([
-        (object) [
-            'name' => 'ยาเม็ดวิตามินรวม',
-            'registration_number' => '123456',
-            'expiry_date' => \Carbon\Carbon::now()->addDays(10),
-            'progress' => 10, // เพิ่มค่า progress
-        ],
-        (object) [
-            'name' => 'น้ำมันตับปลาชนิดแคปซูล',
-            'registration_number' => '654321',
-            'expiry_date' => \Carbon\Carbon::now()->addDays(20),
-            'progress' => 50, // เพิ่มค่า progress
-        ],
-        (object) [
-            'name' => 'ยาแก้ปวดพาราเซตามอล',
-            'registration_number' => '987654',
-            'expiry_date' => \Carbon\Carbon::now()->addDays(5),
-            'progress' => 20, // เพิ่มค่า progress
-        ],
-        (object) [
-            'name' => 'ยาเม็ดวิตามินรวม',
-            'registration_number' => '123456',
-            'expiry_date' => \Carbon\Carbon::now()->addDays(10),
-            'progress' => 90, // เพิ่มค่า progress
-        ],
-        (object) [
-            'name' => 'น้ำมันตับปลาชนิดแคปซูล',
-            'registration_number' => '654321',
-            'expiry_date' => \Carbon\Carbon::now()->addDays(20),
-            'progress' => 70, // เพิ่มค่า progress
-        ],
-        (object) [
-            'name' => 'ยาแก้ปวดพาราเซตามอล',
-            'registration_number' => '987654',
-            'expiry_date' => \Carbon\Carbon::now()->addDays(5),
-            'progress' => 40, // เพิ่มค่า progress
-        ],
-        (object) [
-            'name' => 'ยาเม็ดวิตามินรวม',
-            'registration_number' => '123456',
-            'expiry_date' => \Carbon\Carbon::now()->addDays(10),
-            'progress' => 60, // เพิ่มค่า progress
-        ],
-        (object) [
-            'name' => 'น้ำมันตับปลาชนิดแคปซูล',
-            'registration_number' => '654321',
-            'expiry_date' => \Carbon\Carbon::now()->addDays(20),
-            'progress' => 25, // เพิ่มค่า progress
-        ],
-        (object) [
-            'name' => 'ยาแก้ปวดพาราเซตามอล',
-            'registration_number' => '987654',
-            'expiry_date' => \Carbon\Carbon::now()->addDays(5),
-            'progress' => 10, // เพิ่มค่า progress
-        ],
-        (object) [
-            'name' => 'ยาเม็ดวิตามินรวม',
-            'registration_number' => '123456',
-            'expiry_date' => \Carbon\Carbon::now()->addDays(10),
-            'progress' => 35, // เพิ่มค่า progress
-        ],
-        (object) [
-            'name' => 'น้ำมันตับปลาชนิดแคปซูล',
-            'registration_number' => '654321',
-            'expiry_date' => \Carbon\Carbon::now()->addDays(20),
-            'progress' => 95, // เพิ่มค่า progress
-        ],
-        (object) [
-            'name' => 'ยาแก้ปวดพาราเซตามอล',
-            'registration_number' => '987654',
-            'expiry_date' => \Carbon\Carbon::now()->addDays(5),
-            'progress' => 5, // เพิ่มค่า progress
-        ],
-    ]);
-    $nearExpiryCount = $nearExpiryDrugs->count();
-    $activeCount = 5;
-
-    // Manually paginate the collection
-    $perPage = 5;
-    $currentPage = request()->get('page', 1);
-    $paginatedNearExpiryDrugs = new \Illuminate\Pagination\LengthAwarePaginator(
-        $nearExpiryDrugs->forPage($currentPage, $perPage),
-        $nearExpiryDrugs->count(),
-        $perPage,
-        $currentPage,
-        ['path' => request()->url()],
-    );
-@endphp
 
 <x-app-layout>
     <main class="flex-1 overflow-x-hidden overflow-y-auto">
@@ -340,7 +250,9 @@
                                     </td>
                                     <td class="py-4 px-12 mx-auto">
                                         {{-- ปุ่มดูรายละเอียด --}}
-                                        <a href="/drugs/{{ $drug->registration_number }}"
+                                        {{-- <a href="/drugs/{{ $drug->registration_number }}" --}}
+                                            <a href="{{ route('newregis.show', $drug->registration_number) }}"
+
                                             class="inline-flex items-center justify-center p-2 rounded-full text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200"
                                             title="ดูรายละเอียด">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
