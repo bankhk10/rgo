@@ -1,28 +1,373 @@
+@php
+    $expiredCount = 2;
+    $nearExpiryDrugs = collect([
+        (object) [
+            'name' => 'ยาเม็ดวิตามินรวม',
+            'registration_number' => '123456',
+            'expiry_date' => \Carbon\Carbon::now()->addDays(10),
+            'progress' => 10, // เพิ่มค่า progress
+        ],
+        (object) [
+            'name' => 'น้ำมันตับปลาชนิดแคปซูล',
+            'registration_number' => '654321',
+            'expiry_date' => \Carbon\Carbon::now()->addDays(20),
+            'progress' => 50, // เพิ่มค่า progress
+        ],
+        (object) [
+            'name' => 'ยาแก้ปวดพาราเซตามอล',
+            'registration_number' => '987654',
+            'expiry_date' => \Carbon\Carbon::now()->addDays(5),
+            'progress' => 20, // เพิ่มค่า progress
+        ],
+        (object) [
+            'name' => 'ยาเม็ดวิตามินรวม',
+            'registration_number' => '123456',
+            'expiry_date' => \Carbon\Carbon::now()->addDays(10),
+            'progress' => 90, // เพิ่มค่า progress
+        ],
+        (object) [
+            'name' => 'น้ำมันตับปลาชนิดแคปซูล',
+            'registration_number' => '654321',
+            'expiry_date' => \Carbon\Carbon::now()->addDays(20),
+            'progress' => 70, // เพิ่มค่า progress
+        ],
+        (object) [
+            'name' => 'ยาแก้ปวดพาราเซตามอล',
+            'registration_number' => '987654',
+            'expiry_date' => \Carbon\Carbon::now()->addDays(5),
+            'progress' => 40, // เพิ่มค่า progress
+        ],
+        (object) [
+            'name' => 'ยาเม็ดวิตามินรวม',
+            'registration_number' => '123456',
+            'expiry_date' => \Carbon\Carbon::now()->addDays(10),
+            'progress' => 60, // เพิ่มค่า progress
+        ],
+        (object) [
+            'name' => 'น้ำมันตับปลาชนิดแคปซูล',
+            'registration_number' => '654321',
+            'expiry_date' => \Carbon\Carbon::now()->addDays(20),
+            'progress' => 25, // เพิ่มค่า progress
+        ],
+        (object) [
+            'name' => 'ยาแก้ปวดพาราเซตามอล',
+            'registration_number' => '987654',
+            'expiry_date' => \Carbon\Carbon::now()->addDays(5),
+            'progress' => 10, // เพิ่มค่า progress
+        ],
+        (object) [
+            'name' => 'ยาเม็ดวิตามินรวม',
+            'registration_number' => '123456',
+            'expiry_date' => \Carbon\Carbon::now()->addDays(10),
+            'progress' => 35, // เพิ่มค่า progress
+        ],
+        (object) [
+            'name' => 'น้ำมันตับปลาชนิดแคปซูล',
+            'registration_number' => '654321',
+            'expiry_date' => \Carbon\Carbon::now()->addDays(20),
+            'progress' => 95, // เพิ่มค่า progress
+        ],
+        (object) [
+            'name' => 'ยาแก้ปวดพาราเซตามอล',
+            'registration_number' => '987654',
+            'expiry_date' => \Carbon\Carbon::now()->addDays(5),
+            'progress' => 5, // เพิ่มค่า progress
+        ],
+    ]);
+    $nearExpiryCount = $nearExpiryDrugs->count();
+    $activeCount = 5;
+
+    // Manually paginate the collection
+    $perPage = 5;
+    $currentPage = request()->get('page', 1);
+    $paginatedNearExpiryDrugs = new \Illuminate\Pagination\LengthAwarePaginator(
+        $nearExpiryDrugs->forPage($currentPage, $perPage),
+        $nearExpiryDrugs->count(),
+        $perPage,
+        $currentPage,
+        ['path' => request()->url()],
+    );
+@endphp
+
 <x-app-layout>
-    <style>
-        .soon-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            /* ทำให้สูงเต็ม viewport */
-            margin: 0;
-        }
+    <main class="flex-1 overflow-x-hidden overflow-y-auto">
+        <div class="container mx-auto px-6 py-6">
+            <h1 class="text-4xl font-extrabold text-center text-indigo-700 mt-5 mb-10 tracking-wide">
+                <span class="inline-flex items-center gap-2">
+                    <svg class="w-10 h-10 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 8c-1.657 0-3 1.343-3 3v1c0 1.657 1.343 3 3 3s3-1.343 3-3v-1c0-1.657-1.343-3-3-3z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 2v2m0 16v2m8-10h2M2 12H4m15.364-7.364l1.414 1.414M4.222 19.778l1.414-1.414m12.728 0l1.414 1.414M4.222 4.222l1.414 1.414" />
+                    </svg>
+                    Dashboard
+                </span>
+            </h1>
 
-        .soon-text {
-            font-size: 3em;
-            /* ขนาดตัวอักษร (ปรับได้) */
-            animation: blinker 1s linear infinite;
-        }
+            {{-- สรุปสถานะทะเบียน --}}
+            <div class="flex flex-row justify-around mb-10">
+                <div
+                    class="group h-full bg-gradient-to-br from-blue-200 to-blue-100 p-4 rounded-3xl text-center border-2 border-blue-400 hover:scale-105 transition-all duration-300">
+                    <div class="flex justify-center mb-2">
+                        <div class="bg-blue-300 rounded-full p-3 group-hover:bg-blue-400 transition">
+                            {{-- ไอคอนใหม่ --}}
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-blue-600">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <h2 class="text-lg font-bold text-blue-700 mb-1 tracking-wide">ขึ้นทะเบียนใหม่ทั้งหมด</h2>
+                    <p class="text-4xl text-blue-600 font-extrabold mb-1">{{ $expiredCount }}</p>
+                </div>
+                <div
+                    class="group h-full bg-gradient-to-br from-yellow-100 to-yellow-50 p-4 rounded-3xl text-center border-2 border-yellow-200 hover:scale-105 transition-all duration-300">
+                    <div class="flex justify-center mb-2">
+                        <div class="bg-yellow-200 rounded-full p-3 group-hover:bg-yellow-300 transition">
+                            <svg class="w-8 h-8 text-yellow-500" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3" />
+                                <circle cx="12" cy="12" r="10" />
+                            </svg>
+                        </div>
+                    </div>
+                    <h2 class="text-lg font-bold text-yellow-700 mb-1 tracking-wide">อยู่ระหว่างดำเนินการ</h2>
+                    <p class="text-4xl text-yellow-600 font-extrabold mb-1">{{ $nearExpiryCount }}</p>
 
-        @keyframes blinker {
-            50% {
-                opacity: 0;
-            }
-        }
-    </style>
+                </div>
+                <div
+                    class="group h-full bg-gradient-to-br from-green-100 to-green-50 p-4 rounded-3xl text-center border-2 border-green-200 hover:scale-105 transition-all duration-300">
+                    <div class="flex justify-center mb-2">
+                        <div class="bg-green-200 rounded-full p-3 group-hover:bg-green-300 transition">
+                            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                    </div>
+                    <h2 class="text-lg font-bold text-green-700 mb-1 tracking-wide">ขึ้นทะเบียนใหม่เสร็จแล้ว</h2>
+                    <p class="text-4xl text-green-600 font-extrabold mb-1">{{ $activeCount }}</p>
 
-    <div class="soon-container">
-        <h1 class="soon-text">กำลังดำเนินการ</h1>
-    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl overflow-hidden border border-gray-200">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white">
+                        <thead>
+                            <tr class="bg-indigo-600 text-white text-left">
+                                <th class="py-4 px-8 rounded-tl-2xl">ลำดับ</th>
+                                <th class="py-4 px-8">ชื่อสามัญ</th>
+                                <th class="py-4 px-8">เลขที่ทะเบียน</th>
+                                <th class="py-4 px-8">วันที่ขึ้นทะเบียน</th>
+                                <th class="py-4 px-8">สถานะความคืบหน้า</th>
+                                <th class="py-4 px-8 rounded-tr-2xl">รายละเอียด</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($paginatedNearExpiryDrugs as $index => $drug)
+                                <tr class="border-b hover:bg-yellow-50 transition">
+                                    <td class="py-4 px-8 font-semibold text-gray-700">
+                                        {{ ($paginatedNearExpiryDrugs->currentPage() - 1) * $paginatedNearExpiryDrugs->perPage() + $index + 1 }}
+                                    </td>
+                                    <td class="py-4 px-8">{{ $drug->name }}</td>
+                                    <td class="py-4 px-8">{{ $drug->registration_number }}</td>
+                                    <td class="py-4 px-8">{{ $drug->expiry_date->format('d/m/Y') }}</td>
+                                    <td class="py-4 px-8">
+                                        <div class="text-center mb-2">
+                                            {{-- แสดงสถานะความคืบหน้า --}}
+                                            @if ($drug->progress <= 12.5 || $drug->progress == 0)
+                                                <div x-data="{ tooltip: false }" class="relative inline-block">
+                                                    <p class="text-red-600 font-semibold cursor-pointer"
+                                                        @mouseenter="tooltip = true" @mouseleave="tooltip = false">
+                                                        ขั้นตอนที่ 1
+                                                    </p>
+                                                    <div x-show="tooltip"
+                                                        x-transition:enter="transition ease-out duration-200"
+                                                        x-transition:enter-start="opacity-0 scale-90"
+                                                        x-transition:enter-end="opacity-100 scale-100"
+                                                        x-transition:leave="transition ease-in duration-200"
+                                                        x-transition:leave-start="opacity-100 scale-100"
+                                                        x-transition:leave-end="opacity-0 scale-90"
+                                                        class="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none -translate-x-1/2 left-1/2 -top-10"
+                                                        style="min-width: max-content;">
+                                                        คณะ PDC อนุมัติให้ดำเนินการขึ้นทะเบียน
+                                                    </div>
+                                                </div>
+                                            @elseif ($drug->progress <= 25 && $drug->progress >= 12.5)
+                                                <div x-data="{ tooltip: false }" class="relative inline-block">
+                                                    <p class="text-yellow-700 font-semibold cursor-pointer"
+                                                        @mouseenter="tooltip = true" @mouseleave="tooltip = false">
+                                                        ขั้นตอนที่ 2
+                                                    </p>
+                                                    <div x-show="tooltip"
+                                                        x-transition:enter="transition ease-out duration-200"
+                                                        x-transition:enter-start="opacity-0 scale-90"
+                                                        x-transition:enter-end="opacity-100 scale-100"
+                                                        x-transition:leave="transition ease-in duration-200"
+                                                        x-transition:leave-start="opacity-100 scale-100"
+                                                        x-transition:leave-end="opacity-0 scale-90"
+                                                        class="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none -translate-x-1/2 left-1/2 -top-10"
+                                                        style="min-width: max-content;">
+                                                        นำเข้าตัวอย่าง
+                                                    </div>
+                                                </div>
+                                            @elseif ($drug->progress <= 35.5 && $drug->progress >= 25)
+                                                <div x-data="{ tooltip: false }" class="relative inline-block">
+                                                    <p class="text-yellow-700 font-semibold cursor-pointer"
+                                                        @mouseenter="tooltip = true" @mouseleave="tooltip = false">
+                                                        ขั้นตอนที่ 3
+                                                    </p>
+                                                    <div x-show="tooltip"
+                                                        x-transition:enter="transition ease-out duration-200"
+                                                        x-transition:enter-start="opacity-0 scale-90"
+                                                        x-transition:enter-end="opacity-100 scale-100"
+                                                        x-transition:leave="transition ease-in duration-200"
+                                                        x-transition:leave-start="opacity-100 scale-100"
+                                                        x-transition:leave-end="opacity-0 scale-90"
+                                                        class="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none -translate-x-1/2 left-1/2 -top-10"
+                                                        style="min-width: max-content;">
+                                                        ส่งตัวอย่างข้อมูลศึกษาความเป็นพิษ (ทำTox)
+                                                    </div>
+                                                </div>
+                                            @elseif ($drug->progress <= 50 && $drug->progress >= 35.5)
+                                                <div x-data="{ tooltip: false }" class="relative inline-block">
+                                                    <p class="text-yellow-700 font-semibold cursor-pointer"
+                                                        @mouseenter="tooltip = true" @mouseleave="tooltip = false">
+                                                        ขั้นตอนที่ 4
+                                                    </p>
+                                                    <div x-show="tooltip"
+                                                        x-transition:enter="transition ease-out duration-200"
+                                                        x-transition:enter-start="opacity-0 scale-90"
+                                                        x-transition:enter-end="opacity-100 scale-100"
+                                                        x-transition:leave="transition ease-in duration-200"
+                                                        x-transition:leave-start="opacity-100 scale-100"
+                                                        x-transition:leave-end="opacity-0 scale-90"
+                                                        class="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none -translate-x-1/2 left-1/2 -top-10"
+                                                        style="min-width: max-content;">
+                                                        ยื่นคำขอขึ้นทะเบียน
+                                                    </div>
+                                                </div>
+                                            @elseif ($drug->progress <= 62.5 && $drug->progress >= 50)
+                                                <div x-data="{ tooltip: false }" class="relative inline-block">
+                                                    <p class="text-yellow-700 font-semibold cursor-pointer"
+                                                        @mouseenter="tooltip = true" @mouseleave="tooltip = false">
+                                                        ขั้นตอนที่ 5
+                                                    </p>
+                                                    <div x-show="tooltip"
+                                                        x-transition:enter="transition ease-out duration-200"
+                                                        x-transition:enter-start="opacity-0 scale-90"
+                                                        x-transition:enter-end="opacity-100 scale-100"
+                                                        x-transition:leave="transition ease-in duration-200"
+                                                        x-transition:leave-start="opacity-100 scale-100"
+                                                        x-transition:leave-end="opacity-0 scale-90"
+                                                        class="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none -translate-x-1/2 left-1/2 -top-10"
+                                                        style="min-width: max-content;">
+                                                        แผนการทดลอง Eff, PHI (ถ้ามี) + Phase I+ผลวิเคราะห์ (อนุมัติ)
+                                                    </div>
+                                                </div>
+                                            @elseif ($drug->progress <= 75 && $drug->progress >= 62.5)
+                                                <div x-data="{ tooltip: false }" class="relative inline-block">
+                                                    <p class="text-yellow-700 font-semibold cursor-pointer"
+                                                        @mouseenter="tooltip = true" @mouseleave="tooltip = false">
+                                                        ขั้นตอนที่ 6
+                                                    </p>
+                                                    <div x-show="tooltip"
+                                                        x-transition:enter="transition ease-out duration-200"
+                                                        x-transition:enter-start="opacity-0 scale-90"
+                                                        x-transition:enter-end="opacity-100 scale-100"
+                                                        x-transition:leave="transition ease-in duration-200"
+                                                        x-transition:leave-start="opacity-100 scale-100"
+                                                        x-transition:leave-end="opacity-0 scale-90"
+                                                        class="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none -translate-x-1/2 left-1/2 -top-10"
+                                                        style="min-width: max-content;">
+                                                        ยื่น Phase III (ผลการทดลอง Eff, PHI (ถ้ามี)อนุมัติ+ผลวิเคราะห์อนุมัติ)
+                                                    </div>
+                                                </div>
+                                            @elseif ($drug->progress <= 87.5 && $drug->progress >= 75)
+                                                <div x-data="{ tooltip: false }" class="relative inline-block">
+                                                    <p class="text-yellow-700 font-semibold cursor-pointer"
+                                                        @mouseenter="tooltip = true" @mouseleave="tooltip = false">
+                                                        ขั้นตอนที่ 7
+                                                    </p>
+                                                    <div x-show="tooltip"
+                                                        x-transition:enter="transition ease-out duration-200"
+                                                        x-transition:enter-start="opacity-0 scale-90"
+                                                        x-transition:enter-end="opacity-100 scale-100"
+                                                        x-transition:leave="transition ease-in duration-200"
+                                                        x-transition:leave-start="opacity-100 scale-100"
+                                                        x-transition:leave-end="opacity-0 scale-90"
+                                                        class="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none -translate-x-1/2 left-1/2 -top-10"
+                                                        style="min-width: max-content;">
+                                                        Phase III อนุมัติ (ยื่นเอกสารเข้าประชุมพิจารณาขึ้นทะเบียน)
+                                                    </div>
+                                                </div>
+                                            @elseif ($drug->progress <= 100 && $drug->progress >= 87.5)
+                                                <div x-data="{ tooltip: false }" class="relative inline-block">
+                                                    <p class="text-yellow-700 font-semibold cursor-pointer"
+                                                        @mouseenter="tooltip = true" @mouseleave="tooltip = false">
+                                                        ขั้นตอนที่ 8
+                                                    </p>
+                                                    <div x-show="tooltip"
+                                                        x-transition:enter="transition ease-out duration-200"
+                                                        x-transition:enter-start="opacity-0 scale-90"
+                                                        x-transition:enter-end="opacity-100 scale-100"
+                                                        x-transition:leave="transition ease-in duration-200"
+                                                        x-transition:leave-start="opacity-100 scale-100"
+                                                        x-transition:leave-end="opacity-0 scale-90"
+                                                        class="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none -translate-x-1/2 left-1/2 -top-10"
+                                                        style="min-width: max-content;">
+                                                        ยื่นขอออกทะเบียน
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
+                                        {{-- แถบความคืบหน้า --}}
+                                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                            <div class="h-2.5 rounded-full
+                                                @if ($drug->progress < 25) bg-red-500
+                                                @elseif ($drug->progress < 75) bg-yellow-500
+                                                @else bg-green-500 @endif"
+                                                style="width: {{ $drug->progress }}%">
+                                            </div>
+                                        </div>
+                                        <div class="text-xs text-gray-500 text-center mt-1">
+                                            {{ $drug->progress }}%
+
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-12 mx-auto">
+                                        {{-- ปุ่มดูรายละเอียด --}}
+                                        <a href="/drugs/{{ $drug->registration_number }}"
+                                            class="inline-flex items-center justify-center p-2 rounded-full text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200"
+                                            title="ดูรายละเอียด">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                class="w-6 h-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                            </svg>
+                                        </a>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="py-6 px-8 text-center text-gray-400">
+                                        ไม่มีขึ้นทะเบียนใหม่</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+                <div class="px-8 py-6 bg-white border-t border-gray-100 rounded-b-2xl">
+                    {{ $paginatedNearExpiryDrugs->links() }}
+                </div>
+            </div>
+
+        </div>
+    </main>
 </x-app-layout>
