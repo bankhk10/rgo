@@ -3,6 +3,7 @@
 
     <main class="bg-white font-montserrat">
         <header class="h-24 sm:h-32 flex items-center">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
             <div class="container mx-auto px-6 sm:px-12 flex items-center justify-between">
                 <div class="text-black font-black text-2xl flex items-center">
                     <span class="w-6 h-6 rounded-full bg-blue-500 mr-4"></span> LaravelStarter

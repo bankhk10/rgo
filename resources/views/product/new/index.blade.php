@@ -10,7 +10,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M12 2v2m0 16v2m8-10h2M2 12H4m15.364-7.364l1.414 1.414M4.222 19.778l1.414-1.414m12.728 0l1.414 1.414M4.222 4.222l1.414 1.414" />
                     </svg>
-                    Dashboard
+                    ขึ้นทะเบียนใหม่
                 </span>
             </h1>
 
@@ -29,7 +29,7 @@
                         </div>
                     </div>
                     <h2 class="text-lg font-bold text-blue-700 mb-1 tracking-wide">ขึ้นทะเบียนใหม่ทั้งหมด</h2>
-                    <p class="text-4xl text-blue-600 font-extrabold mb-1">{{ $expiredCount }}</p>
+                    <p class="text-4xl text-blue-600 font-extrabold mb-1">{{ $totalNewRegistrations }}</p>
                 </div>
                 <div
                     class="group h-full bg-gradient-to-br from-yellow-100 to-yellow-50 p-4 rounded-3xl text-center border-2 border-yellow-200 hover:scale-105 transition-all duration-300">
@@ -43,7 +43,7 @@
                         </div>
                     </div>
                     <h2 class="text-lg font-bold text-yellow-700 mb-1 tracking-wide">อยู่ระหว่างดำเนินการ</h2>
-                    <p class="text-4xl text-yellow-600 font-extrabold mb-1">{{ $nearExpiryCount }}</p>
+                    <p class="text-4xl text-yellow-600 font-extrabold mb-1">{{ $pendingCount }}</p>
 
                 </div>
                 <div
@@ -57,9 +57,16 @@
                         </div>
                     </div>
                     <h2 class="text-lg font-bold text-green-700 mb-1 tracking-wide">ขึ้นทะเบียนใหม่เสร็จแล้ว</h2>
-                    <p class="text-4xl text-green-600 font-extrabold mb-1">{{ $activeCount }}</p>
+                    <p class="text-4xl text-green-600 font-extrabold mb-1">{{ $approvedCount }}</p>
 
                 </div>
+            </div>
+
+            <div class="mx-3 mb-6 text-right">
+                <a href="{{ route('newregis.create') }}"
+                    class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 shadow-md">
+                    + เพิ่มข้อมูลทะเบียน
+                </a>
             </div>
 
             <div class="bg-white rounded-2xl overflow-hidden border border-gray-200">
@@ -70,24 +77,27 @@
                                 <th class="py-4 px-8 rounded-tl-2xl">ลำดับ</th>
                                 <th class="py-4 px-8">ชื่อสามัญ</th>
                                 <th class="py-4 px-8">เลขที่ทะเบียน</th>
-                                <th class="py-4 px-8">วันที่ขึ้นทะเบียน</th>
+                                <th class="py-4 px-8">วันที่ขอขึ้นทะเบียน</th>
                                 <th class="py-4 px-8">สถานะความคืบหน้า</th>
                                 <th class="py-4 px-8 rounded-tr-2xl">รายละเอียด</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($paginatedNearExpiryDrugs as $index => $drug)
+                            {{-- เปลี่ยนตัวแปรจาก $paginatedNearExpiryDrugs เป็น $paginatedProducts --}}
+                            @forelse ($paginatedProducts as $index => $product)
                                 <tr class="border-b hover:bg-yellow-50 transition">
                                     <td class="py-4 px-8 font-semibold text-gray-700">
-                                        {{ ($paginatedNearExpiryDrugs->currentPage() - 1) * $paginatedNearExpiryDrugs->perPage() + $index + 1 }}
+                                        {{-- เปลี่ยนตัวแปรตรงนี้ด้วย --}}
+                                        {{ ($paginatedProducts->currentPage() - 1) * $paginatedProducts->perPage() + $index + 1 }}
                                     </td>
-                                    <td class="py-4 px-8">{{ $drug->name }}</td>
-                                    <td class="py-4 px-8">{{ $drug->registration_number }}</td>
-                                    <td class="py-4 px-8">{{ $drug->expiry_date->format('d/m/Y') }}</td>
+                                    <td class="py-4 px-8">{{ $product->name }}</td>
+                                    <td class="py-4 px-8">{{ $product->registration_number }}</td>
+                                    <td class="py-4 px-8">{{ $product->registration_date->format('d/m/Y') }}</td>
                                     <td class="py-4 px-8">
                                         <div class="text-center mb-2">
                                             {{-- แสดงสถานะความคืบหน้า --}}
-                                            @if ($drug->progress <= 12.5 || $drug->progress == 0)
+                                            {{-- ใช้ $product->progress แทน $drug->progress --}}
+                                            @if ($product->progress <= 12.5 || $product->progress == 0)
                                                 <div x-data="{ tooltip: false }" class="relative inline-block">
                                                     <p class="text-red-600 font-semibold cursor-pointer"
                                                         @mouseenter="tooltip = true" @mouseleave="tooltip = false">
@@ -105,7 +115,7 @@
                                                         คณะ PDC อนุมัติให้ดำเนินการขึ้นทะเบียน
                                                     </div>
                                                 </div>
-                                            @elseif ($drug->progress <= 25 && $drug->progress >= 12.5)
+                                            @elseif ($product->progress <= 25 && $product->progress > 12.5) {{-- แก้เงื่อนไขให้ครอบคลุมช่วง --}}
                                                 <div x-data="{ tooltip: false }" class="relative inline-block">
                                                     <p class="text-yellow-700 font-semibold cursor-pointer"
                                                         @mouseenter="tooltip = true" @mouseleave="tooltip = false">
@@ -123,7 +133,7 @@
                                                         นำเข้าตัวอย่าง
                                                     </div>
                                                 </div>
-                                            @elseif ($drug->progress <= 35.5 && $drug->progress >= 25)
+                                            @elseif ($product->progress <= 35.5 && $product->progress > 25)
                                                 <div x-data="{ tooltip: false }" class="relative inline-block">
                                                     <p class="text-yellow-700 font-semibold cursor-pointer"
                                                         @mouseenter="tooltip = true" @mouseleave="tooltip = false">
@@ -141,7 +151,7 @@
                                                         ส่งตัวอย่างข้อมูลศึกษาความเป็นพิษ (ทำTox)
                                                     </div>
                                                 </div>
-                                            @elseif ($drug->progress <= 50 && $drug->progress >= 35.5)
+                                            @elseif ($product->progress <= 50 && $product->progress > 35.5)
                                                 <div x-data="{ tooltip: false }" class="relative inline-block">
                                                     <p class="text-yellow-700 font-semibold cursor-pointer"
                                                         @mouseenter="tooltip = true" @mouseleave="tooltip = false">
@@ -159,7 +169,7 @@
                                                         ยื่นคำขอขึ้นทะเบียน
                                                     </div>
                                                 </div>
-                                            @elseif ($drug->progress <= 62.5 && $drug->progress >= 50)
+                                            @elseif ($product->progress <= 62.5 && $product->progress > 50)
                                                 <div x-data="{ tooltip: false }" class="relative inline-block">
                                                     <p class="text-yellow-700 font-semibold cursor-pointer"
                                                         @mouseenter="tooltip = true" @mouseleave="tooltip = false">
@@ -177,7 +187,7 @@
                                                         แผนการทดลอง Eff, PHI (ถ้ามี) + Phase1+ผลวิเคราะห์ (อนุมัติ)
                                                     </div>
                                                 </div>
-                                            @elseif ($drug->progress <= 75 && $drug->progress >= 62.5)
+                                            @elseif ($product->progress <= 75 && $product->progress > 62.5)
                                                 <div x-data="{ tooltip: false }" class="relative inline-block">
                                                     <p class="text-yellow-700 font-semibold cursor-pointer"
                                                         @mouseenter="tooltip = true" @mouseleave="tooltip = false">
@@ -197,7 +207,7 @@
                                                         อนุมัติ+ผลวิเคราะห์อนุมัติ)
                                                     </div>
                                                 </div>
-                                            @elseif ($drug->progress <= 87.5 && $drug->progress >= 75)
+                                            @elseif ($product->progress <= 87.5 && $product->progress > 75)
                                                 <div x-data="{ tooltip: false }" class="relative inline-block">
                                                     <p class="text-yellow-700 font-semibold cursor-pointer"
                                                         @mouseenter="tooltip = true" @mouseleave="tooltip = false">
@@ -215,7 +225,7 @@
                                                         Phase3 อนุมัติ (ยื่นเอกสารเข้าประชุมพิจารณาขึ้นทะเบียน)
                                                     </div>
                                                 </div>
-                                            @elseif ($drug->progress <= 99 && $drug->progress >= 87.5)
+                                            @elseif ($product->progress <= 99 && $product->progress > 87.5)
                                                 <div x-data="{ tooltip: false }" class="relative inline-block">
                                                     <p class="text-yellow-700 font-semibold cursor-pointer"
                                                         @mouseenter="tooltip = true" @mouseleave="tooltip = false">
@@ -233,9 +243,9 @@
                                                         ยื่นขอออกทะเบียน
                                                     </div>
                                                 </div>
-                                            @elseif ($drug->progress <= 100 && $drug->progress >= 99)
+                                            @elseif ($product->progress == 100) {{-- แก้เป็น == 100 สำหรับสำเร็จ --}}
                                                 <div x-data="{ tooltip: false }" class="relative inline-block">
-                                                    <p class="text-yellow-700 font-semibold cursor-pointer"
+                                                    <p class="text-green-600 font-semibold cursor-pointer" {{-- เปลี่ยนสีเป็นสีเขียวเมื่อสำเร็จ --}}
                                                         @mouseenter="tooltip = true" @mouseleave="tooltip = false">
                                                         สำเร็จ
                                                     </p>
@@ -256,21 +266,19 @@
                                         {{-- แถบความคืบหน้า --}}
                                         <div class="w-full bg-gray-200 rounded-full h-2.5">
                                             <div class="h-2.5 rounded-full
-                                                @if ($drug->progress < 25) bg-red-500
-                                                @elseif ($drug->progress < 75) bg-yellow-500
+                                                @if ($product->progress < 25) bg-red-500
+                                                @elseif ($product->progress < 75) bg-yellow-500
                                                 @else bg-green-500 @endif"
-                                                style="width: {{ $drug->progress }}%">
+                                                style="width: {{ $product->progress }}%">
                                             </div>
                                         </div>
                                         <div class="text-xs text-gray-500 text-center mt-1">
-                                            {{ $drug->progress }}%
-
+                                            {{ $product->progress }}%
                                         </div>
                                     </td>
                                     <td class="py-4 px-12 mx-auto">
                                         {{-- ปุ่มดูรายละเอียด --}}
-                                        {{-- <a href="/drugs/{{ $drug->registration_number }}" --}}
-                                        <a href="{{ route('newregis.show', $drug->registration_number) }}"
+                                        <a href="{{ route('newregis.show', $product->id) }}"
                                             class="inline-flex items-center justify-center p-2 rounded-full text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200"
                                             title="ดูรายละเอียด">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -287,14 +295,16 @@
                             @empty
                                 <tr>
                                     <td colspan="6" class="py-6 px-8 text-center text-gray-400">
-                                        ไม่มีขึ้นทะเบียนใหม่</td>
+                                        ไม่มีขึ้นทะเบียนใหม่
+                                    </td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
                 <div class="px-8 py-6 bg-white border-t border-gray-100 rounded-b-2xl">
-                    {{ $paginatedNearExpiryDrugs->links() }}
+                    {{-- เปลี่ยนตัวแปรตรงนี้ด้วย --}}
+                    {{ $paginatedProducts->links() }}
                 </div>
             </div>
 

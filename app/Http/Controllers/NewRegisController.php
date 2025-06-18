@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Pagination\LengthAwarePaginator;
+use App\Models\Product; // Assuming you have a Product model
 
 class NewRegisController extends Controller
 {
@@ -16,88 +17,33 @@ class NewRegisController extends Controller
 
     public function index(Request $request)
     {
-        // กำหนดค่าต่างๆ
-        $expiredCount = 2; // ตัวอย่างจำนวนหมดอายุ
-        $activeCount = 5; // ตัวอย่างจำนวนที่ขึ้นทะเบียนเสร็จแล้ว
 
-        // ข้อมูลทะเบียนที่ใกล้หมดอายุ (หรืออยู่ระหว่างดำเนินการ)
-        $nearExpiryDrugs = collect([
-            (object) [
-                'name' => 'พาราเซตามอล',
-                'registration_number' => '000001',
-                'expiry_date' => Carbon::now()->addDays(10),
-                'progress' => 10,
-            ],
-            (object) [
-                'name' => 'ไอบูโพรเฟน',
-                'registration_number' => '000002',
-                'expiry_date' => Carbon::now()->addDays(20),
-                'progress' => 20,
-            ],
-            (object) [
-                'name' => 'อะม็อกซิลลิน',
-                'registration_number' => '000003',
-                'expiry_date' => Carbon::now()->addDays(5),
-                'progress' => 30,
-            ],
-            (object) [
-                'name' => 'โอเมพราโซล ',
-                'registration_number' => '000004',
-                'expiry_date' => Carbon::now()->addDays(10),
-                'progress' => 40,
-            ],
-            (object) [
-                'name' => 'ลอราทาดีน',
-                'registration_number' => '000005',
-                'expiry_date' => Carbon::now()->addDays(20),
-                'progress' => 50,
-            ],
-            (object) [
-                'name' => 'ซิมวาสแตติน ',
-                'registration_number' => '000006',
-                'expiry_date' => Carbon::now()->addDays(5),
-                'progress' => 60,
-            ],
-            (object) [
-                'name' => 'เมทฟอร์มิน',
-                'registration_number' => '000007',
-                'expiry_date' => Carbon::now()->addDays(10),
-                'progress' => 70,
-            ],
-            (object) [
-                'name' => 'ซาลบูทามอล',
-                'registration_number' => '000008',
-                'expiry_date' => Carbon::now()->addDays(10),
-                'progress' => 80,
-            ],
-            (object) [
-                'name' => 'ยาราตาร',
-                'registration_number' => '000009',
-                'expiry_date' => Carbon::now()->addDays(10),
-                'progress' => 90,
-            ],
-            (object) [
-                'name' => 'ไดอะซีแพม',
-                'registration_number' => '000010',
-                'expiry_date' => Carbon::now()->addDays(10),
-                'progress' => 100,
-            ],
+        // นับจำนวนผลิตภัณฑ์ที่ 'new_or_old' เป็น true (ขึ้นทะเบียนใหม่ทั้งหมด)
+        $totalNewRegistrations = Product::where('new_or_old', true)->count();
+
+        // นับจำนวนผลิตภัณฑ์ที่ 'status' เป็น 'pending' (อยู่ระหว่างดำเนินการ)
+        $pendingCount = Product::where('progress', '<', 100) // progress ไม่ถึง 100% (ซึ่งน่าจะครอบคลุม 'pending' ด้วย)
+            ->where('new_or_old', true)
+            ->count();
+
+        // นับจำนวนผลิตภัณฑ์ที่ 'status' เป็น 'approved' (ขึ้นทะเบียนใหม่เสร็จแล้ว)
+        $approvedCount = Product::where('progress', 100)
+            ->where('new_or_old', true) // เฉพาะที่เป็นการขึ้นทะเบียนใหม่
+            ->count();
+        // progress ไม่ถึง 100% (ซึ่งน่าจะครอบคลุม 'pending' ด้วย)
+        $paginatedProducts = Product::where('new_or_old', true)
+            ->where('status', 'pending')
+            // แสดงทุกสถานะที่ progress ไม่ถึง 100% ก็ใช้แบบนี้
+            // ->where('progress', '<', 100)
+            ->orderBy('created_at', 'desc')
+            ->paginate(5);
+
+        return view('product.new.index', [
+            'totalNewRegistrations' => $totalNewRegistrations,
+            'pendingCount' => $pendingCount,
+            'approvedCount' => $approvedCount,
+            'paginatedProducts' => $paginatedProducts,
         ]);
-
-        $nearExpiryCount = $nearExpiryDrugs->count();
-
-        // การทำ Pagination ด้วยมือสำหรับ Collection
-        $perPage = 5;
-        $currentPage = $request->get('page', 1);
-        $paginatedNearExpiryDrugs = new LengthAwarePaginator(
-            $nearExpiryDrugs->forPage($currentPage, $perPage),
-            $nearExpiryDrugs->count(),
-            $perPage,
-            $currentPage,
-            ['path' => $request->url()],
-        );
-
-        return view('product.new.index', compact('expiredCount', 'nearExpiryCount', 'activeCount', 'paginatedNearExpiryDrugs'));
     }
 
 
@@ -108,7 +54,7 @@ class NewRegisController extends Controller
      */
     public function create()
     {
-        //
+        return view('product.new.create');
     }
 
     /**
@@ -119,7 +65,15 @@ class NewRegisController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $newRegis = new Product();
+        $newRegis->name = $request->hazardous_name_th;
+        $newRegis->registration_number = $request->registration_number;
+        $newRegis->registration_date = $request->expiry_date;
+        $newRegis->expiry_date = $request->expiry_date;
+        $newRegis->progress = $request->company;
+        $newRegis->save();
+
+        return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จ');
     }
 
     /**
@@ -130,94 +84,7 @@ class NewRegisController extends Controller
      */
     public function show($registrationNumber)
     {
-        // สมมติว่าข้อมูลยาของคุณเก็บอยู่ในฐานข้อมูล
-        // ในที่นี้เราจะใช้ข้อมูลตัวอย่างที่คุณให้มา
-        $allDrugs = collect([
-            (object) [
-                'name' => 'ยาเม็ดวิตามินรวม',
-                'registration_number' => '123456',
-                'expiry_date' => Carbon::now()->addDays(10),
-                'progress' => 10,
-                'description' => 'วิตามินรวมสำหรับบำรุงร่างกาย',
-            ],
-            (object) [
-                'name' => 'น้ำมันตับปลาชนิดแคปซูล',
-                'registration_number' => '654321',
-                'expiry_date' => Carbon::now()->addDays(20),
-                'progress' => 50,
-                'description' => 'น้ำมันตับปลาบำรุงสมองและสายตา',
-            ],
-            (object) [
-                'name' => 'ยาแก้ปวดพาราเซตามอล',
-                'registration_number' => '987654',
-                'expiry_date' => Carbon::now()->addDays(5),
-                'progress' => 20,
-                'description' => 'ยาบรรเทาอาการปวดและลดไข้',
-            ],
-            (object) [
-                'name' => 'พาราเซตามอล',
-                'registration_number' => '000001',
-                'expiry_date' => Carbon::now()->addDays(10),
-                'progress' => 10,
-            ],
-            (object) [
-                'name' => 'ไอบูโพรเฟน',
-                'registration_number' => '000002',
-                'expiry_date' => Carbon::now()->addDays(20),
-                'progress' => 20,
-            ],
-            (object) [
-                'name' => 'อะม็อกซิลลิน',
-                'registration_number' => '000003',
-                'expiry_date' => Carbon::now()->addDays(5),
-                'progress' => 30,
-            ],
-            (object) [
-                'name' => 'โอเมพราโซล ',
-                'registration_number' => '000004',
-                'expiry_date' => Carbon::now()->addDays(10),
-                'progress' => 40,
-            ],
-            (object) [
-                'name' => 'ลอราทาดีน',
-                'registration_number' => '000005',
-                'expiry_date' => Carbon::now()->addDays(20),
-                'progress' => 50,
-            ],
-            (object) [
-                'name' => 'ซิมวาสแตติน ',
-                'registration_number' => '000006',
-                'expiry_date' => Carbon::now()->addDays(5),
-                'progress' => 60,
-            ],
-            (object) [
-                'name' => 'เมทฟอร์มิน',
-                'registration_number' => '000007',
-                'expiry_date' => Carbon::now()->addDays(10),
-                'progress' => 70,
-            ],
-            (object) [
-                'name' => 'ซาลบูทามอล',
-                'registration_number' => '000008',
-                'expiry_date' => Carbon::now()->addDays(10),
-                'progress' => 80,
-            ],
-            (object) [
-                'name' => 'ยาราตาร',
-                'registration_number' => '000009',
-                'expiry_date' => Carbon::now()->addDays(10),
-                'progress' => 90,
-            ],
-            (object) [
-                'name' => 'ไดอะซีแพม',
-                'registration_number' => '000010',
-                'expiry_date' => Carbon::now()->addDays(10),
-                'progress' => 100,
-            ],
-        ]);
-
-        $drug = $allDrugs->firstWhere('registration_number', $registrationNumber);
-
+        $drug = Product::where('id', $registrationNumber)->first();
         if (!$drug) {
             // หากไม่พบยา ให้ Redirect กลับหรือแสดงหน้า 404
             abort(404, 'ไม่พบข้อมูลยา');

@@ -68,8 +68,9 @@ Route::delete('/import/{import}', [ImportController::class, 'destroy'])->name('i
 Route::get('/import/{import}', [ImportController::class, 'show'])->name('import.show');
 
 Route::get('/new/product', [NewRegisController::class, 'index'])->name('newregis.index');
-// Route::get('/new/product/show', [NewRegisController::class, 'show'])->name('newregis.show');
 Route::get('/new/product/show/{registrationNumber}', [NewRegisController::class, 'show'])->name('newregis.show');
+Route::get('/new/product/create', [NewRegisController::class, 'create'])->name('newregis.create');
+Route::post('/new/product/store', [NewRegisController::class, 'store'])->name('newregis.store');
 
 Route::get('/renew/product', [RenewRegisController::class, 'index'])->name('renewregis.index');
 Route::get('/manufactture/product', [ManufactureRegisController::class, 'index'])->name('manufactureregis.index');
