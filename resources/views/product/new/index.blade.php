@@ -1,4 +1,3 @@
-
 <x-app-layout>
     <main class="flex-1 overflow-x-hidden overflow-y-auto">
         <div class="container mx-auto px-6 py-6">
@@ -175,7 +174,7 @@
                                                         x-transition:leave-end="opacity-0 scale-90"
                                                         class="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none -translate-x-1/2 left-1/2 -top-10"
                                                         style="min-width: max-content;">
-                                                        แผนการทดลอง Eff, PHI (ถ้ามี) + Phase I+ผลวิเคราะห์ (อนุมัติ)
+                                                        แผนการทดลอง Eff, PHI (ถ้ามี) + Phase1+ผลวิเคราะห์ (อนุมัติ)
                                                     </div>
                                                 </div>
                                             @elseif ($drug->progress <= 75 && $drug->progress >= 62.5)
@@ -193,7 +192,9 @@
                                                         x-transition:leave-end="opacity-0 scale-90"
                                                         class="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none -translate-x-1/2 left-1/2 -top-10"
                                                         style="min-width: max-content;">
-                                                        ยื่น Phase III (ผลการทดลอง Eff, PHI (ถ้ามี)อนุมัติ+ผลวิเคราะห์อนุมัติ)
+                                                        ยื่น Phase3 (ผลการทดลอง Eff, PHI
+                                                        (ถ้ามี)
+                                                        อนุมัติ+ผลวิเคราะห์อนุมัติ)
                                                     </div>
                                                 </div>
                                             @elseif ($drug->progress <= 87.5 && $drug->progress >= 75)
@@ -211,10 +212,10 @@
                                                         x-transition:leave-end="opacity-0 scale-90"
                                                         class="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none -translate-x-1/2 left-1/2 -top-10"
                                                         style="min-width: max-content;">
-                                                        Phase III อนุมัติ (ยื่นเอกสารเข้าประชุมพิจารณาขึ้นทะเบียน)
+                                                        Phase3 อนุมัติ (ยื่นเอกสารเข้าประชุมพิจารณาขึ้นทะเบียน)
                                                     </div>
                                                 </div>
-                                            @elseif ($drug->progress <= 100 && $drug->progress >= 87.5)
+                                            @elseif ($drug->progress <= 99 && $drug->progress >= 87.5)
                                                 <div x-data="{ tooltip: false }" class="relative inline-block">
                                                     <p class="text-yellow-700 font-semibold cursor-pointer"
                                                         @mouseenter="tooltip = true" @mouseleave="tooltip = false">
@@ -230,6 +231,24 @@
                                                         class="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none -translate-x-1/2 left-1/2 -top-10"
                                                         style="min-width: max-content;">
                                                         ยื่นขอออกทะเบียน
+                                                    </div>
+                                                </div>
+                                            @elseif ($drug->progress <= 100 && $drug->progress >= 99)
+                                                <div x-data="{ tooltip: false }" class="relative inline-block">
+                                                    <p class="text-yellow-700 font-semibold cursor-pointer"
+                                                        @mouseenter="tooltip = true" @mouseleave="tooltip = false">
+                                                        สำเร็จ
+                                                    </p>
+                                                    <div x-show="tooltip"
+                                                        x-transition:enter="transition ease-out duration-200"
+                                                        x-transition:enter-start="opacity-0 scale-90"
+                                                        x-transition:enter-end="opacity-100 scale-100"
+                                                        x-transition:leave="transition ease-in duration-200"
+                                                        x-transition:leave-start="opacity-100 scale-100"
+                                                        x-transition:leave-end="opacity-0 scale-90"
+                                                        class="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none -translate-x-1/2 left-1/2 -top-10"
+                                                        style="min-width: max-content;">
+                                                        สำเร็จ
                                                     </div>
                                                 </div>
                                             @endif
@@ -251,8 +270,7 @@
                                     <td class="py-4 px-12 mx-auto">
                                         {{-- ปุ่มดูรายละเอียด --}}
                                         {{-- <a href="/drugs/{{ $drug->registration_number }}" --}}
-                                            <a href="{{ route('newregis.show', $drug->registration_number) }}"
-
+                                        <a href="{{ route('newregis.show', $drug->registration_number) }}"
                                             class="inline-flex items-center justify-center p-2 rounded-full text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200"
                                             title="ดูรายละเอียด">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"

@@ -7,7 +7,7 @@
 
             <div class="bg-white rounded-2xl overflow-hidden shadow-lg p-8 border border-gray-200">
                 {{-- รายละเอียดข้อมูลยา --}}
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-lg text-gray-700">
+                <div class="grid grid-cols-2 md:grid-cols-2 gap-6 text-lg text-gray-700">
                     <div>
                         <p class="font-semibold text-indigo-600">ชื่อสามัญ:</p>
                         <p>{{ $drug->name }}</p>
@@ -27,22 +27,39 @@
                 </div>
 
                 @php
-                // dd($drug->progress);
-                    // กำหนด mapping ของ progress กับขั้นตอน
-                    // คุณสามารถปรับค่าเหล่านี้ให้ตรงกับ logic การคำนวณ progress ของคุณ
                     $totalSteps = 8;
                     $steps = [
                         1 => ['label' => 'คณะ PDC อนุมัติให้ดำเนินการขึ้นทะเบียน', 'progress_threshold' => 12.5], // 1/8 * 100
-                        2 => ['label' => '1', 'progress_threshold' => 25], // 2/8 * 100
-                        3 => ['label' => '2', 'progress_threshold' => 37.5], // 3/8 * 100
-                        4 => ['label' => '3', 'progress_threshold' => 50], // 4/8 * 100
-                        5 => ['label' => '4', 'progress_threshold' => 62.5], // 5/8 * 100
-                        6 => ['label' => '5', 'progress_threshold' => 75], // 6/8 * 100
-                        7 => ['label' => '66', 'progress_threshold' => 87.5], // 7/8 * 100
-                        8 => ['label' => 'การเฝ้าระวังหลังการขาย', 'progress_threshold' => 100], // 8/8 * 100
+                        2 => [
+                            'label' =>
+                                'นำเข้าตัวอย่าง<span class="text-white">...........................................................</span>',
+                            'progress_threshold' => 25,
+                        ],
+                        3 => ['label' => 'ส่งตัวอย่างข้อมูลศึกษาความเป็นพิษ (ทำTox)', 'progress_threshold' => 37.5], // 3/8 * 100
+                        4 => [
+                            'label' =>
+                                'ยื่นคำขอขึ้นทะเบียน<span class="text-white">...........................................................</span>',
+                            'progress_threshold' => 25,
+                        ],
+                        5 => [
+                            'label' => 'แผนการทดลอง Eff, PHI (ถ้ามี) + Phase1 + ผลวิเคราะห์ (อนุมัติ)',
+                            'progress_threshold' => 62.5,
+                        ], // 5/8 * 100
+                        6 => [
+                            'label' => 'ยื่น Phase3 (ผลการทดลอง Eff, PHI (ถ้ามี)อนุมัติ+ผลวิเคราะห์อนุมัติ)',
+                            'progress_threshold' => 75,
+                        ], // 6/8 * 100
+                        7 => [
+                            'label' => 'Phase3 อนุมัติ (ยื่นเอกสารเข้าประชุมพิจารณาขึ้นทะเบียน)',
+                            'progress_threshold' => 87.5,
+                        ], // 7/8 * 100
+                        8 => [
+                            'label' =>
+                                'ยื่นขอออกทะเบียน <span class="text-white">.....................................................................</span>',
+                            'progress_threshold' => 90,
+                        ],
                     ];
 
-                    // คำนวณขั้นตอนปัจจุบัน
                     $currentStep = 0;
                     foreach ($steps as $key => $step) {
                         if ($drug->progress >= $step['progress_threshold']) {
@@ -71,13 +88,30 @@
                         <ol class="items-center sm:flex space-y-4 sm:space-y-0 mb-6 {{ $loop->first ? '' : 'mt-6' }}">
                             @foreach ($chunk as $stepNumber => $stepInfo)
                                 @php
-                                    $isCompleted = $drug->progress >= $stepInfo['progress_threshold'];
-                                    $isCurrent = ($stepNumber == $currentStep && $drug->progress < 100) || ($stepNumber == $totalSteps && $drug->progress == 100);
+                                    $isCompleted = false;
+                                    $isCurrent = false;
+
+                                    if ($stepNumber == 8) {
+                                        if ($drug->progress >= 100) {
+                                            $isCompleted = true;
+                                        } elseif ($drug->progress >= 90) {
+                                            $isCurrent = true; // ขั้นตอน 8 กำลังดำเนินการ (สีน้ำเงิน)
+                                        }
+                                    } else {
+                                        $isCompleted = $drug->progress >= $stepInfo['progress_threshold'];
+                                        $isCurrent = $stepNumber == $currentStep && !$isCompleted;
+                                    }
 
                                     $iconClass = $isCompleted ? 'text-white' : 'text-blue-800 dark:text-blue-300';
-                                    $bgClass = $isCompleted ? 'bg-green-500' : ($isCurrent ? 'bg-blue-500 ring-4 ring-blue-300' : 'bg-blue-100');
+                                    $bgClass = $isCompleted
+                                        ? 'bg-green-500'
+                                        : ($isCurrent
+                                            ? 'bg-blue-500 ring-4 ring-blue-300'
+                                            : 'bg-blue-100');
                                     $lineClass = $isCompleted ? 'bg-green-500' : 'bg-gray-200 dark:bg-gray-700';
-                                    $dotClass = $isCurrent ? 'ring-blue-500 dark:ring-blue-500' : 'ring-white dark:ring-gray-900';
+                                    $dotClass = $isCurrent
+                                        ? 'ring-blue-500 dark:ring-blue-500'
+                                        : 'ring-white dark:ring-gray-900';
                                 @endphp
                                 <li class="relative mb-6 sm:mb-0 w-full sm:w-1/4">
                                     <div class="flex items-center">
@@ -106,11 +140,12 @@
                                         @endif
                                     </div>
                                     <div class="mt-3 sm:pr-8">
-                                        <h3 class="text-gray-900 dark:text-white {{ $isCurrent ? 'font-bold text-blue-600' : '' }}">
+                                        <h3
+                                            class="text-gray-900 dark:text-white {{ $isCurrent ? 'font-bold text-blue-600' : '' }}">
                                             ขั้นตอนที่ {{ $stepNumber }}
                                         </h3>
                                         <p class="font-normal text-gray-500 dark:text-gray-400">
-                                            {{ $stepInfo['label'] }}
+                                            {!! $stepInfo['label'] !!}
                                         </p>
                                     </div>
                                 </li>

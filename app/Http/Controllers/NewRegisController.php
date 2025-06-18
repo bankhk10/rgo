@@ -71,10 +71,16 @@ class NewRegisController extends Controller
                 'progress' => 80,
             ],
             (object) [
-                'name' => 'ไดอะซีแพม',
+                'name' => 'ยาราตาร',
                 'registration_number' => '000009',
                 'expiry_date' => Carbon::now()->addDays(10),
                 'progress' => 90,
+            ],
+            (object) [
+                'name' => 'ไดอะซีแพม',
+                'registration_number' => '000010',
+                'expiry_date' => Carbon::now()->addDays(10),
+                'progress' => 100,
             ],
         ]);
 
@@ -148,7 +154,7 @@ class NewRegisController extends Controller
                 'progress' => 20,
                 'description' => 'ยาบรรเทาอาการปวดและลดไข้',
             ],
-             (object) [
+            (object) [
                 'name' => 'พาราเซตามอล',
                 'registration_number' => '000001',
                 'expiry_date' => Carbon::now()->addDays(10),
@@ -197,10 +203,16 @@ class NewRegisController extends Controller
                 'progress' => 80,
             ],
             (object) [
-                'name' => 'ไดอะซีแพม',
+                'name' => 'ยาราตาร',
                 'registration_number' => '000009',
                 'expiry_date' => Carbon::now()->addDays(10),
                 'progress' => 90,
+            ],
+            (object) [
+                'name' => 'ไดอะซีแพม',
+                'registration_number' => '000010',
+                'expiry_date' => Carbon::now()->addDays(10),
+                'progress' => 100,
             ],
         ]);
 
