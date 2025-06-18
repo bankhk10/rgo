@@ -62,7 +62,35 @@
                 </div>
             </div>
 
-            <div class="mx-3 mb-6 text-right">
+            <div class="flex flex-col sm:flex-row justify-between items-center mx-3 mb-2">
+                <form action="{{ route('newregis.index') }}" method="GET" class="flex items-center gap-2 mb-4">
+                    <div class="relative w-72">
+                        <!-- ไอคอนแว่น -->
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="size-8">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                            </svg>
+
+
+                        </div>
+                        <!-- ช่องค้นหา -->
+                        <input type="text" name="search" placeholder="ชื่อสามัญ หรือเลขที่ทะเบียน..."
+                            value="{{ request('search') }}"
+                            class="pl-10 pr-4 py-2 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500" />
+                    </div>
+
+                    <!-- ปุ่มค้นหา -->
+                    <button type="submit"
+                        class="bg-blue-500 hover:bg-blue-700 text-white px-5 py-2 rounded-lg transition">
+                        ค้นหา
+                    </button>
+                </form>
+
+
+
+
                 <a href="{{ route('newregis.create') }}"
                     class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 shadow-md">
                     + เพิ่มข้อมูลทะเบียน
@@ -115,7 +143,8 @@
                                                         คณะ PDC อนุมัติให้ดำเนินการขึ้นทะเบียน
                                                     </div>
                                                 </div>
-                                            @elseif ($product->progress <= 25 && $product->progress > 12.5) {{-- แก้เงื่อนไขให้ครอบคลุมช่วง --}}
+                                            @elseif ($product->progress <= 25 && $product->progress > 12.5)
+                                                {{-- แก้เงื่อนไขให้ครอบคลุมช่วง --}}
                                                 <div x-data="{ tooltip: false }" class="relative inline-block">
                                                     <p class="text-yellow-700 font-semibold cursor-pointer"
                                                         @mouseenter="tooltip = true" @mouseleave="tooltip = false">
@@ -243,10 +272,12 @@
                                                         ยื่นขอออกทะเบียน
                                                     </div>
                                                 </div>
-                                            @elseif ($product->progress == 100) {{-- แก้เป็น == 100 สำหรับสำเร็จ --}}
+                                            @elseif ($product->progress == 100)
+                                                {{-- แก้เป็น == 100 สำหรับสำเร็จ --}}
                                                 <div x-data="{ tooltip: false }" class="relative inline-block">
-                                                    <p class="text-green-600 font-semibold cursor-pointer" {{-- เปลี่ยนสีเป็นสีเขียวเมื่อสำเร็จ --}}
-                                                        @mouseenter="tooltip = true" @mouseleave="tooltip = false">
+                                                    <p class="text-green-600 font-semibold cursor-pointer"
+                                                        {{-- เปลี่ยนสีเป็นสีเขียวเมื่อสำเร็จ --}} @mouseenter="tooltip = true"
+                                                        @mouseleave="tooltip = false">
                                                         สำเร็จ
                                                     </p>
                                                     <div x-show="tooltip"
@@ -310,4 +341,71 @@
 
         </div>
     </main>
+
+    <style>
+        /* กล่องค้นหาหลัก */
+        .search-form {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1rem;
+        }
+
+        /* กล่อง input ที่มี icon */
+        .search-box {
+            position: relative;
+            width: 100%;
+        }
+
+        /* ช่องกรอกข้อความ */
+        .search-box input[type="text"] {
+            width: 100%;
+            padding: 12px 16px 12px 40px;
+            /* padding-left สำหรับ icon */
+            border: 1px solid #ccc;
+            border-radius: 16px;
+            /* << มนตรงนี้ */
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            font-size: 16px;
+            transition: border 0.3s ease;
+        }
+
+        .search-box input[type="text"]:focus {
+            outline: none;
+            border-color: #6366f1;
+            /* สีม่วง */
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+            /* วงแสง */
+        }
+
+        /* ไอคอนข้างหน้า */
+        .search-icon {
+            position: absolute;
+            top: 50%;
+            left: 12px;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: #888;
+            pointer-events: none;
+        }
+
+        /* ปุ่มค้นหา */
+        .search-button {
+            padding: 12px 24px;
+            background-color: #6366f1;
+            /* สีม่วง */
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        }
+
+        .search-button:hover {
+            background-color: #4f46e5;
+        }
+    </style>
+
 </x-app-layout>

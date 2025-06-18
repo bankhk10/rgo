@@ -17,26 +17,33 @@ class NewRegisController extends Controller
 
     public function index(Request $request)
     {
+        // Start with a base query for 'new_or_old' products
+        $query = Product::where('new_or_old', true);
 
-        // นับจำนวนผลิตภัณฑ์ที่ 'new_or_old' เป็น true (ขึ้นทะเบียนใหม่ทั้งหมด)
+        // Handle search
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('registration_number', 'like', '%' . $search . '%');
+            });
+        }
+
+        // Count for summary cards - these should NOT be affected by the search query
         $totalNewRegistrations = Product::where('new_or_old', true)->count();
-
-        // นับจำนวนผลิตภัณฑ์ที่ 'status' เป็น 'pending' (อยู่ระหว่างดำเนินการ)
-        $pendingCount = Product::where('progress', '<', 100) // progress ไม่ถึง 100% (ซึ่งน่าจะครอบคลุม 'pending' ด้วย)
+        $pendingCount = Product::where('progress', '<', 100)
+            ->where('new_or_old', true)
+            ->count();
+        $approvedCount = Product::where('progress', 100)
             ->where('new_or_old', true)
             ->count();
 
-        // นับจำนวนผลิตภัณฑ์ที่ 'status' เป็น 'approved' (ขึ้นทะเบียนใหม่เสร็จแล้ว)
-        $approvedCount = Product::where('progress', 100)
-            ->where('new_or_old', true) // เฉพาะที่เป็นการขึ้นทะเบียนใหม่
-            ->count();
-        // progress ไม่ถึง 100% (ซึ่งน่าจะครอบคลุม 'pending' ด้วย)
-        $paginatedProducts = Product::where('new_or_old', true)
-            ->where('status', 'pending')
-            // แสดงทุกสถานะที่ progress ไม่ถึง 100% ก็ใช้แบบนี้
-            // ->where('progress', '<', 100)
-            ->orderBy('created_at', 'desc')
-            ->paginate(5);
+        // Paginate the results using the $query that now includes search conditions
+        // Remove the additional ->where('status', 'pending') or ->where('progress', '<', 100)
+        // unless you specifically want to filter the main table by that status by default.
+        // Based on your original template, the table should show all new registrations,
+        // and the status is indicated by the progress bar.
+        $paginatedProducts = $query->orderBy('created_at', 'desc')->paginate(5);
 
         return view('product.new.index', [
             'totalNewRegistrations' => $totalNewRegistrations,
@@ -68,9 +75,10 @@ class NewRegisController extends Controller
         $newRegis = new Product();
         $newRegis->name = $request->hazardous_name_th;
         $newRegis->registration_number = $request->registration_number;
-        $newRegis->registration_date = $request->expiry_date;
+        $newRegis->registration_date = $request->expiry_date; // This seems incorrect, should be a dedicated date field
         $newRegis->expiry_date = $request->expiry_date;
-        $newRegis->progress = $request->company;
+        $newRegis->progress = $request->company; // This seems incorrect, should be a progress value
+        $newRegis->new_or_old = true; // Make sure new registrations are marked as 'true'
         $newRegis->save();
 
         return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จ');
@@ -82,11 +90,10 @@ class NewRegisController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($registrationNumber)
+    public function show($id) // Changed from $registrationNumber to $id for consistency with route model binding
     {
-        $drug = Product::where('id', $registrationNumber)->first();
+        $drug = Product::where('id', $id)->first();
         if (!$drug) {
-            // หากไม่พบยา ให้ Redirect กลับหรือแสดงหน้า 404
             abort(404, 'ไม่พบข้อมูลยา');
         }
 

@@ -37,8 +37,7 @@
                         ],
                         3 => ['label' => 'ส่งตัวอย่างข้อมูลศึกษาความเป็นพิษ (ทำTox)', 'progress_threshold' => 37.5], // 3/8 * 100
                         4 => [
-                            'label' =>
-                                'ยื่นคำขอขึ้นทะเบียน<span class="text-white"></span>',
+                            'label' => 'ยื่นคำขอขึ้นทะเบียน<span class="text-white"></span>',
                             'progress_threshold' => 50,
                         ],
                         5 => [
@@ -54,8 +53,7 @@
                             'progress_threshold' => 87.5,
                         ], // 7/8 * 100
                         8 => [
-                            'label' =>
-                                'ยื่นขอออกทะเบียน <span class="text-white"><br>.</span>',
+                            'label' => 'ยื่นขอออกทะเบียน <span class="text-white"><br>.</span>',
                             'progress_threshold' => 90,
                         ],
                     ];
@@ -171,17 +169,10 @@
                         </div>
                     </div>
                 </div>
-
-                {{-- ปุ่มกลับ --}}
-                <div class="mt-8 text-center">
-                    <a href="{{ url()->previous() }}"
-                        class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                        </svg>
-                        กลับ
+                <div class="text-center mt-12">
+                    <a href="{{ route('newregis.index') }}"
+                        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg shadow transition duration-300 ">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> ย้อนกลับ
                     </a>
                 </div>
             </div>
