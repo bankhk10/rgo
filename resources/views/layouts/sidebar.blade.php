@@ -136,6 +136,14 @@
                     </a>
                 </li>
             @endcanany
+            @canany('User read', 'User create', 'User update', 'User delete')
+                <li>
+                    <a href="{{ route('company.index') }}" class="side-menu" id="menu-company">
+                        <div class="side-menu__icon"><i data-lucide="building"></i></div>
+                        <div class="side-menu__title">บริษัท</div>
+                    </a>
+                </li>
+            @endcanany
         </ul>
     </nav>
 </div>
@@ -178,13 +186,13 @@ overflow: hidden; / Clips the image into a circle */
         if (currentUrl === "{{ route('import.index', [], false) }}") {
             document.getElementById('menu-inregister')?.classList.add('side-menu--active');
         }
-         if (currentUrl === "{{ route('newregis.index', [], false) }}") {
+        if (currentUrl === "{{ route('newregis.index', [], false) }}") {
             document.getElementById('menu-newregis')?.classList.add('side-menu--active');
         }
-         if (currentUrl === "{{ route('renewregis.index', [], false) }}") {
+        if (currentUrl === "{{ route('renewregis.index', [], false) }}") {
             document.getElementById('menu-renewregis')?.classList.add('side-menu--active');
         }
-         if (currentUrl === "{{ route('manufactureregis.index', [], false) }}") {
+        if (currentUrl === "{{ route('manufactureregis.index', [], false) }}") {
             document.getElementById('menu-manufacture')?.classList.add('side-menu--active');
         }
         if (currentUrl === "{{ route('admin.permissions.index', [], false) }}") {
@@ -199,6 +207,10 @@ overflow: hidden; / Clips the image into a circle */
         if (currentUrl === "{{ route('admin.users.index', [], false) }}") {
             document.getElementById('menu-users')?.classList.add('side-menu--active');
         }
+        if (currentUrl === "{{ route('company.index', [], false) }}") {
+            document.getElementById('menu-company')?.classList.add('side-menu--active');
+        }
+
     });
 </script>
 

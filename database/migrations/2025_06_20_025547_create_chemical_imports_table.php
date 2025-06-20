@@ -1,0 +1,50 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateChemicalImportsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('chemical_imports', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('company_id')
+                ->nullable()
+                ->constrained('companies')
+                ->onDelete('set null');
+
+            $table->string('registration_no')->nullable();         // เลขที่ทะเบียน
+            $table->date('expiry_date')->nullable();               // วันหมดอายุ
+            $table->string('chemical_name_th')->nullable();        // ชื่อวัตถุอันตราย (ไทย)
+            $table->string('chemical_name_en')->nullable();        // ชื่อวัตถุอันตราย (อังกฤษ)
+            $table->string('formula')->nullable();                 // % และสูตร
+            $table->string('trade_name')->nullable();              // ชื่อการค้า
+            $table->string('manufacturer')->nullable();            // ผู้ผลิต
+            $table->string('supplier')->nullable();                // ผู้จำหน่าย
+            $table->string('license_no')->nullable();              // ใบอนุญาต
+            $table->double('import_quantity')->nullable();         // ปริมาณนำเข้า
+            $table->string('remaining_quantity')->nullable();      // ปริมาณคงเหลือ
+            $table->date('second_expiry_date')->nullable();        // วันหมดอายุ (สำรอง)
+            $table->text('packaging')->nullable();                 // ขนาดบรรจุ
+            $table->text('note')->nullable();                      // หมายเหตุ
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('chemical_imports');
+    }
+}

@@ -12,6 +12,8 @@ use App\Http\Controllers\InRegisterController;
 use App\Http\Controllers\ManufactureRegisController;
 use App\Http\Controllers\NewRegisController;
 use App\Http\Controllers\RenewRegisController;
+use App\Http\Controllers\ChemicalImportController;
+use App\Http\Controllers\CompanyController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -75,3 +77,8 @@ Route::post('/new/product/store', [NewRegisController::class, 'store'])->name('n
 Route::get('/renew/product', [RenewRegisController::class, 'index'])->name('renewregis.index');
 Route::get('/manufactture/product', [ManufactureRegisController::class, 'index'])->name('manufactureregis.index');
 
+Route::resource('company', CompanyController::class);
+
+
+Route::get('/chemical-imports/import', [ChemicalImportController::class, 'showImportForm'])->name('chemical_imports.import.form');
+Route::post('/chemical-imports/import', [ChemicalImportController::class, 'import'])->name('chemical_imports.import');

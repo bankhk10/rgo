@@ -70,6 +70,11 @@ class AdminSeeder extends Seeder
             ['name' => 'Inregister create', 'guard_name' => 'web'],
             ['name' => 'Inregister update', 'guard_name' => 'web'],
             ['name' => 'Inregister delete', 'guard_name' => 'web'],
+
+            ['name' => 'Company read', 'guard_name' => 'web'],
+            ['name' => 'Company create', 'guard_name' => 'web'],
+            ['name' => 'Company update', 'guard_name' => 'web'],
+            ['name' => 'Company delete', 'guard_name' => 'web'],
         ];
 
         foreach ($permissionsData as $permissionItem) {

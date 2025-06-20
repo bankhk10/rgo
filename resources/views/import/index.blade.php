@@ -32,11 +32,10 @@
                         <thead>
                             <tr class="bg-indigo-600 text-white text-left">
                                 <th class="py-4 px-8 rounded-tl-2xl">ลำดับ</th>
+                                <th class="py-4 px-8">ชื่อการค้า</th>
                                 <th class="py-4 px-8">บริษัท</th>
                                 <th class="py-4 px-8">เลขที่ทะเบียน</th>
-                                <th class="py-4 px-8">ชื่อวัตถุอันตราย (ไทย)</th>
-                                <th class="py-4 px-8">ชื่อการค้า</th>
-                                <th class="py-4 px-8">ปริมาณนำเข้า</th>
+                                <th class="py-4 px-8">วันหมดอายุ</th>
                                 <th class="py-4 px-8 rounded-tr-2xl text-center">การดำเนินการ</th>
                             </tr>
                         </thead>
@@ -45,11 +44,11 @@
                                 @forelse ($imports as $index => $import)
                                     <tr class="border-b hover:bg-indigo-50 transition">
                                         <td class="py-4 px-8 font-semibold text-gray-700">{{ $index + 1 }}</td>
-                                        <td class="py-4 px-8">{{ $import->company }}</td>
-                                        <td class="py-4 px-8">{{ $import->registration_number }}</td>
-                                        <td class="py-4 px-8">{{ $import->hazardous_name_th }}</td>
                                         <td class="py-4 px-8">{{ $import->trade_name }}</td>
-                                        <td class="py-4 px-8">{{ $import->import_quantity }}</td>
+                                        <td class="py-4 px-8">{{ $import->company->name }}</td>
+                                        <td class="py-4 px-8">{{ $import->registration_no }}</td>
+                                        <td class="py-4 px-8">{{ $import->expiry_date }}</td>
+
                                         <td class="py-4 px-8 text-right">
                                             <div class="flex items-center justify-end gap-2">
                                                 @can('Inregister read')
