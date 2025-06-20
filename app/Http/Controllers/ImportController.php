@@ -15,9 +15,21 @@ class ImportController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $imports = ChemicalImport::latest()->paginate(10);
+        $query = ChemicalImport::query();
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('chemical_name_th', 'like', "%$search%")
+                    ->orWhere('chemical_name_en', 'like', "%$search%")
+                    ->orWhere('registration_no', 'like', "%$search%")
+                    ->orWhere('trade_name', 'like', "%$search%");
+            });
+        }
+
+        $imports = $query->latest()->paginate(10)->withQueryString();
+
         return view('import.index', compact('imports'));
     }
 
@@ -28,8 +40,9 @@ class ImportController extends Controller
      */
     public function create()
     {
-
-        return view('import.create');
+        $companies = Company::all(); // ดึงรายชื่อบริษัททั้งหมด
+        return view('import.create', compact('companies'));
+        // return view('import.create');
     }
 
     /**

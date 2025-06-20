@@ -3,28 +3,54 @@
         <div class="container mx-auto px-6 py-6">
             <h1 class="text-4xl font-extrabold text-center text-indigo-700 mt-5 mb-10 tracking-wide">
                 <span class="inline-flex items-center gap-2">
-                    <svg class="w-10 h-10 text-indigo-400"
-                         fill="none"
-                         stroke="currentColor"
-                         stroke-width="2"
-                         viewBox="0 0 24 24">
-                        <path stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M12 8c-1.657 0-3 1.343-3 3v1c0 1.657 1.343 3 3 3s3-1.343 3-3v-1c0-1.657-1.343-3-3-3z" />
-                        <path stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M12 2v2m0 16v2m8-10h2M2 12H4m15.364-7.364l1.414 1.414M4.222 19.778l1.414-1.414m12.728 0l1.414 1.414M4.222 4.222l1.414 1.414" />
+                    <svg class="w-10 h-10 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 8c-1.657 0-3 1.343-3 3v1c0 1.657 1.343 3 3 3s3-1.343 3-3v-1c0-1.657-1.343-3-3-3z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 2v2m0 16v2m8-10h2M2 12H4m15.364-7.364l1.414 1.414M4.222 19.778l1.414-1.414m12.728 0l1.414 1.414M4.222 4.222l1.414 1.414" />
                     </svg>
                     ข้อมูลทะเบียนนำเข้า
                 </span>
             </h1>
             @can('Inregister create')
-                <div class="mb-6 text-right">
+                <div class="flex flex-col sm:flex-row justify-between items-center mx-3 mb-2">
+                    <form action="{{ route('import.index') }}" method="GET" class="flex items-center gap-2 mb-4">
+                        <div class="relative w-72">
+                            <!-- ไอคอนแว่น -->
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" fill="none"
+                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                                </svg>
+
+
+                            </div>
+                            <!-- ช่องค้นหา -->
+                            <input type="text" name="search" placeholder="ชื่อการค้า หรือเลขที่ทะเบียน..."
+                                value="{{ request('search') }}"
+                                class="pl-10 pr-4 py-2 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500" />
+                        </div>
+
+                        <!-- ปุ่มค้นหา -->
+                        <button type="submit"
+                            class="bg-blue-500 hover:bg-blue-700 text-white px-5 py-2 rounded-lg transition">
+                            ค้นหา
+                        </button>
+                    </form>
+                    <a href="{{ route('import.create') }}"
+                        class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 shadow-md">
+                        + เพิ่มข้อมูลทะเบียน
+                    </a>
+                </div>
+
+                {{-- <div class="mb-6 text-right">
                     <a href="{{ route('import.create') }}"
                        class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 shadow-md">
                         + เพิ่มข้อมูลทะเบียน
                     </a>
-                </div>
+                </div> --}}
             @endcan
             <div class="bg-white rounded-2xl overflow-hidden border border-gray-200">
                 <div class="overflow-x-auto">
@@ -45,7 +71,7 @@
                                     <tr class="border-b hover:bg-indigo-50 transition">
                                         <td class="py-4 px-8 font-semibold text-gray-700">{{ $index + 1 }}</td>
                                         <td class="py-4 px-8">{{ $import->trade_name }}</td>
-                                        <td class="py-4 px-8">{{ $import->company->name }}</td>
+                                        <td class="py-4 px-8">{{ $import->company->name ?? '' }}</td>
                                         <td class="py-4 px-8">{{ $import->registration_no }}</td>
                                         <td class="py-4 px-8">{{ $import->expiry_date }}</td>
 
@@ -53,26 +79,25 @@
                                             <div class="flex items-center justify-end gap-2">
                                                 @can('Inregister read')
                                                     <a href="{{ route('import.show', $import->id) }}"
-                                                       class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-150 ease-in-out">
+                                                        class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-150 ease-in-out">
                                                         ดู
                                                     </a>
                                                 @endcan
                                                 @can('Inregister update')
                                                     <a href="{{ route('import.edit', $import->id) }}"
-                                                       class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-green-500 rounded-md hover:bg-geen-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition duration-150 ease-in-out">
+                                                        class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-green-500 rounded-md hover:bg-geen-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition duration-150 ease-in-out">
                                                         แก้ไข
                                                     </a>
                                                 @endcan
                                                 @can('Inregister delete')
                                                     <button onclick="confirmDelete({{ $import->id }})"
-                                                            class="bg-red-500 text-white font-bold py-2 px-4 rounded-lg shadow hover:bg-red-600 transition duration-300">
+                                                        class="bg-red-500 text-white font-bold py-2 px-4 rounded-lg shadow hover:bg-red-600 transition duration-300">
                                                         ลบ
                                                     </button>
 
                                                     <form id="delete-form-{{ $import->id }}"
-                                                          action="{{ route('import.destroy', $import->id) }}"
-                                                          method="POST"
-                                                          style="display: none;">
+                                                        action="{{ route('import.destroy', $import->id) }}" method="POST"
+                                                        style="display: none;">
                                                         @csrf
                                                         @method('delete')
                                                     </form>
@@ -82,8 +107,8 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7"
-                                            class="py-6 px-8 text-center text-gray-400">ไม่มีข้อมูลทะเบียนนำเข้า</td>
+                                        <td colspan="7" class="py-6 px-8 text-center text-gray-400">
+                                            ไม่มีข้อมูลทะเบียนนำเข้า</td>
                                     </tr>
                                 @endforelse
                             @endcan

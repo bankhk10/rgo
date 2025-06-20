@@ -27,9 +27,9 @@ class ChemicalImport extends Model
         'note',
     ];
 
-    // หากคุณต้องการความสัมพันธ์กับโมเดล Company
     public function company()
     {
         return $this->belongsTo(Company::class);
     }
+
 }
