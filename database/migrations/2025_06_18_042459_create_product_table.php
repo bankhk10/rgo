@@ -15,12 +15,23 @@ class CreateProductTable extends Migration
     {
         Schema::create('product', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->comment('ชื่อผลิตภัณฑ์');
-            $table->string('registration_number')->unique()->comment('หมายเลขทะเบียนผลิตภัณฑ์');
-            $table->date('registration_date')->comment('วันที่ขึ้นทะเบียนผลิตภัณฑ์');
-            $table->date('expiry_date')->comment('วันหมดอายุของผลิตภัณฑ์');
-            $table->integer('progress')->default(0)->comment('สถานะความคืบหน้าของการขึ้นทะเบียนผลิตภัณฑ์');
-            $table->text('description')->nullable()->comment('คำอธิบายเกี่ยวกับผลิตภัณฑ์');
+            $table->integer('chemical_imports_id')->nullable(); // Foreign key to chemical_imports table
+            $table->string('trade_name')->nullable(); // ชื่อทางการค้า
+            $table->string('manufacturer_origin')->nullable(); // ชื่อผู้ผลิตและแหล่งผลิต
+            $table->string('importer_name')->nullable(); // ชื่อผู้นำเข้า
+            $table->string('distributor_name')->nullable(); // ชื่อผู้จำหน่าย/ผู้จัดจำหน่าย
+            $table->string('purpose_and_type_of_use')->nullable(); // วัตถุประสงค์และประเภทของการใช้
+            $table->string('packaging_type')->nullable(); // ชนิดและลักษณะหีบห่อหรือภาชนะบรรจุ
+            $table->text('notes')->nullable(); // อื่นๆ (ระบุ) - ใช้ text สำหรับข้อความยาวๆ
+
+            $table->string('name')->nullable()->comment('ชื่อผลิตภัณฑ์');
+            $table->string('registration_number')->unique()->nullable()->comment('หมายเลขทะเบียนผลิตภัณฑ์');
+            $table->date('registration_date')->nullable()->comment('วันที่ขึ้นทะเบียนผลิตภัณฑ์');
+            $table->date('expiry_date')->nullable()->comment('วันหมดอายุของผลิตภัณฑ์');
+            $table->decimal('progress')->default(0)->comment('สถานะความคืบหน้าของการขึ้นทะเบียนผลิตภัณฑ์');
+
+            // $table->integer('progress')->default(0)->comment('สถานะความคืบหน้าของการขึ้นทะเบียนผลิตภัณฑ์');
+            // $table->text('description')->nullable()->comment('คำอธิบายเกี่ยวกับผลิตภัณฑ์');
             $table->string('company')->nullable()->comment('ชื่อบริษัทที่ผลิตผลิตภัณฑ์');
             $table->string('status')->default('pending')->comment('สถานะของการขึ้นทะเบียนผลิตภัณฑ์ เช่น pending, approved, rejected');
             $table->boolean('is_active')->default(true)->comment('สถานะการใช้งานของผลิตภัณฑ์ (true = ใช้งาน, false = ไม่ใช้งาน)');

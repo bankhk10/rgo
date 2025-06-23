@@ -2,27 +2,51 @@
     <main class="flex-1 overflow-x-hidden overflow-y-auto">
         <div class="container mx-auto px-6 py-6">
             <h1 class="text-4xl font-extrabold text-center text-indigo-700 mt-5 mb-10 tracking-wide">
-                รายละเอียดสินค้า: {{ $drug->name }}
+                รายละเอียดการขึ้นทะเบียนใหม่
             </h1>
 
             <div class="bg-white rounded-2xl overflow-hidden shadow-lg p-8 border border-gray-200">
                 {{-- รายละเอียดข้อมูลยา --}}
                 <div class="grid grid-cols-2 md:grid-cols-2 gap-6 text-lg text-gray-700">
                     <div>
-                        <p class="font-semibold text-indigo-600">ชื่อสามัญ:</p>
-                        <p>{{ $drug->name }}</p>
-                    </div>
-                    <div>
                         <p class="font-semibold text-indigo-600">เลขที่ทะเบียน:</p>
-                        <p>{{ $drug->registration_number }}</p>
+                        <p>{{ $drug->registration_number ?? '-' }}</p>
                     </div>
                     <div>
                         <p class="font-semibold text-indigo-600">วันที่ขึ้นทะเบียน:</p>
-                        <p>{{ $drug->expiry_date->format('d/m/Y') }}</p>
+                        <p>{{ $drug->created_at->format('d/m/Y') }}</p>
                     </div>
                     <div>
-                        <p class="font-semibold text-indigo-600">รายละเอียด:</p>
-                        <p>{{ $drug->description ?? 'ไม่มีรายละเอียดเพิ่มเติม' }}</p>
+                        <p class="font-semibold text-indigo-600">ชื่อสามัญ:</p>
+                        <p>{{ $drug->chemicalImport->chemical_name_th ?? '-' }}</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-indigo-600">ชื่อทางการค้า:</p>
+                        <p>{{ $drug->trade_name ?? '-' }}</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-indigo-600">ชื่อผู้ผลิตและแหล่งผลิต:</p>
+                        <p>{{ $drug->manufacturer_origin ?? '-' }}</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-indigo-600">ชื่อผู้นำเข้า:</p>
+                        <p>{{ $drug->importer_name ?? '-' }}</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-indigo-600">ชื่อผู้จำหน่าย/ผู้จัดจำหน่าย:</p>
+                        <p>{{ $drug->distributor_name ?? '-' }}</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-indigo-600">วัตถุประสงค์และประเภทของการใช้:</p>
+                        <p>{{ $drug->purpose_and_type_of_use ?? '-' }}</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-indigo-600">ชนิดและลักษณะหีบห่อหรือภาชนะบรรจุ:</p>
+                        <p>{{ $drug->packaging_type ?? '-' }}</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-indigo-600">อื่นๆ (ระบุ):</p>
+                        <p>{{ $drug->notes ?? '-' }}</p>
                     </div>
                 </div>
 

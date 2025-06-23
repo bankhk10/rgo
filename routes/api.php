@@ -27,7 +27,7 @@ Route::get('/products/search-list', function (Request $request) {
     $results = ChemicalImport::where('chemical_name_th', 'like', "%{$keyword}%")
         ->orWhere('chemical_name_en', 'like', "%{$keyword}%")
         ->limit(10)
-        ->get(['chemical_name_th', 'registration_no', 'expiry_date']);
+        ->get(['chemical_name_th', 'formula', 'id']);
 
     return response()->json($results);
 });
