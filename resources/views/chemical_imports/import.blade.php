@@ -53,7 +53,7 @@
         </form>
 
         <hr>
-        <h4>รูปแบบไฟล์ Excel ที่ถูกต้อง:</h4>
+        {{-- <h4>รูปแบบไฟล์ Excel ที่ถูกต้อง:</h4>
         <p>
             ไฟล์ Excel ของคุณควรมีแถวแรกเป็นหัวข้อ (header) และชื่อคอลัมน์ต้องตรงกับชื่อคอลัมน์ในฐานข้อมูล (เป็น snake_case ตัวพิมพ์เล็ก) เพื่อให้การแมปข้อมูลเป็นไปอย่างราบรื่น<br>
             ตัวอย่างชื่อคอลัมน์:
@@ -74,7 +74,7 @@
             <code>packaging</code>,
             <code>note</code>
         </p>
-        <p>สำหรับคอลัมน์ <code>expiry_date</code> และ <code>second_expiry_date</code> สามารถระบุเป็นรูปแบบวันที่ที่ถูกต้อง (เช่น YYYY-MM-DD) หรือเป็นรูปแบบตัวเลขวันที่ของ Excel ก็ได้</p>
+        <p>สำหรับคอลัมน์ <code>expiry_date</code> และ <code>second_expiry_date</code> สามารถระบุเป็นรูปแบบวันที่ที่ถูกต้อง (เช่น YYYY-MM-DD) หรือเป็นรูปแบบตัวเลขวันที่ของ Excel ก็ได้</p> --}}
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

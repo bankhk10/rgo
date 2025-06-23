@@ -15,6 +15,8 @@ services:
     working_dir: /var/www/html
     volumes:
       - ./:/var/www/html                     # Mount โค้ดโปรเจกต์ (ยกเว้นส่วนที่จะใช้ named volume)
+      - ./storage/logs:/var/www/html/storage/logs  # 💡 mount เฉพาะ logs folder
+      - app_storage:/var/www/html/storage/app      # ส่วนอื่นยังใช้ volume ได้
       - /var/www/html/vendor                 # (Optional) ถ้า vendor ใหญ่มาก และไม่ต้องการให้ host mount ทับ
       - app_storage:/var/www/html/storage    # ใช้ Named Volume สำหรับ storage
       - app_bootstrap_cache:/var/www/html/bootstrap/cache # ใช้ Named Volume สำหรับ bootstrap/cache
@@ -40,15 +42,6 @@ services:
       - dbdata:/var/lib/mysql # Persist Database Data
     networks:
       - laravel_network
-
-  # (Optional) Node Service for Frontend Assets (ถ้าต้องการ compile assets ภายใน container)
-  node:
-    image: node:18-alpine
-    container_name: my_laravel_node
-    working_dir: /var/www/html
-    volumes:
-      - ./:/var/www/html
-    command: sh -c "npm install && npm run dev" # หรือ npm run watch
 
 # Networks
 networks:

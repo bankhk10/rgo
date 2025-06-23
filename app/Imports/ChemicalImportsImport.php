@@ -36,7 +36,7 @@ class ChemicalImportsImport implements ToModel, WithHeadingRow
 
         // ตัวอย่างการแมปข้อมูล (ปรับคีย์ให้ตรงกับหัวข้อใน Excel ของคุณ)
         return new ChemicalImport([
-            'company_id'          =>  null, // คุณต้องมีคอลัมน์ company_id ใน Excel หรือหา id จากชื่อบริษัท
+            'company_id'          =>  $row['company_id'] ?? null, // คุณต้องมีคอลัมน์ company_id ใน Excel หรือหา id จากชื่อบริษัท
             'registration_no'     => $row['registration_no'] ?? null,
             'expiry_date'         => $parseDate($row['expiry_date'] ?? null),
             'chemical_name_th'    => $row['chemical_name_th'] ?? null,

@@ -28,7 +28,7 @@
 
                             </div>
                             <!-- ช่องค้นหา -->
-                            <input type="text" name="search" placeholder="ชื่อการค้า หรือเลขที่ทะเบียน..."
+                            <input type="text" name="search" placeholder="ชื่อวัตถุอันตราย หรือเลขที่ทะเบียน..."
                                 value="{{ request('search') }}"
                                 class="pl-10 pr-4 py-2 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500" />
                         </div>
@@ -44,13 +44,6 @@
                         + เพิ่มข้อมูลทะเบียน
                     </a>
                 </div>
-
-                {{-- <div class="mb-6 text-right">
-                    <a href="{{ route('import.create') }}"
-                       class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 shadow-md">
-                        + เพิ่มข้อมูลทะเบียน
-                    </a>
-                </div> --}}
             @endcan
             <div class="bg-white rounded-2xl overflow-hidden border border-gray-200">
                 <div class="overflow-x-auto">
@@ -58,8 +51,9 @@
                         <thead>
                             <tr class="bg-indigo-600 text-white text-left">
                                 <th class="py-4 px-8 rounded-tl-2xl">ลำดับ</th>
-                                <th class="py-4 px-8">ชื่อการค้า</th>
-                                <th class="py-4 px-8">บริษัท</th>
+                                <th class="py-4 px-6">ชื่อวัตถุอันตราย (ไทย)</th>
+                                {{-- <th class="py-4 px-6">ชื่อวัตถุอันตราย (อังกฤษ)</th> --}}
+                                <th class="py-4 px-6 text-center">บริษัท</th>
                                 <th class="py-4 px-8">เลขที่ทะเบียน</th>
                                 <th class="py-4 px-8">วันหมดอายุ</th>
                                 <th class="py-4 px-8 rounded-tr-2xl text-center">การดำเนินการ</th>
@@ -69,32 +63,52 @@
                             @can('Inregister read')
                                 @forelse ($imports as $index => $import)
                                     <tr class="border-b hover:bg-indigo-50 transition">
-                                        <td class="py-4 px-8 font-semibold text-gray-700">{{ $index + 1 }}</td>
-                                        <td class="py-4 px-8">{{ $import->trade_name }}</td>
-                                        <td class="py-4 px-8">{{ $import->company->name ?? '' }}</td>
+                                        <td class="py-4 px-6 font-semibold text-gray-700">{{ $index + 1 }}</td>
+                                        <td class="py-4 px-6">{{ $import->chemical_name_th }}</td>
+                                        {{-- <td class="py-4 px-8">{{ $import->chemical_name_en }}</td> --}}
+                                        <td class="py-4 px-6 text-center">{{ $import->company->name ?? '' }}</td>
                                         <td class="py-4 px-8">{{ $import->registration_no }}</td>
                                         <td class="py-4 px-8">{{ $import->expiry_date }}</td>
 
-                                        <td class="py-4 px-8 text-right">
-                                            <div class="flex items-center justify-end gap-2">
+                                        <td class="py-4 px-8 text-center">
+                                            <div class="flex items-center gap-3 justify-center">
                                                 @can('Inregister read')
                                                     <a href="{{ route('import.show', $import->id) }}"
-                                                        class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-150 ease-in-out">
-                                                        ดู
+                                                        class="inline-flex items-center justify-center p-2 rounded-full text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200"
+                                                        title="ดูรายละเอียด">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                            class="w-6 h-6">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                                        </svg>
                                                     </a>
                                                 @endcan
                                                 @can('Inregister update')
                                                     <a href="{{ route('import.edit', $import->id) }}"
-                                                        class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-green-500 rounded-md hover:bg-geen-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition duration-150 ease-in-out">
-                                                        แก้ไข
+                                                        class="inline-flex items-center justify-center p-2 rounded-full text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
+                                                        title="แก้ไข">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                            class="w-6 h-6">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                                        </svg>
                                                     </a>
                                                 @endcan
                                                 @can('Inregister delete')
                                                     <button onclick="confirmDelete({{ $import->id }})"
-                                                        class="bg-red-500 text-white font-bold py-2 px-4 rounded-lg shadow hover:bg-red-600 transition duration-300">
-                                                        ลบ
+                                                        class="inline-flex items-center justify-center p-2 rounded-full text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all duration-200"
+                                                        title="ลบ">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                            class="w-6 h-6">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.92a2.25 2.25 0 0 1-2.244-2.077L4.74 5.959m1.049-.165c.51-.158 1.029-.28 1.563-.35L12 4.75m-4.78 2.152A.75.75 0 0 1 9 6.75h6m-3 0V4.5m-2.25 4.5h.008v.008H9.75V9Zm0 0H9.75Zm4.5 0h.008v.008H14.25V9Z" />
+                                                        </svg>
                                                     </button>
-
                                                     <form id="delete-form-{{ $import->id }}"
                                                         action="{{ route('import.destroy', $import->id) }}" method="POST"
                                                         style="display: none;">

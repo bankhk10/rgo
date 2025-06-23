@@ -5,141 +5,109 @@
             {{-- บริษัท --}}
             <div>
                 <label class="block text-gray-700 mb-1">บริษัท</label>
-                <input type="text0"
-                       class="w-full p-2 border rounded-lg bg-gray-200"
-                       value="{{ $import->company->name ?? '-' }}"
-                       disabled>
+                <input type="text0" class="w-full p-2 border rounded-lg bg-gray-200"
+                    value="{{ $import->company->name ?? '-' }}" disabled>
             </div>
 
             {{-- เลขที่ทะเบียน --}}
             <div>
                 <label class="block text-gray-700 mb-1">เลขที่ทะเบียน</label>
-                <input type="text0"
-                       class="w-full p-2 border rounded-lg bg-gray-200"
-                       value="{{ $import->registration_no }}"
-                       disabled>
+                <input type="text0" class="w-full p-2 border rounded-lg bg-gray-200"
+                    value="{{ $import->registration_no }}" disabled>
             </div>
 
             {{-- วันหมดอายุ --}}
             <div>
                 <label class="block text-gray-700 mb-1">วันหมดอายุ</label>
-                <input type="date0"
-                       class="w-full p-2 border rounded-lg bg-gray-200"
-                       value="{{ $import->expiry_date }}"
-                       disabled>
+                <input type="date0" class="w-full p-2 border rounded-lg bg-gray-200"
+                    value="{{ $import->expiry_date }}" disabled>
             </div>
 
             {{-- ชื่อวัตถุอันตราย (ไทย) --}}
             <div>
                 <label class="block text-gray-700 mb-1">ชื่อวัตถุอันตราย (ไทย)</label>
-                <input type="text0"
-                       class="w-full p-2 border rounded-lg bg-gray-200"
-                       value="{{ $import->chemical_name_th }}"
-                       disabled>
+                <input type="text0" class="w-full p-2 border rounded-lg bg-gray-200"
+                    value="{{ $import->chemical_name_th }}" disabled>
             </div>
 
             {{-- ชื่อวัตถุอันตราย (อังกฤษ) --}}
             <div>
                 <label class="block text-gray-700 mb-1">ชื่อวัตถุอันตราย (อังกฤษ)</label>
-                <input type="text0"
-                       class="w-full p-2 border rounded-lg bg-gray-200"
-                       value="{{ $import->chemical_name_en }}"
-                       disabled>
+                <input type="text0" class="w-full p-2 border rounded-lg bg-gray-200"
+                    value="{{ $import->chemical_name_en }}" disabled>
             </div>
 
             {{-- สูตรและ % --}}
             <div>
                 <label class="block text-gray-700 mb-1">% และสูตร</label>
-                <input type="text0"
-                       class="w-full p-2 border rounded-lg bg-gray-200"
-                       value="{{ $import->formula }}"
-                       disabled>
+                <input type="text0" class="w-full p-2 border rounded-lg bg-gray-200" value="{{ $import->formula }}"
+                    disabled>
             </div>
 
             {{-- ชื่อการค้า --}}
             <div>
                 <label class="block text-gray-700 mb-1">ชื่อการค้า</label>
-                <input type="text0"
-                       class="w-full p-2 border rounded-lg bg-gray-200"
-                       value="{{ $import->trade_name }}"
-                       disabled>
+                <input type="text0" class="w-full p-2 border rounded-lg bg-gray-200" value="{{ $import->trade_name }}"
+                    disabled>
             </div>
 
             {{-- ผู้ผลิต --}}
             <div>
                 <label class="block text-gray-700 mb-1">ผู้ผลิต</label>
-                <input type="text0"
-                       class="w-full p-2 border rounded-lg bg-gray-200"
-                       value="{{ $import->manufacturer }}"
-                       disabled>
+                <input type="text0" class="w-full p-2 border rounded-lg bg-gray-200"
+                    value="{{ $import->manufacturer }}" disabled>
             </div>
 
             {{-- ผู้จำหน่าย --}}
             <div>
                 <label class="block text-gray-700 mb-1">ผู้จำหน่าย</label>
-                <input type="text0"
-                       class="w-full p-2 border rounded-lg bg-gray-200"
-                       value="{{ $import->supplier }}"
-                       disabled>
+                <input type="text0" class="w-full p-2 border rounded-lg bg-gray-200" value="{{ $import->supplier }}"
+                    disabled>
             </div>
 
             {{-- ใบอนุญาต --}}
             <div>
                 <label class="block text-gray-700 mb-1">ใบอนุญาตเลขที่</label>
-                <input type="text0"
-                       class="w-full p-2 border rounded-lg bg-gray-200"
-                       value="{{ $import->license_no }}"
-                       disabled>
+                <input type="text0" class="w-full p-2 border rounded-lg bg-gray-200" value="{{ $import->license_no }}"
+                    disabled>
             </div>
 
             {{-- ปริมาณนำเข้า --}}
             <div>
                 <label class="block text-gray-700 mb-1">ปริมาณนำเข้า</label>
-                <input type="number0"
-                       class="w-full p-2 border rounded-lg bg-gray-200"
-                       value="{{ $import->import_quantity }}"
-                       disabled>
+                <input type="number0" class="w-full p-2 border rounded-lg bg-gray-200"
+                    value="{{ $import->import_quantity }}" disabled>
             </div>
 
             {{-- ปริมาณคงเหลือ --}}
             <div>
                 <label class="block text-gray-700 mb-1">ปริมาณคงเหลือ</label>
-                <input type="text0"
-                       class="w-full p-2 border rounded-lg bg-gray-200"
-                       value="{{ $import->remaining_quantity }}"
-                       disabled>
-            </div>
-
-            {{-- วันหมดอายุ (สำรอง) --}}
-            <div>
-                <label class="block text-gray-700 mb-1">วันหมดอายุ (สำรอง)</label>
-                <input type="date0"
-                       class="w-full p-2 border rounded-lg bg-gray-200"
-                       value="{{ $import->second_expiry_date }}"
-                       disabled>
+                <input type="text0" class="w-full p-2 border rounded-lg bg-gray-200"
+                    value="{{ $import->remaining_quantity }}" disabled>
             </div>
 
             {{-- ขนาดบรรจุ --}}
-            <div>
+            {{-- <div>
                 <label class="block text-gray-700 mb-1">ขนาดบรรจุ</label>
-                <input type="text0"
-                       class="w-full p-2 border rounded-lg bg-gray-200"
-                       value="{{ $import->packaging }}"
-                       disabled>
+                <input type="text0" class="w-full p-2 border rounded-lg bg-gray-200" value="{{ $import->packaging }}"
+                    disabled>
+            </div> --}}
+
+            <div class="md:col-span-2">
+                <label class="block text-gray-700 mb-1">ขนาดบรรจุ</label>
+                <textarea class="w-full p-2 border rounded-lg bg-gray-200" rows="2" disabled>{{ $import->packaging }}</textarea>
             </div>
 
             {{-- หมายเหตุ --}}
             <div class="md:col-span-2">
                 <label class="block text-gray-700 mb-1">หมายเหตุ</label>
-                <textarea class="w-full p-2 border rounded-lg bg-gray-200"
-                          rows="1"
-                          disabled>{{ $import->note }}</textarea>
+                <textarea class="w-full p-2 border rounded-lg bg-gray-200" rows="1" disabled>{{ $import->note }}</textarea>
             </div>
         </form>
 
         <div class="text-center mt-8">
             <a href="{{ route('import.index') }}"
-               class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg shadow transition duration-300">
+                class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg shadow transition duration-300">
                 <i class="fa-solid fa-arrow-left mr-2"></i> ย้อนกลับ
             </a>
         </div>
