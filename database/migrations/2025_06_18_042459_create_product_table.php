@@ -29,6 +29,7 @@ class CreateProductTable extends Migration
             $table->date('registration_date')->nullable()->comment('วันที่ขึ้นทะเบียนผลิตภัณฑ์');
             $table->date('expiry_date')->nullable()->comment('วันหมดอายุของผลิตภัณฑ์');
             $table->decimal('progress')->default(0)->comment('สถานะความคืบหน้าของการขึ้นทะเบียนผลิตภัณฑ์');
+            $table->decimal('sub_progress')->default(0); // เพิ่มหลัง progress
 
             // $table->integer('progress')->default(0)->comment('สถานะความคืบหน้าของการขึ้นทะเบียนผลิตภัณฑ์');
             // $table->text('description')->nullable()->comment('คำอธิบายเกี่ยวกับผลิตภัณฑ์');

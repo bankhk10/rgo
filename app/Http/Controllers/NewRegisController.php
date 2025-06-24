@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Models\Product; // Assuming you have a Product model
 use Illuminate\Support\Facades\Log; // For logging purposes
+use App\Models\DrugProgressStep; // Assuming you have a DrugProgressStep model
 
 class NewRegisController extends Controller
 {
@@ -39,11 +40,6 @@ class NewRegisController extends Controller
             ->where('new_or_old', true)
             ->count();
 
-        // Paginate the results using the $query that now includes search conditions
-        // Remove the additional ->where('status', 'pending') or ->where('progress', '<', 100)
-        // unless you specifically want to filter the main table by that status by default.
-        // Based on your original template, the table should show all new registrations,
-        // and the status is indicated by the progress bar.
         $paginatedProducts = $query->orderBy('created_at', 'desc')->paginate(5);
 
         return view('product.new.index', [
@@ -88,8 +84,7 @@ class NewRegisController extends Controller
 
     public function store(Request $request)
     {
-
-        // 1. ตรวจสอบข้อมูล (Validation) - สำคัญมาก!
+        // 1. Validate ข้อมูล
         $validatedData = $request->validate([
             'chemical_imports_id' => 'nullable|string|max:255',
             'trade_name' => 'nullable|string|max:255',
@@ -98,43 +93,43 @@ class NewRegisController extends Controller
             'distributor_name' => 'nullable|string|max:255',
             'purpose_and_type_of_use' => 'nullable|string|max:255',
             'packaging_type' => 'nullable|string|max:255',
-            'notes' => 'nullable|string', // text field ใช้ string ได้
+            'notes' => 'nullable|string',
 
-            // ฟิลด์จากตาราง product ที่มีอยู่แล้ว
-            'name' => 'nullable|string|max:255', // ถ้าฟอร์มมีช่องนี้
-            'registration_number' => 'nullable|string|max:255|unique:product,registration_number', // ต้องไม่ซ้ำ
+            'name' => 'nullable|string|max:255',
+            'registration_number' => 'nullable|string|max:255|unique:product,registration_number',
             'registration_date' => 'nullable|date',
             'expiry_date' => 'nullable|date',
-            'company' => 'nullable|string|max:255', // ถ้าฟอร์มมีช่องนี้
-
-            // ฟิลด์ 'progress' ไม่มีในฟอร์มปัจจุบัน แต่มีใน migration ถ้าต้องการ set ค่า default
-            // ฟิลด์ 'status', 'is_active', 'is_deleted', 'new_or_old' มักจะตั้งค่า default ใน migration หรือใน code
-            // 'image', 'document', 'remarks' หากมีช่อง input
-            // 'created_by' หากคุณจะบันทึกผู้สร้างเอง
+            'company' => 'nullable|string|max:255',
         ]);
 
-        // 2. เตรียมข้อมูลสำหรับบันทึก (ถ้าจำเป็น)
-        // Laravel จะจัดการ `created_at` และ `updated_at` โดยอัตโนมัติ
-        // หากมีฟิลด์ 'progress' ที่ไม่ได้อยู่ในฟอร์ม แต่ต้องการตั้งค่าเริ่มต้น
-        $validatedData['progress'] = $request->input('progress', 0); // ใช้ค่าจากฟอร์ม หรือ default เป็น 10
-
-        // หากต้องการบันทึกผู้ใช้งานปัจจุบัน
-        // $validatedData['created_by'] = auth()->id(); // หรือ auth()->user()->name;
-
-        // 3. บันทึกข้อมูลลงในฐานข้อมูล
+        // 2. กำหนดค่า progress เริ่มต้น 0 (หรือจะเป็น 12.5% ถ้าต้องการ)
+        $validatedData['progress'] = 0;
 
         try {
-            Log::info("trying to create a new product with data: ");
-            Product::create($validatedData);
+            // 3. สร้าง product ใหม่
+            $product = Product::create($validatedData);
 
-            // 4. ส่งกลับพร้อมข้อความ Success
+            // 4. สร้างหัวข้อย่อยเริ่มต้นให้กับขั้นตอนที่ 1 โดยไม่มีการเลือก (checked_at = null)
+            // กำหนดหัวข้อย่อยขั้นตอน 1 จำนวน 3 หัวข้อ (ตาม requirement ล่าสุด)
+            $subStepsStep1 = ['พิจารณาเบื้องต้น', 'อนุมัติแนวทาง', 'ส่งเรื่องต่อ'];
+
+            foreach ($subStepsStep1 as $index => $label) {
+                DrugProgressStep::create([
+                    'product_id' => $product->id,
+                    'step_number' => 1,
+                    'sub_step_index' => $index,
+                    'sub_step_label' => $label,
+                    'checked_at' => null, // ยังไม่ได้เลือก
+                ]);
+            }
+
             return redirect()->route('newregis.index')->with('success', 'บันทึกข้อมูลสำเร็จแล้ว!');
         } catch (\Exception $e) {
-            // 5. จัดการข้อผิดพลาด
-            Log::error("Error creating product: " . $e->getMessage());
+            // \Log::error("Error creating product: " . $e->getMessage());
             return redirect()->back()->withInput()->withErrors(['error' => 'เกิดข้อผิดพลาดในการบันทึกข้อมูล: ' . $e->getMessage()]);
         }
     }
+
 
     /**
      * Display the specified resource.
@@ -146,7 +141,7 @@ class NewRegisController extends Controller
     {
         $drug = Product::where('id', $id)->first();
         if (!$drug) {
-            abort(404, 'ไม่พบข้อมูลยา');
+            abort(404, 'ไม่พบข้อมูล');
         }
 
         return view('product.new.show', compact('drug'));
@@ -159,7 +154,17 @@ class NewRegisController extends Controller
      */
     public function edit($id)
     {
-        //
+        $drug = Product::where('id', $id)->first();
+        if (!$drug) {
+            abort(404, 'ไม่พบข้อมูล');
+        }
+
+        // ตรวจสอบว่าผู้ใช้มีสิทธิ์แก้ไขหรือไม่
+        // if (!auth()->user()->can('edit', $drug)) {
+        //     abort(403, 'คุณไม่มีสิทธิ์แก้ไขข้อมูลนี้');
+        // }
+
+        return view('product.new.edit', compact('drug'));
     }
 
     /**
@@ -183,5 +188,129 @@ class NewRegisController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function updateSubProgress(Request $request, Product $drug)
+    {
+        $stepNumber = (int) $request->input('step_number');
+        $selectedIndexes = $request->input('sub_steps', []);
+
+        // ข้อมูลแบบเดียวกับ Blade
+        $rawStructure = [
+            1 => [
+                'จัดซื้อต่างประเทศ' => ['ทะเบียน', 'ใบอนุญาตในประเทศผู้ผลิต', 'เอกสารอนุญาตอื่นๆ'],
+                'ฝ่ายขาย' => ['รายชื่อผู้ขอขึ้นทะเบียน', 'ชื่อการค้า', 'Packing'],
+                'วิจัยและพัฒนา' => ['เตรียมข้อมูลผลิตตัวอย่าง'],
+                'แผนกวิชาการ' => ['แผนการทดลอง'],
+                'แผนกทะเบียน' => [
+                    'ตรวจสอบเอกสารขึ้นทะเบียน',
+                    'ตรวจชื่อการค้า',
+                    'ขอใบอนุญาตนำเข้าตัวอย่าง',
+                    'อื่นๆ',
+                ],
+            ],
+            2 => [
+                'จัดซื้อต่างประเทศ' => ['ประสานเพื่อนำเข้าตัวอย่าง'],
+                'วิจัยและพัฒนา' => ['จัดเตรียมตัวอย่าง'],
+                'แผนกทะเบียน' => ['ส่งตัวอย่างให้วิจัยและพัฒนา', 'ขอใบอนุญาตผลิต', 'ตรวจ COA'],
+            ],
+            3 => [
+                'จัดซื้อต่างประเทศ' => ['ประสานเพื่อส่งออกตัวอย่าง', 'Data requirement จากผู้ผลิต'],
+                'แผนกทะเบียน' => [
+                    'ประสานส่งออกตัวอย่าง',
+                    'ตรวจผลการศึกษา Tox',
+                    'เตรียมข้อมูลประกอบการยื่นขอขึ้นทะเบียน',
+                ],
+            ],
+            4 => [
+                'จัดซื้อต่างประเทศ' => [
+                    'ทะเบียน',
+                    'ใบอนุญาตในประเทศผู้ผลิต (ส่ง DOA)',
+                    'เอกสารอนุญาตอื่นๆ',
+                ],
+                'วิจัยและพัฒนา' => ['เตรียมและส่งตัวอย่างให้ทะเบียน'],
+                'แผนกวิชาการ' => ['ติดตามแผนการทดลอง Eff+ PHI (ถ้ามี)'],
+                'แผนกทะเบียน' => [
+                    'รวบรวมข้อมูลและเอกสารยื่นขอขขึ้นทะเบียนตามที่ DOA กำหนด',
+                    'ติดตามผล Phase I',
+                ],
+            ],
+            5 => [
+                'แผนกทะเบียน' => [
+                    'รวบรวมข้อมูล',
+                    'เอกสารยื่นขอขึ้นทะเบียนตามที่ DOA กำหนด',
+                    'ติดตามผล Phase I',
+                ],
+                'แผนกวิชาการ' => [
+                    'รับแผนการทดลอง Eff, PHI (ถ้ามี)',
+                    'ทำการทดลอง Eff และผลการทดลอง PHI (ถ้ามี)',
+                ],
+                'วิจัยและพัฒนา' => [
+                    'รับทราบผลวิเคราะห์ในกรณีที่วิเคราะห์ไม่ผ่าน',
+                    'ส่งตัวอย่างให้ทะเบียนเพื่อยื่นขอขึ้นทะเบียนใหม่',
+                ],
+            ],
+            6 => [
+                'แผนกวิชาการ' => ['ติดตามผลการทดลอง Eff', 'ผลการทดลอง PHI (ถ้ามี) จนอนุมัติ'],
+                'แผนกทะเบียน' => [
+                    'รวบรวมข้อมูล',
+                    ' ผล Eff +ผล PHI (ถ้ามี) ที่อนุมัติ',
+                    ' เอกสารตามที่ DOA กำหนด และติดตามผล Phase III',
+                ],
+                'จัดซื้อต่างประเทศ' => [
+                    'ประสานขอเอกสารจากผู้ผลิตเพิ่มเติมในกรณีที่ผลพิจารณา Tox Phase III ไม่ผ่าน',
+                ],
+            ],
+            7 => [
+                'แผนกทะเบียน' => [
+                    'แผนกทะเบียนได้รับผล Tox Phase III ที่อนุมัติ ทำการรวบรวมข้อมูลเอกสารยื่นขอเข้าประชุมพิจารณาขึ้นทะเบียนใหม่',
+                ],
+            ],
+            8 => [
+                'ฝ่ายขาย' => ['สรุป packing และจัดทำ A/W'],
+                'แผนกทะเบียน' => [
+                    'จัดเตรียมคำขอขึ้นทะเบียน',
+                    'ร่างฉลาก',
+                    'มติพิจารณาขึ้นทะเบียน',
+                    ' A/W',
+                ],
+            ],
+        ];
+
+        $stepItems = collect($rawStructure[$stepNumber] ?? [])->flatten()->values()->all();
+        foreach ($stepItems as $index => $label) {
+            DrugProgressStep::updateOrCreate(
+                [
+                    'product_id' => $drug->id,
+                    'step_number' => $stepNumber,
+                    'sub_step_index' => $index,
+                ],
+                [
+                    'sub_step_label' => $label,
+                    'checked_at' => in_array($index, $selectedIndexes) ? now() : null,
+                ]
+            );
+        }
+
+        // คำนวณ progress
+        $totalSteps = count($rawStructure);
+        $completedSteps = 0;
+
+        foreach ($rawStructure as $step => $groupedItems) {
+            $flat = collect($groupedItems)->flatten()->values();
+            $countChecked = DrugProgressStep::where('product_id', $drug->id)
+                ->where('step_number', $step)
+                ->whereNotNull('checked_at')
+                ->count();
+
+            if ($flat->count() > 0 && $countChecked === $flat->count()) {
+                $completedSteps++;
+            }
+        }
+
+        $drug->progress = round(($completedSteps / $totalSteps) * 100, 2);
+        $drug->save();
+
+        return redirect()->back()->with('success', 'อัปเดตความคืบหน้าเรียบร้อยแล้ว');
     }
 }

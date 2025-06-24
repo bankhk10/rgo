@@ -87,5 +87,20 @@ class Product extends Model
         return $this->belongsTo(ChemicalImport::class, 'chemical_imports_id');
     }
 
+    public function progressSteps()
+    {
+        return $this->hasMany(DrugProgressStep::class);
+    }
+
+    // public function stepSubSteps($stepNumber)
+    // {
+    //     return $this->progressSteps()->where('step_number', $stepNumber);
+    // }
+
+    public function stepSubSteps($stepNumber)
+    {
+        return $this->hasMany(DrugProgressStep::class, 'product_id')
+            ->where('step_number', $stepNumber);
+    }
     // หรือเมธอดอื่นๆ ที่เกี่ยวข้องกับ Product
 }

@@ -76,6 +76,9 @@ Route::post('/new/product/store', [NewRegisController::class, 'store'])->name('n
 Route::get('/new/product/edit/{registrationNumber}', [NewRegisController::class, 'edit'])->name('newregis.edit');
 Route::put('/new/product/update/{registrationNumber}', [NewRegisController::class, 'update'])->name('newregis.update');
 Route::delete('/new/product/delete/{registrationNumber}', [NewRegisController::class, 'destroy'])->name('newregis.destroy');
+Route::put('/newregis/{drug}/update-subprogress', [NewRegisController::class, 'updateSubProgress'])->name('newregis.update-subprogress');
+
+
 
 Route::get('/renew/product', [RenewRegisController::class, 'index'])->name('renewregis.index');
 Route::get('/manufactture/product', [ManufactureRegisController::class, 'index'])->name('manufactureregis.index');

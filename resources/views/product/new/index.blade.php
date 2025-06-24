@@ -126,7 +126,7 @@
                                         <div class="text-center mb-2">
                                             {{-- แสดงสถานะความคืบหน้า --}}
                                             {{-- ใช้ $product->progress แทน $drug->progress --}}
-                                            @if ($product->progress <= 12.5 || $product->progress == 0)
+                                            @if ($product->progress == 0 || $product->progress < 12.5)
                                                 <div x-data="{ tooltip: false }" class="relative inline-block">
                                                     <p class="text-red-600 font-semibold cursor-pointer"
                                                         @mouseenter="tooltip = true" @mouseleave="tooltip = false">
@@ -144,7 +144,7 @@
                                                         คณะ PDC อนุมัติให้ดำเนินการขึ้นทะเบียน
                                                     </div>
                                                 </div>
-                                            @elseif ($product->progress <= 25 && $product->progress > 12.5)
+                                            @elseif ($product->progress >= 12.5 && $product->progress < 25)
                                                 {{-- แก้เงื่อนไขให้ครอบคลุมช่วง --}}
                                                 <div x-data="{ tooltip: false }" class="relative inline-block">
                                                     <p class="text-yellow-700 font-semibold cursor-pointer"
@@ -163,7 +163,7 @@
                                                         นำเข้าตัวอย่าง
                                                     </div>
                                                 </div>
-                                            @elseif ($product->progress <= 35.5 && $product->progress > 25)
+                                            @elseif ($product->progress >= 25 && $product->progress < 35.5)
                                                 <div x-data="{ tooltip: false }" class="relative inline-block">
                                                     <p class="text-yellow-700 font-semibold cursor-pointer"
                                                         @mouseenter="tooltip = true" @mouseleave="tooltip = false">
@@ -181,7 +181,7 @@
                                                         ส่งตัวอย่างข้อมูลศึกษาความเป็นพิษ (ทำTox)
                                                     </div>
                                                 </div>
-                                            @elseif ($product->progress <= 50 && $product->progress > 35.5)
+                                            @elseif ($product->progress >= 35.5 && $product->progress < 50)
                                                 <div x-data="{ tooltip: false }" class="relative inline-block">
                                                     <p class="text-yellow-700 font-semibold cursor-pointer"
                                                         @mouseenter="tooltip = true" @mouseleave="tooltip = false">
@@ -199,7 +199,7 @@
                                                         ยื่นคำขอขึ้นทะเบียน
                                                     </div>
                                                 </div>
-                                            @elseif ($product->progress <= 62.5 && $product->progress > 50)
+                                            @elseif ($product->progress >= 50 && $product->progress < 62.5)
                                                 <div x-data="{ tooltip: false }" class="relative inline-block">
                                                     <p class="text-yellow-700 font-semibold cursor-pointer"
                                                         @mouseenter="tooltip = true" @mouseleave="tooltip = false">
@@ -217,7 +217,7 @@
                                                         แผนการทดลอง Eff, PHI (ถ้ามี) + Phase1+ผลวิเคราะห์ (อนุมัติ)
                                                     </div>
                                                 </div>
-                                            @elseif ($product->progress <= 75 && $product->progress > 62.5)
+                                            @elseif ($product->progress >= 62.5 && $product->progress < 75)
                                                 <div x-data="{ tooltip: false }" class="relative inline-block">
                                                     <p class="text-yellow-700 font-semibold cursor-pointer"
                                                         @mouseenter="tooltip = true" @mouseleave="tooltip = false">
@@ -237,7 +237,7 @@
                                                         อนุมัติ+ผลวิเคราะห์อนุมัติ)
                                                     </div>
                                                 </div>
-                                            @elseif ($product->progress <= 87.5 && $product->progress > 75)
+                                            @elseif ($product->progress >= 75 && $product->progress < 87.5)
                                                 <div x-data="{ tooltip: false }" class="relative inline-block">
                                                     <p class="text-yellow-700 font-semibold cursor-pointer"
                                                         @mouseenter="tooltip = true" @mouseleave="tooltip = false">
@@ -255,7 +255,7 @@
                                                         Phase3 อนุมัติ (ยื่นเอกสารเข้าประชุมพิจารณาขึ้นทะเบียน)
                                                     </div>
                                                 </div>
-                                            @elseif ($product->progress <= 99 && $product->progress > 87.5)
+                                            @elseif ($product->progress >= 87.5 && $product->progress <= 99)
                                                 <div x-data="{ tooltip: false }" class="relative inline-block">
                                                     <p class="text-yellow-700 font-semibold cursor-pointer"
                                                         @mouseenter="tooltip = true" @mouseleave="tooltip = false">
