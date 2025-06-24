@@ -52,7 +52,23 @@
 
                 {{-- ไทม์ไลน์การขึ้นทะเบียน --}}
                 <div class="mt-8">
-                    <h2 class="text-2xl font-bold text-indigo-700 mb-6">ไทม์ไลน์การขึ้นทะเบียน</h2>
+                    {{-- <h2 class="text-2xl font-bold text-indigo-700 mb-6">ไทม์ไลน์การขึ้นทะเบียน</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-lg text-gray-700 mt-6">
+                        <div>
+                            <p class="font-semibold text-indigo-600">สถานะความคืบหน้าโดยรวม:</p>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
+                                <div class="h-2.5 rounded-full
+                                @if ($drug->progress < 25) bg-red-500
+                                @elseif ($drug->progress < 75) bg-yellow-500
+                                @else bg-green-500 @endif"
+                                    style="width: {{ $drug->progress }}%">
+                                </div>
+                            </div>
+                            <div class="text-xs text-gray-500 text-center mt-1">
+                                {{ $drug->progress }}%
+                            </div>
+                        </div>
+                    </div> --}}
 
                     @php
                         $subStepsAll = [
@@ -147,8 +163,7 @@
                                 ],
                             ],
                             8 => [
-                                'title' =>
-                                    'ยื่นขอออกทะเบียน',
+                                'title' => 'ยื่นขอออกทะเบียน',
                                 'items' => [
                                     'ฝ่ายขาย' => ['สรุป packing และจัดทำ A/W'],
                                     'แผนกทะเบียน' => [
@@ -189,7 +204,7 @@
                                 fn($s) => $completedStepFlags[$s] ?? false,
                             );
                             $isVisible = $stepNumber === 1 || $previousStepsCompleted;
-                            $isEditable = $canEdit && $isVisible;
+                            $isEditable = $canEdit && $isVisible && $percent < 100;
                         @endphp
 
                         @if ($isVisible)
@@ -238,10 +253,10 @@
                                                                     class="text-sm text-gray-800">{{ $label }}</label>
                                                             </div>
                                                             @if ($isChecked)
-                                                                <div class="text-sm text-gray-500">
+                                                                {{-- <div class="text-sm text-gray-500">
                                                                     <i class="fa-solid fa-clock mr-1 text-gray-400"></i>
                                                                     {{ \Carbon\Carbon::parse($record->checked_at)->format('d/m/Y H:i') }}
-                                                                </div>
+                                                                </div> --}}
                                                             @endif
                                                         </div>
                                                         @php $checkboxIndex++; @endphp
@@ -265,23 +280,6 @@
                     @endforeach
                 </div>
 
-                {{-- สถานะความคืบหน้าโดยรวม --}}
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-lg text-gray-700 mt-6">
-                    <div>
-                        <p class="font-semibold text-indigo-600">สถานะความคืบหน้าโดยรวม:</p>
-                        <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
-                            <div class="h-2.5 rounded-full
-                                @if ($drug->progress < 25) bg-red-500
-                                @elseif ($drug->progress < 75) bg-yellow-500
-                                @else bg-green-500 @endif"
-                                style="width: {{ $drug->progress }}%">
-                            </div>
-                        </div>
-                        <div class="text-xs text-gray-500 text-center mt-1">
-                            {{ $drug->progress }}%
-                        </div>
-                    </div>
-                </div>
 
                 <div class="text-center mt-12">
                     <a href="{{ route('newregis.index') }}"
