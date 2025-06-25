@@ -60,8 +60,7 @@
                                 <div class="h-2.5 rounded-full
                                 @if ($drug->progress < 25) bg-red-500
                                 @elseif ($drug->progress < 75) bg-yellow-500
-                                @else bg-green-500 @endif"
-                                    style="width: {{ $drug->progress }}%">
+                                @else bg-green-500 @endif" style="width: {{ $drug->progress }}%">
                                 </div>
                             </div>
                             <div class="text-xs text-gray-500 text-center mt-1">
@@ -158,7 +157,8 @@
                                 'title' => 'Phase III อนุมัติ (ยื่นเอกสารเข้าประชุมพิจารณาขึ้นทะเบียน)',
                                 'items' => [
                                     'แผนกทะเบียน' => [
-                                        'แผนกทะเบียนได้รับผล Tox Phase III ที่อนุมัติ ทำการรวบรวมข้อมูลเอกสารยื่นขอเข้าประชุมพิจารณาขึ้นทะเบียนใหม่',
+                                        'แผนกทะเบียนได้รับผล Tox Phase III ที่อนุมัติ
+                    ทำการรวบรวมข้อมูลเอกสารยื่นขอเข้าประชุมพิจารณาขึ้นทะเบียนใหม่',
                                     ],
                                 ],
                             ],
@@ -204,10 +204,7 @@
                                 fn($s) => $completedStepFlags[$s] ?? false,
                             );
                             $isVisible = $stepNumber === 1 || $previousStepsCompleted;
-                            $isEditable = $canEdit && $isVisible && $percent < 100;
-                        @endphp
-
-                        @if ($isVisible)
+                        $isEditable = $canEdit && $isVisible && $percent < 100; @endphp @if ($isVisible)
                             {{-- โค้ดแสดงแบบฟอร์มของขั้นตอนนี้ --}}
                             <form method="POST" action="{{ route('newregis.update-subprogress', $drug->id) }}">
                                 @csrf
@@ -244,7 +241,8 @@
                                                         @endphp
                                                         <div class="flex items-center justify-between">
                                                             <div class="flex items-center space-x-3">
-                                                                <input type="checkbox" name="sub_steps[]" id="vehicle1_{{ $label }}"
+                                                                <input type="checkbox" name="sub_steps[]"
+                                                                    id="vehicle1_{{ $label }}"
                                                                     value="{{ $checkboxIndex }}"
                                                                     {{ $isChecked ? 'checked' : '' }}
                                                                     {{ !$isEditable ? 'disabled' : '' }}
@@ -254,9 +252,9 @@
                                                             </div>
                                                             @if ($isChecked)
                                                                 {{-- <div class="text-sm text-gray-500">
-                                                                    <i class="fa-solid fa-clock mr-1 text-gray-400"></i>
-                                                                    {{ \Carbon\Carbon::parse($record->checked_at)->format('d/m/Y H:i') }}
-                                                                </div> --}}
+                                                <i class="fa-solid fa-clock mr-1 text-gray-400"></i>
+                                                {{ \Carbon\Carbon::parse($record->checked_at)->format('d/m/Y H:i') }}
+                                            </div> --}}
                                                             @endif
                                                         </div>
                                                         @php $checkboxIndex++; @endphp
