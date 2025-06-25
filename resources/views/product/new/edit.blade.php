@@ -244,12 +244,12 @@
                                                         @endphp
                                                         <div class="flex items-center justify-between">
                                                             <div class="flex items-center space-x-3">
-                                                                <input type="checkbox" name="sub_steps[]"
+                                                                <input type="checkbox" name="sub_steps[]" id="vehicle1_{{ $label }}"
                                                                     value="{{ $checkboxIndex }}"
                                                                     {{ $isChecked ? 'checked' : '' }}
                                                                     {{ !$isEditable ? 'disabled' : '' }}
                                                                     class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                                                                <label
+                                                                <label for="vehicle1_{{ $label }}"
                                                                     class="text-sm text-gray-800">{{ $label }}</label>
                                                             </div>
                                                             @if ($isChecked)
@@ -265,7 +265,6 @@
                                             </div>
                                         @endforeach
                                     </div>
-
                                     @if ($isEditable && $percent < 100)
                                         <div class="text-right mt-4">
                                             <button type="submit"
@@ -279,8 +278,6 @@
                         @endif
                     @endforeach
                 </div>
-
-
                 <div class="text-center mt-12">
                     <a href="{{ route('newregis.index') }}"
                         class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg shadow transition duration-300">
