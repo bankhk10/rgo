@@ -107,7 +107,7 @@
                                 <th class="py-4 px-8">เลขที่ทะเบียน</th>
                                 <th class="py-4 px-8">วันที่ขอขึ้นทะเบียน</th>
                                 <th class="py-4 px-8">สถานะความคืบหน้า</th>
-                                <th class="py-4 px-8 rounded-tr-2xl">รายละเอียด</th>
+                                <th class="py-4 px-8 rounded-tr-2xl text-center">รายละเอียด</th>
                             </tr>
                         </thead>
                         <tbody>
