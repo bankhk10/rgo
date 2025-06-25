@@ -7,48 +7,91 @@
 
             <div class="bg-white rounded-2xl overflow-hidden shadow-lg p-8 border border-gray-200">
                 {{-- รายละเอียดข้อมูลยา --}}
-                <div class="grid grid-cols-2 md:grid-cols-2 gap-6 text-lg text-gray-700">
+                <div class="grid grid-cols-3 gap-6 text-lg text-gray-700 ml-16">
                     <div>
-                        <p class="font-semibold text-indigo-600">เลขที่ทะเบียน:</p>
-                        <p>{{ $drug->registration_number ?? '-' }}</p>
+                        <p class="font-semibold text-indigo-600">เลขที่ทะเบียน</p>
+                        <form method="POST" action="{{ route('newregis.update-reg-number', $drug->id) }}">
+                            @csrf
+                            @method('PUT')
+                            <input type="text" name="registration_number"
+                                class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="กรอกเลขที่ทะเบียน"
+                                value="{{ $drug->registration_number }}" required>
                     </div>
                     <div>
-                        <p class="font-semibold text-indigo-600">วันที่ขึ้นทะเบียน:</p>
-                        <p>{{ $drug->created_at->format('d/m/Y') }}</p>
+                        <p class="font-semibold text-indigo-600">วันที่ขึ้นทะเบียน</p>
+                        <input type="date" name="registration_date"
+                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1"
+                            value="{{ $drug->created_at->format('Y-m-d') }}" readonly>
                     </div>
                     <div>
-                        <p class="font-semibold text-indigo-600">ชื่อสามัญ:</p>
-                        <p>{{ $drug->chemicalImport->chemical_name_th ?? '-' }}</p>
+                        <p class="font-semibold text-indigo-600">ชื่อสามัญ</p>
+                        <input type="text" name="common_name" class="border-gray-300 rounded-lg shadow-sm w-80 mt-1"
+                            placeholder="กรอกชื่อสามัญ" value="{{ $drug->chemicalImport->chemical_name_th }}" readonly>
                     </div>
                     <div>
-                        <p class="font-semibold text-indigo-600">ชื่อทางการค้า:</p>
-                        <p>{{ $drug->trade_name ?? '-' }}</p>
+                        <p class="font-semibold text-indigo-600">ชื่อทางการค้า</p>
+                        <input type="text" name="trade_name" class="border-gray-300 rounded-lg shadow-sm w-80 mt-1"
+                            placeholder="กรอกชื่อทางการค้า" value="{{ $drug->trade_name }}" readonly>
                     </div>
                     <div>
-                        <p class="font-semibold text-indigo-600">ชื่อผู้ผลิตและแหล่งผลิต:</p>
-                        <p>{{ $drug->manufacturer_origin ?? '-' }}</p>
+                        <p class="font-semibold text-indigo-600">ชื่อผู้ผลิตและแหล่งผลิต</p>
+                        <input type="text" name="manufacturer_name"
+                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="กรอกชื่อผู้ผลิต"
+                            value="{{ $drug->manufacturer_origin }}" readonly>
                     </div>
                     <div>
-                        <p class="font-semibold text-indigo-600">ชื่อผู้นำเข้า:</p>
-                        <p>{{ $drug->importer_name ?? '-' }}</p>
+                        <p class="font-semibold text-indigo-600">ชื่อผู้นำเข้า</p>
+                        <input type="text" name="importer_name"
+                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="กรอกชื่อผู้นำเข้า"
+                            value="{{ $drug->importer_name }}" readonly>
                     </div>
                     <div>
-                        <p class="font-semibold text-indigo-600">ชื่อผู้จำหน่าย/ผู้จัดจำหน่าย:</p>
-                        <p>{{ $drug->distributor_name ?? '-' }}</p>
+                        <p class="font-semibold text-indigo-600">ชื่อผู้จำหน่าย/ผู้จัดจำหน่าย</p>
+                        <input type="text" name="distributor_name"
+                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="กรอกชื่อผู้จำหน่าย"
+                            value="{{ $drug->distributor_name }}" readonly>
+                        {{-- <p>{{ $drug->distributor_name ?? '-' }}</p> --}}
                     </div>
                     <div>
-                        <p class="font-semibold text-indigo-600">วัตถุประสงค์และประเภทของการใช้:</p>
-                        <p>{{ $drug->purpose_and_type_of_use ?? '-' }}</p>
+                        <p class="font-semibold text-indigo-600">วัตถุประสงค์และประเภทของการใช้</p>
+                        <input type="text" name="purpose_and_type_of_use"
+                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1"
+                            placeholder="กรอกวัตถุประสงค์และประเภทของการใช้"
+                            value="{{ $drug->purpose_and_type_of_use }}" readonly>
                     </div>
                     <div>
-                        <p class="font-semibold text-indigo-600">ชนิดและลักษณะหีบห่อหรือภาชนะบรรจุ:</p>
-                        <p>{{ $drug->packaging_type ?? '-' }}</p>
+                        <p class="font-semibold text-indigo-600">ชนิดและลักษณะหรือภาชนะบรรจุ</p>
+                        <input type="text" name="packaging_type"
+                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1"
+                            placeholder="กรอกชนิดและลักษณะหีบห่อหรือภาชนะบรรจุ" value="{{ $drug->packaging_type }}"
+                            readonly>
                     </div>
-                    <div>
-                        <p class="font-semibold text-indigo-600">อื่นๆ (ระบุ):</p>
-                        <p>{{ $drug->notes ?? '-' }}</p>
+                    {{-- <div>
+                        <p class="font-semibold text-indigo-600">อื่นๆ (ระบุ)</p>
+                        <textarea type="text" name="other_details" class="border-gray-300 rounded-lg shadow-sm w-64 mt-1"
+                            placeholder="กรอกรายละเอียดอื่นๆ" value="{{ $drug->notes }}" readonly>
+                    </div> --}}
+
+
+                    <div class="md:col-span-1.5">
+                        {{-- <label class="block text-gray-700 mb-1">หมายเหตุ</label> --}}
+                        <p class="font-semibold text-indigo-600">อื่นๆ (ระบุ)</p>
+                        <textarea name="note" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            rows="2"></textarea>
                     </div>
                 </div>
+
+                <div class="text-center mt-4">
+                    <a href="{{ route('newregis.index') }}"
+                        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg shadow transition duration-300 mr-2">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> ย้อนกลับ
+                    </a>
+                    <button type="submit"
+                        class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg shadow transition">
+                        <i class="fa-solid fa-floppy-disk mr-1"></i> บันทึก
+                    </button>
+                </div>
+                </form>
 
                 {{-- ไทม์ไลน์การขึ้นทะเบียน --}}
                 <div class="mt-8">
@@ -264,7 +307,11 @@
                                         @endforeach
                                     </div>
                                     @if ($isEditable && $percent < 100)
-                                        <div class="text-right mt-4">
+                                        <div class="text-center mt-4">
+                                            <a href="{{ route('newregis.index') }}"
+                                                class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg shadow transition duration-300 mr-2">
+                                                <i class="fa-solid fa-arrow-left mr-2"></i> ย้อนกลับ
+                                            </a>
                                             <button type="submit"
                                                 class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg shadow transition">
                                                 <i class="fa-solid fa-floppy-disk mr-1"></i> บันทึกความคืบหน้า
@@ -276,12 +323,12 @@
                         @endif
                     @endforeach
                 </div>
-                <div class="text-center mt-12">
+                {{-- <div class="text-center mt-12">
                     <a href="{{ route('newregis.index') }}"
                         class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg shadow transition duration-300">
                         <i class="fa-solid fa-arrow-left mr-2"></i> ย้อนกลับ
                     </a>
-                </div>
+                </div> --}}
             </div>
         </div>
     </main>
