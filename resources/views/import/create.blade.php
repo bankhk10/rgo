@@ -88,7 +88,7 @@
             {{-- ที่จัดเก็บ (ปรับปรุงใหม่เป็น Dropdown และห้ามเลือกซ้ำ) --}}
             <div class="flex flex-col md:flex-row md:space-x-4">
                 <div class="flex-1 mb-4 md:mb-0">
-                    <label for="store_company_1" class="block text-gray-700 mb-1">บริษัทจัดเก็บ 1</label>
+                    <label for="store_company_1" class="block text-gray-700 mb-1">สถานที่จัดเก็บที่ 1</label>
                     <select name="store_company_1" id="store_company_1"
                         class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <option value="">-- เลือก --</option>
@@ -104,7 +104,7 @@
                     @enderror
                 </div>
                 <div class="flex-1">
-                    <label for="store_company_2" class="block text-gray-700 mb-1">บริษัทจัดเก็บ 2</label>
+                    <label for="store_company_2" class="block text-gray-700 mb-1">สถานที่จัดเก็บที่ 2</label>
                     <select name="store_company_2" id="store_company_2"
                         class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <option value="">-- เลือก --</option>
@@ -160,7 +160,7 @@
         class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
         <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
             <div class="mt-3 text-center">
-                <h3 class="text-lg leading-6 font-medium text-gray-900" id="messageBoxTitle">ข้อผิดพลาด</h3>
+                <h3 class="text-lg leading-6 font-medium text-gray-900" id="messageBoxTitle">แจ้งเตือน</h3>
                 <div class="mt-2 px-7 py-3">
                     <p class="text-sm text-gray-500" id="messageBoxContent"></p>
                 </div>
@@ -218,10 +218,10 @@
                     // หากค่าซ้ำกัน ให้เคลียร์ค่าของช่องที่เลือกทีหลัง
                     if (event.target.id === 'store_company_1') {
                         storeCompanySelect.value = ''; // ถ้าเปลี่ยน company แล้วซ้ำ ให้รีเซ็ต store_company
-                        showMessageBox('ชื่อบริษัทจัดเก็บ 1 และ 2 ต้องไม่เหมือนกัน');
+                        showMessageBox('สถานที่จัดเก็บที่ 1 และ 2 ต้องไม่เหมือนกัน');
                     } else if (event.target.id === 'store_company_2') {
                         companySelect.value = ''; // ถ้าเปลี่ยน store_company แล้วซ้ำ ให้รีเซ็ต company
-                        showMessageBox('ชื่อบริษัทจัดเก็บ 1 และ 2 ต้องไม่เหมือนกัน');
+                        showMessageBox('สถานที่จัดเก็บที่ 1 และ 2 ต้องไม่เหมือนกัน');
                     }
                 }
             }

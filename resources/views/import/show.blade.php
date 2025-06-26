@@ -74,12 +74,12 @@
 
             <div class="flex flex-col md:flex-row md:space-x-4">
                 <div class="flex-1 mb-4 md:mb-0">
-                    <label for="store_company_1" class="block text-gray-700 mb-1">บริษัทจัดเก็บ 1</label>
+                    <label for="store_company_1" class="block text-gray-700 mb-1">สถานที่จัดเก็บที่ 1</label>
                     <input type="text0" class="w-full p-2 border rounded-lg bg-gray-200"
                         value="{{ $import->storeCompany1->full_name ?? '-' }}" disabled>
                 </div>
                 <div class="flex-1">
-                    <label for="store_company_2" class="block text-gray-700 mb-1">บริษัทจัดเก็บ 2</label>
+                    <label for="store_company_2" class="block text-gray-700 mb-1">สถานที่จัดเก็บที่ 2</label>
                     <input type="text0" class="w-full p-2 border rounded-lg bg-gray-200"
                         value="{{ $import->storeCompany2->full_name ?? '-' }}" disabled>
                 </div>
