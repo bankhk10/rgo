@@ -15,7 +15,7 @@
                     <option value="">-- เลือก --</option>
                     @foreach ($companies as $company)
                         <option value="{{ $company->id }}" {{ $import->company_id == $company->id ? 'selected' : '' }}>
-                            {{ $company->name }}
+                            {{ $company->full_name }}
                         </option>
                     @endforeach
                 </select>
@@ -32,8 +32,7 @@
             {{-- วันหมดอายุ --}}
             <div>
                 <label class="block text-gray-700 mb-1">วันหมดอายุ</label>
-                <input type="date" name="expiry_date"
-                    {{-- value="{{ old('expiry_date', optional($import->expiry_date)->format('Y-m-d')) }}" --}}
+                <input type="date" name="expiry_date" {{-- value="{{ old('expiry_date', optional($import->expiry_date)->format('Y-m-d')) }}" --}}
                     value="{{ old('expiry_date', $import->expiry_date) }}"
                     class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
             </div>
@@ -83,7 +82,7 @@
                     <option value="">-- เลือก --</option>
                     @foreach ($companies as $company)
                         <option value="{{ $company->id }}" {{ $import->supplier == $company->id ? 'selected' : '' }}>
-                            {{ $company->name }}
+                            {{ $company->full_name }}
                         </option>
                     @endforeach
                 </select>
@@ -105,12 +104,20 @@
                         class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <option value="">-- เลือก --</option>
                         {{-- ตัวอย่างข้อมูลสำหรับ dropdowns; ในการใช้งานจริงควรดึงมาจากฐานข้อมูล --}}
-                        @php
+                        {{-- @php
                             $companies_list = ['บริษัท A', 'บริษัท B', 'บริษัท C', 'บริษัท D', 'บริษัท E'];
                         @endphp
                         @foreach ($companies_list as $comp)
-                            <option value="{{ $comp }}" {{ old('store_company_1', $import->store_company_1) == $comp ? 'selected' : '' }}>
+                            <option value="{{ $comp }}"
+                                {{ old('store_company_1', $import->store_company_1) == $comp ? 'selected' : '' }}>
                                 {{ $comp }}
+                            </option>
+                        @endforeach --}}
+
+                        @foreach ($companies as $company)
+                            <option value="{{ $company->id }}"
+                                {{ $import->store_company_1 == $company->id ? 'selected' : '' }}>
+                                {{ $company->full_name }}
                             </option>
                         @endforeach
                     </select>
@@ -123,9 +130,10 @@
                     <select name="store_company_2" id="store_company_2"
                         class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <option value="">-- เลือก --</option>
-                        @foreach ($companies_list as $comp)
-                            <option value="{{ $comp }}" {{ old('store_company_2', $import->store_company_2) == $comp ? 'selected' : '' }}>
-                                {{ $comp }}
+                        @foreach ($companies as $company)
+                            <option value="{{ $company->id }}"
+                                {{ $import->store_company_2 == $company->id ? 'selected' : '' }}>
+                                {{ $company->full_name }}
                             </option>
                         @endforeach
                     </select>
@@ -205,7 +213,8 @@
     </div>
 
     {{-- Custom Message Box --}}
-    <div id="customMessageBox" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+    <div id="customMessageBox"
+        class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
         <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
             <div class="mt-3 text-center">
                 <h3 class="text-lg leading-6 font-medium text-gray-900" id="messageBoxTitle">ข้อผิดพลาด</h3>
@@ -265,10 +274,12 @@
                 if (value1 && value2 && value1 === value2) {
                     // หากค่าซ้ำกัน ให้เคลียร์ค่าของช่องที่เลือกทีหลัง
                     if (event.target.id === 'store_company_1') {
-                        storeCompany2Select.value = ''; // ถ้าเปลี่ยน store_company_1 แล้วซ้ำ ให้รีเซ็ต store_company_2
+                        storeCompany2Select.value =
+                            ''; // ถ้าเปลี่ยน store_company_1 แล้วซ้ำ ให้รีเซ็ต store_company_2
                         showMessageBox('ชื่อบริษัทจัดเก็บ 1 และ 2 ต้องไม่เหมือนกัน');
                     } else if (event.target.id === 'store_company_2') {
-                        storeCompany1Select.value = ''; // ถ้าเปลี่ยน store_company_2 แล้วซ้ำ ให้รีเซ็ต store_company_1
+                        storeCompany1Select.value =
+                            ''; // ถ้าเปลี่ยน store_company_2 แล้วซ้ำ ให้รีเซ็ต store_company_1
                         showMessageBox('ชื่อบริษัทจัดเก็บ 1 และ 2 ต้องไม่เหมือนกัน');
                     }
                 }

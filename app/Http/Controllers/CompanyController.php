@@ -92,7 +92,7 @@ class CompanyController extends Controller
             'tax_id' => 'nullable|string|max:50',
         ]);
 
-        $company->update($request->only('name', 'address', 'email', 'phone', 'tax_id'));
+        $company->update($request->only('full_name','name', 'address', 'email', 'phone', 'tax_id'));
 
         return redirect()->route('company.index')->with('success', 'อัปเดตข้อมูลบริษัทเรียบร้อยแล้ว');
     }

@@ -6,7 +6,7 @@
             <div>
                 <label class="block text-gray-700 mb-1">บริษัทนำเข้า</label>
                 <input type="text0" class="w-full p-2 border rounded-lg bg-gray-200"
-                    value="{{ $import->company->name ?? '-' }}" disabled>
+                    value="{{ $import->company->full_name ?? '-' }}" disabled>
             </div>
 
             {{-- เลขที่ทะเบียน --}}
@@ -61,8 +61,8 @@
             {{-- ผู้จำหน่าย --}}
             <div>
                 <label class="block text-gray-700 mb-1">ผู้จำหน่าย</label>
-                <input type="text0" class="w-full p-2 border rounded-lg bg-gray-200" value="{{ $import->supplier }}"
-                    disabled>
+                <input type="text0" class="w-full p-2 border rounded-lg bg-gray-200"
+                    value="{{ $import->company->full_name }}" disabled>
             </div>
 
             {{-- ใบอนุญาต --}}
@@ -76,14 +76,16 @@
                 <div class="flex-1 mb-4 md:mb-0">
                     <label for="store_company_1" class="block text-gray-700 mb-1">บริษัทจัดเก็บ 1</label>
                     <input type="text0" class="w-full p-2 border rounded-lg bg-gray-200"
-                        value="{{ $import->store_company_1 }}" disabled>
+                        value="{{ $import->storeCompany1->full_name ?? '-' }}" disabled>
                 </div>
                 <div class="flex-1">
                     <label for="store_company_2" class="block text-gray-700 mb-1">บริษัทจัดเก็บ 2</label>
                     <input type="text0" class="w-full p-2 border rounded-lg bg-gray-200"
-                        value="{{ $import->store_company_2 }}" disabled>
+                        value="{{ $import->storeCompany2->full_name ?? '-' }}" disabled>
                 </div>
             </div>
+
+
 
             {{-- ปริมาณนำเข้า --}}
             <div>

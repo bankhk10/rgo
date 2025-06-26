@@ -42,4 +42,14 @@ class ChemicalImport extends Model
     {
         return $this->belongsTo(Company::class);
     }
+
+    public function storeCompany1()
+    {
+        return $this->belongsTo(Company::class, 'store_company_1'); // 'store_company_1' is the foreign key
+    }
+
+    public function storeCompany2()
+    {
+        return $this->belongsTo(Company::class, 'store_company_2'); // 'store_company_2' is the foreign key
+    }
 }

@@ -76,6 +76,7 @@ class UserController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'profile' => 'aa_user.png',
             'password' => bcrypt($request->password),
             'department' => $request->department,     // เพิ่มแผนก
             'position' => $request->position,       // เพิ่มตำแหน่ง

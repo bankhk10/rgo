@@ -12,7 +12,7 @@
                     name="company_id">
                     <option value="">-- เลือก --</option>
                     @foreach ($companies as $company)
-                        <option value="{{ $company->id }}">{{ $company->name }}</option>
+                        <option value="{{ $company->id }}">{{ $company->full_name }}</option>
                     @endforeach
                 </select>
             </div>
@@ -73,7 +73,7 @@
                     name="supplier">
                     <option value="">-- เลือก --</option>
                     @foreach ($companies as $company)
-                        <option value="{{ $company->id }}">{{ $company->name }}</option>
+                        <option value="{{ $company->id }}">{{ $company->full_name }}</option>
                     @endforeach
                 </select>
             </div>
@@ -92,13 +92,11 @@
                     <select name="store_company_1" id="store_company_1"
                         class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <option value="">-- เลือก --</option>
-                        @php
+                        {{-- @php
                             $companies_list = ['บริษัท A', 'บริษัท B', 'บริษัท C', 'บริษัท D', 'บริษัท E']; // ตัวอย่างข้อมูล
-                        @endphp
-                        @foreach ($companies_list as $comp)
-                            <option value="{{ $comp }}" {{ old('store_company_1') == $comp ? 'selected' : '' }}>
-                                {{ $comp }}
-                            </option>
+                        @endphp --}}
+                        @foreach ($companies as $company)
+                            <option value="{{ $company->full_name }}">{{ $company->full_name }}</option>
                         @endforeach
                     </select>
                     @error('store_company_1')
@@ -110,10 +108,8 @@
                     <select name="store_company_2" id="store_company_2"
                         class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <option value="">-- เลือก --</option>
-                        @foreach ($companies_list as $comp)
-                            <option value="{{ $comp }}" {{ old('store_company_2') == $comp ? 'selected' : '' }}>
-                                {{ $comp }}
-                            </option>
+                        @foreach ($companies as $company)
+                            <option value="{{ $company->full_name }}">{{ $company->full_name }}</option>
                         @endforeach
                     </select>
                     @error('store_company_2')
@@ -160,7 +156,8 @@
     </div>
 
     {{-- Custom Message Box --}}
-    <div id="customMessageBox" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+    <div id="customMessageBox"
+        class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
         <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
             <div class="mt-3 text-center">
                 <h3 class="text-lg leading-6 font-medium text-gray-900" id="messageBoxTitle">ข้อผิดพลาด</h3>
