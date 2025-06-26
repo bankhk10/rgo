@@ -18,6 +18,6 @@ class DrugProgressStep extends Model
 
     public function drug()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(ChemicalRegistration::class);
     }
 }

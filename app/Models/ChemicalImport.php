@@ -20,16 +20,26 @@ class ChemicalImport extends Model
         'manufacturer',
         'supplier',
         'license_no',
+        'store_company_1',
+        'store_company_2',
         'import_quantity',
         'remaining_quantity',
         'second_expiry_date',
+        'possession_form_wo2',
+        'possession_form_expiry',
         'packaging',
-        'note',
+        'remarks',
     ];
+
+    // protected $casts = [
+    //     'expiry_date' => 'date',
+    //     'second_expiry_date' => 'date',
+    //     'possession_form_expiry' => 'date',
+    //     'import_quantity' => 'float',
+    // ];
 
     public function company()
     {
         return $this->belongsTo(Company::class);
     }
-
 }

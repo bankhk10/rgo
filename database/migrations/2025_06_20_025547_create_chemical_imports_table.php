@@ -29,11 +29,15 @@ class CreateChemicalImportsTable extends Migration
             $table->string('manufacturer')->nullable();            // ผู้ผลิต
             $table->string('supplier')->nullable();                // ผู้จำหน่าย
             $table->string('license_no')->nullable();              // ใบอนุญาต
+            $table->string('store_company_1')->nullable(); // ชื่อบริษัทที่เก็บรักษาผลิตภัณฑ์
+            $table->string('store_company_2')->nullable(); // ชื่อบริษัทที่เก็บรักษาผลิตภัณฑ์
             $table->double('import_quantity')->nullable();         // ปริมาณนำเข้า
             $table->string('remaining_quantity')->nullable();      // ปริมาณคงเหลือ
             $table->date('second_expiry_date')->nullable();        // วันหมดอายุ (สำรอง)
+            $table->string('possession_form_wo2')->nullable(); // ใบแจ้งครอบครอง วอ.2
+            $table->date('possession_form_expiry')->nullable(); // วันหมดอายุใบแจ้งครอบครอง วอ.2
             $table->text('packaging')->nullable();                 // ขนาดบรรจุ
-            $table->text('note')->nullable();                      // หมายเหตุ
+            $table->text('remarks')->nullable();                      // หมายเหตุ
             $table->timestamps();
         });
     }

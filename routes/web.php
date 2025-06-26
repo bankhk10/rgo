@@ -6,14 +6,15 @@ use App\Http\Controllers\Admin\{
     MailSettingController,
 };
 
-use App\Http\Controllers\ImportController;
+
 use App\Http\Controllers\ProductionController;
 use App\Http\Controllers\InRegisterController;
 use App\Http\Controllers\ManufactureRegisController;
-use App\Http\Controllers\NewRegisController;
+use App\Http\Controllers\ChemicalRegistrationController;
 use App\Http\Controllers\RenewRegisController;
 use App\Http\Controllers\ChemicalImportController;
 use App\Http\Controllers\CompanyController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -58,25 +59,24 @@ Route::namespace('App\Http\Controllers\Admin')->name('admin.')->prefix('admin')
         Route::get('/mail', [MailSettingController::class, 'index'])->name('mail.index');
         Route::put('/mail-update/{mailsetting}', [MailSettingController::class, 'update'])->name('mail.update');
         Route::get('/production', [ProductionController::class, 'index'])->name('production.index');
-        // Route::get('/import', [ImportController::class, 'index'])->name('import.index');
     });
 
-Route::get('/import', [ImportController::class, 'index'])->name('import.index');
-Route::get('/import/create', [ImportController::class, 'create'])->name('import.create');
-Route::post('/import/store', [ImportController::class, 'store'])->name('import.store');
-Route::get('/import/{import}/edit', [ImportController::class, 'edit'])->name('import.edit');
-Route::put('/import/{import}', [ImportController::class, 'update'])->name('import.update');
-Route::delete('/import/{import}', [ImportController::class, 'destroy'])->name('import.destroy');
-Route::get('/import/{import}', [ImportController::class, 'show'])->name('import.show');
+Route::get('/import', [ChemicalImportController::class, 'index'])->name('import.index');
+Route::get('/import/create', [ChemicalImportController::class, 'create'])->name('import.create');
+Route::post('/import/store', [ChemicalImportController::class, 'store'])->name('import.store');
+Route::get('/import/{import}/edit', [ChemicalImportController::class, 'edit'])->name('import.edit');
+Route::put('/import/{import}', [ChemicalImportController::class, 'update'])->name('import.update');
+Route::delete('/import/{import}', [ChemicalImportController::class, 'destroy'])->name('import.destroy');
+Route::get('/import/{import}', [ChemicalImportController::class, 'show'])->name('import.show');
 
-Route::get('/new/product', [NewRegisController::class, 'index'])->name('newregis.index');
-Route::get('/new/product/show/{registrationNumber}', [NewRegisController::class, 'show'])->name('newregis.show');
-Route::get('/new/product/create', [NewRegisController::class, 'create'])->name('newregis.create');
-Route::post('/new/product/store', [NewRegisController::class, 'store'])->name('newregis.store');
-Route::get('/new/product/edit/{registrationNumber}', [NewRegisController::class, 'edit'])->name('newregis.edit');
-Route::put('/new/product/update/{registrationNumber}', [NewRegisController::class, 'update'])->name('newregis.update');
-Route::delete('/new/product/delete/{registrationNumber}', [NewRegisController::class, 'destroy'])->name('newregis.destroy');
-Route::put('/newregis/{drug}/update-subprogress', [NewRegisController::class, 'updateSubProgress'])->name('newregis.update-subprogress');
+Route::get('/new/product', [ChemicalRegistrationController::class, 'index'])->name('newregis.index');
+Route::get('/new/product/show/{registrationNumber}', [ChemicalRegistrationController::class, 'show'])->name('newregis.show');
+Route::get('/new/product/create', [ChemicalRegistrationController::class, 'create'])->name('newregis.create');
+Route::post('/new/product/store', [ChemicalRegistrationController::class, 'store'])->name('newregis.store');
+Route::get('/new/product/edit/{registrationNumber}', [ChemicalRegistrationController::class, 'edit'])->name('newregis.edit');
+Route::put('/new/product/update/{registrationNumber}', [ChemicalRegistrationController::class, 'update'])->name('newregis.update');
+Route::delete('/new/product/delete/{registrationNumber}', [ChemicalRegistrationController::class, 'destroy'])->name('newregis.destroy');
+Route::put('/newregis/{drug}/update-subprogress', [ChemicalRegistrationController::class, 'updateSubProgress'])->name('newregis.update-subprogress');
 
 
 

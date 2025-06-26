@@ -50,7 +50,11 @@ class ChemicalImportsImport implements ToModel, WithHeadingRow
             'remaining_quantity'  => $row['remaining_quantity'] ?? null,
             'second_expiry_date'  => $parseDate($row['second_expiry_date'] ?? null),
             'packaging'           => $row['packaging'] ?? null,
-            'note'                => $row['note'] ?? null,
+            'remarks'              => $row['note'] ?? null,
+            'store_company_1'   => $row['store_company_1'] ?? null,
+            'store_company_2'  => $row['store_company_2'] ?? null,
+            'possession_form_wo2' => $row['possession_form_wo2'] ?? null,
+            'possession_form_expiry' => $parseDate($row['possession_form_expiry'] ?? null),
         ]);
     }
 

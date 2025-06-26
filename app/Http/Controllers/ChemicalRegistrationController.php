@@ -3,14 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Carbon\Carbon;
-use Illuminate\Pagination\LengthAwarePaginator;
-use App\Models\Product; // Assuming you have a Product model
-use Illuminate\Support\Facades\Log; // For logging purposes
-use App\Models\DrugProgressStep; // Assuming you have a DrugProgressStep model
+use App\Models\ChemicalRegistration;
+use App\Models\DrugProgressStep; // Assuming this is the model for drug progress steps
+use Illuminate\Support\Facades\Log; // For logging errors
 
-class NewRegisController extends Controller
+class ChemicalRegistrationController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -20,7 +19,7 @@ class NewRegisController extends Controller
     public function index(Request $request)
     {
         // Start with a base query for 'new_or_old' products
-        $query = Product::where('new_or_old', true);
+        $query = ChemicalRegistration::where('new_or_old', true);
 
         // Handle search
         if ($request->has('search') && $request->search != '') {
@@ -32,11 +31,11 @@ class NewRegisController extends Controller
         }
 
         // Count for summary cards - these should NOT be affected by the search query
-        $totalNewRegistrations = Product::where('new_or_old', true)->count();
-        $pendingCount = Product::where('progress', '<', 100)
+        $totalNewRegistrations = ChemicalRegistration::where('new_or_old', true)->count();
+        $pendingCount = ChemicalRegistration::where('progress', '<', 100)
             ->where('new_or_old', true)
             ->count();
-        $approvedCount = Product::where('progress', 100)
+        $approvedCount = ChemicalRegistration::where('progress', 100)
             ->where('new_or_old', true)
             ->count();
 
@@ -69,7 +68,7 @@ class NewRegisController extends Controller
      */
     // public function store(Request $request)
     // {
-    //     $newRegis = new Product();
+    //     $newRegis = new ChemicalRegistration();
     //     $newRegis->name = $request->hazardous_name_th;
     //     $newRegis->registration_number = $request->registration_number;
     //     $newRegis->registration_date = $request->expiry_date; // This seems incorrect, should be a dedicated date field
@@ -107,7 +106,7 @@ class NewRegisController extends Controller
 
         try {
             // 3. สร้าง product ใหม่
-            $product = Product::create($validatedData);
+            $product = ChemicalRegistration::create($validatedData);
 
             // 4. สร้างหัวข้อย่อยเริ่มต้นให้กับขั้นตอนที่ 1 โดยไม่มีการเลือก (checked_at = null)
             // กำหนดหัวข้อย่อยขั้นตอน 1 จำนวน 3 หัวข้อ (ตาม requirement ล่าสุด)
@@ -139,7 +138,7 @@ class NewRegisController extends Controller
      */
     public function show($id) // Changed from $registrationNumber to $id for consistency with route model binding
     {
-        $drug = Product::where('id', $id)->first();
+        $drug = ChemicalRegistration::where('id', $id)->first();
         if (!$drug) {
             abort(404, 'ไม่พบข้อมูล');
         }
@@ -154,7 +153,7 @@ class NewRegisController extends Controller
      */
     public function edit($id)
     {
-        $drug = Product::where('id', $id)->first();
+        $drug = ChemicalRegistration::where('id', $id)->first();
         if (!$drug) {
             abort(404, 'ไม่พบข้อมูล');
         }
@@ -190,7 +189,7 @@ class NewRegisController extends Controller
         //
     }
 
-    public function updateSubProgress(Request $request, Product $drug)
+    public function updateSubProgress(Request $request, ChemicalRegistration $drug)
     {
         $stepNumber = (int) $request->input('step_number');
         $selectedIndexes = $request->input('sub_steps', []);
