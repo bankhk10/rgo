@@ -12,8 +12,6 @@ class ChemicalImportsImport implements ToModel, WithHeadingRow
 {
     public function model(array $row)
     {
-        // dd($row); // Uncomment บรรทัดนี้เพื่อตรวจสอบข้อมูลที่อ่านได้จาก Excel
-
         $parseDate = function ($dateValue) {
             if (is_numeric($dateValue) && $dateValue > 0) {
                 try {
@@ -31,10 +29,6 @@ class ChemicalImportsImport implements ToModel, WithHeadingRow
             return null;
         };
 
-        // ตรวจสอบชื่อคอลัมน์ใน $row[] ให้ตรงกับชื่อหัวข้อในไฟล์ Excel ของคุณ
-        // และตรวจสอบว่าตรงกับฟิลด์ใน migration ด้วย
-
-        // ตัวอย่างการแมปข้อมูล (ปรับคีย์ให้ตรงกับหัวข้อใน Excel ของคุณ)
         return new ChemicalImport([
             'company_id'          =>  $row['company_id'] ?? null, // คุณต้องมีคอลัมน์ company_id ใน Excel หรือหา id จากชื่อบริษัท
             'registration_no'     => $row['registration_no'] ?? null,
@@ -50,7 +44,7 @@ class ChemicalImportsImport implements ToModel, WithHeadingRow
             'remaining_quantity'  => $row['remaining_quantity'] ?? null,
             'second_expiry_date'  => $parseDate($row['second_expiry_date'] ?? null),
             'packaging'           => $row['packaging'] ?? null,
-            'remarks'              => $row['note'] ?? null,
+            'remarks'              => $row['remarks'] ?? null,
             'store_company_1'   => $row['store_company_1'] ?? null,
             'store_company_2'  => $row['store_company_2'] ?? null,
             'possession_form_wo2' => $row['possession_form_wo2'] ?? null,

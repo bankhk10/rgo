@@ -94,23 +94,28 @@ class ChemicalImportController extends Controller
      */
     public function update(Request $request, ChemicalImport $import)
     {
-        $import->update([
-            'company_id'          => $request->company_id,
-            'registration_no'     => $request->registration_no,
-            'expiry_date'         => $request->expiry_date,
-            'chemical_name_th'    => $request->chemical_name_th,
-            'chemical_name_en'    => $request->chemical_name_en,
-            'formula'             => $request->formula,
-            'trade_name'          => $request->trade_name,
-            'manufacturer'        => $request->manufacturer,
-            'supplier'            => $request->supplier,
-            'license_no'          => $request->license_no,
-            'import_quantity'     => $request->import_quantity,
-            'remaining_quantity'  => $request->remaining_quantity,
-            'second_expiry_date'  => $request->second_expiry_date,
-            'packaging'           => $request->packaging,
-            'note'                => $request->note,
+        // Validate input
+        $validated = $request->validate([
+            'company_id'          => 'required|exists:companies,id',
+            'registration_no'     => 'nullable|string|max:255',
+            'expiry_date'         => 'nullable|date',
+            'second_expiry_date'  => 'nullable|date',
+            'chemical_name_th'    => 'nullable|string|max:255',
+            'chemical_name_en'    => 'nullable|string|max:255',
+            'formula'             => 'nullable|string|max:255',
+            'trade_name'          => 'nullable|string|max:255',
+            'manufacturer'        => 'nullable|string|max:255',
+            'supplier'            => 'nullable|string|max:255',
+            'license_no'          => 'nullable|string|max:255',
+            'import_quantity'     => 'nullable|numeric|min:0',
+            'remaining_quantity'  => 'nullable|numeric|min:0',
+            'packaging'           => 'nullable|string',
+            'remarks'                => 'nullable|string',
+            'store_company_1'     => 'nullable|string|different:store_company_2',
+            'store_company_2'     => 'nullable|string|different:store_company_1',
         ]);
+
+        $import->update($validated);
 
         return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จ');
     }

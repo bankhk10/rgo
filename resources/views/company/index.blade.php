@@ -20,6 +20,7 @@
                             <thead>
                                 <tr class="bg-indigo-600 text-white text-left">
                                     <th class="py-3 px-6 rounded-tl-2xl">ชื่อบริษัท</th>
+                                    <th class="py-3 px-6">ตัวย่อบริษัท</th>
                                     <th class="py-3 px-6">ที่อยู่</th>
                                     <th class="py-3 px-6">อีเมล</th>
                                     <th class="py-3 px-6">เบอร์โทร</th>
@@ -31,6 +32,7 @@
                                 @can('Company read')
                                     @foreach ($companies as $company)
                                         <tr class="border-b hover:bg-indigo-50 transition">
+                                            <td class="py-4 px-6">{{ $company->full_name }}</td>
                                             <td class="py-4 px-6">{{ $company->name }}</td>
                                             <td class="py-4 px-6">{{ $company->address }}</td>
                                             <td class="py-4 px-6">{{ $company->email }}</td>

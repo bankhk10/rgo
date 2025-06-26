@@ -4,7 +4,7 @@
         <form class="grid grid-cols-2 md:grid-cols-2 gap-4">
             {{-- บริษัท --}}
             <div>
-                <label class="block text-gray-700 mb-1">บริษัท</label>
+                <label class="block text-gray-700 mb-1">บริษัทนำเข้า</label>
                 <input type="text0" class="w-full p-2 border rounded-lg bg-gray-200"
                     value="{{ $import->company->name ?? '-' }}" disabled>
             </div>
@@ -72,6 +72,19 @@
                     disabled>
             </div>
 
+            <div class="flex flex-col md:flex-row md:space-x-4">
+                <div class="flex-1 mb-4 md:mb-0">
+                    <label for="store_company_1" class="block text-gray-700 mb-1">บริษัทจัดเก็บ 1</label>
+                    <input type="text0" class="w-full p-2 border rounded-lg bg-gray-200"
+                        value="{{ $import->store_company_1 }}" disabled>
+                </div>
+                <div class="flex-1">
+                    <label for="store_company_2" class="block text-gray-700 mb-1">บริษัทจัดเก็บ 2</label>
+                    <input type="text0" class="w-full p-2 border rounded-lg bg-gray-200"
+                        value="{{ $import->store_company_2 }}" disabled>
+                </div>
+            </div>
+
             {{-- ปริมาณนำเข้า --}}
             <div>
                 <label class="block text-gray-700 mb-1">ปริมาณนำเข้า</label>
@@ -79,19 +92,6 @@
                     value="{{ $import->import_quantity }}" disabled>
             </div>
 
-            {{-- ปริมาณคงเหลือ --}}
-            <div>
-                <label class="block text-gray-700 mb-1">ปริมาณคงเหลือ</label>
-                <input type="text0" class="w-full p-2 border rounded-lg bg-gray-200"
-                    value="{{ $import->remaining_quantity }}" disabled>
-            </div>
-
-            {{-- ขนาดบรรจุ --}}
-            {{-- <div>
-                <label class="block text-gray-700 mb-1">ขนาดบรรจุ</label>
-                <input type="text0" class="w-full p-2 border rounded-lg bg-gray-200" value="{{ $import->packaging }}"
-                    disabled>
-            </div> --}}
 
             <div class="md:col-span-2">
                 <label class="block text-gray-700 mb-1">ขนาดบรรจุ</label>
@@ -101,7 +101,7 @@
             {{-- หมายเหตุ --}}
             <div class="md:col-span-2">
                 <label class="block text-gray-700 mb-1">หมายเหตุ</label>
-                <textarea class="w-full p-2 border rounded-lg bg-gray-200" rows="1" disabled>{{ $import->note }}</textarea>
+                <textarea class="w-full p-2 border rounded-lg bg-gray-200" rows="1" disabled>{{ $import->remarks }}</textarea>
             </div>
         </form>
 
