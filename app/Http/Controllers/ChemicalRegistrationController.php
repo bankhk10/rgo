@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\ChemicalRegistration;
 use App\Models\DrugProgressStep; // Assuming this is the model for drug progress steps
 use Illuminate\Support\Facades\Log; // For logging errors
+use App\Models\Company;
+
 
 class ChemicalRegistrationController extends Controller
 {
@@ -57,7 +59,9 @@ class ChemicalRegistrationController extends Controller
      */
     public function create()
     {
-        return view('product.new.create');
+        $companies = Company::all(); // ดึงรายชื่อบริษัททั้งหมด
+        // return view('import.create', compact('companies'));
+        return view('product.new.create', compact('companies'));
     }
 
     /**
@@ -83,47 +87,16 @@ class ChemicalRegistrationController extends Controller
 
     public function store(Request $request)
     {
-        // 1. Validate ข้อมูล
+        // dd($request->all());
         $validatedData = $request->validate([
-            'chemical_imports_id' => 'nullable|integer',
             'registration_number' => 'nullable|string',
             'registration_expiry_date' => 'nullable|date',
-            'chemical_name_th' => 'nullable|string',
-            'chemical_name_en' => 'nullable|string',
-            'composition' => 'nullable|string',
-            'manufacturer' => 'nullable|string',
-            'registrant' => 'nullable|string',
-            'registration_type' => 'nullable|string',
-            'importer' => 'nullable|string',
-            'distributor' => 'nullable|string',
-            'trade_name' => 'nullable|string',
-            'trade_name_at' => 'nullable|string',
-            'production_license_number' => 'nullable|string',
-            'production_license_expiry' => 'nullable|date',
-            'production_license_quantity' => 'nullable|string',
-            'possession_form_wo2' => 'nullable|string',
-            'possession_form_expiry' => 'nullable|date',
-            'application_received_date' => 'nullable|date',
-            'expired_license_number' => 'nullable|string',
-            'expired_at' => 'nullable|date',
-            'old_license_quantity' => 'nullable|string',
-            'packaging_size' => 'nullable|string',
-            'remarks' => 'nullable|string',
-            'new_or_old' => 'nullable|boolean',
-            'step' => 'nullable|string',
-            'chemical_type' => 'nullable|string',
-            'company' => 'nullable|string',
-            'store_company' => 'nullable|string',
-            'status' => 'nullable|string',
-            'is_active' => 'nullable|boolean',
-            'is_deleted' => 'nullable|boolean',
         ]);
 
         // 2. กำหนดค่า progress เริ่มต้น 0 (หรือจะเป็น 12.5% ถ้าต้องการ)
         $validatedData['progress'] = 0;
 
         try {
-            // 3. สร้าง product ใหม่
             $product = ChemicalRegistration::create($validatedData);
 
             // 4. สร้างหัวข้อย่อยเริ่มต้นให้กับขั้นตอนที่ 1 โดยไม่มีการเลือก (checked_at = null)
@@ -171,6 +144,7 @@ class ChemicalRegistrationController extends Controller
      */
     public function edit($id)
     {
+        $companies = Company::all();
         $drug = ChemicalRegistration::where('id', $id)->first();
         if (!$drug) {
             abort(404, 'ไม่พบข้อมูล');
@@ -181,7 +155,7 @@ class ChemicalRegistrationController extends Controller
         //     abort(403, 'คุณไม่มีสิทธิ์แก้ไขข้อมูลนี้');
         // }
 
-        return view('product.new.edit', compact('drug'));
+        return view('product.new.edit', compact('drug', 'companies'));
     }
 
     /**

@@ -12,15 +12,16 @@ class CreateChemicalRegistrationsTable extends Migration
             $table->id();
             $table->integer('chemical_imports_id')->nullable(); // Foreign key to chemical_imports table
             $table->string('registration_number')->nullable(); // เลขที่ทะเบียนผลิต
+            $table->string('registration_number_pass')->nullable(); // เลขที่ทะเบียนผลิตที่ผ่าน
             $table->date('registration_expiry_date')->nullable(); // วันหมดอายุทะเบียน
             $table->string('chemical_name_th')->nullable(); // ชื่อวัตถุอันตราย (ไทย)
             $table->string('chemical_name_en')->nullable(); // ชื่อวัตถุอันตราย (อังกฤษ)
             $table->text('composition')->nullable(); // % และสูตร
-            $table->string('manufacturer')->nullable(); // ผู้ผลิตและแหล่งผลิต
-            $table->string('registrant')->nullable(); // ผู้ขึ้นทะเบียน
+            $table->string('manufacturer')->nullable(); // ชื่อผู้ผลิตและแหล่งผลิต
+            $table->string('registrant')->nullable(); // ผู้ขอขึ้นทะเบียน
             $table->string('registration_type')->nullable(); // ประเภททะเบียน
-            $table->string('importer')->nullable(); // ผู้นำเข้า
-            $table->string('distributor')->nullable(); // ผู้จำหน่าย
+            $table->string('importer')->nullable(); // ชื่อผู้นำเข้า
+            $table->string('distributor')->nullable(); // ชื่อผู้จำหน่าย
             $table->string('trade_name')->nullable(); // ชื่อการค้า
             $table->string('trade_name_at')->nullable(); // ชื่อการค้าที่
             $table->string('production_license_number')->nullable(); // เลขที่ใบอนุญาตผลิต
@@ -33,7 +34,18 @@ class CreateChemicalRegistrationsTable extends Migration
             $table->date('expired_at')->nullable(); // หมดอายุเมื่อ
             $table->string('old_license_quantity')->nullable(); // ปริมาณผลิตใบอนุญาตเดิม
             $table->string('packaging_size')->nullable(); // ขนาดบรรจุ
-            $table->text('remarks')->nullable(); // หมายเหตุ
+            $table->string('formula_of_ratio')->nullable(); // สูตรอัตรส่วนผสมของสารสำคัญและลักษณะ
+            $table->string('type_registration')->nullable(); // ชนิดทะเบียน
+            $table->string('common_name')->nullable(); // ชื่อสามัญ
+            $table->string('packaging_size_details')->nullable(); // รายละเอียดขนาดบรรจุ
+            $table->string('type_of_use')->nullable(); // ประเภทของการใช้
+            $table->date('date_submit_request')->nullable(); //  วันที่ยื่นคำขอ..
+            $table->string('request_number_1')->nullable(); //  เลขที่รับคำขอ......
+            $table->string('request_number_phase_1')->nullable(); //   เลข # Phase I
+            $table->date('date_request_phase_3')->nullable(); //  วันที่ยื่น Phase III
+            $table->string('request_number_phase_3')->nullable(); //   เลข # Phase III
+            $table->string('name_position')->nullable(); //  ชื่อการที่... ตำแหน่ง
+            $table->text('remarks')->nullable(); // อื่นๆ (ระบุ)
             $table->boolean('new_or_old')->default(true); // สถานะของข้อมูล (true = ใหม่, false = เก่า)
             $table->string('step')->nullable(); // ขั้นตอนการขึ้นทะเบียน เช่น 'initial', 'review', 'approval'
             $table->string('chemical_type')->nullable(); // ประเภทของวัตถุอันตราย เช่น สารเคมี, ยาฆ่าแมลง, ปุ๋

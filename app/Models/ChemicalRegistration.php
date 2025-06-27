@@ -13,6 +13,7 @@ class ChemicalRegistration extends Model
     protected $fillable = [
         'chemical_imports_id',
         'registration_number',
+        'registration_number_pass',
         'registration_expiry_date',
         'chemical_name_th',
         'chemical_name_en',
@@ -34,6 +35,17 @@ class ChemicalRegistration extends Model
         'expired_at',
         'old_license_quantity',
         'packaging_size',
+        'formula_of_ratio',
+        'type_registration',
+        'common_name',
+        'packaging_size_details',
+        'type_of_use',
+        'date_submit_request',
+        'request_number_1',
+        'request_number_phase_1',
+        'date_request_phase_3',
+        'request_number_phase_3',
+        'name_position',
         'remarks',
         'new_or_old',
         'step',
@@ -53,14 +65,18 @@ class ChemicalRegistration extends Model
 
     // Optional: สำหรับวันที่ที่เป็น Carbon instance เช่น soft delete, timestamps
     protected $dates = [
-        'registration_expiry_date',
-        'production_license_expiry',
-        'possession_form_expiry',
-        'application_received_date',
-        'expired_at',
-        'deleted_at',
-        'created_at',
-        'updated_at',
+        'new_or_old' => 'boolean',
+        'is_active' => 'boolean',
+        'is_deleted' => 'boolean',
+        'registration_expiry_date' => 'date',
+        'production_license_expiry' => 'date',
+        'possession_form_expiry' => 'date',
+        'application_received_date' => 'date',
+        'expired_at' => 'date',
+        'date_submit_request' => 'date',
+        'date_request_phase_3' => 'date',
+        'progress' => 'float',
+        'sub_progress' => 'float',
     ];
 
     // Optional: ความสัมพันธ์กับตารางอื่น (ถ้า chemical_imports มี model)
