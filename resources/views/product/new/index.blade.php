@@ -115,8 +115,8 @@
                                         {{-- เปลี่ยนตัวแปรตรงนี้ด้วย --}}
                                         {{ ($paginatedProducts->currentPage() - 1) * $paginatedProducts->perPage() + $index + 1 }}
                                     </td>
-                                    <td class="py-4 px-8">{{ $product->chemicalImport->chemical_name_th }}</td>
-                                    <td class="py-4 px-8">{{ $product->registration_number }}</td>
+                                    <td class="py-4 px-8">{{ $product->chemicalImport->chemical_name_th ?? '' }}</td>
+                                    <td class="py-4 px-8">{{ $product->registration_number ?? '' }}</td>
                                     {{-- <td class="py-4 px-8">{{ $product->registration_number }}</td> --}}
                                     <td class="py-4 px-8">{{ $product->created_at->format('d/m/Y') ?? '' }}</td>
                                     <td class="py-4 px-8">

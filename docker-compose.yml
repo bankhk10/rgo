@@ -18,8 +18,8 @@ services:
       - ./storage/logs:/var/www/html/storage/logs  # 💡 mount เฉพาะ logs folder
       - app_storage:/var/www/html/storage/app      # ส่วนอื่นยังใช้ volume ได้
       - /var/www/html/vendor                 # (Optional) ถ้า vendor ใหญ่มาก และไม่ต้องการให้ host mount ทับ
-      - app_storage:/var/www/html/storage    # ใช้ Named Volume สำหรับ storage
-      - app_bootstrap_cache:/var/www/html/bootstrap/cache # ใช้ Named Volume สำหรับ bootstrap/cache
+      - ./storage:/var/www/html/storage              # ✅ ใช้ storage จากเครื่อง host จริง
+      - ./bootstrap/cache:/var/www/html/bootstrap/cache  # ✅ แชร์ bootstrap/cache จากเครื่อง
     ports:
       - "8000:80" # Map port 8000 ของเครื่องคุณไปยัง port 80 ของ Container
     networks:
