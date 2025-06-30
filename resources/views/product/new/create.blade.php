@@ -3,8 +3,6 @@
         <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center">แบบฟอร์มขึ้นทะเบียนใหม่</h2>
         <form method="POST" action="{{ route('newregis.store') }}" class="grid grid-cols-2 md:grid-cols-2 gap-4">
             @csrf
-
-
             <div>
                 <label class="block text-gray-700 mb-1">ชื่อสามัญ</label>
                 <input type="text" id="productSearch"
@@ -81,7 +79,7 @@
             <div>
                 <label class="block text-gray-700 mb-1">ชื่อการที่</label>
                 <select class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    name="registration_type">
+                    name="name_position">
                     <option value="">-- เลือก --</option>
                     <option value="T">T</option>
                     <option value="-">-</option>
@@ -164,6 +162,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="md:col-span-2">
                 <label class="block text-gray-700 mb-1">อื่นๆ (ระบุ)</label>
                 <textarea name="remarks" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -316,6 +315,7 @@
         input[readonly].bg-gray-200 {
             background-color: #e2e8f0 !important;
         }
+
     </style>
 
 </x-app-layout>

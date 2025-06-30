@@ -147,7 +147,7 @@ class ChemicalRegistrationController extends Controller
                 ]);
             }
 
-            // return redirect()->route('newregis.index')->with('success', 'บันทึกข้อมูลสำเร็จแล้ว!');
+            return redirect()->route('newregis.index')->with('success', 'บันทึกข้อมูลสำเร็จแล้ว!');
         } catch (\Exception $e) {
             \Log::error("Error creating product: " . $e->getMessage());
             return redirect()->back()->withInput()->withErrors(['error' => 'เกิดข้อผิดพลาดในการบันทึกข้อมูล: ' . $e->getMessage()]);
@@ -382,7 +382,7 @@ class ChemicalRegistrationController extends Controller
         foreach ($stepItems as $index => $label) {
             DrugProgressStep::updateOrCreate(
                 [
-                    'product_id' => $drug->id,
+                    'chemical_registrations_id' => $drug->id,
                     'step_number' => $stepNumber,
                     'sub_step_index' => $index,
                 ],
@@ -399,7 +399,7 @@ class ChemicalRegistrationController extends Controller
 
         foreach ($rawStructure as $step => $groupedItems) {
             $flat = collect($groupedItems)->flatten()->values();
-            $countChecked = DrugProgressStep::where('product_id', $drug->id)
+            $countChecked = DrugProgressStep::where('chemical_registrations_id', $drug->id)
                 ->where('step_number', $step)
                 ->whereNotNull('checked_at')
                 ->count();

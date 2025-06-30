@@ -88,13 +88,13 @@
                         <p class="font-semibold text-indigo-600 mb-1">ชื่อการที่</p>
                         <select
                             class="w-5/6 p-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            name="registration_type">
+                            name="name_position">
                             <option value="">-- เลือก --</option>
-                            <option value="T" {{ $drug->registration_type == 'T' ? 'selected' : '' }}>T</option>
-                            <option value="-" {{ $drug->registration_type == '-' ? 'selected' : '' }}>-</option>
-                            <option value="1" {{ $drug->registration_type == '1' ? 'selected' : '' }}>1</option>
-                            <option value="2" {{ $drug->registration_type == '2' ? 'selected' : '' }}>2</option>
-                            <option value="3" {{ $drug->registration_type == '3' ? 'selected' : '' }}>3</option>
+                            <option value="T" {{ $drug->name_position == 'T' ? 'selected' : '' }}>T</option>
+                            <option value="-" {{ $drug->name_position == '-' ? 'selected' : '' }}>-</option>
+                            <option value="1" {{ $drug->name_position == '1' ? 'selected' : '' }}>1</option>
+                            <option value="2" {{ $drug->name_position == '2' ? 'selected' : '' }}>2</option>
+                            <option value="3" {{ $drug->name_position == '3' ? 'selected' : '' }}>3</option>
                         </select>
                     </div>
                     <div>
