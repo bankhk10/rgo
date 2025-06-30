@@ -92,11 +92,8 @@
                     <select name="store_company_1" id="store_company_1"
                         class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <option value="">-- เลือก --</option>
-                        {{-- @php
-                            $companies_list = ['บริษัท A', 'บริษัท B', 'บริษัท C', 'บริษัท D', 'บริษัท E']; // ตัวอย่างข้อมูล
-                        @endphp --}}
                         @foreach ($companies as $company)
-                            <option value="{{ $company->full_name }}">{{ $company->full_name }}</option>
+                            <option value="{{ $company->id }}">{{ $company->full_name }}</option>
                         @endforeach
                     </select>
                     @error('store_company_1')
@@ -109,7 +106,7 @@
                         class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <option value="">-- เลือก --</option>
                         @foreach ($companies as $company)
-                            <option value="{{ $company->full_name }}">{{ $company->full_name }}</option>
+                            <option value="{{ $company->id }}">{{ $company->full_name }}</option>
                         @endforeach
                     </select>
                     @error('store_company_2')

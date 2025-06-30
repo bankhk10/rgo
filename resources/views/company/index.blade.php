@@ -1,7 +1,7 @@
 <x-app-layout>
     <div>
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
-            <div class="container mx-auto px-6 py-6">
+            <div class="mx-auto px-6 py-6">
                 <div class="flex justify-between items-center mb-6">
                     <h1 class="text-4xl font-extrabold text-gray-600 tracking-wide">
                         จัดการบริษัท
@@ -20,7 +20,7 @@
                             <thead>
                                 <tr class="bg-indigo-600 text-white text-left">
                                     <th class="py-3 px-6 rounded-tl-2xl">ชื่อบริษัท</th>
-                                    <th class="py-3 px-6">ตัวย่อบริษัท</th>
+                                    <th class="py-3 px-6">ตัวย่อ</th>
                                     <th class="py-3 px-6">ที่อยู่</th>
                                     <th class="py-3 px-6">อีเมล</th>
                                     <th class="py-3 px-6">เบอร์โทร</th>

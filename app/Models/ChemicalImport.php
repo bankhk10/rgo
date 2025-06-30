@@ -31,12 +31,12 @@ class ChemicalImport extends Model
         'remarks',
     ];
 
-    // protected $casts = [
-    //     'expiry_date' => 'date',
-    //     'second_expiry_date' => 'date',
-    //     'possession_form_expiry' => 'date',
-    //     'import_quantity' => 'float',
-    // ];
+    protected $casts = [
+        'expiry_date' => 'date',
+        'second_expiry_date' => 'date',
+        'possession_form_expiry' => 'date',
+        'import_quantity' => 'float',
+    ];
 
     public function company()
     {

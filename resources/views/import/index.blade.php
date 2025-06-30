@@ -63,12 +63,15 @@
                             @can('Inregister read')
                                 @forelse ($imports as $index => $import)
                                     <tr class="border-b hover:bg-indigo-50 transition">
-                                        <td class="py-4 px-6 font-semibold text-gray-700">{{ $index + 1 }}</td>
+                                        <td class="py-4 px-6 font-semibold text-gray-700">
+                                            {{ $loop->iteration + ($imports->currentPage() - 1) * $imports->perPage() }}
+                                        </td>
                                         <td class="py-4 px-6">{{ $import->chemical_name_th }}</td>
-                                        {{-- <td class="py-4 px-8">{{ $import->chemical_name_en }}</td> --}}
                                         <td class="py-4 px-6 text-center">{{ $import->company->name ?? '' }}</td>
                                         <td class="py-4 px-8">{{ $import->registration_no }}</td>
-                                        <td class="py-4 px-8">{{ $import->expiry_date }}</td>
+                                        <td class="py-4 px-8">
+                                            {{ \Carbon\Carbon::parse($import->expiry_date)->addYears(543)->format('d/m/Y') }}
+                                        </td>
 
                                         <td class="py-4 px-8 text-center">
                                             <div class="flex items-center gap-3 justify-center">

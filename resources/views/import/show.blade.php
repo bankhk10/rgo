@@ -19,8 +19,8 @@
             {{-- วันหมดอายุ --}}
             <div>
                 <label class="block text-gray-700 mb-1">วันหมดอายุ</label>
-                <input type="date0" class="w-full p-2 border rounded-lg bg-gray-200"
-                    value="{{ $import->expiry_date }}" disabled>
+                <input type="date" class="w-full p-2 border rounded-lg bg-gray-200"
+                    value="{{ \Carbon\Carbon::parse($import->expiry_date)->addYears(543)->format('Y-m-d') }}" disabled>
             </div>
 
             {{-- ชื่อวัตถุอันตราย (ไทย) --}}

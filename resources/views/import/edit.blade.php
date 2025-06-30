@@ -32,8 +32,8 @@
             {{-- วันหมดอายุ --}}
             <div>
                 <label class="block text-gray-700 mb-1">วันหมดอายุ</label>
-                <input type="date" name="expiry_date" {{-- value="{{ old('expiry_date', optional($import->expiry_date)->format('Y-m-d')) }}" --}}
-                    value="{{ old('expiry_date', $import->expiry_date) }}"
+                <input type="date" name="expiry_date"
+                    value="{{ old('expiry_date', optional($import->expiry_date)->format('Y-m-d')) }}"
                     class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
             </div>
 
@@ -188,9 +188,9 @@
             </div>
 
             {{-- ปุ่ม --}}
-            <div class="col-span-2 flex justify-between mt-6">
+            <div class="col-span-2 text-center mt-6">
                 <a href="{{ route('import.index') }}"
-                    class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg shadow transition duration-300">
+                    class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg shadow transition duration-300 mr-4">
                     <i class="fa-solid fa-arrow-left mr-2"></i> ย้อนกลับ
                 </a>
 
