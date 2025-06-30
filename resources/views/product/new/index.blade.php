@@ -370,6 +370,14 @@
                                     </td>
                                 </tr>
                             @endforelse
+
+                            <script>
+                                function confirmDelete(id) {
+                                    if (confirm('คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?')) {
+                                        document.getElementById(`delete-form-${id}`).submit();
+                                    }
+                                }
+                            </script>
                         </tbody>
                     </table>
                 </div>
@@ -381,6 +389,7 @@
 
         </div>
     </main>
+
 
     <style>
         /* กล่องค้นหาหลัก */

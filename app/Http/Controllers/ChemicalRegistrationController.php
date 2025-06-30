@@ -70,19 +70,6 @@ class ChemicalRegistrationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    // public function store(Request $request)
-    // {
-    //     $newRegis = new ChemicalRegistration();
-    //     $newRegis->name = $request->hazardous_name_th;
-    //     $newRegis->registration_number = $request->registration_number;
-    //     $newRegis->registration_date = $request->expiry_date; // This seems incorrect, should be a dedicated date field
-    //     $newRegis->expiry_date = $request->expiry_date;
-    //     $newRegis->progress = $request->company; // This seems incorrect, should be a progress value
-    //     $newRegis->new_or_old = true; // Make sure new registrations are marked as 'true'
-    //     $newRegis->save();
-
-    //     return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จ');
-    // }
 
 
     public function store(Request $request)
@@ -214,8 +201,73 @@ class ChemicalRegistrationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $drug = ChemicalRegistration::findOrFail($id);
+
+        $rules = [
+            'chemical_imports_id' => 'nullable|integer',
+            'registration_number' => 'nullable|string',
+            'registration_number_pass' => 'nullable|string',
+            'registration_expiry_date' => 'nullable|date',
+            'chemical_name_th' => 'nullable|string',
+            'chemical_name_en' => 'nullable|string',
+            'composition' => 'nullable|string',
+            'manufacturer' => 'nullable|string',
+            'registrant' => 'nullable|string',
+            'registration_type' => 'nullable|string',
+            'importer' => 'nullable|string',
+            'distributor' => 'nullable|string',
+            'trade_name' => 'nullable|string',
+            'trade_name_at' => 'nullable|string',
+            'production_license_number' => 'nullable|string',
+            'production_license_expiry' => 'nullable|date',
+            'production_license_quantity' => 'nullable|string',
+            'possession_form_wo2' => 'nullable|string',
+            'possession_form_expiry' => 'nullable|date',
+            'application_received_date' => 'nullable|date',
+            'expired_license_number' => 'nullable|string',
+            'expired_at' => 'nullable|date',
+            'old_license_quantity' => 'nullable|string',
+            'packaging_size' => 'nullable|string',
+            'formula_of_ratio' => 'nullable|string',
+            'type_registration' => 'nullable|string',
+            'common_name' => 'nullable|string',
+            'packaging_size_details' => 'nullable|string',
+            'type_of_use' => 'nullable|string',
+            'date_submit_request' => 'nullable|date',
+            'request_number_1' => 'nullable|string',
+            'request_number_phase_1' => 'nullable|string',
+            'date_request_phase_3' => 'nullable|date',
+            'request_number_phase_3' => 'nullable|string',
+            'name_position' => 'nullable|string',
+            'remarks' => 'nullable|string',
+            'new_or_old' => 'nullable|boolean',
+            'step' => 'nullable|string',
+            'chemical_type' => 'nullable|string',
+            'company' => 'nullable|string',
+            'store_company_1' => 'nullable|string',
+            'store_company_2' => 'nullable|string',
+            'status' => 'nullable|string',
+            'is_active' => 'nullable|boolean',
+            'is_deleted' => 'nullable|boolean',
+            'image' => 'nullable|string',
+            'document' => 'nullable|string',
+            'progress' => 'nullable|numeric',
+            'sub_progress' => 'nullable|numeric',
+            'created_by' => 'nullable|string',
+            'updated_by' => 'nullable|string',
+        ];
+
+        $validatedData = $request->validate($rules);
+
+        foreach ($validatedData as $key => $value) {
+            $drug->$key = $value;
+        }
+
+        $drug->save();
+
+        return redirect()->route('newregis.index')->with('success', 'อัปเดตข้อมูลเรียบร้อยแล้ว!');
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -225,9 +277,20 @@ class ChemicalRegistrationController extends Controller
      */
     public function destroy($id)
     {
-        //
-    }
+        $drug = ChemicalRegistration::findOrFail($id);
 
+        try {
+            // ลบหัวข้อย่อยที่เกี่ยวข้อง (DrugProgressStep)
+            DrugProgressStep::where('chemical_registrations_id', $drug->id)->delete();
+
+            $drug->delete();
+
+            return redirect()->route('newregis.index')->with('success', 'ลบข้อมูลเรียบร้อยแล้ว');
+        } catch (\Exception $e) {
+            \Log::error("Error deleting chemical registration: " . $e->getMessage());
+            return redirect()->back()->with('error', 'เกิดข้อผิดพลาดในการลบข้อมูล');
+        }
+    }
     public function updateSubProgress(Request $request, ChemicalRegistration $drug)
     {
         $stepNumber = (int) $request->input('step_number');

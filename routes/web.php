@@ -14,6 +14,7 @@ use App\Http\Controllers\ChemicalRegistrationController;
 use App\Http\Controllers\RenewRegisController;
 use App\Http\Controllers\ChemicalImportController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,17 +31,17 @@ Route::get('/', function () {
     return redirect('/admin/login'); // เปลี่ยนเส้นทางไปยัง /admin/login
 });
 
-Route::get('/dashboard', function () {
-    return view('front.dashboard');
-})->middleware(['front'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return view('front.dashboard');
+// })->middleware(['front'])->name('dashboard');
 
 
 // require __DIR__ . '/front_auth.php';
 
 // Admin routes
-Route::get('/admin/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('admin.dashboard');
+// Route::get('/admin/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth'])->name('admin.dashboard');
 
 require __DIR__ . '/auth.php';
 
@@ -75,7 +76,9 @@ Route::get('/new/product/create', [ChemicalRegistrationController::class, 'creat
 Route::post('/new/product/store', [ChemicalRegistrationController::class, 'store'])->name('newregis.store');
 Route::get('/new/product/edit/{registrationNumber}', [ChemicalRegistrationController::class, 'edit'])->name('newregis.edit');
 Route::put('/new/product/update/{registrationNumber}', [ChemicalRegistrationController::class, 'update'])->name('newregis.update');
-Route::delete('/new/product/delete/{registrationNumber}', [ChemicalRegistrationController::class, 'destroy'])->name('newregis.destroy');
+// Route::delete('/new/product/delete/{registrationNumber}', [ChemicalRegistrationController::class, 'destroy'])->name('newregis.destroy');
+Route::delete('/newregis/{id}', [ChemicalRegistrationController::class, 'destroy'])->name('newregis.destroy');
+
 Route::put('/newregis/{drug}/update-subprogress', [ChemicalRegistrationController::class, 'updateSubProgress'])->name('newregis.update-subprogress');
 
 
@@ -84,6 +87,7 @@ Route::get('/renew/product', [RenewRegisController::class, 'index'])->name('rene
 Route::get('/manufactture/product', [ManufactureRegisController::class, 'index'])->name('manufactureregis.index');
 
 Route::resource('company', CompanyController::class);
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
 
 Route::get('/chemical-imports/import', [ChemicalImportController::class, 'showImportForm'])->name('chemical_imports.import.form');

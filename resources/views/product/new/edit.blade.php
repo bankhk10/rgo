@@ -9,120 +9,180 @@
                 {{-- รายละเอียดข้อมูลยา --}}
                 <div class="grid grid-cols-3 gap-6 text-lg text-gray-700 ml-16">
                     <div>
-                        <p class="font-semibold text-indigo-600">เลขที่ทะเบียน</p>
+                        <p class="font-semibold text-indigo-600 mb-1">เลขที่ทะเบียน</p>
                         <form method="POST" action="{{ route('newregis.update', $drug->id) }}">
                             @csrf
                             @method('PUT')
                             <input type="text" name="registration_number"
-                                class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="กรอกเลขที่ทะเบียน"
+                                class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1" placeholder="กรอกเลขที่ทะเบียน"
                                 value="{{ $drug->registration_number }}">
                     </div>
                     <div>
-                        <p class="font-semibold text-indigo-600">ชื่อสามัญ</p>
-                        <input type="text" name="common_name" class="border-gray-300 rounded-lg shadow-sm w-80 mt-1 bg-gray-200"
+                        <p class="font-semibold text-indigo-600 mb-1">ชื่อสามัญ</p>
+                        <input type="text" name="common_name"
+                            class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1 bg-gray-200"
                             placeholder="กรอกชื่อสามัญ" value="{{ $drug->chemicalImport->chemical_name_th }}" readonly>
                     </div>
                     <div>
-                        <p class="font-semibold text-indigo-600">สูตรอัตรส่วนผสมสารสำคัญและลักษณะ</p>
+                        <p class="font-semibold text-indigo-600 mb-1">สูตรอัตรส่วนผสมสารสำคัญและลักษณะ</p>
                         <input type="text" name="formula_of_ratio"
-                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1"
-                            placeholder="กรอกสูตรอัตรส่วนผสมของ..."
-                            value="{{ $drug->chemicalImport->formula_of_ratio }}">
+                            class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1"
+                            placeholder="กรอกสูตรอัตรส่วนผสมของ..." value="{{ $drug->formula_of_ratio }}">
                     </div>
                     <div>
-                        <p class="font-semibold text-indigo-600">วันที่ยื่น Phase III</p>
-                        <input type="date" name="common_name" class="border-gray-300 rounded-lg shadow-sm w-80 mt-1"
-                            placeholder="วันที่ยื่น Phase III" value="{{ $drug->created_at->format('Y-m-d') }}"
-                            readonly>
+                        <p class="font-semibold text-indigo-600 mb-1">วันที่ยื่น Phase III</p>
+                        <input type="date" name="date_request_phase_3"
+                            class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1"
+                            value="{{ $drug->date_request_phase_3 }}">
                     </div>
                     <div>
-                        <p class="font-semibold text-indigo-600">ผู้ขอขึ้นทะเบียน</p>
+                        <p class="font-semibold text-indigo-600 mb-1">ผู้ขอขึ้นทะเบียน</p>
+                        <select class="w-5/6 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            name="registrant">
+                            <option value="">-- เลือก --</option>
+                            @foreach ($companies as $company)
+                                <option value="{{ $company->full_name }}"
+                                    {{ $drug->registrant == $company->full_name ? 'selected' : '' }}>
+                                    {{ $company->full_name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-indigo-600 mb-1">ชนิดทะเบียน</p>
+                        <select class="w-5/6 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            name="type_registration">
+                            <option value="">-- เลือก --</option>
+                            <option value="ชนิดที่ 2" {{ $drug->type_registration == 'ชนิดที่ 2' ? 'selected' : '' }}>
+                                ชนิดที่ 2</option>
+                            <option value="ชนิดที่ 3" {{ $drug->type_registration == 'ชนิดที่ 3' ? 'selected' : '' }}>
+                                ชนิดที่ 3</option>
+                        </select>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-indigo-600 mb-1">ประเภททะเบียน</p>
+                        <select class="w-5/6 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            name="registration_type">
+                            <option value="">-- เลือก --</option>
+                            <option value="นำเข้า (สารเข้มข้น)"
+                                {{ $drug->registration_type == 'นำเข้า (สารเข้มข้น)' ? 'selected' : '' }}>นำเข้า
+                                (สารเข้มข้น)</option>
+                            <option value="นำเข้า (สำเร็จรูป)"
+                                {{ $drug->registration_type == 'นำเข้า (สำเร็จรูป)' ? 'selected' : '' }}>นำเข้า
+                                (สำเร็จรูป)</option>
+                            <option value="ผลิต (ผสมปรุงแต่ง)"
+                                {{ $drug->registration_type == 'ผลิต (ผสมปรุงแต่ง)' ? 'selected' : '' }}>ผลิต
+                                (ผสมปรุงแต่ง)</option>
+                            <option value="นำเข้า (แบ่งบรรจุ)"
+                                {{ $drug->registration_type == 'นำเข้า (แบ่งบรรจุ)' ? 'selected' : '' }}>นำเข้า
+                                (แบ่งบรรจุ)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-indigo-600 mb-1">ชื่อการค้า</p>
                         <input type="text" name="request_number_phase_3"
-                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="ผู้ขอขึ้นทะเบียน"
-                            value="{{ $drug->chemicalImport->full_name }}">
+                            class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1" placeholder="กรอกชื่อการค้า"
+                            value="{{ $drug->trade_name }}">
                     </div>
                     <div>
-                        <p class="font-semibold text-indigo-600">ชนิดทะเบียน</p>
-                        <input type="text" name="request_number_phase_3"
-                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="ผู้ขอขึ้นทะเบียน"
-                            value="{{ $drug->chemicalImport->full_name }}">
+                        <p class="font-semibold text-indigo-600 mb-1">ชื่อการที่</p>
+                        <select
+                            class="w-5/6 p-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            name="registration_type">
+                            <option value="">-- เลือก --</option>
+                            <option value="T" {{ $drug->registration_type == 'T' ? 'selected' : '' }}>T</option>
+                            <option value="-" {{ $drug->registration_type == '-' ? 'selected' : '' }}>-</option>
+                            <option value="1" {{ $drug->registration_type == '1' ? 'selected' : '' }}>1</option>
+                            <option value="2" {{ $drug->registration_type == '2' ? 'selected' : '' }}>2</option>
+                            <option value="3" {{ $drug->registration_type == '3' ? 'selected' : '' }}>3</option>
+                        </select>
                     </div>
                     <div>
-                        <p class="font-semibold text-indigo-600">ประเภททะเบียน</p>
-                        <input type="text" name="request_number_phase_3"
-                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="ผู้ขอขึ้นทะเบียน"
-                            value="{{ $drug->chemicalImport->full_name }}">
+                        <p class="font-semibold text-indigo-600 mb-1">ชื่อผู้นำเข้า</p>
+                        <select class="w-5/6 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            name="importer">
+                            <option value="">-- เลือก --</option>
+                            @foreach ($companies as $company)
+                                <option value="{{ $company->full_name }}"
+                                    {{ $drug->importer == $company->full_name ? 'selected' : '' }}>
+                                    {{ $company->full_name }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
                     <div>
-                        <p class="font-semibold text-indigo-600">ชื่อการค้า</p>
-                        <input type="text" name="request_number_phase_3"
-                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="ผู้ขอขึ้นทะเบียน"
-                            value="{{ $drug->chemicalImport->full_name }}">
+                        <p class="font-semibold text-indigo-600 mb-1">ชื่อผู้จำหน่าย</p>
+                        <select class="w-5/6 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            name="distributor">
+                            <option value="">-- เลือก --</option>
+                            @foreach ($companies as $company)
+                                <option value="{{ $company->full_name }}"
+                                    {{ $drug->distributor == $company->full_name ? 'selected' : '' }}>
+                                    {{ $company->full_name }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
                     <div>
-                        <p class="font-semibold text-indigo-600">ชื่อการที่</p>
-                        <input type="text" name="request_number_phase_3"
-                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="ผู้ขอขึ้นทะเบียน"
-                            value="{{ $drug->chemicalImport->full_name }}">
+                        <p class="font-semibold text-indigo-600 mb-1">ประเภทของการใช้</p>
+                        <select class="w-5/6 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            name="type_of_use">
+                            <option value="">-- เลือก --</option>
+                            <option value="A : Acaricide (สารกำจัดไรศัตรูพืช)"
+                                {{ $drug->type_of_use == 'A : Acaricide (สารกำจัดไรศัตรูพืช)' ? 'selected' : '' }}>A :
+                                Acaricide (สารกำจัดไรศัตรูพืช)</option>
+                            <option value="F : Fungicide (สารป้องกันกำจัดโรคพืช)"
+                                {{ $drug->type_of_use == 'F : Fungicide (สารป้องกันกำจัดโรคพืช)' ? 'selected' : '' }}>F
+                                : Fungicide (สารป้องกันกำจัดโรคพืช)</option>
+                            <option value="H : Herbicide (สารกำจัดวัชพืช)"
+                                {{ $drug->type_of_use == 'H : Herbicide (สารกำจัดวัชพืช)' ? 'selected' : '' }}>H :
+                                Herbicide (สารกำจัดวัชพืช)</option>
+                            <option value="I : Insecticide (สารกำจัดแมลง)"
+                                {{ $drug->type_of_use == 'I : Insecticide (สารกำจัดแมลง)' ? 'selected' : '' }}>I :
+                                Insecticide (สารกำจัดแมลง)</option>
+                            <option value="M : Molluscicide (สารกำจัดหอย)"
+                                {{ $drug->type_of_use == 'M : Molluscicide (สารกำจัดหอย)' ? 'selected' : '' }}>M :
+                                Molluscicide (สารกำจัดหอย)</option>
+                            <option value="N : Nematicide (สารกำจัดไส้เดือนฝอย)"
+                                {{ $drug->type_of_use == 'N : Nematicide (สารกำจัดไส้เดือนฝอย)' ? 'selected' : '' }}>N
+                                : Nematicide (สารกำจัดไส้เดือนฝอย)</option>
+                            <option value="P : PlantGrowthRegulators (สารควบคุมการเจริญเติบโตของพืช)"
+                                {{ $drug->type_of_use == 'P : PlantGrowthRegulators (สารควบคุมการเจริญเติบโตของพืช)' ? 'selected' : '' }}>
+                                P : PlantGrowthRegulators (สารควบคุมการเจริญเติบโตของพืช)</option>
+                            <option value="R : Rodenticide (สารกำจัดหนู)"
+                                {{ $drug->type_of_use == 'R : Rodenticide (สารกำจัดหนู)' ? 'selected' : '' }}>R :
+                                Rodenticide (สารกำจัดหนู)</option>
+                        </select>
+                    </div>
+                    <div class="md:col-span-3">
+                        <p class="font-semibold text-indigo-600 mb-1">รายละเอียดขนาดบรรจุ</p>
+                        <textarea name="packaging_size_details"
+                            class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" rows="2">{{ $drug->packaging_size_details }}</textarea>
                     </div>
                     <div>
-                        <p class="font-semibold text-indigo-600">ชื่อผู้นำเข้า</p>
-                        <input type="text" name="request_number_phase_3"
-                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="ผู้ขอขึ้นทะเบียน"
-                            value="{{ $drug->chemicalImport->full_name }}">
+                        <p class="font-semibold text-indigo-600 mb-1">วันที่ยื่นคำขอ</p>
+                        <input type="date" name="date_submit_request"
+                            class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1"
+                            value="{{ $drug->date_submit_request }}">
                     </div>
                     <div>
-                        <p class="font-semibold text-indigo-600">ชื่อผู้จำหน่าย</p>
-                        <input type="text" name="request_number_phase_3"
-                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="ผู้ขอขึ้นทะเบียน"
-                            value="{{ $drug->chemicalImport->full_name }}">
+                        <p class="font-semibold text-indigo-600 mb-1">เลขที่รับคำขอ</p>
+                        <input type="text" name="request_number_1"
+                            class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1" placeholder="กรอกเลขที่รับคำขอ"
+                            value="{{ $drug->request_number_1 }}">
                     </div>
                     <div>
-                        <p class="font-semibold text-indigo-600">ชื่อผู้ผลิตและแหล่งผลิต</p>
-                        <input type="text" name="request_number_phase_3"
-                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="ผู้ขอขึ้นทะเบียน"
-                            value="{{ $drug->chemicalImport->full_name }}">
-                    </div>
-                    <div>
-                        <p class="font-semibold text-indigo-600">ประเภทของการใช้</p>
-                        <input type="text" name="request_number_phase_3"
-                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="ผู้ขอขึ้นทะเบียน"
-                            value="{{ $drug->chemicalImport->full_name }}">
-                    </div>
-                    <div>
-                        <p class="font-semibold text-indigo-600">รายละเอียดขนาดบรรจุ</p>
-                        <input type="text" name="request_number_phase_3"
-                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="ผู้ขอขึ้นทะเบียน"
-                            value="{{ $drug->chemicalImport->full_name }}">
-                    </div>
-                    <div>
-                        <p class="font-semibold text-indigo-600">วันที่ยื่นคำขอ</p>
-                        <input type="text" name="request_number_phase_3"
-                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="ผู้ขอขึ้นทะเบียน"
-                            value="{{ $drug->chemicalImport->full_name }}">
-                    </div>
-                    <div>
-                        <p class="font-semibold text-indigo-600">เลขที่รับคำขอ</p>
-                        <input type="text" name="request_number_phase_3"
-                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="ผู้ขอขึ้นทะเบียน"
-                            value="{{ $drug->chemicalImport->full_name }}">
-                    </div>
-                    <div>
-                        <p class="font-semibold text-indigo-600">เลข # Phase I</p>
-                        <input type="text" name="request_number_phase_3"
-                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="ผู้ขอขึ้นทะเบียน"
-                            value="{{ $drug->chemicalImport->full_name }}">
-                    </div>
-                    <div>
-                        <p class="font-semibold text-indigo-600">อื่นๆ (ระบุ)</p>
-                        <input type="text" name="request_number_phase_3"
-                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="ผู้ขอขึ้นทะเบียน"
-                            value="{{ $drug->chemicalImport->full_name }}">
+                        <p class="font-semibold text-indigo-600 mb-1">เลข # Phase I</p>
+                        <input type="text" name="request_number_phase_1"
+                            class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1" placeholder="กรอกเลข # Phase I"
+                            value="{{ $drug->request_number_phase_1 }}">
                     </div>
 
-
-
-
+                    <div class="md:col-span-3">
+                        <p class="font-semibold text-indigo-600 mb-1">อื่นๆ (ระบุ)</p>
+                        <textarea name="remarks" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            rows="2">{{ $drug->remarks }}</textarea>
+                    </div>
                 </div>
 
                 <div class="text-center mt-4">
@@ -139,23 +199,6 @@
 
                 {{-- ไทม์ไลน์การขึ้นทะเบียน --}}
                 <div class="mt-8">
-                    {{-- <h2 class="text-2xl font-bold text-indigo-700 mb-6">ไทม์ไลน์การขึ้นทะเบียน</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-lg text-gray-700 mt-6">
-                        <div>
-                            <p class="font-semibold text-indigo-600">สถานะความคืบหน้าโดยรวม:</p>
-                            <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
-                                <div class="h-2.5 rounded-full
-                                @if ($drug->progress < 25) bg-red-500
-                                @elseif ($drug->progress < 75) bg-yellow-500
-                                @else bg-green-500 @endif" style="width: {{ $drug->progress }}%">
-                                </div>
-                            </div>
-                            <div class="text-xs text-gray-500 text-center mt-1">
-                                {{ $drug->progress }}%
-                            </div>
-                        </div>
-                    </div> --}}
-
                     @php
                         $subStepsAll = [
                             1 => [
@@ -291,7 +334,9 @@
                                 fn($s) => $completedStepFlags[$s] ?? false,
                             );
                             $isVisible = $stepNumber === 1 || $previousStepsCompleted;
-                        $isEditable = $canEdit && $isVisible && $percent < 100; @endphp @if ($isVisible)
+                            $isEditable = $canEdit && $isVisible && $percent < 100;
+                        @endphp
+                        @if ($isVisible)
                             {{-- โค้ดแสดงแบบฟอร์มของขั้นตอนนี้ --}}
                             <form method="POST" action="{{ route('newregis.update-subprogress', $drug->id) }}">
                                 @csrf
@@ -337,12 +382,6 @@
                                                                 <label for="vehicle1_{{ $label }}"
                                                                     class="text-sm text-gray-800">{{ $label }}</label>
                                                             </div>
-                                                            @if ($isChecked)
-                                                                {{-- <div class="text-sm text-gray-500">
-                                                <i class="fa-solid fa-clock mr-1 text-gray-400"></i>
-                                                {{ \Carbon\Carbon::parse($record->checked_at)->format('d/m/Y H:i') }}
-                                            </div> --}}
-                                                            @endif
                                                         </div>
                                                         @php $checkboxIndex++; @endphp
                                                     @endforeach
@@ -367,12 +406,6 @@
                         @endif
                     @endforeach
                 </div>
-                {{-- <div class="text-center mt-12">
-                    <a href="{{ route('newregis.index') }}"
-                        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg shadow transition duration-300">
-                        <i class="fa-solid fa-arrow-left mr-2"></i> ย้อนกลับ
-                    </a>
-                </div> --}}
             </div>
         </div>
     </main>

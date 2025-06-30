@@ -60,8 +60,8 @@ class AdminSeeder extends Seeder
             ['name' => 'User update', 'guard_name' => 'web'],
             ['name' => 'User create', 'guard_name' => 'web'],
             ['name' => 'User delete', 'guard_name' => 'web'],
-            ['name' => 'Mail access', 'guard_name' => 'web'],
-            ['name' => 'Mail edit', 'guard_name' => 'web'],
+            // ['name' => 'Mail access', 'guard_name' => 'web'],
+            // ['name' => 'Mail edit', 'guard_name' => 'web'],
             // ['name' => 'Permission read', 'guard_name' => 'web'],
             // ['name' => 'Permission create', 'guard_name' => 'web'],
             // ['name' => 'Permission update', 'guard_name' => 'web'],
@@ -70,6 +70,21 @@ class AdminSeeder extends Seeder
             ['name' => 'Inregister create', 'guard_name' => 'web'],
             ['name' => 'Inregister update', 'guard_name' => 'web'],
             ['name' => 'Inregister delete', 'guard_name' => 'web'],
+
+            ['name' => 'RegisterNew read', 'guard_name' => 'web'],
+            ['name' => 'RegisterNew create', 'guard_name' => 'web'],
+            ['name' => 'RegisterNew update', 'guard_name' => 'web'],
+            ['name' => 'RegisterNew delete', 'guard_name' => 'web'],
+
+            ['name' => 'RegisterContinue read', 'guard_name' => 'web'],
+            ['name' => 'RegisterContinue create', 'guard_name' => 'web'],
+            ['name' => 'RegisterContinue update', 'guard_name' => 'web'],
+            ['name' => 'RegisterContinue delete', 'guard_name' => 'web'],
+
+            ['name' => 'RegisterManufacture read', 'guard_name' => 'web'],
+            ['name' => 'RegisterManufacture create', 'guard_name' => 'web'],
+            ['name' => 'RegisterManufacture update', 'guard_name' => 'web'],
+            ['name' => 'RegisterManufacture delete', 'guard_name' => 'web'],
 
             ['name' => 'Company read', 'guard_name' => 'web'],
             ['name' => 'Company create', 'guard_name' => 'web'],
