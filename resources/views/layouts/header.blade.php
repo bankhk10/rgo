@@ -1,4 +1,5 @@
-<header class="flex justify-between items-center py-3 px-6 bg-white-100  border-b-2 sticky top-0 z-50">
+{{-- <header class="flex justify-between items-center py-3 px-6 bg-white-100  border-b-2 sticky top-0 z-50"> --}}
+<header class="flex justify-between items-center py-3 px-6 bg-white-100 sticky top-0 z-50">
     <div class="flex items-center">
         <button @click="sidebarOpen = true"
                 class="text-gray-500 focus:outline-none lg:hidden">

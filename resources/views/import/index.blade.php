@@ -10,7 +10,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M12 2v2m0 16v2m8-10h2M2 12H4m15.364-7.364l1.414 1.414M4.222 19.778l1.414-1.414m12.728 0l1.414 1.414M4.222 4.222l1.414 1.414" />
                     </svg>
-                    ข้อมูลทะเบียนนำเข้า
+                    ข้อมูลทะเบียนนำเข้าวัตถุดิบ
                 </span>
             </h1>
             @can('Inregister create')

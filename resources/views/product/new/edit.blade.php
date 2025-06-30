@@ -2,7 +2,7 @@
     <main class="flex-1 overflow-x-hidden overflow-y-auto">
         <div class="container mx-auto px-6 py-6">
             <h1 class="text-4xl font-extrabold text-center text-indigo-700 mt-5 mb-10 tracking-wide">
-                รายละเอียดการขึ้นทะเบียนใหม่
+                รายละเอียดการขึ้นทะเบียนสินค้าใหม่
             </h1>
 
             <div class="bg-white rounded-2xl overflow-hidden shadow-lg p-8 border border-gray-200">

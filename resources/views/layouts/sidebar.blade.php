@@ -16,7 +16,7 @@
                 <li>
                     <a href="{{ route('import.index') }}" class="side-menu" id="menu-inregister">
                         <div class="side-menu__icon"><i data-lucide="file-text"></i></div>
-                        <div class="side-menu__title">ทะเบียนนำเข้า</div>
+                        <div class="side-menu__title">ทะเบียนนำเข้าวัตถุดิบ</div>
                     </a>
                 </li>
             @endcanany
@@ -35,7 +35,7 @@
                         </svg>
                     </div>
 
-                    <div class="side-menu__title">ขึ้นทะเบียนใหม่</div>
+                    <div class="side-menu__title">ขึ้นทะเบียนสินค้าใหม่</div>
                 </a>
             </li>
 
@@ -51,7 +51,7 @@
                         </svg>
                     </div>
 
-                    <div class="side-menu__title">ต่อทะเบียนเก่า</div>
+                    <div class="side-menu__title">ต่อทะเบียนสินค้าเก่า</div>
                 </a>
             </li>
             <li>
@@ -66,7 +66,7 @@
                         </svg>
                     </div>
 
-                    <div class="side-menu__title">ทะเบียนผลิต</div>
+                    <div class="side-menu__title">ต่อทะเบียนผลิต</div>
                 </a>
             </li>
 
@@ -105,7 +105,7 @@
                             <a href="{{ route('admin.import.index') }}"
                                class="side-menu {{ Route::currentRouteNamed('admin.import.index') ? 'side-menu--active' : '' }}">
                                 <div class="side-menu__icon"><i data-lucide="activity"></i></div>
-                                <div class="side-menu__title">ทะเบียนนำเข้า</div>
+                                <div class="side-menu__title">ทะเบียนนำเข้าวัตถุดิบ</div>
                             </a>
                         </li>
                     </ul>
