@@ -361,6 +361,18 @@
                                     {{-- รายการ checkbox --}}
                                     <div class="space-y-6">
                                         @php $checkboxIndex = 0; @endphp
+                                        @php
+                                            $userDept = auth()->user()->department;
+                                            // ถ้าไม่ใช่ admin หรือ manager ให้เห็นเฉพาะหัวข้อของแผนกตัวเอง
+                                            if (
+                                                !auth()->user()->hasRole('admin') &&
+                                                !auth()->user()->hasRole('manager')
+                                            ) {
+                                                $departments = collect($departments)
+                                                    ->filter(fn($items, $deptName) => $deptName === $userDept)
+                                                    ->all();
+                                            }
+                                        @endphp
                                         @foreach ($departments as $dept => $subItems)
                                             <div>
                                                 <h5 class="text-sm font-bold text-gray-700 mb-2">{{ $dept }}

@@ -24,7 +24,7 @@
                         <p class="font-semibold text-indigo-600">ชื่อทางการค้า:</p>
                         <p>{{ $drug->trade_name ?? '-' }}</p>
                     </div>
-                    <div>
+                    {{-- <div>
                         <p class="font-semibold text-indigo-600">ชื่อผู้ผลิตและแหล่งผลิต:</p>
                         <p>{{ $drug->manufacturer_origin ?? '-' }}</p>
                     </div>
@@ -43,11 +43,11 @@
                     <div>
                         <p class="font-semibold text-indigo-600">ชนิดและลักษณะหีบห่อหรือภาชนะบรรจุ:</p>
                         <p>{{ $drug->packaging_type ?? '-' }}</p>
-                    </div>
-                    <div>
+                    </div> --}}
+                    {{-- <div>
                         <p class="font-semibold text-indigo-600">อื่นๆ (ระบุ):</p>
                         <p>{{ $drug->notes ?? '-' }}</p>
-                    </div>
+                    </div> --}}
                 </div>
 
                 @php
@@ -175,6 +175,7 @@
                         </ol>
                     @endforeach
                 </div>
+
 
                 {{-- สถานะความคืบหน้าโดยรวม --}}
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-lg text-gray-700 mt-6">
