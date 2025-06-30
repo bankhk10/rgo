@@ -89,30 +89,76 @@ class ChemicalRegistrationController extends Controller
     {
         // dd($request->all());
         $validatedData = $request->validate([
+            'chemical_imports_id' => 'nullable|integer', // Changed from string to integer based on schema
             'registration_number' => 'nullable|string',
+            'registration_number_pass' => 'nullable|string',
             'registration_expiry_date' => 'nullable|date',
+            'chemical_name_th' => 'nullable|string',
+            'chemical_name_en' => 'nullable|string',
+            'composition' => 'nullable|string', // text field can be validated as string
+            'manufacturer' => 'nullable|string',
+            'registrant' => 'nullable|string',
+            'registration_type' => 'nullable|string',
+            'importer' => 'nullable|string',
+            'distributor' => 'nullable|string',
+            'trade_name' => 'nullable|string',
+            'trade_name_at' => 'nullable|string',
+            'production_license_number' => 'nullable|string',
+            'production_license_expiry' => 'nullable|date',
+            'production_license_quantity' => 'nullable|string',
+            'possession_form_wo2' => 'nullable|string',
+            'possession_form_expiry' => 'nullable|date',
+            'application_received_date' => 'nullable|date',
+            'expired_license_number' => 'nullable|string',
+            'expired_at' => 'nullable|date',
+            'old_license_quantity' => 'nullable|string',
+            'packaging_size' => 'nullable|string',
+            'formula_of_ratio' => 'nullable|string',
+            'type_registration' => 'nullable|string',
+            'common_name' => 'nullable|string',
+            'packaging_size_details' => 'nullable|string',
+            'type_of_use' => 'nullable|string',
+            'date_submit_request' => 'nullable|date',
+            'request_number_1' => 'nullable|string',
+            'request_number_phase_1' => 'nullable|string',
+            'date_request_phase_3' => 'nullable|date',
+            'request_number_phase_3' => 'nullable|string',
+            'name_position' => 'nullable|string',
+            'remarks' => 'nullable|string', // text field can be validated as string
+            'new_or_old' => 'nullable|boolean', // boolean field
+            'step' => 'nullable|string',
+            'chemical_type' => 'nullable|string',
+            'company' => 'nullable|string',
+            'store_company_1' => 'nullable|string',
+            'store_company_2' => 'nullable|string',
+            'status' => 'nullable|string',
+            'is_active' => 'nullable|boolean', // boolean field
+            'is_deleted' => 'nullable|boolean', // boolean field
+            'image' => 'nullable|string',
+            'document' => 'nullable|string',
+            'progress' => 'nullable|numeric', // decimal field
+            'sub_progress' => 'nullable|numeric', // decimal field
+            'created_by' => 'nullable|string',
+            'updated_by' => 'nullable|string',
         ]);
 
         // 2. กำหนดค่า progress เริ่มต้น 0 (หรือจะเป็น 12.5% ถ้าต้องการ)
         $validatedData['progress'] = 0;
-
         try {
-            $product = ChemicalRegistration::create($validatedData);
-            Log::info( $product);
-
+            $chemical_registration = ChemicalRegistration::create($validatedData);
             // 4. สร้างหัวข้อย่อยเริ่มต้นให้กับขั้นตอนที่ 1 โดยไม่มีการเลือก (checked_at = null)
             // กำหนดหัวข้อย่อยขั้นตอน 1 จำนวน 3 หัวข้อ (ตาม requirement ล่าสุด)
             $subStepsStep1 = ['พิจารณาเบื้องต้น', 'อนุมัติแนวทาง', 'ส่งเรื่องต่อ'];
 
-            // foreach ($subStepsStep1 as $index => $label) {
-            //     DrugProgressStep::create([
-            //         'chemical_registrations_id' => $product->id,
-            //         'step_number' => 1,
-            //         'sub_step_index' => $index,
-            //         'sub_step_label' => $label,
-            //         'checked_at' => null,
-            //     ]);
-            // }
+            foreach ($subStepsStep1 as $index => $label) {
+                DrugProgressStep::create([
+                    'chemical_registrations_id' => $chemical_registration->id,
+                    'step_number' => 1,
+                    'sub_step_index' => $index,
+                    'sub_step_label' => $label,
+                    'checked_at' => null,
+                ]);
+            }
 
             // return redirect()->route('newregis.index')->with('success', 'บันทึกข้อมูลสำเร็จแล้ว!');
         } catch (\Exception $e) {

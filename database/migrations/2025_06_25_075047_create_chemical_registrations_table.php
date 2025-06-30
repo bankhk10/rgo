@@ -44,7 +44,7 @@ class CreateChemicalRegistrationsTable extends Migration
             $table->string('request_number_phase_1')->nullable(); //   เลข # Phase I
             $table->date('date_request_phase_3')->nullable(); //  วันที่ยื่น Phase III
             $table->string('request_number_phase_3')->nullable(); //   เลข # Phase III
-            $table->string('name_position')->nullable(); //  ชื่อการที่... ตำแหน่ง
+            $table->string('name_position')->nullable(); //  ชื่อการที่... ตำแfสูตรอัตรส่วนผสมของสารสำคัญและลักษณะหน่ง
             $table->text('remarks')->nullable(); // อื่นๆ (ระบุ)
             $table->boolean('new_or_old')->default(true); // สถานะของข้อมูล (true = ใหม่, false = เก่า)
             $table->string('step')->nullable(); // ขั้นตอนการขึ้นทะเบียน เช่น 'initial', 'review', 'approval'

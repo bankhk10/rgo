@@ -10,75 +10,119 @@
                 <div class="grid grid-cols-3 gap-6 text-lg text-gray-700 ml-16">
                     <div>
                         <p class="font-semibold text-indigo-600">เลขที่ทะเบียน</p>
-                        <form method="POST" action="{{ route('newregis.update-reg-number', $drug->id) }}">
+                        <form method="POST" action="{{ route('newregis.update', $drug->id) }}">
                             @csrf
                             @method('PUT')
                             <input type="text" name="registration_number"
                                 class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="กรอกเลขที่ทะเบียน"
-                                value="{{ $drug->registration_number }}" required>
-                    </div>
-                    <div>
-                        <p class="font-semibold text-indigo-600">วันที่ขึ้นทะเบียน</p>
-                        <input type="date" name="registration_date"
-                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1"
-                            value="{{ $drug->created_at->format('Y-m-d') }}" readonly>
+                                value="{{ $drug->registration_number }}">
                     </div>
                     <div>
                         <p class="font-semibold text-indigo-600">ชื่อสามัญ</p>
-                        <input type="text" name="common_name" class="border-gray-300 rounded-lg shadow-sm w-80 mt-1"
+                        <input type="text" name="common_name" class="border-gray-300 rounded-lg shadow-sm w-80 mt-1 bg-gray-200"
                             placeholder="กรอกชื่อสามัญ" value="{{ $drug->chemicalImport->chemical_name_th }}" readonly>
                     </div>
                     <div>
-                        <p class="font-semibold text-indigo-600">ชื่อทางการค้า</p>
-                        <input type="text" name="trade_name" class="border-gray-300 rounded-lg shadow-sm w-80 mt-1"
-                            placeholder="กรอกชื่อทางการค้า" value="{{ $drug->trade_name }}" readonly>
+                        <p class="font-semibold text-indigo-600">สูตรอัตรส่วนผสมสารสำคัญและลักษณะ</p>
+                        <input type="text" name="formula_of_ratio"
+                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1"
+                            placeholder="กรอกสูตรอัตรส่วนผสมของ..."
+                            value="{{ $drug->chemicalImport->formula_of_ratio }}">
                     </div>
                     <div>
-                        <p class="font-semibold text-indigo-600">ชื่อผู้ผลิตและแหล่งผลิต</p>
-                        <input type="text" name="manufacturer_name"
-                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="กรอกชื่อผู้ผลิต"
-                            value="{{ $drug->manufacturer_origin }}" readonly>
+                        <p class="font-semibold text-indigo-600">วันที่ยื่น Phase III</p>
+                        <input type="date" name="common_name" class="border-gray-300 rounded-lg shadow-sm w-80 mt-1"
+                            placeholder="วันที่ยื่น Phase III" value="{{ $drug->created_at->format('Y-m-d') }}"
+                            readonly>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-indigo-600">ผู้ขอขึ้นทะเบียน</p>
+                        <input type="text" name="request_number_phase_3"
+                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="ผู้ขอขึ้นทะเบียน"
+                            value="{{ $drug->chemicalImport->full_name }}">
+                    </div>
+                    <div>
+                        <p class="font-semibold text-indigo-600">ชนิดทะเบียน</p>
+                        <input type="text" name="request_number_phase_3"
+                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="ผู้ขอขึ้นทะเบียน"
+                            value="{{ $drug->chemicalImport->full_name }}">
+                    </div>
+                    <div>
+                        <p class="font-semibold text-indigo-600">ประเภททะเบียน</p>
+                        <input type="text" name="request_number_phase_3"
+                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="ผู้ขอขึ้นทะเบียน"
+                            value="{{ $drug->chemicalImport->full_name }}">
+                    </div>
+                    <div>
+                        <p class="font-semibold text-indigo-600">ชื่อการค้า</p>
+                        <input type="text" name="request_number_phase_3"
+                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="ผู้ขอขึ้นทะเบียน"
+                            value="{{ $drug->chemicalImport->full_name }}">
+                    </div>
+                    <div>
+                        <p class="font-semibold text-indigo-600">ชื่อการที่</p>
+                        <input type="text" name="request_number_phase_3"
+                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="ผู้ขอขึ้นทะเบียน"
+                            value="{{ $drug->chemicalImport->full_name }}">
                     </div>
                     <div>
                         <p class="font-semibold text-indigo-600">ชื่อผู้นำเข้า</p>
-                        <input type="text" name="importer_name"
-                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="กรอกชื่อผู้นำเข้า"
-                            value="{{ $drug->importer_name }}" readonly>
+                        <input type="text" name="request_number_phase_3"
+                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="ผู้ขอขึ้นทะเบียน"
+                            value="{{ $drug->chemicalImport->full_name }}">
                     </div>
                     <div>
-                        <p class="font-semibold text-indigo-600">ชื่อผู้จำหน่าย/ผู้จัดจำหน่าย</p>
-                        <input type="text" name="distributor_name"
-                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="กรอกชื่อผู้จำหน่าย"
-                            value="{{ $drug->distributor_name }}" readonly>
-                        {{-- <p>{{ $drug->distributor_name ?? '-' }}</p> --}}
+                        <p class="font-semibold text-indigo-600">ชื่อผู้จำหน่าย</p>
+                        <input type="text" name="request_number_phase_3"
+                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="ผู้ขอขึ้นทะเบียน"
+                            value="{{ $drug->chemicalImport->full_name }}">
                     </div>
                     <div>
-                        <p class="font-semibold text-indigo-600">วัตถุประสงค์และประเภทของการใช้</p>
-                        <input type="text" name="purpose_and_type_of_use"
-                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1"
-                            placeholder="กรอกวัตถุประสงค์และประเภทของการใช้"
-                            value="{{ $drug->purpose_and_type_of_use }}" readonly>
+                        <p class="font-semibold text-indigo-600">ชื่อผู้ผลิตและแหล่งผลิต</p>
+                        <input type="text" name="request_number_phase_3"
+                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="ผู้ขอขึ้นทะเบียน"
+                            value="{{ $drug->chemicalImport->full_name }}">
                     </div>
                     <div>
-                        <p class="font-semibold text-indigo-600">ชนิดและลักษณะหรือภาชนะบรรจุ</p>
-                        <input type="text" name="packaging_type"
-                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1"
-                            placeholder="กรอกชนิดและลักษณะหีบห่อหรือภาชนะบรรจุ" value="{{ $drug->packaging_type }}"
-                            readonly>
+                        <p class="font-semibold text-indigo-600">ประเภทของการใช้</p>
+                        <input type="text" name="request_number_phase_3"
+                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="ผู้ขอขึ้นทะเบียน"
+                            value="{{ $drug->chemicalImport->full_name }}">
                     </div>
-                    {{-- <div>
+                    <div>
+                        <p class="font-semibold text-indigo-600">รายละเอียดขนาดบรรจุ</p>
+                        <input type="text" name="request_number_phase_3"
+                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="ผู้ขอขึ้นทะเบียน"
+                            value="{{ $drug->chemicalImport->full_name }}">
+                    </div>
+                    <div>
+                        <p class="font-semibold text-indigo-600">วันที่ยื่นคำขอ</p>
+                        <input type="text" name="request_number_phase_3"
+                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="ผู้ขอขึ้นทะเบียน"
+                            value="{{ $drug->chemicalImport->full_name }}">
+                    </div>
+                    <div>
+                        <p class="font-semibold text-indigo-600">เลขที่รับคำขอ</p>
+                        <input type="text" name="request_number_phase_3"
+                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="ผู้ขอขึ้นทะเบียน"
+                            value="{{ $drug->chemicalImport->full_name }}">
+                    </div>
+                    <div>
+                        <p class="font-semibold text-indigo-600">เลข # Phase I</p>
+                        <input type="text" name="request_number_phase_3"
+                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="ผู้ขอขึ้นทะเบียน"
+                            value="{{ $drug->chemicalImport->full_name }}">
+                    </div>
+                    <div>
                         <p class="font-semibold text-indigo-600">อื่นๆ (ระบุ)</p>
-                        <textarea type="text" name="other_details" class="border-gray-300 rounded-lg shadow-sm w-64 mt-1"
-                            placeholder="กรอกรายละเอียดอื่นๆ" value="{{ $drug->notes }}" readonly>
-                    </div> --}}
+                        <input type="text" name="request_number_phase_3"
+                            class="border-gray-300 rounded-lg shadow-sm w-80 mt-1" placeholder="ผู้ขอขึ้นทะเบียน"
+                            value="{{ $drug->chemicalImport->full_name }}">
+                    </div>
 
 
-                    <div class="md:col-span-1.5">
-                        {{-- <label class="block text-gray-700 mb-1">หมายเหตุ</label> --}}
-                        <p class="font-semibold text-indigo-600">อื่นๆ (ระบุ)</p>
-                        <textarea name="note" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            rows="2"></textarea>
-                    </div>
+
+
                 </div>
 
                 <div class="text-center mt-4">

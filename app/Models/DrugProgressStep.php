@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class DrugProgressStep extends Model
 {
     protected $fillable = [
-        'product_id',
+        'chemical_registrations_id',
         'step_number',
         'sub_step_index',
         'sub_step_label',

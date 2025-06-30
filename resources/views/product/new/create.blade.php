@@ -16,18 +16,17 @@
                 <input type="hidden" id="hazardous_name_th" name="chemical_name_th" />
                 <input type="hidden" id="formulation_ratio"
                     class="w-full p-2 border rounded-lg bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    name="formulation_ratio44" readonly />
+                    name="common_name" readonly />
+                <input type="hidden" id="chemical_imports_id"
+                    class="w-full p-2 border rounded-lg bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    name="chemical_imports_id" readonly />
             </div>
-
             <div>
                 <label class="block text-gray-700 mb-1">สูตรอัตรส่วนผสมของสารสำคัญและลักษณะ</label>
                 <input type="text"
                     class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     name="formula_of_ratio" />
             </div>
-
-
-
             <div>
                 <label class="block text-gray-700 mb-1">วันที่ยื่น Phase III</label>
                 <input type="date" name="date_request_phase_3"
@@ -40,8 +39,6 @@
                     class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     name="request_number_phase_3" />
             </div>
-
-
             <div>
                 <label class="block text-gray-700 mb-1">ผู้ขอขึ้นทะเบียน</label>
                 <select class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -81,13 +78,6 @@
                     class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     name="trade_name" />
             </div>
-            {{-- <div>
-                <label class="block text-gray-700 mb-1">ชื่อการที่</label>
-                <input type="text"
-                    class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    name="name_position" />
-            </div> --}}
-
             <div>
                 <label class="block text-gray-700 mb-1">ชื่อการที่</label>
                 <select class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -153,26 +143,6 @@
                     class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" rows="2"></textarea>
             </div>
 
-            {{-- <div>
-                <label class="block text-gray-700 mb-1">วันที่ยื่นคำขอ</label>
-                <input type="date" name="date_submit_request"
-                    class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-            </div>
-
-            <div>
-                <label class="block text-gray-700 mb-1">เลขที่รับคำขอ</label>
-                <input type="text"
-                    class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    name="request_number_1" />
-            </div>
-
-            <div>
-                <label class="block text-gray-700 mb-1">เลข # Phase I</label>
-                <input type="text"
-                    class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    name="request_number_phase_1" />
-            </div> --}}
-
             <div class="md:col-span-2">
                 <div class="flex flex-col md:flex-row gap-4">
                     <div class="w-full md:w-1/3">
@@ -194,11 +164,6 @@
                     </div>
                 </div>
             </div>
-
-
-
-
-
             <div class="md:col-span-2">
                 <label class="block text-gray-700 mb-1">อื่นๆ (ระบุ)</label>
                 <textarea name="remarks" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -233,6 +198,8 @@
         const productSearchInput = document.getElementById("productSearch");
         const hazardousNameThInput = document.getElementById("hazardous_name_th");
         const formulationRatioInput = document.getElementById("formulation_ratio");
+        const chemicalImportsId = document.getElementById("chemical_imports_id");
+
         // เนื่องจาก expiry_date ถูกคอมเมนต์ออกไป ผมจะไม่รวมไว้ใน clearFields()
         // แต่ถ้าคุณต้องการนำกลับมาใช้ อย่าลืมเพิ่ม const สำหรับมันด้วย
         // const expiryDateInput = document.querySelector('input[name="expiry_date"]');
@@ -290,6 +257,7 @@
             productSearchInput.value = product.chemical_name_th || "";
             hazardousNameThInput.value = product.chemical_name_th || ""; // เติมค่าใน hidden field
             formulationRatioInput.value = product.formula || "";
+            chemicalImportsId.value = product.id || "";
             // ถ้ามีการนำ expiry_date กลับมาใช้ ให้ uncomment บรรทัดนี้
             // expiryDateInput.value = product.expiry_date || "";
         }
@@ -297,6 +265,7 @@
         function clearFields() {
             hazardousNameThInput.value = "";
             formulationRatioInput.value = "";
+            chemicalImportsId.value = "";
             // ถ้ามีการนำ expiry_date กลับมาใช้ ให้ uncomment บรรทัดนี้
             // if (expiryDateInput) {
             //     expiryDateInput.value = "";
