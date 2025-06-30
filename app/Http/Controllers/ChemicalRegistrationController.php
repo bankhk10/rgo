@@ -98,24 +98,25 @@ class ChemicalRegistrationController extends Controller
 
         try {
             $product = ChemicalRegistration::create($validatedData);
+            Log::info( $product);
 
             // 4. สร้างหัวข้อย่อยเริ่มต้นให้กับขั้นตอนที่ 1 โดยไม่มีการเลือก (checked_at = null)
             // กำหนดหัวข้อย่อยขั้นตอน 1 จำนวน 3 หัวข้อ (ตาม requirement ล่าสุด)
             $subStepsStep1 = ['พิจารณาเบื้องต้น', 'อนุมัติแนวทาง', 'ส่งเรื่องต่อ'];
 
-            foreach ($subStepsStep1 as $index => $label) {
-                DrugProgressStep::create([
-                    'product_id' => $product->id,
-                    'step_number' => 1,
-                    'sub_step_index' => $index,
-                    'sub_step_label' => $label,
-                    'checked_at' => null, // ยังไม่ได้เลือก
-                ]);
-            }
+            // foreach ($subStepsStep1 as $index => $label) {
+            //     DrugProgressStep::create([
+            //         'chemical_registrations_id' => $product->id,
+            //         'step_number' => 1,
+            //         'sub_step_index' => $index,
+            //         'sub_step_label' => $label,
+            //         'checked_at' => null,
+            //     ]);
+            // }
 
-            return redirect()->route('newregis.index')->with('success', 'บันทึกข้อมูลสำเร็จแล้ว!');
+            // return redirect()->route('newregis.index')->with('success', 'บันทึกข้อมูลสำเร็จแล้ว!');
         } catch (\Exception $e) {
-            // \Log::error("Error creating product: " . $e->getMessage());
+            \Log::error("Error creating product: " . $e->getMessage());
             return redirect()->back()->withInput()->withErrors(['error' => 'เกิดข้อผิดพลาดในการบันทึกข้อมูล: ' . $e->getMessage()]);
         }
     }

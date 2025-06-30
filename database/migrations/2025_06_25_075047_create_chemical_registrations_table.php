@@ -50,7 +50,8 @@ class CreateChemicalRegistrationsTable extends Migration
             $table->string('step')->nullable(); // ขั้นตอนการขึ้นทะเบียน เช่น 'initial', 'review', 'approval'
             $table->string('chemical_type')->nullable(); // ประเภทของวัตถุอันตราย เช่น สารเคมี, ยาฆ่าแมลง, ปุ๋
             $table->string('company')->nullable(); // ชื่อบริษัทที่ผลิตผลิตภัณฑ์
-            $table->string('store_company')->nullable(); // ชื่อบริษัทที่เก็บรักษาผลิตภัณฑ์
+            $table->string('store_company_1')->nullable(); // ชื่อบริษัทที่เก็บรักษาผลิตภัณฑ์ 1
+            $table->string('store_company_2')->nullable(); // ชื่อบริษัทที่เก็บรักษาผลิตภัณฑ์ 2
             $table->string('status')->default('pending'); // สถานะของการขึ้นทะเบียนผลิตภัณฑ์ เช่น pending, approved, rejected
             $table->boolean('is_active')->default(true); // สถานะการใช้งานของผลิตภัณฑ์ (true = ใช้งาน, false = ไม่ใช้งาน)
             $table->boolean('is_deleted')->default(false); // สถานะการลบของผลิตภัณฑ์ (true = ถูกลบ, false = ไม่ถูกลบ)
