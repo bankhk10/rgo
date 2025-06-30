@@ -10,11 +10,8 @@
 
 <body
     class="relative min-h-screen bg-gradient-to-b from-pink-200 via-purple-200 to-blue-200 flex items-center justify-center">
-
     <div class="">
-        {{-- <h1 class="text-5xl font-bold text-white text-center mb-2 whitespace-nowrap"> --}}
         <h1 class="text-5xl font-bold text-white text-center mb-12 whitespace-nowrap">
-
             ระบบทะเบียนออนไลน์ ( RGO )
         </h1>
         <h2 class="text-3xl text-white text-center mb-8">เข้าสู่ระบบ</h2>
@@ -34,8 +31,8 @@
 
 
             <div class="flex items-center bg-white rounded-full px-4 py-2 shadow-sm max-w-sm mx-auto">
-                <svg xmlns="http://www.w3.org/2000/svg"  class="w-5 h-5 text-gray-400 mr-2"  fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="size-6">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400 mr-2" fill="none"
+                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
                 </svg>

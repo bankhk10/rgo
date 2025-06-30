@@ -28,7 +28,7 @@
                         </div>
                     </div>
                     <h2 class="text-lg font-bold text-red-700 mb-1 tracking-wide">ทะเบียนสินค้าหมดอายุ</h2>
-                    <p class="text-4xl text-red-600 font-extrabold mb-1">{{ $expiredCount }}</p>
+                    <p class="text-4xl text-red-600 font-extrabold mb-1">{{ $expiredCount ?? 0 }}</p>
                 </div>
 
                 <div
@@ -43,7 +43,7 @@
                         </div>
                     </div>
                     <h2 class="text-lg font-bold text-yellow-700 mb-1 tracking-wide">ทะเบียนสินค้าใกล้หมดอายุ</h2>
-                    <p class="text-4xl text-yellow-600 font-extrabold mb-1">{{ $nearExpiryCount }}</p>
+                    <p class="text-4xl text-yellow-600 font-extrabold mb-1">{{ $nearExpiryCount ?? 0 }}</p>
                 </div>
 
                 <div
@@ -58,7 +58,7 @@
                         </div>
                     </div>
                     <h2 class="text-lg font-bold text-red-700 mb-1 tracking-wide">ทะเบียนผลิตหมดอายุ</h2>
-                    <p class="text-4xl text-red-600 font-extrabold mb-1">{{ $expiredCount }}</p>
+                    <p class="text-4xl text-red-600 font-extrabold mb-1">{{ $expiredCount ?? 0 }}</p>
                 </div>
 
                 <div
@@ -73,7 +73,7 @@
                         </div>
                     </div>
                     <h2 class="text-lg font-bold text-yellow-700 mb-1 tracking-wide">ทะเบียนผลิตใกล้หมดอายุ</h2>
-                    <p class="text-4xl text-yellow-600 font-extrabold mb-1">{{ $nearExpiryCount }}</p>
+                    <p class="text-4xl text-yellow-600 font-extrabold mb-1">{{ $nearExpiryCount ?? 0 }}</p>
                 </div>
             </div>
 

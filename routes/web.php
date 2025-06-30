@@ -87,7 +87,7 @@ Route::get('/renew/product', [RenewRegisController::class, 'index'])->name('rene
 Route::get('/manufactture/product', [ManufactureRegisController::class, 'index'])->name('manufactureregis.index');
 
 Route::resource('company', CompanyController::class);
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
 
 Route::get('/chemical-imports/import', [ChemicalImportController::class, 'showImportForm'])->name('chemical_imports.import.form');
