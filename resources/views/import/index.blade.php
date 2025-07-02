@@ -156,7 +156,6 @@
                 cancelButtonText: 'ยกเลิก'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // ส่งฟอร์มลบ
                     document.getElementById(`delete-form-${roleId}`).submit();
                 }
             });

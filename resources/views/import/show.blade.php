@@ -85,8 +85,6 @@
                 </div>
             </div>
 
-
-
             {{-- ปริมาณนำเข้า --}}
             <div>
                 <label class="block text-gray-700 mb-1">ปริมาณนำเข้า</label>
@@ -96,7 +94,7 @@
 
 
             <div class="md:col-span-2">
-                <label class="block text-gray-700 mb-1">ขนาดบรรจุ</label>
+                <label class="block text-gray-700 mb-1">รายละเอียดขนาดบรรจุ</label>
                 <textarea class="w-full p-2 border rounded-lg bg-gray-200" rows="2" disabled>{{ $import->packaging }}</textarea>
             </div>
 

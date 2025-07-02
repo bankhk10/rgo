@@ -33,7 +33,7 @@ class CreateChemicalRegistrationsTable extends Migration
             $table->string('expired_license_number')->nullable(); // เลขที่ใบอนุญาตหมดอายุ
             $table->date('expired_at')->nullable(); // หมดอายุเมื่อ
             $table->string('old_license_quantity')->nullable(); // ปริมาณผลิตใบอนุญาตเดิม
-            $table->string('packaging_size')->nullable(); // ขนาดบรรจุ
+            $table->string('packaging_size')->nullable(); // รายละเอียดขนาดบรรจุ
             $table->string('formula_of_ratio')->nullable(); // สูตรอัตรส่วนผสมของสารสำคัญและลักษณะ
             $table->string('type_registration')->nullable(); // ชนิดทะเบียน
             $table->string('common_name')->nullable(); // ชื่อสามัญ

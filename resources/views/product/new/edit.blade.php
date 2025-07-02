@@ -377,6 +377,7 @@
                                             <div>
                                                 <h5 class="text-sm font-bold text-gray-700 mb-2">{{ $dept }}
                                                 </h5>
+
                                                 <div class="space-y-2 pl-4">
                                                     @foreach ($subItems as $label)
                                                         @php

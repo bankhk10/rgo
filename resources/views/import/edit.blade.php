@@ -173,9 +173,9 @@
                     class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
             </div> --}}
 
-            {{-- ขนาดบรรจุ --}}
+            {{-- รายละเอียดขนาดบรรจุ --}}
             <div class="md:col-span-2">
-                <label class="block text-gray-700 mb-1">ขนาดบรรจุ</label>
+                <label class="block text-gray-700 mb-1">รายละเอียดขนาดบรรจุ</label>
                 <textarea name="packaging" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     rows="2">{{ old('packaging', $import->packaging) }}</textarea>
             </div>
