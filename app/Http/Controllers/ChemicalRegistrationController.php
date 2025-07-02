@@ -378,19 +378,42 @@ class ChemicalRegistrationController extends Controller
             ],
         ];
 
-        $stepItems = collect($rawStructure[$stepNumber] ?? [])->flatten()->values()->all();
-        foreach ($stepItems as $index => $label) {
-            DrugProgressStep::updateOrCreate(
-                [
-                    'chemical_registrations_id' => $drug->id,
-                    'step_number' => $stepNumber,
-                    'sub_step_index' => $index,
-                ],
-                [
-                    'sub_step_label' => $label,
-                    'checked_at' => in_array($index, $selectedIndexes) ? now() : null,
-                ]
-            );
+
+        $userDept = auth()->user()->department;
+        $departmentMap = [
+            'InternationalProcurement' => 'จัดซื้อต่างประเทศ',
+            'SalesDepartment' => 'ฝ่ายขาย',
+            'ResearchAndDevelopment' => 'วิจัยและพัฒนา',
+            'Academic' => 'แผนกวิชาการ',
+            'Registration' => 'แผนกทะเบียน',
+            'IT' => 'ไอที',
+        ];
+        $mappedDept = $departmentMap[$userDept] ?? $userDept;
+
+
+        $stepStructure = $rawStructure[$stepNumber] ?? [];
+        $flatItems = [];
+        $index = 0;
+
+        foreach ($stepStructure as $department => $subSteps) {
+            foreach ($subSteps as $label) {
+                if ($department === $mappedDept || auth()->user()->hasRole('admin') || auth()->user()->hasRole('manager')) {
+                    DrugProgressStep::updateOrCreate(
+                        [
+                            'chemical_registrations_id' => $drug->id,
+                            'step_number' => $stepNumber,
+                            'sub_step_index' => $index,
+                        ],
+                        [
+                            'sub_step_label' => $label,
+                            'department' => $department,
+                            'checked_at' => in_array($index, $selectedIndexes) ? now() : null,
+                        ]
+                    );
+                } else {
+                }
+                $index++;
+            }
         }
 
         // คำนวณ progress

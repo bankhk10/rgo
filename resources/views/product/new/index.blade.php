@@ -317,6 +317,46 @@
                                                 </a>
                                             @endcan
                                             @can('RegisterNew update')
+                                                @php
+                                                    $userDept = auth()->user()->department;
+                                                    $deptMap = [
+                                                        'InternationalProcurement' => 'จัดซื้อต่างประเทศ',
+                                                        'SalesDepartment' => 'ฝ่ายขาย',
+                                                        'ResearchAndDevelopment' => 'วิจัยและพัฒนา',
+                                                        'Academic' => 'แผนกวิชาการ',
+                                                        'Registration' => 'แผนกทะเบียน',
+                                                    ];
+                                                    $mappedDept = $deptMap[$userDept] ?? $userDept;
+
+                                                    // ดึงหัวข้อของแผนกในขั้นตอนล่าสุดที่ยังไม่ติ๊ก
+                                                    // $step = (int) ceil($product->progress / 12.5);
+                                                    $incomplete = \App\Models\DrugProgressStep::where(
+                                                        'chemical_registrations_id',
+                                                        $product->id,
+                                                    )
+                                                        // ->where('step_number', $step)
+                                                        ->where('department', $mappedDept)
+                                                        ->whereNull('checked_at')
+                                                        ->exists();
+                                                    // Log::info($step);
+
+                                                @endphp
+
+                                                @if ($incomplete || auth()->user()->hasRole('admin') || auth()->user()->hasRole('manager'))
+                                                    <a href="{{ route('newregis.edit', $product->id) }}"
+                                                        class="inline-flex items-center justify-center p-2 rounded-full text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
+                                                        title="แก้ไข">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                            class="w-6 h-6">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                                        </svg>
+                                                    </a>
+                                                @endif
+                                            @endcan
+
+                                            {{-- @can('RegisterNew update')
                                                 <a href="{{ route('newregis.edit', $product->id) }}"
                                                     class="inline-flex items-center justify-center p-2 rounded-full text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
                                                     title="แก้ไข">
@@ -327,7 +367,7 @@
                                                             d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                                                     </svg>
                                                 </a>
-                                            @endcan
+                                            @endcan --}}
                                             @can('RegisterNew delete')
                                                 <button onclick="confirmDelete({{ $product->id }})"
                                                     class="inline-flex items-center justify-center p-2 rounded-full text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all duration-200"

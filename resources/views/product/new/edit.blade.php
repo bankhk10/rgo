@@ -4,198 +4,213 @@
             <h1 class="text-4xl font-extrabold text-center text-indigo-700 mt-5 mb-10 tracking-wide">
                 รายละเอียดการขึ้นทะเบียนสินค้าใหม่
             </h1>
-
             <div class="bg-white rounded-2xl overflow-hidden shadow-lg p-8 border border-gray-200">
                 {{-- รายละเอียดข้อมูลยา --}}
-                <div class="grid grid-cols-3 gap-6 text-lg text-gray-700 ml-16">
-                    <div>
-                        <p class="font-semibold text-indigo-600 mb-1">เลขที่ทะเบียน</p>
-                        <form method="POST" action="{{ route('newregis.update', $drug->id) }}">
-                            @csrf
-                            @method('PUT')
-                            <input type="text" name="registration_number"
-                                class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1" placeholder="กรอกเลขที่ทะเบียน"
-                                value="{{ $drug->registration_number }}">
-                    </div>
-                    <div>
-                        <p class="font-semibold text-indigo-600 mb-1">ชื่อสามัญ</p>
-                        <input type="text" name="common_name"
-                            class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1 bg-gray-200"
-                            placeholder="กรอกชื่อสามัญ" value="{{ $drug->chemicalImport->chemical_name_th }}" readonly>
-                    </div>
-                    <div>
-                        <p class="font-semibold text-indigo-600 mb-1">สูตรอัตรส่วนผสมสารสำคัญและลักษณะ</p>
-                        <input type="text" name="formula_of_ratio"
-                            class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1"
-                            placeholder="กรอกสูตรอัตรส่วนผสมของ..." value="{{ $drug->formula_of_ratio }}">
-                    </div>
-                    <div>
-                        <p class="font-semibold text-indigo-600 mb-1">วันที่ยื่น Phase III</p>
-                        <input type="date" name="date_request_phase_3"
-                            class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1"
-                            value="{{ $drug->date_request_phase_3 }}">
-                    </div>
-                    <div>
-                        <p class="font-semibold text-indigo-600 mb-1">ผู้ขอขึ้นทะเบียน</p>
-                        <select class="w-5/6 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            name="registrant">
-                            <option value="">-- เลือก --</option>
-                            @foreach ($companies as $company)
-                                <option value="{{ $company->full_name }}"
-                                    {{ $drug->registrant == $company->full_name ? 'selected' : '' }}>
-                                    {{ $company->full_name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div>
-                        <p class="font-semibold text-indigo-600 mb-1">ชนิดทะเบียน</p>
-                        <select class="w-5/6 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            name="type_registration">
-                            <option value="">-- เลือก --</option>
-                            <option value="ชนิดที่ 2" {{ $drug->type_registration == 'ชนิดที่ 2' ? 'selected' : '' }}>
-                                ชนิดที่ 2</option>
-                            <option value="ชนิดที่ 3" {{ $drug->type_registration == 'ชนิดที่ 3' ? 'selected' : '' }}>
-                                ชนิดที่ 3</option>
-                        </select>
-                    </div>
-                    <div>
-                        <p class="font-semibold text-indigo-600 mb-1">ประเภททะเบียน</p>
-                        <select class="w-5/6 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            name="registration_type">
-                            <option value="">-- เลือก --</option>
-                            <option value="นำเข้า (สารเข้มข้น)"
-                                {{ $drug->registration_type == 'นำเข้า (สารเข้มข้น)' ? 'selected' : '' }}>นำเข้า
-                                (สารเข้มข้น)</option>
-                            <option value="นำเข้า (สำเร็จรูป)"
-                                {{ $drug->registration_type == 'นำเข้า (สำเร็จรูป)' ? 'selected' : '' }}>นำเข้า
-                                (สำเร็จรูป)</option>
-                            <option value="ผลิต (ผสมปรุงแต่ง)"
-                                {{ $drug->registration_type == 'ผลิต (ผสมปรุงแต่ง)' ? 'selected' : '' }}>ผลิต
-                                (ผสมปรุงแต่ง)</option>
-                            <option value="นำเข้า (แบ่งบรรจุ)"
-                                {{ $drug->registration_type == 'นำเข้า (แบ่งบรรจุ)' ? 'selected' : '' }}>นำเข้า
-                                (แบ่งบรรจุ)</option>
-                        </select>
-                    </div>
-                    <div>
-                        <p class="font-semibold text-indigo-600 mb-1">ชื่อการค้า</p>
-                        <input type="text" name="request_number_phase_3"
-                            class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1" placeholder="กรอกชื่อการค้า"
-                            value="{{ $drug->trade_name }}">
-                    </div>
-                    <div>
-                        <p class="font-semibold text-indigo-600 mb-1">ชื่อการที่</p>
-                        <select
-                            class="w-5/6 p-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            name="name_position">
-                            <option value="">-- เลือก --</option>
-                            <option value="T" {{ $drug->name_position == 'T' ? 'selected' : '' }}>T</option>
-                            <option value="-" {{ $drug->name_position == '-' ? 'selected' : '' }}>-</option>
-                            <option value="1" {{ $drug->name_position == '1' ? 'selected' : '' }}>1</option>
-                            <option value="2" {{ $drug->name_position == '2' ? 'selected' : '' }}>2</option>
-                            <option value="3" {{ $drug->name_position == '3' ? 'selected' : '' }}>3</option>
-                        </select>
-                    </div>
-                    <div>
-                        <p class="font-semibold text-indigo-600 mb-1">ชื่อผู้นำเข้า</p>
-                        <select class="w-5/6 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            name="importer">
-                            <option value="">-- เลือก --</option>
-                            @foreach ($companies as $company)
-                                <option value="{{ $company->full_name }}"
-                                    {{ $drug->importer == $company->full_name ? 'selected' : '' }}>
-                                    {{ $company->full_name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div>
-                        <p class="font-semibold text-indigo-600 mb-1">ชื่อผู้จำหน่าย</p>
-                        <select class="w-5/6 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            name="distributor">
-                            <option value="">-- เลือก --</option>
-                            @foreach ($companies as $company)
-                                <option value="{{ $company->full_name }}"
-                                    {{ $drug->distributor == $company->full_name ? 'selected' : '' }}>
-                                    {{ $company->full_name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div>
-                        <p class="font-semibold text-indigo-600 mb-1">ประเภทของการใช้</p>
-                        <select class="w-5/6 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            name="type_of_use">
-                            <option value="">-- เลือก --</option>
-                            <option value="A : Acaricide (สารกำจัดไรศัตรูพืช)"
-                                {{ $drug->type_of_use == 'A : Acaricide (สารกำจัดไรศัตรูพืช)' ? 'selected' : '' }}>A :
-                                Acaricide (สารกำจัดไรศัตรูพืช)</option>
-                            <option value="F : Fungicide (สารป้องกันกำจัดโรคพืช)"
-                                {{ $drug->type_of_use == 'F : Fungicide (สารป้องกันกำจัดโรคพืช)' ? 'selected' : '' }}>F
-                                : Fungicide (สารป้องกันกำจัดโรคพืช)</option>
-                            <option value="H : Herbicide (สารกำจัดวัชพืช)"
-                                {{ $drug->type_of_use == 'H : Herbicide (สารกำจัดวัชพืช)' ? 'selected' : '' }}>H :
-                                Herbicide (สารกำจัดวัชพืช)</option>
-                            <option value="I : Insecticide (สารกำจัดแมลง)"
-                                {{ $drug->type_of_use == 'I : Insecticide (สารกำจัดแมลง)' ? 'selected' : '' }}>I :
-                                Insecticide (สารกำจัดแมลง)</option>
-                            <option value="M : Molluscicide (สารกำจัดหอย)"
-                                {{ $drug->type_of_use == 'M : Molluscicide (สารกำจัดหอย)' ? 'selected' : '' }}>M :
-                                Molluscicide (สารกำจัดหอย)</option>
-                            <option value="N : Nematicide (สารกำจัดไส้เดือนฝอย)"
-                                {{ $drug->type_of_use == 'N : Nematicide (สารกำจัดไส้เดือนฝอย)' ? 'selected' : '' }}>N
-                                : Nematicide (สารกำจัดไส้เดือนฝอย)</option>
-                            <option value="P : PlantGrowthRegulators (สารควบคุมการเจริญเติบโตของพืช)"
-                                {{ $drug->type_of_use == 'P : PlantGrowthRegulators (สารควบคุมการเจริญเติบโตของพืช)' ? 'selected' : '' }}>
-                                P : PlantGrowthRegulators (สารควบคุมการเจริญเติบโตของพืช)</option>
-                            <option value="R : Rodenticide (สารกำจัดหนู)"
-                                {{ $drug->type_of_use == 'R : Rodenticide (สารกำจัดหนู)' ? 'selected' : '' }}>R :
-                                Rodenticide (สารกำจัดหนู)</option>
-                        </select>
-                    </div>
-                    <div class="md:col-span-3">
-                        <p class="font-semibold text-indigo-600 mb-1">รายละเอียดขนาดบรรจุ</p>
-                        <textarea name="packaging_size_details"
-                            class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" rows="2">{{ $drug->packaging_size_details }}</textarea>
-                    </div>
-                    <div>
-                        <p class="font-semibold text-indigo-600 mb-1">วันที่ยื่นคำขอ</p>
-                        <input type="date" name="date_submit_request"
-                            class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1"
-                            value="{{ $drug->date_submit_request }}">
-                    </div>
-                    <div>
-                        <p class="font-semibold text-indigo-600 mb-1">เลขที่รับคำขอ</p>
-                        <input type="text" name="request_number_1"
-                            class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1" placeholder="กรอกเลขที่รับคำขอ"
-                            value="{{ $drug->request_number_1 }}">
-                    </div>
-                    <div>
-                        <p class="font-semibold text-indigo-600 mb-1">เลข # Phase I</p>
-                        <input type="text" name="request_number_phase_1"
-                            class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1" placeholder="กรอกเลข # Phase I"
-                            value="{{ $drug->request_number_phase_1 }}">
-                    </div>
+                @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('manager'))
+                    <div class="grid grid-cols-3 gap-6 text-lg text-gray-700 ml-16">
+                        <div>
+                            <p class="font-semibold text-indigo-600 mb-1">เลขที่ทะเบียน</p>
+                            <form method="POST" action="{{ route('newregis.update', $drug->id) }}">
+                                @csrf
+                                @method('PUT')
+                                <input type="text" name="registration_number"
+                                    class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1"
+                                    placeholder="กรอกเลขที่ทะเบียน" value="{{ $drug->registration_number }}">
+                        </div>
+                        <div>
+                            <p class="font-semibold text-indigo-600 mb-1">ชื่อสามัญ</p>
+                            <input type="text" name="common_name"
+                                class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1 bg-gray-200"
+                                placeholder="กรอกชื่อสามัญ" value="{{ $drug->chemicalImport->chemical_name_th }}"
+                                readonly>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-indigo-600 mb-1">สูตรอัตรส่วนผสมสารสำคัญและลักษณะ</p>
+                            <input type="text" name="formula_of_ratio"
+                                class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1"
+                                placeholder="กรอกสูตรอัตรส่วนผสมของ..." value="{{ $drug->formula_of_ratio }}">
+                        </div>
+                        <div>
+                            <p class="font-semibold text-indigo-600 mb-1">วันที่ยื่น Phase III</p>
+                            <input type="date" name="date_request_phase_3"
+                                class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1"
+                                value="{{ $drug->date_request_phase_3 }}">
+                        </div>
+                        <div>
+                            <p class="font-semibold text-indigo-600 mb-1">ผู้ขอขึ้นทะเบียน</p>
+                            <select
+                                class="w-5/6 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                name="registrant">
+                                <option value="">-- เลือก --</option>
+                                @foreach ($companies as $company)
+                                    <option value="{{ $company->full_name }}"
+                                        {{ $drug->registrant == $company->full_name ? 'selected' : '' }}>
+                                        {{ $company->full_name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-indigo-600 mb-1">ชนิดทะเบียน</p>
+                            <select
+                                class="w-5/6 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                name="type_registration">
+                                <option value="">-- เลือก --</option>
+                                <option value="ชนิดที่ 2"
+                                    {{ $drug->type_registration == 'ชนิดที่ 2' ? 'selected' : '' }}>
+                                    ชนิดที่ 2</option>
+                                <option value="ชนิดที่ 3"
+                                    {{ $drug->type_registration == 'ชนิดที่ 3' ? 'selected' : '' }}>
+                                    ชนิดที่ 3</option>
+                            </select>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-indigo-600 mb-1">ประเภททะเบียน</p>
+                            <select
+                                class="w-5/6 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                name="registration_type">
+                                <option value="">-- เลือก --</option>
+                                <option value="นำเข้า (สารเข้มข้น)"
+                                    {{ $drug->registration_type == 'นำเข้า (สารเข้มข้น)' ? 'selected' : '' }}>นำเข้า
+                                    (สารเข้มข้น)</option>
+                                <option value="นำเข้า (สำเร็จรูป)"
+                                    {{ $drug->registration_type == 'นำเข้า (สำเร็จรูป)' ? 'selected' : '' }}>นำเข้า
+                                    (สำเร็จรูป)</option>
+                                <option value="ผลิต (ผสมปรุงแต่ง)"
+                                    {{ $drug->registration_type == 'ผลิต (ผสมปรุงแต่ง)' ? 'selected' : '' }}>ผลิต
+                                    (ผสมปรุงแต่ง)</option>
+                                <option value="นำเข้า (แบ่งบรรจุ)"
+                                    {{ $drug->registration_type == 'นำเข้า (แบ่งบรรจุ)' ? 'selected' : '' }}>นำเข้า
+                                    (แบ่งบรรจุ)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-indigo-600 mb-1">ชื่อการค้า</p>
+                            <input type="text" name="request_number_phase_3"
+                                class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1" placeholder="กรอกชื่อการค้า"
+                                value="{{ $drug->trade_name }}">
+                        </div>
+                        <div>
+                            <p class="font-semibold text-indigo-600 mb-1">ชื่อการที่</p>
+                            <select
+                                class="w-5/6 p-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                name="name_position">
+                                <option value="">-- เลือก --</option>
+                                <option value="T" {{ $drug->name_position == 'T' ? 'selected' : '' }}>T</option>
+                                <option value="-" {{ $drug->name_position == '-' ? 'selected' : '' }}>-</option>
+                                <option value="1" {{ $drug->name_position == '1' ? 'selected' : '' }}>1</option>
+                                <option value="2" {{ $drug->name_position == '2' ? 'selected' : '' }}>2</option>
+                                <option value="3" {{ $drug->name_position == '3' ? 'selected' : '' }}>3</option>
+                            </select>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-indigo-600 mb-1">ชื่อผู้นำเข้า</p>
+                            <select
+                                class="w-5/6 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                name="importer">
+                                <option value="">-- เลือก --</option>
+                                @foreach ($companies as $company)
+                                    <option value="{{ $company->full_name }}"
+                                        {{ $drug->importer == $company->full_name ? 'selected' : '' }}>
+                                        {{ $company->full_name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-indigo-600 mb-1">ชื่อผู้จำหน่าย</p>
+                            <select
+                                class="w-5/6 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                name="distributor">
+                                <option value="">-- เลือก --</option>
+                                @foreach ($companies as $company)
+                                    <option value="{{ $company->full_name }}"
+                                        {{ $drug->distributor == $company->full_name ? 'selected' : '' }}>
+                                        {{ $company->full_name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-indigo-600 mb-1">ประเภทของการใช้</p>
+                            <select
+                                class="w-5/6 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                name="type_of_use">
+                                <option value="">-- เลือก --</option>
+                                <option value="A : Acaricide (สารกำจัดไรศัตรูพืช)"
+                                    {{ $drug->type_of_use == 'A : Acaricide (สารกำจัดไรศัตรูพืช)' ? 'selected' : '' }}>
+                                    A :
+                                    Acaricide (สารกำจัดไรศัตรูพืช)</option>
+                                <option value="F : Fungicide (สารป้องกันกำจัดโรคพืช)"
+                                    {{ $drug->type_of_use == 'F : Fungicide (สารป้องกันกำจัดโรคพืช)' ? 'selected' : '' }}>
+                                    F
+                                    : Fungicide (สารป้องกันกำจัดโรคพืช)</option>
+                                <option value="H : Herbicide (สารกำจัดวัชพืช)"
+                                    {{ $drug->type_of_use == 'H : Herbicide (สารกำจัดวัชพืช)' ? 'selected' : '' }}>H :
+                                    Herbicide (สารกำจัดวัชพืช)</option>
+                                <option value="I : Insecticide (สารกำจัดแมลง)"
+                                    {{ $drug->type_of_use == 'I : Insecticide (สารกำจัดแมลง)' ? 'selected' : '' }}>I :
+                                    Insecticide (สารกำจัดแมลง)</option>
+                                <option value="M : Molluscicide (สารกำจัดหอย)"
+                                    {{ $drug->type_of_use == 'M : Molluscicide (สารกำจัดหอย)' ? 'selected' : '' }}>M :
+                                    Molluscicide (สารกำจัดหอย)</option>
+                                <option value="N : Nematicide (สารกำจัดไส้เดือนฝอย)"
+                                    {{ $drug->type_of_use == 'N : Nematicide (สารกำจัดไส้เดือนฝอย)' ? 'selected' : '' }}>
+                                    N
+                                    : Nematicide (สารกำจัดไส้เดือนฝอย)</option>
+                                <option value="P : PlantGrowthRegulators (สารควบคุมการเจริญเติบโตของพืช)"
+                                    {{ $drug->type_of_use == 'P : PlantGrowthRegulators (สารควบคุมการเจริญเติบโตของพืช)' ? 'selected' : '' }}>
+                                    P : PlantGrowthRegulators (สารควบคุมการเจริญเติบโตของพืช)</option>
+                                <option value="R : Rodenticide (สารกำจัดหนู)"
+                                    {{ $drug->type_of_use == 'R : Rodenticide (สารกำจัดหนู)' ? 'selected' : '' }}>R :
+                                    Rodenticide (สารกำจัดหนู)</option>
+                            </select>
+                        </div>
+                        <div class="md:col-span-3">
+                            <p class="font-semibold text-indigo-600 mb-1">รายละเอียดขนาดบรรจุ</p>
+                            <textarea name="packaging_size_details"
+                                class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" rows="2">{{ $drug->packaging_size_details }}</textarea>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-indigo-600 mb-1">วันที่ยื่นคำขอ</p>
+                            <input type="date" name="date_submit_request"
+                                class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1"
+                                value="{{ $drug->date_submit_request }}">
+                        </div>
+                        <div>
+                            <p class="font-semibold text-indigo-600 mb-1">เลขที่รับคำขอ</p>
+                            <input type="text" name="request_number_1"
+                                class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1" placeholder="กรอกเลขที่รับคำขอ"
+                                value="{{ $drug->request_number_1 }}">
+                        </div>
+                        <div>
+                            <p class="font-semibold text-indigo-600 mb-1">เลข # Phase I</p>
+                            <input type="text" name="request_number_phase_1"
+                                class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1"
+                                placeholder="กรอกเลข # Phase I" value="{{ $drug->request_number_phase_1 }}">
+                        </div>
 
-                    <div class="md:col-span-3">
-                        <p class="font-semibold text-indigo-600 mb-1">อื่นๆ (ระบุ)</p>
-                        <textarea name="remarks" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            rows="2">{{ $drug->remarks }}</textarea>
+                        <div class="md:col-span-3">
+                            <p class="font-semibold text-indigo-600 mb-1">อื่นๆ (ระบุ)</p>
+                            <textarea name="remarks" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                rows="2">{{ $drug->remarks }}</textarea>
+                        </div>
                     </div>
-                </div>
+                    <div class="text-center mt-4">
+                        <a href="{{ route('newregis.index') }}"
+                            class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg shadow transition duration-300 mr-2">
+                            <i class="fa-solid fa-arrow-left mr-2"></i> ย้อนกลับ
+                        </a>
+                        <button type="submit"
+                            class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg shadow transition">
+                            <i class="fa-solid fa-floppy-disk mr-1"></i> บันทึก
+                        </button>
+                    </div>
+                    </form>
 
-                <div class="text-center mt-4">
-                    <a href="{{ route('newregis.index') }}"
-                        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg shadow transition duration-300 mr-2">
-                        <i class="fa-solid fa-arrow-left mr-2"></i> ย้อนกลับ
-                    </a>
-                    <button type="submit"
-                        class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg shadow transition">
-                        <i class="fa-solid fa-floppy-disk mr-1"></i> บันทึก
-                    </button>
-                </div>
-                </form>
+                @endif
+
+
 
                 {{-- ไทม์ไลน์การขึ้นทะเบียน --}}
                 <div class="mt-8">
@@ -313,16 +328,45 @@
                             $completedStepFlags[$step] = $totalSubSteps > 0 && $completedCount === $totalSubSteps;
                         }
 
-                        $canEdit = auth()->user()->hasRole('admin') || auth()->user()->hasRole('manager');
+                        // $canEdit = auth()->user()->hasRole('admin') || auth()->user()->hasRole('manager');
+
                     @endphp
+
+                    @php
+                        function mapDepartment($enDept)
+                        {
+                            return [
+                                'InternationalProcurement' => 'จัดซื้อต่างประเทศ',
+                                'SalesDepartment' => 'ฝ่ายขาย',
+                                'ResearchAndDevelopment' => 'วิจัยและพัฒนา',
+                                'Academic' => 'แผนกวิชาการ',
+                                'Registration' => 'แผนกทะเบียน',
+                                'IT' => 'ไอที',
+                            ][$enDept] ?? $enDept; // fallback กรณีไม่มีใน map
+                        }
+
+                        $userDept = auth()->user()->department;
+                        $mappedUserDept = mapDepartment($userDept);
+                    @endphp
+
 
                     @foreach ($subStepsAll as $stepNumber => $stepData)
                         @php
                             $stepTitle = $stepData['title'];
-                            $departments = $stepData['items'];
+                            $allDepartments = $stepData['items'];
+                            $userDept = auth()->user()->department;
+
+                            // กรองแผนกให้เห็นเฉพาะของตัวเอง (ยกเว้น admin/manager)
+                            $departments =
+                                !auth()->user()->hasRole('admin') && !auth()->user()->hasRole('manager')
+                                    ? collect($allDepartments)
+                                        ->filter(fn($items, $deptName) => $deptName === $mappedUserDept)
+                                        ->all()
+                                    : $allDepartments;
+
                             $savedSubSteps = $drug->stepSubSteps($stepNumber)->get()->keyBy('sub_step_index');
 
-                            $allSubLabels = collect($departments)->flatten()->values()->all();
+                            $allSubLabels = collect($allDepartments)->flatten()->values()->all();
                             $totalSub = count($allSubLabels);
                             $completedCount = $savedSubSteps->whereNotNull('checked_at')->count();
                             $percent = $totalSub > 0 ? round(($completedCount / $totalSub) * 100, 2) : 0;
@@ -330,14 +374,16 @@
                             $completedStepFlags[$stepNumber] = $totalSub > 0 && $completedCount === $totalSub;
 
                             $canEdit = auth()->user()->hasRole('admin') || auth()->user()->hasRole('manager');
+                            // auth()->user()->hasRole('staff InternationalProcurement');
                             $previousStepsCompleted = collect(range(1, $stepNumber - 1))->every(
                                 fn($s) => $completedStepFlags[$s] ?? false,
                             );
                             $isVisible = $stepNumber === 1 || $previousStepsCompleted;
-                            $isEditable = $canEdit && $isVisible && $percent < 100;
+                            $isEditable =
+                                $canEdit || (!auth()->user()->hasRole('admin') && !$canEdit && $percent < 100);
                         @endphp
-                        @if ($isVisible)
-                            {{-- โค้ดแสดงแบบฟอร์มของขั้นตอนนี้ --}}
+
+                        @if ($isVisible && count($departments) > 0)
                             <form method="POST" action="{{ route('newregis.update-subprogress', $drug->id) }}">
                                 @csrf
                                 @method('PUT')
@@ -358,63 +404,98 @@
                                         <div class="text-xs text-gray-500 text-right mt-1">{{ $percent }}%</div>
                                     </div>
 
+                                    @php
+                                        $userCheckedCount = 0;
+                                        $userTotalCount = 0;
+
+                                        foreach ($departments as $dept => $subItems) {
+                                            if ($dept === $mappedUserDept) {
+                                                foreach ($subItems as $label) {
+                                                    $record = $savedSubSteps[$userTotalCount] ?? null;
+                                                    if ($record && $record->checked_at) {
+                                                        $userCheckedCount++;
+                                                    }
+                                                    $userTotalCount++;
+                                                }
+                                            } else {
+                                                $userTotalCount += count($subItems);
+                                            }
+                                        }
+
+                                        $userDeptComplete =
+                                            $userTotalCount > 0 && $userCheckedCount === $userTotalCount;
+                                    @endphp
+
                                     {{-- รายการ checkbox --}}
                                     <div class="space-y-6">
                                         @php $checkboxIndex = 0; @endphp
-                                        @php
-                                            $userDept = auth()->user()->department;
 
-                                            if (auth()->user()->hasRole('admin')) {
-                                                Log::info('admin');
-                                            }
-                                            // {{ Log::info(1) }}
-                                            // {{ Log::info($userDept) }}
-                                            // {{ Log::info(auth()->user()->position) }}
+                                        @foreach ($allDepartments as $dept => $subItems)
+                                            @php
+                                                $showDept =
+                                                    auth()->user()->hasRole('admin') ||
+                                                    auth()->user()->hasRole('manager') ||
+                                                    $dept === $mappedUserDept;
+                                            @endphp
+                                            @if ($showDept)
+                                                <div>
+                                                    <h5 class="text-sm font-bold text-gray-700 mb-2">
+                                                        {{ $dept }}</h5>
+                                                    <div class="space-y-2 pl-4">
+                                                        @foreach ($subItems as $label)
+                                                            @php
+                                                                $record = $savedSubSteps[$checkboxIndex] ?? null;
+                                                                $isChecked = $record && $record->checked_at;
+                                                            @endphp
+                                                            <div class="flex items-center justify-between">
+                                                                <div class="flex items-center space-x-3">
+                                                                    <input type="checkbox" name="sub_steps[]"
+                                                                        id="substep_{{ $stepNumber }}_{{ $checkboxIndex }}"
+                                                                        value="{{ $checkboxIndex }}"
+                                                                        {{ $isChecked ? 'checked' : '' }}
+                                                                        {{-- {{ !$isEditable || $dept !== $mappedUserDept || $userDeptComplete ? 'disabled' : '' }} --}}
+                                                                        {{ !$isEditable || (!auth()->user()->hasRole('admin') && !auth()->user()->hasRole('manager') && $dept !== $mappedUserDept) || $userDeptComplete ? 'disabled' : '' }}
+                                                                        class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
 
-                                            // ถ้าไม่ใช่ admin หรือ manager ให้เห็นเฉพาะหัวข้อของแผนกตัวเอง
-                                            if (
-                                                !auth()->user()->position == 'manager' &&
-                                                !auth()->user()->position == 'head'
-                                            ) {
-                                                $departments = collect($departments)
-                                                    ->filter(fn($items, $deptName) => $deptName === $userDept)
-                                                    ->all();
-                                            }
-                                        @endphp
-                                        @foreach ($departments as $dept => $subItems)
-                                            {{ Log::info(2) }}
-
-                                            {{-- {{  Log::info($userDept); }} --}}
-
-                                            <div>
-                                                <h5 class="text-sm font-bold text-gray-700 mb-2">{{ $dept }}
-                                                </h5>
-
-                                                <div class="space-y-2 pl-4">
-                                                    @foreach ($subItems as $label)
-                                                        @php
-                                                            $record = $savedSubSteps[$checkboxIndex] ?? null;
-                                                            $isChecked = $record && $record->checked_at;
-                                                        @endphp
-                                                        <div class="flex items-center justify-between">
-                                                            <div class="flex items-center space-x-3">
-                                                                <input type="checkbox" name="sub_steps[]"
-                                                                    id="vehicle1_{{ $label }}"
-                                                                    value="{{ $checkboxIndex }}"
-                                                                    {{ $isChecked ? 'checked' : '' }}
-                                                                    {{ !$isEditable ? 'disabled' : '' }}
-                                                                    class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                                                                <label for="vehicle1_{{ $label }}"
-                                                                    class="text-sm text-gray-800">{{ $label }}</label>
+                                                                    <label
+                                                                        for="substep_{{ $stepNumber }}_{{ $checkboxIndex }}"
+                                                                        class="text-sm text-gray-800">{{ $label }}</label>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        @php $checkboxIndex++; @endphp
-                                                    @endforeach
+                                                            @php $checkboxIndex++; @endphp
+                                                        @endforeach
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            @else
+                                                @php $checkboxIndex += count($subItems); @endphp
+                                            @endif
                                         @endforeach
                                     </div>
-                                    @if ($isEditable && $percent < 100)
+
+                                    @php
+                                        // ตรวจสอบว่าแผนกของผู้ใช้งานติ๊กครบแล้วหรือยัง
+                                        $userCheckedCount = 0;
+                                        $userTotalCount = 0;
+
+                                        foreach ($departments as $dept => $subItems) {
+                                            if ($dept === $mappedUserDept) {
+                                                foreach ($subItems as $label) {
+                                                    $record = $savedSubSteps[$userTotalCount] ?? null;
+                                                    if ($record && $record->checked_at) {
+                                                        $userCheckedCount++;
+                                                    }
+                                                    $userTotalCount++;
+                                                }
+                                            } else {
+                                                $userTotalCount += count($subItems); // นับ index ต่อ
+                                            }
+                                        }
+
+                                        $userDeptComplete =
+                                            $userTotalCount > 0 && $userCheckedCount === $userTotalCount;
+                                    @endphp
+
+                                    @if ($isEditable && !$userDeptComplete)
                                         <div class="text-center mt-4">
                                             <a href="{{ route('newregis.index') }}"
                                                 class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg shadow transition duration-300 mr-2">
@@ -426,10 +507,12 @@
                                             </button>
                                         </div>
                                     @endif
+
                                 </div>
                             </form>
                         @endif
                     @endforeach
+
                 </div>
             </div>
         </div>
