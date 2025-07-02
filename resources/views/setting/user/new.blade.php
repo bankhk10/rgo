@@ -30,12 +30,12 @@
                 <select name="department"
                     class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <option value="">-- เลือกแผนก --</option>
-                    <option value="regis" {{ old('department') == 'regis' ? 'selected' : '' }}>ทะเบียน</option>
-                    <option value="po" {{ old('department') == 'po' ? 'selected' : '' }}>จัดซื้อต่างประเทศ</option>
-                    <option value="rd" {{ old('department') == 'rd' ? 'selected' : '' }}>วิจัยและพัฒนา</option>
-                    <option value="acad" {{ old('department') == 'acad' ? 'selected' : '' }}>วิชาการ</option>
-                    <option value="sale" {{ old('department') == 'sale' ? 'selected' : '' }}>ฝ่ายขาย</option>
-                    <option value="it" {{ old('department') == 'it' ? 'selected' : '' }}>ไอที</option>
+                    <option value="Registration" {{ old('department') == 'Registration' ? 'selected' : '' }}>ทะเบียน</option>
+                    <option value="InternationalProcurement" {{ old('department') == 'InternationalProcurement' ? 'selected' : '' }}>จัดซื้อต่างประเทศ</option>
+                    <option value="ResearchAndDevelopment" {{ old('department') == 'ResearchAndDevelopment' ? 'selected' : '' }}>วิจัยและพัฒนา</option>
+                    <option value="Academic" {{ old('department') == 'Academic' ? 'selected' : '' }}>วิชาการ</option>
+                    <option value="SalesDepartment" {{ old('department') == 'SalesDepartment' ? 'selected' : '' }}>ฝ่ายขาย</option>
+                    <option value="IT" {{ old('department') == 'IT' ? 'selected' : '' }}>ไอที</option>
                 </select>
                 @error('department')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
@@ -44,8 +44,13 @@
 
             <div>
                 <label class="block text-gray-700 mb-1">ตำแหน่ง</label>
-                <input type="text" name="position" value="{{ old('position') }}" placeholder="ใส่ตำแหน่ง"
-                    class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <select name="position"
+                    class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">-- เลือกตำแหน่ง --</option>
+                    <option value="manager">ผู้จัดการแผนก</option>
+                    <option value="head">หัวหน้า</option>
+                    <option value="staff">พนักงาน</option>
+                </select>
                 @error('position')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
                 @enderror

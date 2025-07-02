@@ -28,17 +28,20 @@
                 <select name="department"
                     class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <option value="">-- เลือกแผนก --</option>
-                    <option value="regis" {{ old('department', $user->department) == 'regis' ? 'selected' : '' }}>
-                        ทะเบียน</option>
-                    <option value="po" {{ old('department', $user->department) == 'po' ? 'selected' : '' }}>
+                    <option value="Registration"
+                        {{ old('department', $user->department) == 'Registration' ? 'selected' : '' }}>ทะเบียน</option>
+                    <option value="InternationalProcurement"
+                        {{ old('department', $user->department) == 'InternationalProcurement' ? 'selected' : '' }}>
                         จัดซื้อต่างประเทศ</option>
-                    <option value="rd" {{ old('department', $user->department) == 'rd' ? 'selected' : '' }}>
+                    <option value="ResearchAndDevelopment"
+                        {{ old('department', $user->department) == 'ResearchAndDevelopment' ? 'selected' : '' }}>
                         วิจัยและพัฒนา</option>
-                    <option value="acad" {{ old('department', $user->department) == 'acad' ? 'selected' : '' }}>
+                    <option value="Academic" {{ old('department', $user->department) == 'Academic' ? 'selected' : '' }}>
                         วิชาการ</option>
-                    <option value="sale" {{ old('department', $user->department) == 'sale' ? 'selected' : '' }}>
-                        ฝ่ายขาย</option>
-                    <option value="it" {{ old('department', $user->department) == 'it' ? 'selected' : '' }}>ไอที
+                    <option value="SalesDepartment"
+                        {{ old('department', $user->department) == 'SalesDepartment' ? 'selected' : '' }}>ฝ่ายขาย
+                    </option>
+                    <option value="IT" {{ old('department', $user->department) == 'IT' ? 'selected' : '' }}>ไอที
                     </option>
                 </select>
                 @error('department')
@@ -48,8 +51,16 @@
 
             <div>
                 <label class="block text-gray-700 mb-1">ตำแหน่ง</label>
-                <input type="text" name="position" value="{{ old('position', $user->position) }}"
-                    class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <select name="position"
+                    class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">-- เลือกตำแหน่ง --</option>
+                    <option value="manager" {{ old('position', $user->position) == 'manager' ? 'selected' : '' }}>
+                        ผู้จัดการแผนก</option>
+                    <option value="head" {{ old('position', $user->position) == 'head' ? 'selected' : '' }}>หัวหน้า
+                    </option>
+                    <option value="staff" {{ old('position', $user->position) == 'staff' ? 'selected' : '' }}>พนักงาน
+                    </option>
+                </select>
                 @error('position')
                     <p class="text-red-500 text-sm">{{ $message }}</p>
                 @enderror

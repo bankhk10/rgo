@@ -374,6 +374,7 @@
                                             }
                                         @endphp
                                         @foreach ($departments as $dept => $subItems)
+                                            
                                             <div>
                                                 <h5 class="text-sm font-bold text-gray-700 mb-2">{{ $dept }}
                                                 </h5>
@@ -400,6 +401,7 @@
                                                     @endforeach
                                                 </div>
                                             </div>
+
                                         @endforeach
                                     </div>
                                     @if ($isEditable && $percent < 100)
