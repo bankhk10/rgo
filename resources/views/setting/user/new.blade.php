@@ -30,11 +30,16 @@
                 <select name="department"
                     class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <option value="">-- เลือกแผนก --</option>
-                    <option value="Registration" {{ old('department') == 'Registration' ? 'selected' : '' }}>ทะเบียน</option>
-                    <option value="InternationalProcurement" {{ old('department') == 'InternationalProcurement' ? 'selected' : '' }}>จัดซื้อต่างประเทศ</option>
-                    <option value="ResearchAndDevelopment" {{ old('department') == 'ResearchAndDevelopment' ? 'selected' : '' }}>วิจัยและพัฒนา</option>
+                    <option value="Registration" {{ old('department') == 'Registration' ? 'selected' : '' }}>ทะเบียน
+                    </option>
+                    <option value="InternationalProcurement"
+                        {{ old('department') == 'InternationalProcurement' ? 'selected' : '' }}>จัดซื้อต่างประเทศ
+                    </option>
+                    <option value="ResearchAndDevelopment"
+                        {{ old('department') == 'ResearchAndDevelopment' ? 'selected' : '' }}>วิจัยและพัฒนา</option>
                     <option value="Academic" {{ old('department') == 'Academic' ? 'selected' : '' }}>วิชาการ</option>
-                    <option value="SalesDepartment" {{ old('department') == 'SalesDepartment' ? 'selected' : '' }}>ฝ่ายขาย</option>
+                    <option value="SalesDepartment" {{ old('department') == 'SalesDepartment' ? 'selected' : '' }}>
+                        ฝ่ายขาย</option>
                     <option value="IT" {{ old('department') == 'IT' ? 'selected' : '' }}>ไอที</option>
                 </select>
                 @error('department')
@@ -107,11 +112,38 @@
             <div class="md:col-span-2">
                 <h3 class="text-lg font-medium text-gray-700 mb-2 mt-4">สิทธิ์</h3>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    @php
+                        function translateRoleName($roleName)
+                        {
+                            $positions = [
+                                'manager' => 'ผู้จัดการแผนก',
+                                'head' => 'หัวหน้า',
+                                'staff' => 'พนักงาน',
+                            ];
+
+                            $departments = [
+                                'Registration' => 'ทะเบียน',
+                                'InternationalProcurement' => 'จัดซื้อต่างประเทศ',
+                                'ResearchAndDevelopment' => 'วิจัยและพัฒนา',
+                                'Academic' => 'วิชาการ',
+                                'SalesDepartment' => 'ฝ่ายขาย',
+                                'IT' => 'ไอที',
+                            ];
+
+                            $parts = explode(' ', $roleName);
+                            $position = $positions[$parts[0]] ?? $parts[0];
+                            $department = $departments[$parts[1] ?? ''] ?? ($parts[1] ?? '');
+
+                            return trim("$position $department");
+                        }
+                    @endphp
                     @foreach ($roles as $role)
                         <label class="flex items-center">
+                            {{-- <span class="font-medium">{{ translateRoleName($role->name) }}</span> --}}
+
                             <input type="checkbox" name="roles[]" value="{{ $role->id }}"
                                 class="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500">
-                            <span class="ml-2 text-gray-700">{{ $role->name }}</span>
+                            <span class="ml-2 text-gray-700">{{translateRoleName($role->name)}}</span>
                         </label>
                     @endforeach
                 </div>

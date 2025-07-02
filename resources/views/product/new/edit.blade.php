@@ -363,10 +363,18 @@
                                         @php $checkboxIndex = 0; @endphp
                                         @php
                                             $userDept = auth()->user()->department;
+
+                                            if (auth()->user()->hasRole('admin')) {
+                                                Log::info('admin');
+                                            }
+                                            // {{ Log::info(1) }}
+                                            // {{ Log::info($userDept) }}
+                                            // {{ Log::info(auth()->user()->position) }}
+
                                             // ถ้าไม่ใช่ admin หรือ manager ให้เห็นเฉพาะหัวข้อของแผนกตัวเอง
                                             if (
-                                                !auth()->user()->hasRole('admin') &&
-                                                !auth()->user()->hasRole('manager')
+                                                !auth()->user()->position == 'manager' &&
+                                                !auth()->user()->position == 'head'
                                             ) {
                                                 $departments = collect($departments)
                                                     ->filter(fn($items, $deptName) => $deptName === $userDept)
@@ -374,7 +382,10 @@
                                             }
                                         @endphp
                                         @foreach ($departments as $dept => $subItems)
-                                            
+                                            {{ Log::info(2) }}
+
+                                            {{-- {{  Log::info($userDept); }} --}}
+
                                             <div>
                                                 <h5 class="text-sm font-bold text-gray-700 mb-2">{{ $dept }}
                                                 </h5>
@@ -401,7 +412,6 @@
                                                     @endforeach
                                                 </div>
                                             </div>
-
                                         @endforeach
                                     </div>
                                     @if ($isEditable && $percent < 100)

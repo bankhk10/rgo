@@ -8,19 +8,45 @@
                     </h1>
 
                 </div>
-                <form method="POST"
-                      action="{{ route('admin.roles.store') }}">
+                <form method="POST" action="{{ route('admin.roles.store') }}">
                     @csrf
                     @method('post')
                     <div class="mb-4">
-                        <label for="role_name"
-                               class="inline-block text-xl mt-10 mb-4 text-gray-600 mr-4">ชื่อสิทธิ์การใช้งาน : </label>
-                        <input id="role_name"
-                               type="text"
-                               name="name"
-                               value="{{ old('name') }}"
-                               placeholder="ใส่ชื่อสิทธิ์"
-                               class="inline-block w-auto px-4 py-2 rounded-lg border border-gray-300 focus:blue-green-500 focus:ring-2 focus:ring-gray-200 text-gray-800 shadow transition placeholder-gray-400 mt-2" />
+
+                        <div class="flex flex-wrap items-center gap-4">
+                            <input id="role_combined_name" type="hidden" name="name" value="{{ old('name') }}"
+                                placeholder="ชื่อสิทธิ์การใช้งาน"
+                                class="bg-gray-200 flex-1 min-w-xl px-4 py-2 rounded-lg border border-gray-300 focus:blue-green-500 focus:ring-2 focus:ring-gray-200 text-gray-800 shadow transition placeholder-gray-400"
+                                readonly />
+                        </div>
+
+                        <div class="flex flex-wrap items-center gap-4 mt-6 w-6/12">
+                            <label class="text-xl text-gray-600 whitespace-nowrap">ชื่อสิทธิ์การใช้งาน :</label>
+                            <select name="position" id="select_position"
+                                class="flex-1 min-w-[150px] p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="">-- เลือกตำแหน่ง --</option>
+                                <option value="manager">ผู้จัดการแผนก</option>
+                                <option value="head">หัวหน้า</option>
+                                <option value="staff">พนักงาน</option>
+                            </select>
+                            <select name="department" id="select_department"
+                                class="flex-1 min-w-[150px] p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="">-- เลือกแผนก --</option>
+                                <option value="Registration"
+                                    {{ old('department') == 'Registration' ? 'selected' : '' }}>ทะเบียน</option>
+                                <option value="InternationalProcurement"
+                                    {{ old('department') == 'InternationalProcurement' ? 'selected' : '' }}>
+                                    จัดซื้อต่างประเทศ</option>
+                                <option value="ResearchAndDevelopment"
+                                    {{ old('department') == 'ResearchAndDevelopment' ? 'selected' : '' }}>วิจัยและพัฒนา
+                                </option>
+                                <option value="Academic" {{ old('department') == 'Academic' ? 'selected' : '' }}>วิชาการ
+                                </option>
+                                <option value="SalesDepartment"
+                                    {{ old('department') == 'SalesDepartment' ? 'selected' : '' }}>ฝ่ายขาย</option>
+                                <option value="IT" {{ old('department') == 'IT' ? 'selected' : '' }}>ไอที</option>
+                            </select>
+                        </div>
                         @error('name')
                             <p class="text-red-500 text-xs italic">{{ $message }}</p>
                         @enderror
@@ -48,11 +74,10 @@
                                                 <td class="py-4 px-8 text-center">
                                                     @if (isset($actions[$action]))
                                                         <input type="checkbox"
-                                                               id="permission_{{ $actions[$action]->id }}"
-                                                               name="permissions[]"
-                                                               value="{{ $actions[$action]->id }}"
-                                                               class="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
-                                                               @if (is_array(old('permissions')) && in_array($actions[$action]->id, old('permissions'))) checked @endif>
+                                                            id="permission_{{ $actions[$action]->id }}"
+                                                            name="permissions[]" value="{{ $actions[$action]->id }}"
+                                                            class="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                                                            @if (is_array(old('permissions')) && in_array($actions[$action]->id, old('permissions'))) checked @endif>
                                                     @endif
                                                 </td>
                                             @endforeach
@@ -64,11 +89,11 @@
                     </div>
                     <div class="text-center mt-8">
                         <a href="{{ route('admin.roles.index') }}"
-                           class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg shadow transition duration-300 mr-2">
+                            class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg shadow transition duration-300 mr-2">
                             <i class="fa-solid fa-arrow-left mr-2"></i> ย้อนกลับ
                         </a>
                         <button type="submit"
-                                class="bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline shadow-md ml-2">
+                            class="bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline shadow-md ml-2">
                             บันทึก
                         </button>
                     </div>
@@ -76,6 +101,37 @@
             </div>
 
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const selectPosition = document.getElementById('select_position');
+            const selectDepartment = document.getElementById('select_department');
+            const combinedNameInput = document.getElementById('role_combined_name');
+
+            function updateCombinedName() {
+                const positionText = selectPosition.value;
+                const departmentText = selectDepartment.value;
+
+                let combinedText = '';
+                if (positionText && positionText !== '-- เลือกตำแหน่ง --') {
+                    combinedText += positionText;
+                }
+                if (departmentText && departmentText !== '-- เลือกแผนก --') {
+                    if (combinedText) { // ถ้ามีตำแหน่งแล้ว ให้เพิ่มช่องว่าง
+                        combinedText += ' ';
+                    }
+                    combinedText += departmentText;
+                }
+
+                combinedNameInput.value = combinedText;
+            }
+
+            selectPosition.addEventListener('change', updateCombinedName);
+            selectDepartment.addEventListener('change', updateCombinedName);
+            updateCombinedName();
+        });
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @if (session('success'))
         <script>

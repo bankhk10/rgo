@@ -6,30 +6,50 @@
                     <h1 class="text-4xl font-extrabold text-gray-800 tracking-wide">
                         <span class="text-gray-600">แก้ไขสิทธิ์การใช้งาน</span>
                     </h1>
-                    {{-- <div>
-                        <a href="{{ route('admin.roles.index') }}"
-                           class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg shadow transition duration-300">
-                            <i class="fa-solid fa-arrow-left mr-2"></i> ย้อนกลับ
-                        </a>
-                    </div> --}}
                 </div>
-                <form method="POST"
-                      action="{{ route('admin.roles.update', $role->id) }}">
+
+                <form method="POST" action="{{ route('admin.roles.update', $role->id) }}">
                     @csrf
                     @method('put')
-                    <div class="mb-4">
-                        <label for="role_name"
-                               class="inline-block text-xl mt-10 mb-4 text-gray-600 mr-4">ชื่อสิทธิ์การใช้งาน : </label>
-                        <input id="role_name"
-                               type="text"
-                               name="name"
-                               value="{{ old('name', $role->name) }}"
-                               placeholder="ใส่ชื่อสิทธิ์"
-                               class="inline-block w-auto px-4 py-2 rounded-lg border border-gray-300 focus:blue-green-500 focus:ring-2 focus:ring-gray-200 text-gray-800 shadow transition placeholder-gray-400 mt-2" />
-                        @error('name')
-                            <p class="text-red-500 text-xs italic">{{ $message }}</p>
-                        @enderror
+
+                    {{-- Input ที่เก็บค่ารวมตำแหน่ง+แผนก --}}
+                    <input id="role_combined_name" type="hidden" name="name"
+                        value="{{ old('name', $role->name) }}" readonly />
+
+                    <div class="flex flex-wrap items-center gap-4 mt-6 w-6/12">
+                        <label class="text-xl text-gray-600 whitespace-nowrap">ชื่อสิทธิ์การใช้งาน :</label>
+                        <select name="position" id="select_position"
+                            class="flex-1 min-w-[150px] p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">-- เลือกตำแหน่ง --</option>
+                            <option value="manager" {{ Str::contains($role->name, 'manager') ? 'selected' : '' }}>ผู้จัดการแผนก</option>
+                            <option value="head" {{ Str::contains($role->name, 'head') ? 'selected' : '' }}>หัวหน้า</option>
+                            <option value="staff" {{ Str::contains($role->name, 'staff') ? 'selected' : '' }}>พนักงาน</option>
+                        </select>
+
+                        <select name="department" id="select_department"
+                            class="flex-1 min-w-[150px] p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">-- เลือกแผนก --</option>
+                            @php
+                                $departments = [
+                                    'Registration' => 'ทะเบียน',
+                                    'InternationalProcurement' => 'จัดซื้อต่างประเทศ',
+                                    'ResearchAndDevelopment' => 'วิจัยและพัฒนา',
+                                    'Academic' => 'วิชาการ',
+                                    'SalesDepartment' => 'ฝ่ายขาย',
+                                    'IT' => 'ไอที',
+                                ];
+                            @endphp
+                            @foreach ($departments as $key => $label)
+                                <option value="{{ $key }}" {{ Str::contains($role->name, $key) ? 'selected' : '' }}>
+                                    {{ $label }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
+
+                    @error('name')
+                        <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                    @enderror
 
                     <h3 class="text-xl mt-10 mb-4 text-gray-600">สิทธิ์การเข้าถึงแต่ละเมนู</h3>
                     <div class="bg-white shadow-xl rounded-2xl overflow-hidden border border-gray-200">
@@ -52,11 +72,11 @@
                                                 <td class="py-4 px-8 text-center">
                                                     @if (isset($actions[$action]))
                                                         <input type="checkbox"
-                                                               id="permission_{{ $actions[$action]->id }}"
-                                                               name="permissions[]"
-                                                               value="{{ $actions[$action]->id }}"
-                                                               class="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
-                                                               @if ($role->permissions->contains('id', $actions[$action]->id)) checked @endif>
+                                                            id="permission_{{ $actions[$action]->id }}"
+                                                            name="permissions[]"
+                                                            value="{{ $actions[$action]->id }}"
+                                                            class="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                                                            @if ($role->permissions->contains('id', $actions[$action]->id)) checked @endif>
                                                     @endif
                                                 </td>
                                             @endforeach
@@ -69,11 +89,11 @@
 
                     <div class="text-center mt-8">
                         <a href="{{ route('admin.roles.index') }}"
-                           class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg shadow transition duration-300 mr-2">
+                            class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg shadow transition duration-300 mr-2">
                             <i class="fa-solid fa-arrow-left mr-2"></i> ย้อนกลับ
                         </a>
                         <button type="submit"
-                                class="bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline shadow-md ml-2">
+                            class="bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline shadow-md ml-2">
                             บันทึก
                         </button>
                     </div>
@@ -81,6 +101,35 @@
             </div>
         </main>
     </div>
+
+    {{-- JS รวมชื่อ --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const selectPosition = document.getElementById('select_position');
+            const selectDepartment = document.getElementById('select_department');
+            const combinedNameInput = document.getElementById('role_combined_name');
+
+            function updateCombinedName() {
+                const position = selectPosition.value;
+                const department = selectDepartment.value;
+
+                let combinedText = '';
+                if (position) combinedText += position;
+                if (department) {
+                    if (combinedText) combinedText += ' ';
+                    combinedText += department;
+                }
+
+                combinedNameInput.value = combinedText;
+            }
+
+            selectPosition.addEventListener('change', updateCombinedName);
+            selectDepartment.addEventListener('change', updateCombinedName);
+            updateCombinedName();
+        });
+    </script>
+
+    {{-- SweetAlert --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @if (session('success'))
         <script>
@@ -90,11 +139,10 @@
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'ตกลง'
             }).then((result) => {
-                /* Read more about isConfirmed, isDenied below */
                 if (result.isConfirmed) {
                     window.location.href = "{{ route('admin.roles.index') }}";
                 }
-            })
+            });
         </script>
     @endif
 </x-app-layout>
