@@ -20,55 +20,67 @@
                     </a>
                 </li>
             @endcanany
+            @canany('RegisterNew read', 'RegisterNew create', 'RegisterNew update', 'RegisterNew delete')
+                <li>
+                    <a href="{{ route('newregis.index') }}" class="side-menu" id="menu-newregis">
+                        <div class="side-menu__icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-clipboard-pen-icon lucide-clipboard-pen">
+                                <rect width="8" height="4" x="8" y="2" rx="1" />
+                                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-5.5" />
+                                <path d="M4 13.5V6a2 2 0 0 1 2-2h2" />
+                                <path
+                                    d="M13.378 15.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z" />
+                            </svg>
+                        </div>
 
-            <li>
-                <a href="{{ route('newregis.index') }}" class="side-menu" id="menu-newregis">
-                    <div class="side-menu__icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="lucide lucide-clipboard-pen-icon lucide-clipboard-pen">
-                            <rect width="8" height="4" x="8" y="2" rx="1" />
-                            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-5.5" />
-                            <path d="M4 13.5V6a2 2 0 0 1 2-2h2" />
-                            <path
-                                d="M13.378 15.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z" />
-                        </svg>
-                    </div>
+                        <div class="side-menu__title">ขึ้นทะเบียนสินค้าใหม่</div>
+                    </a>
+                </li>
+            @endcanany
+            @canany('RegisterContinue read',
+                'RegisterContinue create',
+                'RegisterContinue update',
+                'RegisterContinue
+                delete')
+                <li>
+                    <a href="{{ route('renewregis.index') }}" class="side-menu" id="menu-renewregis">
+                        <div class="side-menu__icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-pen-line-icon lucide-pen-line">
+                                <path d="M12 20h9" />
+                                <path
+                                    d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z" />
+                            </svg>
+                        </div>
 
-                    <div class="side-menu__title">ขึ้นทะเบียนสินค้าใหม่</div>
-                </a>
-            </li>
+                        <div class="side-menu__title">ต่อทะเบียนสินค้าเก่า</div>
+                    </a>
+                </li>
+            @endcanany
+            @canany('RegisterManufacture read',
+                'RegisterManufacture create',
+                'RegisterManufacture update',
+                'RegisterManufacture
+                delete')
+                <li>
+                    <a href="{{ route('manufactureregis.index') }}" class="side-menu" id="menu-manufacture">
+                        <div class="side-menu__icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-clipboard-check-icon lucide-clipboard-check">
+                                <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
+                                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                                <path d="m9 14 2 2 4-4" />
+                            </svg>
+                        </div>
 
-            <li>
-                <a href="{{ route('renewregis.index') }}" class="side-menu" id="menu-renewregis">
-                    <div class="side-menu__icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="lucide lucide-pen-line-icon lucide-pen-line">
-                            <path d="M12 20h9" />
-                            <path
-                                d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z" />
-                        </svg>
-                    </div>
-
-                    <div class="side-menu__title">ต่อทะเบียนสินค้าเก่า</div>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('manufactureregis.index') }}" class="side-menu" id="menu-manufacture">
-                    <div class="side-menu__icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="lucide lucide-clipboard-check-icon lucide-clipboard-check">
-                            <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
-                            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-                            <path d="m9 14 2 2 4-4" />
-                        </svg>
-                    </div>
-
-                    <div class="side-menu__title">ต่อทะเบียนผลิต</div>
-                </a>
-            </li>
+                        <div class="side-menu__title">ต่อทะเบียนผลิต</div>
+                    </a>
+                </li>
+            @endcanany
 
             {{-- @canany('Post read', 'Post create', 'Post update', 'Post delete')
                 <li x-data="{ open: {{ Route::is('admin.posts.*', 'admin.production.*', 'admin.import.*') ? 'true' : 'false' }} }">
@@ -161,16 +173,15 @@
     .logo-circular {
         width: 100px;
         /* Adjust size as needed /
-height: 100px; / Ensure it's a square for a perfect circle /
-border-radius: 50%;
-overflow: hidden; / Clips the image into a circle */
+    height: 100px; / Ensure it's a square for a perfect circle /
+    border-radius: 50%;
+    overflow: hidden; / Clips the image into a circle */
     }
 
     .logo-circular img {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        /* Ensures the image fills the circle without distortion */
     }
 </style>
 
@@ -213,6 +224,3 @@ overflow: hidden; / Clips the image into a circle */
 
     });
 </script>
-
-
-{{-- </x-app-layout> --}}

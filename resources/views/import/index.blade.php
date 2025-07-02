@@ -13,38 +13,40 @@
                     ข้อมูลทะเบียนนำเข้าวัตถุดิบ
                 </span>
             </h1>
-            @can('Inregister create')
-                <div class="flex flex-col sm:flex-row justify-between items-center mx-3 mb-2">
-                    <form action="{{ route('import.index') }}" method="GET" class="flex items-center gap-2 mb-4">
-                        <div class="relative w-72">
-                            <!-- ไอคอนแว่น -->
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" fill="none"
-                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                                </svg>
+
+            <div class="flex flex-col sm:flex-row justify-between items-center mx-3 mb-2">
+                <form action="{{ route('import.index') }}" method="GET" class="flex items-center gap-2 mb-4">
+                    <div class="relative w-72">
+                        <!-- ไอคอนแว่น -->
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" fill="none"
+                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                            </svg>
 
 
-                            </div>
-                            <!-- ช่องค้นหา -->
-                            <input type="text" name="search" placeholder="ชื่อวัตถุอันตราย หรือเลขที่ทะเบียน..."
-                                value="{{ request('search') }}"
-                                class="pl-10 pr-4 py-2 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500" />
                         </div>
+                        <!-- ช่องค้นหา -->
+                        <input type="text" name="search" placeholder="ชื่อวัตถุอันตราย หรือเลขที่ทะเบียน..."
+                            value="{{ request('search') }}"
+                            class="pl-10 pr-4 py-2 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500" />
+                    </div>
 
-                        <!-- ปุ่มค้นหา -->
-                        <button type="submit"
-                            class="bg-blue-500 hover:bg-blue-700 text-white px-5 py-2 rounded-lg transition">
-                            ค้นหา
-                        </button>
-                    </form>
+                    <!-- ปุ่มค้นหา -->
+                    <button type="submit"
+                        class="bg-blue-500 hover:bg-blue-700 text-white px-5 py-2 rounded-lg transition">
+                        ค้นหา
+                    </button>
+                </form>
+                @can('Inregister create')
                     <a href="{{ route('import.create') }}"
                         class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 shadow-md">
                         + เพิ่มข้อมูลทะเบียน
                     </a>
-                </div>
-            @endcan
+                @endcan
+            </div>
+
             <div class="bg-white rounded-2xl overflow-hidden border border-gray-200">
                 <div class="overflow-x-auto">
                     <table class="min-w-full bg-white">

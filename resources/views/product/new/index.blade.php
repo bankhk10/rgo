@@ -87,11 +87,12 @@
                         ค้นหา
                     </button>
                 </form>
-
-                <a href="{{ route('newregis.create') }}"
-                    class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 shadow-md">
-                    + เพิ่มข้อมูลทะเบียน
-                </a>
+                @can('RegisterNew create')
+                    <a href="{{ route('newregis.create') }}"
+                        class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 shadow-md">
+                        + เพิ่มข้อมูลทะเบียน
+                    </a>
+                @endcan
             </div>
 
             <div class="bg-white rounded-2xl overflow-hidden border border-gray-200">
@@ -108,21 +109,17 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- เปลี่ยนตัวแปรจาก $paginatedNearExpiryDrugs เป็น $paginatedProducts --}}
                             @forelse ($paginatedProducts as $index => $product)
                                 <tr class="border-b hover:bg-yellow-50 transition">
                                     <td class="py-4 px-8 font-semibold text-gray-700">
-                                        {{-- เปลี่ยนตัวแปรตรงนี้ด้วย --}}
                                         {{ ($paginatedProducts->currentPage() - 1) * $paginatedProducts->perPage() + $index + 1 }}
                                     </td>
                                     <td class="py-4 px-8">{{ $product->chemicalImport->chemical_name_th ?? '' }}</td>
                                     <td class="py-4 px-8">{{ $product->registration_number ?? '' }}</td>
-                                    {{-- <td class="py-4 px-8">{{ $product->registration_number }}</td> --}}
                                     <td class="py-4 px-8">{{ $product->created_at->format('d/m/Y') ?? '' }}</td>
                                     <td class="py-4 px-8">
                                         <div class="text-center mb-2">
                                             {{-- แสดงสถานะความคืบหน้า --}}
-                                            {{-- ใช้ $product->progress แทน $drug->progress --}}
                                             @if ($product->progress == 0 || $product->progress < 12.5)
                                                 <div x-data="{ tooltip: false }" class="relative inline-block">
                                                     <p class="text-red-600 font-semibold cursor-pointer"
@@ -142,9 +139,7 @@
                                                     </div>
                                                 </div>
                                             @elseif ($product->progress >= 12.5 && $product->progress < 25)
-                                                {{--
-                                        แก้เงื่อนไขให้ครอบคลุมช่วง --}} <div x-data="{ tooltip: false }"
-                                                    class="relative inline-block">
+                                                <div x-data="{ tooltip: false }" class="relative inline-block">
                                                     <p class="text-yellow-700 font-semibold cursor-pointer"
                                                         @mouseenter="tooltip = true" @mouseleave="tooltip = false">
                                                         ขั้นตอนที่ 2
@@ -272,12 +267,9 @@
                                                     </div>
                                                 </div>
                                             @elseif ($product->progress == 100)
-                                                {{-- แก้เป็น == 100 สำหรับสำเร็จ --}}
                                                 <div x-data="{ tooltip: false }" class="relative inline-block">
                                                     <p class="text-green-600 font-semibold cursor-pointer"
-                                                        {{-- เปลี่ยนสีเป็นสีเขียวเมื่อสำเร็จ
-                                --}} @mouseenter="tooltip = true"
-                                                        @mouseleave="tooltip = false">
+                                                        @mouseenter="tooltip = true" @mouseleave="tooltip = false">
                                                         สำเร็จ
                                                     </p>
                                                     <div x-show="tooltip"
@@ -309,51 +301,45 @@
                                     </td>
                                     <td class="py-4 px-12 mx-auto">
                                         {{-- ปุ่มดูรายละเอียด --}}
-                                        {{-- <a href="{{ route('newregis.show', $product->id) }}"
-                                class="inline-flex items-center justify-center p-2 rounded-full text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200"
-                                title="ดูรายละเอียด">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                </svg>
-                            </a> --}}
                                         <div class="flex items-center gap-3 justify-center">
-
-                                            <a href="{{ route('newregis.show', $product->id) }}"
-                                                class="inline-flex items-center justify-center p-2 rounded-full text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200"
-                                                title="ดูรายละเอียด">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                    class="w-6 h-6">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                                </svg>
-                                            </a>
-                                            <a href="{{ route('newregis.edit', $product->id) }}"
-                                                class="inline-flex items-center justify-center p-2 rounded-full text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
-                                                title="แก้ไข">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                    class="w-6 h-6">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                                                </svg>
-                                            </a>
-                                            <button onclick="confirmDelete({{ $product->id }})"
-                                                class="inline-flex items-center justify-center p-2 rounded-full text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all duration-200"
-                                                title="ลบ">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                    class="w-6 h-6">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.92a2.25 2.25 0 0 1-2.244-2.077L4.74 5.959m1.049-.165c.51-.158 1.029-.28 1.563-.35L12 4.75m-4.78 2.152A.75.75 0 0 1 9 6.75h6m-3 0V4.5m-2.25 4.5h.008v.008H9.75V9Zm0 0H9.75Zm4.5 0h.008v.008H14.25V9Z" />
-                                                </svg>
-                                            </button>
+                                            @can('RegisterNew read')
+                                                <a href="{{ route('newregis.show', $product->id) }}"
+                                                    class="inline-flex items-center justify-center p-2 rounded-full text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200"
+                                                    title="ดูรายละเอียด">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                        class="w-6 h-6">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                                    </svg>
+                                                </a>
+                                            @endcan
+                                            @can('RegisterNew update')
+                                                <a href="{{ route('newregis.edit', $product->id) }}"
+                                                    class="inline-flex items-center justify-center p-2 rounded-full text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
+                                                    title="แก้ไข">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                        class="w-6 h-6">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                                    </svg>
+                                                </a>
+                                            @endcan
+                                            @can('RegisterNew delete')
+                                                <button onclick="confirmDelete({{ $product->id }})"
+                                                    class="inline-flex items-center justify-center p-2 rounded-full text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all duration-200"
+                                                    title="ลบ">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                        class="w-6 h-6">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.92a2.25 2.25 0 0 1-2.244-2.077L4.74 5.959m1.049-.165c.51-.158 1.029-.28 1.563-.35L12 4.75m-4.78 2.152A.75.75 0 0 1 9 6.75h6m-3 0V4.5m-2.25 4.5h.008v.008H9.75V9Zm0 0H9.75Zm4.5 0h.008v.008H14.25V9Z" />
+                                                    </svg>
+                                                </button>
+                                            @endcan
                                             <form id="delete-form-{{ $product->id }}"
                                                 action="{{ route('newregis.destroy', $product->id) }}" method="POST"
                                                 style="display: none;">
