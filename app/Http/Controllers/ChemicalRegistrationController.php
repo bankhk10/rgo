@@ -147,13 +147,13 @@ class ChemicalRegistrationController extends Controller
                 ]);
             }
 
-            return redirect()->route('newregis.index')->with('success', 'บันทึกข้อมูลสำเร็จแล้ว!');
+            // return redirect()->route('newregis.index')->with('success', 'บันทึกข้อมูลสำเร็จแล้ว!');
+            return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จ');
         } catch (\Exception $e) {
-            \Log::error("Error creating product: " . $e->getMessage());
+            // \Log::error("Error creating product: " . $e->getMessage());
             return redirect()->back()->withInput()->withErrors(['error' => 'เกิดข้อผิดพลาดในการบันทึกข้อมูล: ' . $e->getMessage()]);
         }
     }
-
 
     /**
      * Display the specified resource.
@@ -264,8 +264,8 @@ class ChemicalRegistrationController extends Controller
         }
 
         $drug->save();
-
-        return redirect()->route('newregis.index')->with('success', 'อัปเดตข้อมูลเรียบร้อยแล้ว!');
+        return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จ');
+        // return redirect()->route('newregis.index')->with('success', 'บันทึกข้อมูลสำเร็จ');
     }
 
 

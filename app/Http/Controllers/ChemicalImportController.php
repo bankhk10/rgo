@@ -57,8 +57,6 @@ class ChemicalImportController extends Controller
         //
         ChemicalImport::create($request->all());
         return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จ');
-        // return redirect()->route('import.index')->with('success', 'บันทึกข้อมูลเรียบร้อยแล้ว');
-        // return redirect()->route('import.index')->with('success', 'บันทึกข้อมูลสำเร็จ');
     }
 
     /**

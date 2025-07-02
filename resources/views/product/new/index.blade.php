@@ -339,13 +339,13 @@
                                                             d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.92a2.25 2.25 0 0 1-2.244-2.077L4.74 5.959m1.049-.165c.51-.158 1.029-.28 1.563-.35L12 4.75m-4.78 2.152A.75.75 0 0 1 9 6.75h6m-3 0V4.5m-2.25 4.5h.008v.008H9.75V9Zm0 0H9.75Zm4.5 0h.008v.008H14.25V9Z" />
                                                     </svg>
                                                 </button>
+                                                <form id="delete-form-{{ $product->id }}"
+                                                    action="{{ route('newregis.destroy', $product->id) }}" method="POST"
+                                                    style="display: none;">
+                                                    @csrf
+                                                    @method('delete')
+                                                </form>
                                             @endcan
-                                            <form id="delete-form-{{ $product->id }}"
-                                                action="{{ route('newregis.destroy', $product->id) }}" method="POST"
-                                                style="display: none;">
-                                                @csrf
-                                                @method('delete')
-                                            </form>
                                         </div>
                                     </td>
                                 </tr>
@@ -376,6 +376,26 @@
         </div>
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function confirmDelete(roleId) {
+            Swal.fire({
+                title: 'คุณแน่ใจหรือไม่',
+                text: "คุณจะไม่สามารถกู้คืนข้อมูลนี้ได้!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'ตกลง',
+                cancelButtonText: 'ยกเลิก'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // ส่งฟอร์มลบ
+                    document.getElementById(`delete-form-${roleId}`).submit();
+                }
+            });
+        }
+    </script>
 
     <style>
         /* กล่องค้นหาหลัก */

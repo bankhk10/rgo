@@ -303,15 +303,9 @@
     @endif
 
     <style>
-        /* เพื่อให้สีพื้นหลังทำงานได้ดีขึ้นเมื่อใช้ bg-gray-200 */
-        /* หรือถ้ายังไม่ทำงาน ให้เพิ่ม !important */
         .bg-gray-200 {
             background-color: #e2e8f0;
-            /* ค่าสีของ gray-200 ใน Tailwind */
         }
-
-        /* หาก Tailwind ไม่ได้ apply สีพื้นหลังเมื่อ input เป็น readonly
-           คุณสามารถใช้ CSS นี้เพื่อบังคับได้ (น้อยกว่าที่จำเป็น) */
         input[readonly].bg-gray-200 {
             background-color: #e2e8f0 !important;
         }

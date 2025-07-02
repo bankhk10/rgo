@@ -146,13 +146,13 @@
     <script>
         function confirmDelete(roleId) {
             Swal.fire({
-                title: 'คุณแน่ใจหรือไม่?',
+                title: 'คุณแน่ใจหรือไม่',
                 text: "คุณจะไม่สามารถกู้คืนข้อมูลนี้ได้!",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'ใช่, ลบเลย!',
+                confirmButtonText: 'ตกลง',
                 cancelButtonText: 'ยกเลิก'
             }).then((result) => {
                 if (result.isConfirmed) {

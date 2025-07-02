@@ -421,4 +421,20 @@
             </div>
         </div>
     </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'บันทึกสำเร็จ!',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'ตกลง'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "{{ route('newregis.index') }}";
+                }
+            });
+        </script>
+    @endif
 </x-app-layout>
