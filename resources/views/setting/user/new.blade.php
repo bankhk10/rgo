@@ -96,6 +96,44 @@
             </div>
 
             <div>
+                <label class="block text-gray-700 mb-1">สิทธิ์</label>
+                <select name="role_id" required
+                    class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">-- เลือกสิทธิ์ --</option>
+                    @php
+                        function translateRoleName($roleName)
+                        {
+                            $positions = [
+                                'manager' => 'ผู้จัดการแผนก',
+                                'head' => 'หัวหน้า',
+                                'staff' => 'พนักงาน',
+                            ];
+                            $departments = [
+                                'Registration' => 'ทะเบียน',
+                                'InternationalProcurement' => 'จัดซื้อต่างประเทศ',
+                                'ResearchAndDevelopment' => 'วิจัยและพัฒนา',
+                                'Academic' => 'วิชาการ',
+                                'SalesDepartment' => 'ฝ่ายขาย',
+                                'IT' => 'ไอที',
+                            ];
+                            $parts = explode(' ', $roleName);
+                            $position = $positions[$parts[0]] ?? $parts[0];
+                            $department = $departments[$parts[1] ?? ''] ?? ($parts[1] ?? '');
+                            return trim("$position $department");
+                        }
+                    @endphp
+                    @foreach ($roles as $role)
+                        <option value="{{ $role->id }}" {{ old('role_id') == $role->id ? 'selected' : '' }}>
+                            {{ translateRoleName($role->name) }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('role_id')
+                    <p class="text-red-500 text-sm">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div>
                 <label class="block text-gray-700 mb-1">สถานะการทำงาน</label>
                 <select name="employment_status"
                     class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -109,45 +147,6 @@
                 @enderror
             </div>
 
-            <div class="md:col-span-2">
-                <h3 class="text-lg font-medium text-gray-700 mb-2 mt-4">สิทธิ์</h3>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    @php
-                        function translateRoleName($roleName)
-                        {
-                            $positions = [
-                                'manager' => 'ผู้จัดการแผนก',
-                                'head' => 'หัวหน้า',
-                                'staff' => 'พนักงาน',
-                            ];
-
-                            $departments = [
-                                'Registration' => 'ทะเบียน',
-                                'InternationalProcurement' => 'จัดซื้อต่างประเทศ',
-                                'ResearchAndDevelopment' => 'วิจัยและพัฒนา',
-                                'Academic' => 'วิชาการ',
-                                'SalesDepartment' => 'ฝ่ายขาย',
-                                'IT' => 'ไอที',
-                            ];
-
-                            $parts = explode(' ', $roleName);
-                            $position = $positions[$parts[0]] ?? $parts[0];
-                            $department = $departments[$parts[1] ?? ''] ?? ($parts[1] ?? '');
-
-                            return trim("$position $department");
-                        }
-                    @endphp
-                    @foreach ($roles as $role)
-                        <label class="flex items-center">
-                            {{-- <span class="font-medium">{{ translateRoleName($role->name) }}</span> --}}
-
-                            <input type="checkbox" name="roles[]" value="{{ $role->id }}"
-                                class="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500">
-                            <span class="ml-2 text-gray-700">{{translateRoleName($role->name)}}</span>
-                        </label>
-                    @endforeach
-                </div>
-            </div>
 
             <div class="text-right mt-8">
                 <a href="{{ route('admin.users.index') }}"

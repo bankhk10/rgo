@@ -101,6 +101,49 @@
             </div>
 
             <div>
+                <label class="block text-gray-700 mb-1">สิทธิ์</label>
+                <select name="role_id"
+                    class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">-- เลือกสิทธิ์ --</option>
+                    @php
+                        function translateRoleName($roleName)
+                        {
+                            $positions = [
+                                'manager' => 'ผู้จัดการแผนก',
+                                'head' => 'หัวหน้า',
+                                'staff' => 'พนักงาน',
+                            ];
+                            $departments = [
+                                'Registration' => 'ทะเบียน',
+                                'InternationalProcurement' => 'จัดซื้อต่างประเทศ',
+                                'ResearchAndDevelopment' => 'วิจัยและพัฒนา',
+                                'Academic' => 'วิชาการ',
+                                'SalesDepartment' => 'ฝ่ายขาย',
+                                'IT' => 'ไอที',
+                            ];
+                            $parts = explode(' ', $roleName);
+                            $position = $positions[$parts[0]] ?? $parts[0];
+                            $department = $departments[$parts[1] ?? ''] ?? ($parts[1] ?? '');
+                            return trim("$position $department");
+                        }
+
+                        $currentRoleId = optional($user->roles->first())->id;
+                    @endphp
+
+                    @foreach ($roles as $role)
+                        <option value="{{ $role->id }}"
+                            {{ old('role_id', $currentRoleId) == $role->id ? 'selected' : '' }}>
+                            {{ translateRoleName($role->name) }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('role_id')
+                    <p class="text-red-500 text-sm">{{ $message }}</p>
+                @enderror
+            </div>
+
+
+            <div>
                 <label class="block text-gray-700 mb-1">สถานะการทำงาน</label>
                 <select name="employment_status"
                     class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -117,19 +160,7 @@
                 @enderror
             </div>
 
-            <div class="md:col-span-2">
-                <label class="block text-gray-700 mb-2">สิทธิ์</label>
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
-                    @foreach ($roles as $role)
-                        <label class="flex items-center">
-                            <input type="checkbox" name="roles[]" value="{{ $role->id }}"
-                                class="form-checkbox h-5 w-5 text-blue-600 border-gray-300"
-                                @if ($user->roles->pluck('id')->contains($role->id)) checked @endif>
-                            <span class="ml-2 text-gray-700">{{ $role->name }}</span>
-                        </label>
-                    @endforeach
-                </div>
-            </div>
+
 
             <div class="text-right mt-8">
                 <a href="{{ route('admin.users.index') }}"

@@ -61,35 +61,38 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed',
-            'department' => 'nullable|string|max:255', // เพิ่มการตรวจสอบแผนก
-            'position' => 'nullable|string|max:255',   // เพิ่มการตรวจสอบตำแหน่ง
-            'employee_id' => 'nullable|string|max:255|unique:users', // เพิ่มการตรวจสอบรหัสพนักงาน (unique)
-            'phone_number' => 'nullable|string|max:20', // เพิ่มการตรวจสอบเบอร์โทรศัพท์
-            'employment_status' => 'nullable|string|max:255', // เพิ่มการตรวจสอบสถานะการทำงาน
-            'roles' => 'nullable|array', // ให้แน่ใจว่ามี validation สำหรับ roles ด้วย (ถ้าจำเป็น)
-        ]);
+        try {
+            $request->validate([
+                'name' => 'required',
+                'email' => 'required|email|unique:users',
+                'password' => 'required|confirmed',
+                'department' => 'nullable|string|max:255',
+                'position' => 'nullable|string|max:255',
+                'employee_id' => 'nullable|string|max:255|unique:users',
+                'phone_number' => 'nullable|string|max:20',
+                'employment_status' => 'nullable|string|max:255',
+                'role_id' => 'required|exists:roles,id', // ใช้ dropdown ให้เลือก role เดียว
+            ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'profile' => 'aa_user.png',
-            'password' => bcrypt($request->password),
-            'department' => $request->department,     // เพิ่มแผนก
-            'position' => $request->position,       // เพิ่มตำแหน่ง
-            'employee_id' => $request->employee_id,   // เพิ่มรหัสพนักงาน
-            'phone_number' => $request->phone_number, // เพิ่มเบอร์โทรศัพท์
-            'employment_status' => $request->employment_status, // เพิ่มสถานะการทำงาน
-        ]);
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'profile' => 'aa_user.png',
+                'password' => bcrypt($request->password),
+                'department' => $request->department,
+                'position' => $request->position,
+                'employee_id' => $request->employee_id,
+                'phone_number' => $request->phone_number,
+                'employment_status' => $request->employment_status,
+            ]);
 
-        if ($request->has('roles')) {
-            $user->syncRoles($request->roles);
+            $user->syncRoles([$request->role_id]); // ใช้ role เดียวจาก dropdown
+
+            return redirect()->back()->with('success', 'บันทึกเรียบร้อยแล้ว');
+        } catch (\Throwable $th) {
+            Log::error('User Create Error: ' . $th->getMessage());
+            return redirect()->back()->withErrors(['เกิดข้อผิดพลาด'])->withInput();
         }
-
-        return redirect()->back()->withSuccess('User created !!!');
     }
 
     /**
@@ -125,32 +128,36 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $validated = $request->validate([
+        $request->validate([
             'name' => 'required',
-            'email' => 'required|email|unique:users,email,' . $user->id . ',id',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'password' => 'nullable|confirmed',
             'department' => 'nullable|string|max:255',
             'position' => 'nullable|string|max:255',
-            'employee_id' => 'nullable|string|max:255|unique:users,employee_id,' . $user->id . ',id',
+            'employee_id' => 'nullable|string|max:255|unique:users,employee_id,' . $user->id,
             'phone_number' => 'nullable|string|max:20',
             'employment_status' => 'nullable|string|max:255',
-            'roles' => 'nullable|array',
+            'role_id' => 'required|exists:roles,id',
+        ]);
+
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'department' => $request->department,
+            'position' => $request->position,
+            'employee_id' => $request->employee_id,
+            'phone_number' => $request->phone_number,
+            'employment_status' => $request->employment_status,
         ]);
 
         if ($request->filled('password')) {
-            $request->validate([
-                'password' => 'required|confirmed'
-            ]);
-            $validated['password'] = bcrypt($request->password);
+            $user->update(['password' => bcrypt($request->password)]);
         }
 
-        $user->update($validated);
-
-        if ($request->has('roles')) {
-            $user->syncRoles($request->roles);
-        }
-
-        return redirect()->back()->withSuccess('User updated !!!');
+        $user->syncRoles([$request->role_id]);
+        return redirect()->back()->with('success', 'บันทึกเรียบร้อยแล้ว');
     }
+
 
     /**
      * Remove the specified resource from storage.
