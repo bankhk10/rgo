@@ -1,13 +1,23 @@
 <x-app-layout>
-    <div class="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-2xl space-y-6 mt-6">
-        <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center">แบบฟอร์มข้อมูลทะเบียนนำเข้าวัตถุดิบ</h2>
-
+    <div class="max-w-5xl mx-auto p-6 bg-white shadow-lg rounded-2xl space-y-6 mt-6">
+        <h1 class="text-4xl font-extrabold text-center text-indigo-700 mt-5 mb-10 tracking-wide">
+            <span class="inline-flex items-center gap-2">
+                <svg class="w-10 h-10 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 8c-1.657 0-3 1.343-3 3v1c0 1.657 1.343 3 3 3s3-1.343 3-3v-1c0-1.657-1.343-3-3-3z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 2v2m0 16v2m8-10h2M2 12H4m15.364-7.364l1.414 1.414M4.222 19.778l1.414-1.414m12.728 0l1.414 1.414M4.222 4.222l1.414 1.414" />
+                </svg>
+                แบบฟอร์มข้อมูลทะเบียนนำเข้าวัตถุดิบ
+            </span>
+        </h1>
         <form method="POST" action="{{ route('import.store') }}" class="grid grid-cols-2 md:grid-cols-2 gap-4">
             @csrf
 
             {{-- บริษัท (company_id) --}}
             <div>
-                <label class="block text-gray-700 mb-1">บริษัทนำเข้า</label>
+                <label class="block text-gray-700 mb-1 text-c">บริษัทนำเข้า</label>
                 <select class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     name="company_id">
                     <option value="">-- เลือก --</option>
