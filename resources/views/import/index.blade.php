@@ -164,5 +164,6 @@
                 }
             });
         }
+        document.getElementById('menu-inregister')?.classList.add('side-menu--active');
     </script>
 </x-app-layout>

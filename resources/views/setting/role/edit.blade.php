@@ -13,17 +13,20 @@
                     @method('put')
 
                     {{-- Input ที่เก็บค่ารวมตำแหน่ง+แผนก --}}
-                    <input id="role_combined_name" type="hidden" name="name"
-                        value="{{ old('name', $role->name) }}" readonly />
+                    <input id="role_combined_name" type="hidden" name="name" value="{{ old('name', $role->name) }}"
+                        readonly />
 
                     <div class="flex flex-wrap items-center gap-4 mt-6 w-6/12">
                         <label class="text-xl text-gray-600 whitespace-nowrap">ชื่อสิทธิ์การใช้งาน :</label>
                         <select name="position" id="select_position"
                             class="flex-1 min-w-[150px] p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                             <option value="">-- เลือกตำแหน่ง --</option>
-                            <option value="manager" {{ Str::contains($role->name, 'manager') ? 'selected' : '' }}>ผู้จัดการแผนก</option>
-                            <option value="head" {{ Str::contains($role->name, 'head') ? 'selected' : '' }}>หัวหน้า</option>
-                            <option value="staff" {{ Str::contains($role->name, 'staff') ? 'selected' : '' }}>พนักงาน</option>
+                            <option value="manager" {{ Str::contains($role->name, 'manager') ? 'selected' : '' }}>
+                                ผู้จัดการแผนก</option>
+                            <option value="head" {{ Str::contains($role->name, 'head') ? 'selected' : '' }}>หัวหน้า
+                            </option>
+                            <option value="staff" {{ Str::contains($role->name, 'staff') ? 'selected' : '' }}>พนักงาน
+                            </option>
                         </select>
 
                         <select name="department" id="select_department"
@@ -40,7 +43,8 @@
                                 ];
                             @endphp
                             @foreach ($departments as $key => $label)
-                                <option value="{{ $key }}" {{ Str::contains($role->name, $key) ? 'selected' : '' }}>
+                                <option value="{{ $key }}"
+                                    {{ Str::contains($role->name, $key) ? 'selected' : '' }}>
                                     {{ $label }}
                                 </option>
                             @endforeach
@@ -73,8 +77,7 @@
                                                     @if (isset($actions[$action]))
                                                         <input type="checkbox"
                                                             id="permission_{{ $actions[$action]->id }}"
-                                                            name="permissions[]"
-                                                            value="{{ $actions[$action]->id }}"
+                                                            name="permissions[]" value="{{ $actions[$action]->id }}"
                                                             class="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
                                                             @if ($role->permissions->contains('id', $actions[$action]->id)) checked @endif>
                                                     @endif
@@ -102,9 +105,9 @@
         </main>
     </div>
 
-    {{-- JS รวมชื่อ --}}
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('menu-roles')?.classList.add('side-menu--active');
+        document.addEventListener('DOMContentLoaded', function() {
             const selectPosition = document.getElementById('select_position');
             const selectDepartment = document.getElementById('select_department');
             const combinedNameInput = document.getElementById('role_combined_name');

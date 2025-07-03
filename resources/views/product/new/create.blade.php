@@ -186,6 +186,8 @@
     </div>
 
     <script>
+        document.getElementById('menu-newregis')?.classList.add('side-menu--active');
+
         let typingTimer;
         const delay = 300;
         const listElement = document.getElementById("autocomplete-list");
@@ -306,10 +308,10 @@
         .bg-gray-200 {
             background-color: #e2e8f0;
         }
+
         input[readonly].bg-gray-200 {
             background-color: #e2e8f0 !important;
         }
-
     </style>
 
 </x-app-layout>

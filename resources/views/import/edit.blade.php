@@ -278,5 +278,7 @@
             storeCompany1Select.addEventListener('change', enforceUniqueSelection);
             storeCompany2Select.addEventListener('change', enforceUniqueSelection);
         });
+
+        document.getElementById('menu-inregister')?.classList.add('side-menu--active');
     </script>
 </x-app-layout>

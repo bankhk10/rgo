@@ -35,11 +35,11 @@
                             </svg>
                         </div>
 
-                        <div class="side-menu__title">ขึ้นทะเบียนสินค้าใหม่</div>
+                        <div class="side-menu__title">ทะเบียนสินค้าทั้งหมด</div>
                     </a>
                 </li>
             @endcanany
-            @canany('RegisterContinue read',
+            {{-- @canany('RegisterContinue read',
                 'RegisterContinue create',
                 'RegisterContinue update',
                 'RegisterContinue
@@ -59,7 +59,7 @@
                         <div class="side-menu__title">ต่อทะเบียนสินค้าเก่า</div>
                     </a>
                 </li>
-            @endcanany
+            @endcanany --}}
             @canany('RegisterManufacture read',
                 'RegisterManufacture create',
                 'RegisterManufacture update',
@@ -77,7 +77,7 @@
                             </svg>
                         </div>
 
-                        <div class="side-menu__title">ต่อทะเบียนผลิต</div>
+                        <div class="side-menu__title">ทะเบียนผลิตทั้งหมด</div>
                     </a>
                 </li>
             @endcanany

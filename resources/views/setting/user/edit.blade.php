@@ -177,6 +177,9 @@
         </form>
     </div>
 
+    <script>
+        document.getElementById('menu-users')?.classList.add('side-menu--active');
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @if (session('success'))
         <script>

@@ -105,6 +105,7 @@
     </div>
 
     <script>
+        document.getElementById('menu-roles')?.classList.add('side-menu--active');
         document.addEventListener('DOMContentLoaded', function() {
             const selectPosition = document.getElementById('select_position');
             const selectDepartment = document.getElementById('select_department');

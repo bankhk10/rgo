@@ -16,8 +16,7 @@
                 <div class="flex-1"> {{-- Makes this div take up available space --}}
                     <label class="block text-sm font-medium text-gray-700 mb-2">ตัวย่อบริษัท</label>
                     {{-- Corrected the name attribute for company abbreviation --}}
-                    <input type="text" name="name" class="w-full border border-gray-300 p-2 rounded"
-                        required>
+                    <input type="text" name="name" class="w-full border border-gray-300 p-2 rounded" required>
                 </div>
             </div>
 
@@ -51,9 +50,9 @@
                     บันทึก
                 </button>
             </div>
-
-
-
         </form>
     </div>
+    <script>
+        document.getElementById('menu-company')?.classList.add('side-menu--active');
+    </script>
 </x-app-layout>

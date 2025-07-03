@@ -371,118 +371,119 @@
                                 $percentComplete = $totalSubSteps > 0 ? ($completedCount / $totalSubSteps) * 100 : 0;
                             @endphp
                             @if ($percentComplete < 100)
-                            <form method="POST" action="{{ route('newregis.update-subprogress', $drug->id) }}">
-                                @csrf
-                                @method('PUT')
-                                <input type="hidden" name="step_number" value="{{ $stepNumber }}">
+                                <form method="POST" action="{{ route('newregis.update-subprogress', $drug->id) }}">
+                                    @csrf
+                                    @method('PUT')
+                                    <input type="hidden" name="step_number" value="{{ $stepNumber }}">
 
-                                <div class="mt-8 bg-gray-50 border border-gray-200 rounded-xl p-4">
-                                    <h4 class="text-lg font-semibold text-indigo-600 mb-3">
-                                        ขั้นตอนที่ {{ $stepNumber }}: {{ $stepTitle }}
-                                    </h4>
+                                    <div class="mt-8 bg-gray-50 border border-gray-200 rounded-xl p-4">
+                                        <h4 class="text-lg font-semibold text-indigo-600 mb-3">
+                                            ขั้นตอนที่ {{ $stepNumber }}: {{ $stepTitle }}
+                                        </h4>
 
-                                    {{-- แถบสถานะ --}}
-                                    <div class="mb-4">
-                                        <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                            <div class="h-2.5 rounded-full @if ($percent < 25) bg-red-500 @elseif ($percent < 75) bg-yellow-500 @else bg-green-500 @endif"
-                                                style="width: {{ $percent }}%">
+                                        {{-- แถบสถานะ --}}
+                                        <div class="mb-4">
+                                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                                <div class="h-2.5 rounded-full @if ($percent < 25) bg-red-500 @elseif ($percent < 75) bg-yellow-500 @else bg-green-500 @endif"
+                                                    style="width: {{ $percent }}%">
+                                                </div>
+                                            </div>
+                                            <div class="text-xs text-gray-500 text-right mt-1">{{ $percent }}%
                                             </div>
                                         </div>
-                                        <div class="text-xs text-gray-500 text-right mt-1">{{ $percent }}%</div>
-                                    </div>
 
-                                    @php
-                                        $userCheckedCount = 0;
-                                        $userTotalCount = 0;
+                                        @php
+                                            $userCheckedCount = 0;
+                                            $userTotalCount = 0;
 
-                                        foreach ($departments as $dept => $subItems) {
-                                            if ($dept === $mappedUserDept) {
-                                                foreach ($subItems as $label) {
-                                                    $record = $savedSubSteps[$userTotalCount] ?? null;
-                                                    if ($record && $record->checked_at) {
-                                                        $userCheckedCount++;
+                                            foreach ($departments as $dept => $subItems) {
+                                                if ($dept === $mappedUserDept) {
+                                                    foreach ($subItems as $label) {
+                                                        $record = $savedSubSteps[$userTotalCount] ?? null;
+                                                        if ($record && $record->checked_at) {
+                                                            $userCheckedCount++;
+                                                        }
+                                                        $userTotalCount++;
                                                     }
-                                                    $userTotalCount++;
+                                                } else {
+                                                    $userTotalCount += count($subItems);
                                                 }
-                                            } else {
-                                                $userTotalCount += count($subItems);
                                             }
-                                        }
 
-                                        $userDeptComplete =
-                                            $userTotalCount > 0 && $userCheckedCount === $userTotalCount;
-                                    @endphp
+                                            $userDeptComplete =
+                                                $userTotalCount > 0 && $userCheckedCount === $userTotalCount;
+                                        @endphp
 
-                                    {{-- รายการ checkbox --}}
-                                    <div class="space-y-6">
-                                        @php $checkboxIndex = 0; @endphp
+                                        {{-- รายการ checkbox --}}
+                                        <div class="space-y-6">
+                                            @php $checkboxIndex = 0; @endphp
 
-                                        @foreach ($allDepartments as $dept => $subItems)
-                                            @php
-                                                $showDept =
-                                                    auth()->user()->hasRole('admin') ||
-                                                    auth()->user()->hasRole('manager') ||
-                                                    $dept === $mappedUserDept;
-                                            @endphp
-                                            @if ($showDept)
-                                                <div>
-                                                    <h5 class="text-sm font-bold text-gray-700 mb-2">
-                                                        {{ $dept }}</h5>
-                                                    <div class="space-y-2 pl-4">
-                                                        @foreach ($subItems as $label)
-                                                            @php
-                                                                $record = $savedSubSteps[$checkboxIndex] ?? null;
-                                                                $isChecked = $record && $record->checked_at;
-                                                            @endphp
-                                                            <div class="flex items-center justify-between">
-                                                                <div class="flex items-center space-x-3">
-                                                                    <input type="checkbox" name="sub_steps[]"
-                                                                        id="substep_{{ $stepNumber }}_{{ $checkboxIndex }}"
-                                                                        value="{{ $checkboxIndex }}"
-                                                                        {{ $isChecked ? 'checked' : '' }}
-                                                                        {{-- {{ !$isEditable || $dept !== $mappedUserDept || $userDeptComplete ? 'disabled' : '' }} --}}
-                                                                        {{-- {{ !$isEditable || (!auth()->user()->hasRole('admin') && !auth()->user()->hasRole('manager') && $dept !== $mappedUserDept) || $userDeptComplete ? 'disabled' : '' }} --}}
-                                                                        class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" disabled>
+                                            @foreach ($allDepartments as $dept => $subItems)
+                                                @php
+                                                    $showDept =
+                                                        auth()->user()->hasRole('admin') ||
+                                                        auth()->user()->hasRole('manager') ||
+                                                        $dept === $mappedUserDept;
+                                                @endphp
+                                                @if ($showDept)
+                                                    <div>
+                                                        <h5 class="text-sm font-bold text-gray-700 mb-2">
+                                                            {{ $dept }}</h5>
+                                                        <div class="space-y-2 pl-4">
+                                                            @foreach ($subItems as $label)
+                                                                @php
+                                                                    $record = $savedSubSteps[$checkboxIndex] ?? null;
+                                                                    $isChecked = $record && $record->checked_at;
+                                                                @endphp
+                                                                <div class="flex items-center justify-between">
+                                                                    <div class="flex items-center space-x-3">
+                                                                        <input type="checkbox" name="sub_steps[]"
+                                                                            id="substep_{{ $stepNumber }}_{{ $checkboxIndex }}"
+                                                                            value="{{ $checkboxIndex }}"
+                                                                            {{ $isChecked ? 'checked' : '' }}
+                                                                            {{-- {{ !$isEditable || $dept !== $mappedUserDept || $userDeptComplete ? 'disabled' : '' }} --}} {{-- {{ !$isEditable || (!auth()->user()->hasRole('admin') && !auth()->user()->hasRole('manager') && $dept !== $mappedUserDept) || $userDeptComplete ? 'disabled' : '' }} --}}
+                                                                            class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                                                                            disabled>
 
-                                                                    <label
-                                                                        for="substep_{{ $stepNumber }}_{{ $checkboxIndex }}"
-                                                                        class="text-sm text-gray-800">{{ $label }}</label>
+                                                                        <label
+                                                                            for="substep_{{ $stepNumber }}_{{ $checkboxIndex }}"
+                                                                            class="text-sm text-gray-800">{{ $label }}</label>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                            @php $checkboxIndex++; @endphp
-                                                        @endforeach
+                                                                @php $checkboxIndex++; @endphp
+                                                            @endforeach
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            @else
-                                                @php $checkboxIndex += count($subItems); @endphp
-                                            @endif
-                                        @endforeach
-                                    </div>
+                                                @else
+                                                    @php $checkboxIndex += count($subItems); @endphp
+                                                @endif
+                                            @endforeach
+                                        </div>
 
-                                    @php
-                                        // ตรวจสอบว่าแผนกของผู้ใช้งานติ๊กครบแล้วหรือยัง
-                                        $userCheckedCount = 0;
-                                        $userTotalCount = 0;
+                                        @php
+                                            // ตรวจสอบว่าแผนกของผู้ใช้งานติ๊กครบแล้วหรือยัง
+                                            $userCheckedCount = 0;
+                                            $userTotalCount = 0;
 
-                                        foreach ($departments as $dept => $subItems) {
-                                            if ($dept === $mappedUserDept) {
-                                                foreach ($subItems as $label) {
-                                                    $record = $savedSubSteps[$userTotalCount] ?? null;
-                                                    if ($record && $record->checked_at) {
-                                                        $userCheckedCount++;
+                                            foreach ($departments as $dept => $subItems) {
+                                                if ($dept === $mappedUserDept) {
+                                                    foreach ($subItems as $label) {
+                                                        $record = $savedSubSteps[$userTotalCount] ?? null;
+                                                        if ($record && $record->checked_at) {
+                                                            $userCheckedCount++;
+                                                        }
+                                                        $userTotalCount++;
                                                     }
-                                                    $userTotalCount++;
+                                                } else {
+                                                    $userTotalCount += count($subItems); // นับ index ต่อ
                                                 }
-                                            } else {
-                                                $userTotalCount += count($subItems); // นับ index ต่อ
                                             }
-                                        }
 
-                                        $userDeptComplete =
-                                            $userTotalCount > 0 && $userCheckedCount === $userTotalCount;
-                                    @endphp
-                                </div>
-                            </form>
+                                            $userDeptComplete =
+                                                $userTotalCount > 0 && $userCheckedCount === $userTotalCount;
+                                        @endphp
+                                    </div>
+                                </form>
                             @endif
                         @endif
                     @endforeach
@@ -498,4 +499,7 @@
             </div>
         </div>
     </main>
+    <script>
+        document.getElementById('menu-newregis')?.classList.add('side-menu--active');
+    </script>
 </x-app-layout>

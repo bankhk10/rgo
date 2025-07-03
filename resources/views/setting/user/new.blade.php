@@ -41,7 +41,8 @@
                     <option value="SalesDepartment" {{ old('department') == 'SalesDepartment' ? 'selected' : '' }}>
                         ฝ่ายขาย</option>
                     <option value="IT" {{ old('department') == 'IT' ? 'selected' : '' }}>ไอที</option>
-                    <option value="no" {{ old('department') == 'no' ? 'selected' : '' }}>ไม่มีสิทธิ์ดำเนินการ</option>
+                    <option value="no" {{ old('department') == 'no' ? 'selected' : '' }}>ไม่มีสิทธิ์ดำเนินการ
+                    </option>
                 </select>
                 @error('department')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
@@ -165,6 +166,9 @@
         </form>
     </div>
 
+    <script>
+        document.getElementById('menu-users')?.classList.add('side-menu--active');
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @if (session('success'))
         <script>
