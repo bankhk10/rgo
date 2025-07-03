@@ -29,6 +29,7 @@
                                 <option value="head">หัวหน้า</option>
                                 <option value="staff">พนักงาน</option>
                             </select>
+                            แผนกดำเนินการ
                             <select name="department" id="select_department"
                                 class="flex-1 min-w-[150px] p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 <option value="">-- เลือกแผนก --</option>
@@ -45,6 +46,7 @@
                                 <option value="SalesDepartment"
                                     {{ old('department') == 'SalesDepartment' ? 'selected' : '' }}>ฝ่ายขาย</option>
                                 <option value="IT" {{ old('department') == 'IT' ? 'selected' : '' }}>ไอที</option>
+                                <option value="no" {{ old('department') == 'IT' ? 'selected' : '' }}>ไม่มีสิทธิ์ดำเนินการ</option>
                             </select>
                         </div>
                         @error('name')

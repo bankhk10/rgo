@@ -44,6 +44,7 @@
                                                 'Academic' => 'วิชาการ',
                                                 'SalesDepartment' => 'ฝ่ายขาย',
                                                 'IT' => 'ไอที',
+                                                'no' => 'ไม่มีสิทธิ์ดำเนินการ',
                                             ];
 
                                             $parts = explode(' ', $roleName);

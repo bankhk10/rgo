@@ -26,7 +26,7 @@
 
 
             <div>
-                <label class="block text-gray-700 mb-1">แผนก</label>
+                <label class="block text-gray-700 mb-1">แผนกดำเนินการ</label>
                 <select name="department"
                     class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <option value="">-- เลือกแผนก --</option>
@@ -41,6 +41,7 @@
                     <option value="SalesDepartment" {{ old('department') == 'SalesDepartment' ? 'selected' : '' }}>
                         ฝ่ายขาย</option>
                     <option value="IT" {{ old('department') == 'IT' ? 'selected' : '' }}>ไอที</option>
+                    <option value="no" {{ old('department') == 'no' ? 'selected' : '' }}>ไม่มีสิทธิ์ดำเนินการ</option>
                 </select>
                 @error('department')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
