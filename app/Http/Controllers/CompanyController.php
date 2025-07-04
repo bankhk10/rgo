@@ -49,7 +49,9 @@ class CompanyController extends Controller
 
         Company::create($validated);
 
-        return redirect()->route('company.index')->with('success', 'บริษัทใหม่ถูกเพิ่มเรียบร้อยแล้ว');
+        // return redirect()->route('company.index')->with('success', 'บริษัทใหม่ถูกเพิ่มเรียบร้อยแล้ว');
+        return redirect()->back()->with('success', 'บันทึกเรียบร้อยแล้ว');
+
     }
 
     /**
@@ -93,7 +95,8 @@ class CompanyController extends Controller
 
         $company->update($request->only('full_name','name', 'address', 'email', 'phone', 'tax_id'));
 
-        return redirect()->route('company.index')->with('success', 'อัปเดตข้อมูลบริษัทเรียบร้อยแล้ว');
+        return redirect()->back()->with('success', 'บันทึกเรียบร้อยแล้ว');
+        // return redirect()->route('company.index')->with('success', 'อัปเดตข้อมูลบริษัทเรียบร้อยแล้ว');
     }
 
     /**
