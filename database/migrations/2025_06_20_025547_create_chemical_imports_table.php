@@ -37,7 +37,7 @@ class CreateChemicalImportsTable extends Migration
             $table->string('possession_form_wo2')->nullable(); // ใบแจ้งครอบครอง วอ.2
             $table->date('possession_form_expiry')->nullable(); // วันหมดอายุใบแจ้งครอบครอง วอ.2
             $table->text('packaging')->nullable();                 // รายละเอียดขนาดบรรจุ
-            $table->text('status')->nullable();                 // รายละเอียดขนาดบรรจุ
+            $table->text('status')->nullable();                 // normal expired soon_expired
             $table->text('remarks')->nullable();                      // หมายเหตุ
             $table->timestamps();
         });
