@@ -34,10 +34,6 @@ class UserController extends Controller
      */
     public function index()
     {
-        // $user = User::latest()->get();
-
-        // return view('setting.user.index', ['users' => $user]);
-
         $user = User::latest()->paginate(10);
         return view('setting.user.index', ['users' => $user]);
     }
@@ -61,18 +57,19 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         try {
-            $request->validate([
-                'name' => 'required',
-                'email' => 'required|email|unique:users',
-                'password' => 'required|confirmed',
-                'department' => 'nullable|string|max:255',
-                'position' => 'nullable|string|max:255',
-                'employee_id' => 'nullable|string|max:255|unique:users',
-                'phone_number' => 'nullable|string|max:20',
-                'employment_status' => 'nullable|string|max:255',
-                'role_id' => 'required|exists:roles,id', // ใช้ dropdown ให้เลือก role เดียว
-            ]);
+            // $request->validate([
+            //     'name' => 'required',
+            //     'email' => 'required|email|unique:users',
+            //     'password' => 'required|confirmed',
+            //     'department' => 'nullable|string|max:255',
+            //     'position' => 'nullable|string|max:255',
+            //     'employee_id' => 'nullable|string|max:255|unique:users',
+            //     'phone_number' => 'nullable|string|max:20',
+            //     'employment_status' => 'nullable|string|max:255',
+            //     'role_id' => 'required|exists:roles,id',
+            // ]);
 
             $user = User::create([
                 'name' => $request->name,
@@ -90,7 +87,7 @@ class UserController extends Controller
 
             return redirect()->back()->with('success', 'บันทึกเรียบร้อยแล้ว');
         } catch (\Throwable $th) {
-            Log::error('User Create Error: ' . $th->getMessage());
+            Log::error('User Create Error: ' . $th);
             return redirect()->back()->withErrors(['เกิดข้อผิดพลาด'])->withInput();
         }
     }
