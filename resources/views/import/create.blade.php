@@ -1,168 +1,270 @@
 <x-app-layout>
-    <div class="max-w-5xl mx-auto p-6 bg-white shadow-lg rounded-2xl space-y-6 mt-6">
-        <h1 class="text-4xl font-extrabold text-center text-indigo-700 mt-5 mb-10 tracking-wide">
-            <span class="inline-flex items-center gap-2">
-                <svg class="w-10 h-10 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M12 8c-1.657 0-3 1.343-3 3v1c0 1.657 1.343 3 3 3s3-1.343 3-3v-1c0-1.657-1.343-3-3-3z" />
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M12 2v2m0 16v2m8-10h2M2 12H4m15.364-7.364l1.414 1.414M4.222 19.778l1.414-1.414m12.728 0l1.414 1.414M4.222 4.222l1.414 1.414" />
-                </svg>
-                แบบฟอร์มข้อมูลทะเบียนนำเข้าวัตถุดิบ
-            </span>
-        </h1>
-        <form method="POST" action="{{ route('import.store') }}" class="grid grid-cols-2 md:grid-cols-2 gap-4">
+    <div class="max-w-5xl mx-auto p-8 bg-white shadow-lg rounded-2xl space-y-10 mt-6">
+        <h2 class="text-4xl font-extrabold text-gray-700 mb-8 pb-4 text-center border-b border-gray-300">
+            แบบฟอร์มข้อมูลทะเบียนนำเข้าวัตถุดิบ
+        </h2>
+
+        <form method="POST" action="{{ route('import.store') }}" class="space-y-10">
             @csrf
 
-            {{-- บริษัท (company_id) --}}
+            {{-- General Import Information Section --}}
             <div>
-                <label class="block text-gray-700 mb-1 text-c">บริษัทนำเข้า</label>
-                <select class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    name="company_id">
-                    <option value="">-- เลือก --</option>
-                    @foreach ($companies as $company)
-                        <option value="{{ $company->id }}">{{ $company->full_name }}</option>
-                    @endforeach
-                </select>
-            </div>
+                <h3
+                    class="text-2xl font-semibold text-white bg-gradient-to-r from-blue-400 to-indigo-400 px-4 py-3 rounded-t-md">
+                    ข้อมูลการนำเข้าทั่วไป
+                </h3>
+                <div class="grid grid-cols-2 md:grid-cols-2 gap-6 mt-4">
+                    {{-- บริษัท (company_id) --}}
+                    <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">บริษัทนำเข้า</label>
+                        <div class="dropdown" id="companyDropdown">
+                            <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="companyBtn">
+                                @if (old('company_id'))
+                                    {{ $companies->firstWhere('id', old('company_id'))->full_name ?? '-- เลือก --' }}
+                                @else
+                                    -- เลือก --
+                                @endif
+                            </div>
+                            <div class="dropdown-list" id="companyList">
+                                <div class="dropdown-item text-gray-500" data-value="">-- เลือก --</div>
+                                @foreach ($companies as $company)
+                                    <div class="dropdown-item" data-value="{{ $company->id }}">
+                                        {{ $company->full_name }}
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        <input type="hidden" name="company_id" id="companyInput" value="{{ old('company_id') }}">
+                        @error('company_id')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-            {{-- เลขที่ทะเบียน --}}
-            <div>
-                <label class="block text-gray-700 mb-1">เลขที่ทะเบียน</label>
-                <input type="text" name="registration_no"
-                    class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-            </div>
+                    {{-- เลขที่ทะเบียน --}}
+                    <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลขที่ทะเบียน</label>
+                        <input type="text" name="registration_no" value="{{ old('registration_no') }}"
+                            placeholder="ใส่เลขที่ทะเบียน"
+                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        @error('registration_no')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-            {{-- วันหมดอายุ --}}
-            <div>
-                <label class="block text-gray-700 mb-1">วันหมดอายุ</label>
-                <input type="date" name="expiry_date"
-                    class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-            </div>
 
-            {{-- ชื่อวัตถุอันตราย (ไทย) --}}
-            <div>
-                <label class="block text-gray-700 mb-1">ชื่อวัตถุอันตราย (ไทย)</label>
-                <input type="text" name="chemical_name_th"
-                    class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-            </div>
+                    {{-- ชื่อการค้า --}}
+                    <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อการค้า</label>
+                        <input type="text" name="trade_name" value="{{ old('trade_name') }}"
+                            placeholder="ใส่ชื่อการค้า"
+                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        @error('trade_name')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    {{-- วันหมดอายุ --}}
+                    <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันหมดอายุ</label>
+                        <input type="date" name="expiry_date" value="{{ old('expiry_date') }}"
+                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        @error('expiry_date')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-            {{-- ชื่อวัตถุอันตราย (อังกฤษ) --}}
-            <div>
-                <label class="block text-gray-700 mb-1">ชื่อวัตถุอันตราย (อังกฤษ)</label>
-                <input type="text" name="chemical_name_en"
-                    class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-            </div>
+                    {{-- ชื่อวัตถุอันตราย (ไทย) --}}
+                    <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อวัตถุอันตราย (ไทย)</label>
+                        <input type="text" name="chemical_name_th" value="{{ old('chemical_name_th') }}"
+                            placeholder="ใส่ชื่อวัตถุอันตราย (ไทย)"
+                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        @error('chemical_name_th')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-            {{-- % และสูตร --}}
-            <div>
-                <label class="block text-gray-700 mb-1">% และสูตร</label>
-                <input type="text" name="formula"
-                    class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-            </div>
+                    {{-- ชื่อวัตถุอันตราย (อังกฤษ) --}}
+                    <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อวัตถุอันตราย (อังกฤษ)</label>
+                        <input type="text" name="chemical_name_en" value="{{ old('chemical_name_en') }}"
+                            placeholder="ใส่ชื่อวัตถุอันตราย (อังกฤษ)"
+                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        @error('chemical_name_en')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-            {{-- ชื่อการค้า --}}
-            <div>
-                <label class="block text-gray-700 mb-1">ชื่อการค้า</label>
-                <input type="text" name="trade_name"
-                    class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-            </div>
+                    {{-- % และสูตร --}}
+                    <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">% และสูตร</label>
+                        <input type="text" name="formula" value="{{ old('formula') }}" placeholder="ใส่ % และสูตร"
+                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        @error('formula')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-            {{-- ผู้ผลิต --}}
-            <div>
-                <label class="block text-gray-700 mb-1">ผู้ผลิตและแหล่งผลิต</label>
-                <input type="text" name="manufacturer"
-                    class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-            </div>
 
-            {{-- ผู้จำหน่าย --}}
-            <div>
-                <label class="block text-gray-700 mb-1">ผู้จำหน่าย</label>
-                <select class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    name="supplier">
-                    <option value="">-- เลือก --</option>
-                    @foreach ($companies as $company)
-                        <option value="{{ $company->id }}">{{ $company->full_name }}</option>
-                    @endforeach
-                </select>
-            </div>
+                    {{-- ผู้ผลิต --}}
+                    <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ผู้ผลิตและแหล่งผลิต</label>
+                        <input type="text" name="manufacturer" value="{{ old('manufacturer') }}"
+                            placeholder="ใส่ผู้ผลิตและแหล่งผลิต"
+                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        @error('manufacturer')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-            {{-- ใบอนุญาต --}}
-            <div>
-                <label for="license_no" class="block text-gray-700 mb-1">ใบอนุญาตเลขที่</label>
-                <input type="text" name="license_no" id="license_no"
-                    class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-            </div>
+                    {{-- ผู้จำหน่าย --}}
+                    <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ผู้จำหน่าย</label>
+                        <div class="dropdown" id="supplierDropdown">
+                            <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="supplierBtn">
+                                @if (old('supplier'))
+                                    {{ $companies->firstWhere('id', old('supplier'))->full_name ?? '-- เลือก --' }}
+                                @else
+                                    -- เลือก --
+                                @endif
+                            </div>
+                            <div class="dropdown-list" id="supplierList">
+                                <div class="dropdown-item text-gray-500" data-value="">-- เลือก --</div>
+                                @foreach ($companies as $company)
+                                    <div class="dropdown-item" data-value="{{ $company->id }}">
+                                        {{ $company->full_name }}
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        <input type="hidden" name="supplier" id="supplierInput" value="{{ old('supplier') }}">
+                        @error('supplier')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-            {{-- ที่จัดเก็บ (ปรับปรุงใหม่เป็น Dropdown และห้ามเลือกซ้ำ) --}}
-            <div class="flex flex-col md:flex-row md:space-x-4">
-                <div class="flex-1 mb-4 md:mb-0">
-                    <label for="store_company_1" class="block text-gray-700 mb-1">สถานที่จัดเก็บที่ 1</label>
-                    <select name="store_company_1" id="store_company_1"
-                        class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="">-- เลือก --</option>
-                        @foreach ($companies as $company)
-                            <option value="{{ $company->id }}">{{ $company->full_name }}</option>
-                        @endforeach
-                    </select>
-                    @error('store_company_1')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
+                    {{-- ใบอนุญาต --}}
+                    <div>
+                        <label for="license_no"
+                            class="mx-3 text-base block text-gray-700 mb-1 mt-3">ใบอนุญาตเลขที่</label>
+                        <input type="text" name="license_no" id="license_no" value="{{ old('license_no') }}"
+                            placeholder="ใส่ใบอนุญาตเลขที่"
+                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        @error('license_no')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
                 </div>
-                <div class="flex-1">
-                    <label for="store_company_2" class="block text-gray-700 mb-1">สถานที่จัดเก็บที่ 2</label>
-                    <select name="store_company_2" id="store_company_2"
-                        class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="">-- เลือก --</option>
-                        @foreach ($companies as $company)
-                            <option value="{{ $company->id }}">{{ $company->full_name }}</option>
-                        @endforeach
-                    </select>
-                    @error('store_company_2')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
+            </div>
+
+            {{-- Storage Information Section --}}
+            <div>
+                <h3
+                    class="text-2xl font-semibold text-white bg-gradient-to-r from-blue-400 to-indigo-400 px-4 py-3 rounded-t-md">
+                    ข้อมูลการจัดเก็บ
+                </h3>
+                <div class="grid grid-cols-3 md:grid-cols-4 gap-6 mt-4">
+                    {{-- ปริมาณนำเข้า --}}
+                    <div>
+                        <label for="import_quantity"
+                            class="mx-3 text-base block text-gray-700 mb-1 mt-3">ปริมาณนำเข้า</label>
+                        <input type="number" name="import_quantity" id="import_quantity"
+                            value="{{ old('import_quantity') }}" placeholder="ใส่ปริมาณนำเข้า"
+                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        @error('import_quantity')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- ที่จัดเก็บ (ปรับปรุงใหม่เป็น Dropdown และห้ามเลือกซ้ำ) --}}
+                    <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">สถานที่จัดเก็บที่ 1</label>
+                        <div class="dropdown" id="storeCompany1Dropdown">
+                            <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="storeCompany1Btn">
+                                @if (old('store_company_1'))
+                                    {{ $companies->firstWhere('id', old('store_company_1'))->full_name ?? '-- เลือก --' }}
+                                @else
+                                    -- เลือก --
+                                @endif
+                            </div>
+                            <div class="dropdown-list" id="storeCompany1List">
+                                <div class="dropdown-item text-gray-500" data-value="">-- เลือก --</div>
+                                @foreach ($companies as $company)
+                                    <div class="dropdown-item" data-value="{{ $company->id }}">
+                                        {{ $company->full_name }}
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        <input type="hidden" name="store_company_1" id="storeCompany1Input"
+                            value="{{ old('store_company_1') }}">
+                        @error('store_company_1')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">สถานที่จัดเก็บที่ 2</label>
+                        <div class="dropdown" id="storeCompany2Dropdown">
+                            <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="storeCompany2Btn">
+                                @if (old('store_company_2'))
+                                    {{ $companies->firstWhere('id', old('store_company_2'))->full_name ?? '-- เลือก --' }}
+                                @else
+                                    -- เลือก --
+                                @endif
+                            </div>
+                            <div class="dropdown-list" id="storeCompany2List">
+                                <div class="dropdown-item text-gray-500" data-value="">-- เลือก --</div>
+                                @foreach ($companies as $company)
+                                    <div class="dropdown-item" data-value="{{ $company->id }}">
+                                        {{ $company->full_name }}
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        <input type="hidden" name="store_company_2" id="storeCompany2Input"
+                            value="{{ old('store_company_2') }}">
+                        @error('store_company_2')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+
+                    {{-- รายละเอียดขนาดบรรจุ --}}
+                    <div class="md:col-span-3">
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">รายละเอียดขนาดบรรจุ</label>
+                        <textarea name="packaging" placeholder="ใส่รายละเอียดขนาดบรรจุ"
+                            class="w-full p-3 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500" rows="2">{{ old('packaging') }}</textarea>
+                        @error('packaging')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- หมายเหตุ --}}
+                    <div class="md:col-span-3">
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">หมายเหตุ</label>
+                        <textarea name="remarks" placeholder="เพิ่มหมายเหตุ (ถ้ามี)"
+                            class="w-full p-3 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500" rows="2">{{ old('remarks') }}</textarea>
+                        @error('remarks')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
                 </div>
             </div>
-
-            {{-- ปริมาณนำเข้า --}}
-            <div>
-                <label for="import_quantity" class="block text-gray-700 mb-1">ปริมาณนำเข้า</label>
-                <input type="number" name="import_quantity" id="import_quantity"
-                    class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-            </div>
-
-            {{-- รายละเอียดขนาดบรรจุ --}}
-            <div class="md:col-span-2">
-                <label class="block text-gray-700 mb-1">รายละเอียดขนาดบรรจุ</label>
-                <textarea name="packaging" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    rows="2"></textarea>
-            </div>
-
-            {{-- หมายเหตุ --}}
-            <div class="md:col-span-2">
-                <label class="block text-gray-700 mb-1">หมายเหตุ</label>
-                <textarea name="remarks" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    rows="2"></textarea>
-            </div>
-
-            {{-- ปุ่ม --}}
-            <div class="text-right mt-8">
+            {{-- Buttons --}}
+            <div class="flex justify-center gap-4 pt-4">
                 <a href="{{ route('import.index') }}"
-                    class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg shadow transition duration-300">
-                    <i class="fa-solid fa-arrow-left mr-2"></i> ย้อนกลับ
+                    class="bg-gray-500 hover:bg-gray-500 text-white font-bold py-2 px-6 rounded-lg shadow-md flex items-center justify-center">
+                    ยกเลิก
                 </a>
-            </div>
-            <div class="text-left mt-6">
                 <button type="submit"
-                    class="bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md">
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg shadow-md">
                     บันทึก
                 </button>
             </div>
         </form>
     </div>
 
-    {{-- Custom Message Box --}}
+    {{-- Custom Message Box (for unique selection error) --}}
     <div id="customMessageBox"
         class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
         <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
@@ -199,9 +301,94 @@
     @endif
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const companySelect = document.getElementById('store_company_1');
-            const storeCompanySelect = document.getElementById('store_company_2');
+        document.getElementById('menu-inregister')?.classList.add('side-menu--active');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Function to set up custom dropdowns
+            function setupDropdown(btnId, listId, inputId, oldValue = null, isStoreCompanyDropdown = false) {
+                const btn = document.getElementById(btnId);
+                const list = document.getElementById(listId);
+                const input = document.getElementById(inputId);
+                const items = list.querySelectorAll('.dropdown-item');
+
+                function updateBtn(label, value) {
+                    btn.textContent = label;
+                    if (value === "" || label.includes('--')) {
+                        btn.classList.add('text-gray-500');
+                    } else {
+                        btn.classList.remove('text-gray-500');
+                    }
+                    input.value = value;
+                }
+
+                // Initial state
+                const initial = [...items].find(item => item.dataset.value === "");
+                if (initial) updateBtn(initial.textContent, "");
+
+                // Restore old value from Laravel if available
+                if (oldValue) {
+                    const match = [...items].find(i => i.dataset.value == oldValue);
+                    if (match) updateBtn(match.textContent, match.dataset.value);
+                }
+
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent document click from closing immediately
+                    list.classList.toggle('open');
+                    btn.classList.toggle('open');
+                    // Close other dropdowns
+                    document.querySelectorAll('.dropdown-list.open').forEach(openlist => {
+                        if (openlist.id !== listId) {
+                            openlist.classList.remove('open');
+                            document.getElementById(openlist.id.replace('List', 'Btn')).classList
+                                .remove('open');
+                        }
+                    });
+                });
+
+                items.forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const selectedValue = item.dataset.value;
+                        const selectedLabel = item.textContent;
+
+                        // Specific logic for store company dropdowns to ensure unique selection
+                        if (isStoreCompanyDropdown) {
+                            const storeCompany1Input = document.getElementById(
+                                'storeCompany1Input');
+                            const storeCompany2Input = document.getElementById(
+                                'storeCompany2Input');
+                            const currentBtnId = btnId;
+
+                            let otherValue = '';
+                            if (currentBtnId === 'storeCompany1Btn') {
+                                otherValue = storeCompany2Input.value;
+                            } else if (currentBtnId === 'storeCompany2Btn') {
+                                otherValue = storeCompany1Input.value;
+                            }
+
+                            if (selectedValue && selectedValue === otherValue) {
+                                showMessageBox('สถานที่จัดเก็บที่ 1 และ 2 ต้องไม่เหมือนกัน');
+                                // Don't update the dropdown if values are the same
+                                return;
+                            }
+                        }
+
+                        updateBtn(selectedLabel, selectedValue);
+                        list.classList.remove('open');
+                        btn.classList.remove('open');
+                    });
+                });
+
+                document.addEventListener('click', (e) => {
+                    // Check if the click is outside any dropdown
+                    if (!e.target.closest('.dropdown')) {
+                        list.classList.remove('open');
+                        btn.classList.remove('open');
+                    }
+                });
+            }
+
+            // Custom message box functions
             const messageBox = document.getElementById('customMessageBox');
             const messageBoxContent = document.getElementById('messageBoxContent');
             const closeMessageBox = document.getElementById('closeMessageBox');
@@ -217,26 +404,102 @@
 
             closeMessageBox.addEventListener('click', hideMessageBox);
 
-            function enforceUniqueSelection(event) {
-                const companyValue = companySelect.value;
-                const storeCompanyValue = storeCompanySelect.value;
-
-                if (companyValue && storeCompanyValue && companyValue === storeCompanyValue) {
-                    // หากค่าซ้ำกัน ให้เคลียร์ค่าของช่องที่เลือกทีหลัง
-                    if (event.target.id === 'store_company_1') {
-                        storeCompanySelect.value = ''; // ถ้าเปลี่ยน company แล้วซ้ำ ให้รีเซ็ต store_company
-                        showMessageBox('สถานที่จัดเก็บที่ 1 และ 2 ต้องไม่เหมือนกัน');
-                    } else if (event.target.id === 'store_company_2') {
-                        companySelect.value = ''; // ถ้าเปลี่ยน store_company แล้วซ้ำ ให้รีเซ็ต company
-                        showMessageBox('สถานที่จัดเก็บที่ 1 และ 2 ต้องไม่เหมือนกัน');
-                    }
-                }
-            }
-
-            companySelect.addEventListener('change', enforceUniqueSelection);
-            storeCompanySelect.addEventListener('change', enforceUniqueSelection);
+            // Setup for all dropdowns
+            setupDropdown('companyBtn', 'companyList', 'companyInput', "{{ old('company_id') }}");
+            setupDropdown('supplierBtn', 'supplierList', 'supplierInput', "{{ old('supplier') }}");
+            setupDropdown('storeCompany1Btn', 'storeCompany1List', 'storeCompany1Input',
+                "{{ old('store_company_1') }}", true);
+            setupDropdown('storeCompany2Btn', 'storeCompany2List', 'storeCompany2Input',
+                "{{ old('store_company_2') }}", true);
         });
-
-        document.getElementById('menu-inregister')?.classList.add('side-menu--active');
     </script>
+
+    <style>
+        /* Shared Dropdown Styles from รูปแบบที่ 1 */
+        * {
+            box-sizing: border-box;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #374151;
+            font-size: 16px;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-btn {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #edeff3;
+            border-radius: 9999px;
+            background-color: #fff;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dropdown-btn:after {
+            content: "▾";
+            font-size: 26px;
+            color: #7f838a;
+            margin-left: 8px;
+        }
+
+        .dropdown-list {
+            position: absolute;
+            top: 105%;
+            left: 0;
+            width: 100%;
+            background-color: #fff;
+            border: 1px solid #edeff3;
+            border-radius: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            display: none;
+            max-height: 230px;
+            overflow-y: auto;
+        }
+
+        .dropdown-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .dropdown-list::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        .dropdown-list::-webkit-scrollbar-track {
+            background-color: #f1f5f9;
+        }
+
+        .dropdown-list.open {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            border-radius: 20px;
+            /* Apply border-radius to each item for consistent look */
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            background-color: #e0f2fe;
+        }
+
+        .hidden-input {
+            display: none;
+        }
+    </style>
 </x-app-layout>

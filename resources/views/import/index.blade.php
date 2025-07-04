@@ -15,38 +15,65 @@
             </h1>
 
             <div class="flex flex-col sm:flex-row justify-between items-center mx-3 mb-2">
-                <form action="{{ route('import.index') }}" method="GET" class="flex items-center gap-2 mb-4">
-                    <div class="relative w-72">
-                        <!-- ไอคอนแว่น -->
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" fill="none"
-                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8">
+                <form action="{{ route('import.index') }}" method="GET" class="flex items-center gap-2 mb-2">
+                    <div class="relative flex-grow min-w-[280px]">
+                        <label for="search_query"
+                            class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อบริษัท</label>
+
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none mt-9">
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                             </svg>
-
-
                         </div>
-                        <!-- ช่องค้นหา -->
-                        <input type="text" name="search" placeholder="ชื่อวัตถุอันตราย หรือเลขที่ทะเบียน..."
-                            value="{{ request('search') }}"
-                            class="pl-10 pr-4 py-2 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500" />
+                        <input type="text" id="search_query" name="search"
+                            placeholder="ชื่อวัตถุอันตราย /บริษัท /เลขที่ทะเบียน" value="{{ request('search') }}"
+                            class="pl-10 pr-4 py-2 w-96 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-600 transition duration-200 ease-in-out text-gray-700 shadow-sm" />
                     </div>
-
+                    <div class="flex-grow min-w-[180px]">
+                        <label for="expiry_date_from"
+                            class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันที่เริ่ม</label>
+                        <input id="expiry_date_from"
+                            class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200 ease-in-out text-gray-700 text-base shadow-sm w-full"
+                            type="date" name="expiry_date_from" value="{{ request('expiry_date_from') }}" />
+                    </div>
+                    <div class="flex-grow min-w-[180px]">
+                        <label for="expiry_date_to"
+                            class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันที่สิ้นสุด</label>
+                        <input id="expiry_date_to"
+                            class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200 ease-in-out text-gray-700 text-base shadow-sm w-full"
+                            type="date" name="expiry_date_to" value="{{ request('expiry_date_to') }}" />
+                    </div>
                     <!-- ปุ่มค้นหา -->
-                    <button type="submit"
-                        class="bg-blue-500 hover:bg-blue-700 text-white px-5 py-2 rounded-lg transition">
-                        ค้นหา
-                    </button>
+                    <div class="flex gap-3 mt-10">
+                        <button type="submit"
+                            class="bg-gradient-to-r from-blue-500 to-blue-500 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold px-6 py-2 rounded-lg shadow-md transform hover:scale-105 transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
+                            <svg class="w-5 h-5 inline-block mr-1 -mt-0.5" fill="none" stroke="currentColor"
+                                stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                            </svg>
+                            ค้นหา
+                        </button>
+
+                        {{-- <a href="{{ route('import.index') }}"
+                            class="inline-flex items-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold px-6 py-2 rounded-lg shadow-md transform hover:scale-105 transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50">
+                            <svg class="w-5 h-5 inline-block mr-1 -mt-0.5" fill="none" stroke="currentColor"
+                                stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                            </svg>
+                            ล้างการค้นหา
+                        </a> --}}
+                    </div>
                 </form>
                 @can('Inregister create')
                     <a href="{{ route('import.create') }}"
-                        class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 shadow-md">
+                        class="mt-10 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold px-6 py-2 rounded-lg shadow-md transform hover:scale-105 transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
                         + เพิ่มข้อมูลทะเบียน
                     </a>
                 @endcan
             </div>
-
             <div class="bg-white rounded-2xl overflow-hidden border border-gray-200">
                 <div class="overflow-x-auto">
                     <table class="min-w-full bg-white">

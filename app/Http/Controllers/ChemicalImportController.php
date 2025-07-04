@@ -19,20 +19,51 @@ class ChemicalImportController extends Controller
     public function index(Request $request)
     {
         $query = ChemicalImport::query();
+        $query->with('company');
+
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
                 $q->where('chemical_name_th', 'like', "%$search%")
                     ->orWhere('chemical_name_en', 'like', "%$search%")
-                    ->orWhere('registration_no', 'like', "%$search%");
-                // ->orWhere('trade_name', 'like', "%$search%");
+                    ->orWhere('registration_no', 'like', "%$search%")
+                    ->orWhereHas('company', function ($q2) use ($search) {
+                        $q2->where('full_name', 'like', "%$search%");
+                    });
             });
+        }
+
+        if ($request->filled('expiry_date_from') && $request->filled('expiry_date_to')) {
+            $query->whereBetween('expiry_date', [
+                $request->input('expiry_date_from'),
+                $request->input('expiry_date_to'),
+            ]);
         }
 
         $imports = $query->latest()->paginate(10)->withQueryString();
 
-        return view('import.index', compact('imports'));
+        // Count for summary cards - these should NOT be affected by the search query
+        // $totalNewRegistrations = ChemicalRegistration::where('new_or_old', true)->count();
+        // $pendingCount = ChemicalRegistration::where('progress', '<', 100)
+        //     ->where('new_or_old', true)
+        //     ->count();
+        // $approvedCount = ChemicalRegistration::where('progress', 100)
+        //     ->where('new_or_old', true)
+        //     ->count();
+
+        // $paginatedProducts = $query->orderBy('created_at', 'desc')->paginate(5);
+
+        return view('import.index', [
+            'imports' => $imports,
+            // 'totalNewRegistrations' => $totalNewRegistrations,
+            // 'pendingCount' => $pendingCount,
+            // 'approvedCount' => $approvedCount,
+            // 'paginatedProducts' => $paginatedProducts,
+        ]);
+
+        // return view('import.index', compact('imports'));
     }
+
 
     /**
      * Show the form for creating a new resource.
