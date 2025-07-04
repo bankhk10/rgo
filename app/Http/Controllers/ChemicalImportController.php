@@ -42,12 +42,12 @@ class ChemicalImportController extends Controller
 
         $imports = $query->latest()->paginate(10)->withQueryString();
 
-        // Count for summary cards - these should NOT be affected by the search query
-        // $totalNewRegistrations = ChemicalRegistration::where('new_or_old', true)->count();
-        // $pendingCount = ChemicalRegistration::where('progress', '<', 100)
-        //     ->where('new_or_old', true)
-        //     ->count();
-        // $approvedCount = ChemicalRegistration::where('progress', 100)
+        // $totalNewRegistrations = ChemicalImport::where('new_or_old', true)->count();
+        $total = ChemicalImport::count();
+        $pendingCount = ChemicalImport::where('progress', '<', 100)
+            ->where('new_or_old', true)
+            ->count();
+        // $approvedCount = ChemicalImport::where('progress', 100)
         //     ->where('new_or_old', true)
         //     ->count();
 
@@ -55,7 +55,7 @@ class ChemicalImportController extends Controller
 
         return view('import.index', [
             'imports' => $imports,
-            // 'totalNewRegistrations' => $totalNewRegistrations,
+            'total' => $total ,
             // 'pendingCount' => $pendingCount,
             // 'approvedCount' => $approvedCount,
             // 'paginatedProducts' => $paginatedProducts,

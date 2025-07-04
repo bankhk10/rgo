@@ -28,6 +28,7 @@ class ChemicalImport extends Model
         'possession_form_wo2',
         'possession_form_expiry',
         'packaging',
+        'status',
         'remarks',
     ];
 
