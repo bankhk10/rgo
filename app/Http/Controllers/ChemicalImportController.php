@@ -42,26 +42,19 @@ class ChemicalImportController extends Controller
 
         $imports = $query->latest()->paginate(10)->withQueryString();
 
-        // $totalNewRegistrations = ChemicalImport::where('new_or_old', true)->count();
         $total = ChemicalImport::count();
-        $pendingCount = ChemicalImport::where('progress', '<', 100)
-            ->where('new_or_old', true)
+        $expiredCount = ChemicalImport::where('status', 'expired')
             ->count();
-        // $approvedCount = ChemicalImport::where('progress', 100)
-        //     ->where('new_or_old', true)
-        //     ->count();
-
-        // $paginatedProducts = $query->orderBy('created_at', 'desc')->paginate(5);
+        $soonCount = ChemicalImport::where('status', 'soon_expired')
+            ->count();
 
         return view('import.index', [
             'imports' => $imports,
-            'total' => $total ,
-            // 'pendingCount' => $pendingCount,
-            // 'approvedCount' => $approvedCount,
-            // 'paginatedProducts' => $paginatedProducts,
+            'total' => $total,
+            'expiredCount' => $expiredCount,
+            'soonCount' => $soonCount,
         ]);
 
-        // return view('import.index', compact('imports'));
     }
 
 
@@ -72,7 +65,7 @@ class ChemicalImportController extends Controller
      */
     public function create()
     {
-        $companies = Company::all(); // ดึงรายชื่อบริษัททั้งหมด
+        $companies = Company::all();
         return view('import.create', compact('companies'));
         // return view('import.create');
     }

@@ -72,6 +72,7 @@ class UserController extends Controller
             // ]);
 
             $user = User::create([
+                'prefix' => $request->prefix,
                 'name' => $request->name,
                 'email' => $request->email,
                 'profile' => 'aa_user.png',
@@ -125,7 +126,9 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+
         $request->validate([
+            'prefix' => 'required',
             'name' => 'required',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'password' => 'nullable|confirmed',
@@ -138,6 +141,7 @@ class UserController extends Controller
         ]);
 
         $user->update([
+            'prefix' => $request->prefix,
             'name' => $request->name,
             'email' => $request->email,
             'department' => $request->department,

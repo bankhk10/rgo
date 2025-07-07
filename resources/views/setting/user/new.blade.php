@@ -13,7 +13,25 @@
                 <h3
                     class="text-2xl font-semibold text-white bg-gradient-to-r from-blue-400 to-indigo-400 px-4 py-3 rounded-t-md">
                     ข้อมูลทั่วไป</h3>
-                <div class="grid grid-cols-2 md:grid-cols-2 gap-6 mt-4">
+                <div class="grid grid-cols-3 md:grid-cols-2 gap-6 mt-4">
+                    <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">คำนำหน้า</label>
+                        <div class="dropdown" id="prefixDropdown">
+                            <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="prefixBtn">--
+                                เลือกคำนำหน้า --</div>
+                            <div class="dropdown-list" id="prefixList">
+                                <div class="dropdown-item text-gray-500" data-value="">-- เลือกคำนำหน้า --</div>
+                                <div class="dropdown-item" data-value="นาย">นาย</div>
+                                <div class="dropdown-item" data-value="นาง">นาง</div>
+                                <div class="dropdown-item" data-value="นางสาว">นางสาว</div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="prefix" id="prefixInput" value="{{ old('prefix') }}">
+                        @error('prefix')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อผู้ใช้งาน</label>
                         <input type="text" name="name" value="{{ old('name') }}" placeholder="ใส่ชื่อผู้ใช้งาน"
@@ -36,8 +54,10 @@
                                 <div class="dropdown-item" data-value="staff">พนักงาน</div>
                             </div>
                         </div>
-                        <input type="hidden" name="position" id="positionInput" value="{{ old('position') }}"> {{-- เพิ่ม old('position') --}}
-                        @error('position') {{-- เพิ่ม error message สำหรับ position --}}
+                        <input type="hidden" name="position" id="positionInput" value="{{ old('position') }}">
+                        {{-- เพิ่ม old('position') --}}
+                        @error('position')
+                            {{-- เพิ่ม error message สำหรับ position --}}
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
@@ -69,7 +89,7 @@
                 <h3
                     class="text-2xl font-semibold text-white bg-gradient-to-r from-blue-400 to-indigo-400 px-4 py-3 rounded-t-md">
                     การเข้าสู่ระบบและสิทธิ์การใช้งาน</h3>
-                <div class="grid grid-cols-2 md:grid-cols-2 gap-6 mt-4">
+                <div class="grid grid-cols-3 md:grid-cols-2 gap-6 mt-4">
 
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">อีเมล์เข้าสู่ระบบ</label>
@@ -122,7 +142,8 @@
                                 <div class="dropdown-item" data-value="no">ไม่มีสิทธิ์ดำเนินการ</div>
                             </div>
                         </div>
-                        <input type="hidden" name="department" id="departmentInput" value="{{ old('department') }}">
+                        <input type="hidden" name="department" id="departmentInput"
+                            value="{{ old('department') }}">
                         @error('department')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
@@ -181,7 +202,8 @@
                                 <div class="dropdown-item" data-value="inactive">Inactive</div>
                             </div>
                         </div>
-                        <input type="hidden" name="employment_status" id="statusInput" value="{{ old('employment_status') }}">
+                        <input type="hidden" name="employment_status" id="statusInput"
+                            value="{{ old('employment_status') }}">
                         @error('employment_status')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
@@ -277,6 +299,9 @@
 
             // Setup for 'employment_status' dropdown
             setupDropdown('statusBtn', 'statusList', 'statusInput', "{{ old('employment_status') }}");
+
+            setupDropdown('prefixBtn', 'prefixList', 'prefixInput', "{{ old('prefix') }}");
+
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

@@ -13,7 +13,25 @@
                 <h3
                     class="text-2xl font-semibold text-white bg-gradient-to-r from-blue-400 to-indigo-400 px-4 py-3 rounded-t-md">
                     ข้อมูลทั่วไป</h3>
-                <div class="grid grid-cols-2 md:grid-cols-2 gap-6 mt-4">
+                <div class="grid grid-cols-3 md:grid-cols-2 gap-6 mt-4">
+                    <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">คำนำหน้า</label>
+                        <div class="dropdown" id="prefixDropdown">
+                            <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="prefixBtn">--
+                                เลือกคำนำหน้า --</div>
+                            <div class="dropdown-list" id="prefixList">
+                                <div class="dropdown-item text-gray-500" data-value="">-- เลือกคำนำหน้า --</div>
+                                <div class="dropdown-item" data-value="นาย">นาย</div>
+                                <div class="dropdown-item" data-value="นาง">นาง</div>
+                                <div class="dropdown-item" data-value="นางสาว">นางสาว</div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="prefix" id="prefixInput" value="{{ old('prefix') }}">
+                        @error('prefix')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อผู้ใช้งาน</label>
                         <input type="text" name="name" value="{{ old('name', $user->name) }}"
@@ -71,7 +89,7 @@
                 <h3
                     class="text-2xl font-semibold text-white bg-gradient-to-r from-blue-400 to-indigo-400 px-4 py-3 rounded-t-md">
                     การเข้าสู่ระบบและสิทธิ์การใช้งาน</h3>
-                <div class="grid grid-cols-2 md:grid-cols-2 gap-6 mt-4">
+                <div class="grid grid-cols-3 md:grid-cols-2 gap-6 mt-4">
 
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">อีเมล์เข้าสู่ระบบ</label>
@@ -177,7 +195,8 @@
                                 @endforeach
                             </div>
                         </div>
-                        <input type="hidden" name="role_id" id="roleInput" value="{{ old('role_id', $currentRoleId) }}">
+                        <input type="hidden" name="role_id" id="roleInput"
+                            value="{{ old('role_id', $currentRoleId) }}">
                         @error('role_id')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
@@ -284,16 +303,22 @@
             }
 
             // Setup for 'position' dropdown
-            setupDropdown('positionBtn', 'positionList', 'positionInput', "{{ old('position', $user->position) }}");
+            setupDropdown('positionBtn', 'positionList', 'positionInput',
+                "{{ old('position', $user->position) }}");
 
             // Setup for 'department' dropdown
-            setupDropdown('departmentBtn', 'departmentList', 'departmentInput', "{{ old('department', $user->department) }}");
+            setupDropdown('departmentBtn', 'departmentList', 'departmentInput',
+                "{{ old('department', $user->department) }}");
 
             // Setup for 'role' dropdown
             setupDropdown('roleBtn', 'roleList', 'roleInput', "{{ old('role_id', $currentRoleId) }}");
 
             // Setup for 'employment_status' dropdown
-            setupDropdown('statusBtn', 'statusList', 'statusInput', "{{ old('employment_status', $user->employment_status) }}");
+            setupDropdown('statusBtn', 'statusList', 'statusInput',
+                "{{ old('employment_status', $user->employment_status) }}");
+
+            setupDropdown('prefixBtn', 'prefixList', 'prefixInput', "{{ old('prefix', $user->prefix) }}");
+
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
