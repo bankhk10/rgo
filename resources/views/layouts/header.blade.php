@@ -10,10 +10,32 @@
     </div>
     <div class="flex items-center">
         <div x-data="{ dropdownOpen: false }" class="relative">
-            <button @click="dropdownOpen = ! dropdownOpen"
+            @php
+
+                if (auth()->user()) {
+                }
+                if (auth()->user()->prefix == 'นาย') {
+                    $profileImage = '/m.png';
+                } elseif (auth()->user()->prefix == 'นาง' || auth()->user()->prefix == 'นางสาว') {
+                    $profileImage = '/w.png';
+                } else {
+                    $profileImage = '/aa_user.png';
+                }
+            @endphp
+
+            {{-- <button id="myHiddenButton"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-opacity duration-300"
+                x-data="{ showButton: true }" x-show="showButton" x-transition:opacity
+                @scroll.window="showButton = (window.scrollY <= 10)">
+                ปุ่มของฉัน
+            </button> --}}
+
+            <button @click="dropdownOpen = ! dropdownOpen" x-data="{ showButton: true }" x-show="showButton"
+                x-transition:opacity @scroll.window="showButton = (window.scrollY <= 1)"
                 class="relative block h-8 w-8 rounded-full overflow-hidden shadow focus:outline-none">
-                <img class="h-full w-full object-cover" src="/images/{{ auth()->user()->profile ?? '/aa_user.png' }}"
-                    alt="Your avatar">
+                <img class="h-full w-full object-cover" src="/images/{{ $profileImage }}" alt="">
+                {{-- <img class="h-full w-full object-cover" src="/images/{{ auth()->user()->profile ?? '/aa_user.png' }}"
+                    alt="Your avatar"> --}}
             </button>
 
             <div x-show="dropdownOpen" @click="dropdownOpen = false" class="fixed inset-0 h-full w-full z-10"
