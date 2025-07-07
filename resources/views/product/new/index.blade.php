@@ -101,6 +101,7 @@
                         <thead>
                             <tr class="bg-indigo-600 text-white text-left">
                                 <th class="py-4 px-8 rounded-tl-2xl">ลำดับ</th>
+                                <th class="py-4 px-8">ชื่อทางการค้า</th>
                                 <th class="py-4 px-8">ชื่อสามัญ</th>
                                 <th class="py-4 px-8">เลขที่ทะเบียน</th>
                                 <th class="py-4 px-8">วันที่ขอขึ้นทะเบียน</th>
@@ -114,6 +115,7 @@
                                     <td class="py-4 px-8 font-semibold text-gray-700">
                                         {{ ($paginatedProducts->currentPage() - 1) * $paginatedProducts->perPage() + $index + 1 }}
                                     </td>
+                                    <td class="py-4 px-8">{{ $product->trade_name ?? '' }}</td>
                                     <td class="py-4 px-8">{{ $product->chemicalImport->chemical_name_th ?? '' }}</td>
                                     <td class="py-4 px-8">{{ $product->registration_number ?? '' }}</td>
                                     <td class="py-4 px-8">{{ $product->created_at->format('d/m/Y') ?? '' }}</td>

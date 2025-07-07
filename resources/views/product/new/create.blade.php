@@ -1,187 +1,296 @@
 <x-app-layout>
-    <div class="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-2xl space-y-6 mt-6">
-        <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center">แบบฟอร์มขึ้นทะเบียนใหม่</h2>
-        <form method="POST" action="{{ route('newregis.store') }}" class="grid grid-cols-2 md:grid-cols-2 gap-4">
+    <div class="max-w-7xl mx-auto p-8 bg-white shadow-lg rounded-2xl space-y-10 mt-6">
+        <h2 class="text-4xl font-extrabold text-gray-700 mb-8 pb-4 text-center border-b border-gray-300">
+            แบบฟอร์มขึ้นทะเบียนใหม่
+        </h2>
+
+        <form method="POST" action="{{ route('newregis.store') }}" class="space-y-10">
             @csrf
-            <div>
-                <label class="block text-gray-700 mb-1">ชื่อสามัญ</label>
-                <input type="text" id="productSearch"
-                    class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="พิมพ์ชื่อสามัญ..." oninput="autocompleteSearch(this.value)" autocomplete="off" />
-                <ul id="autocomplete-list"
-                    class="absolute z-10 bg-white border w-80 rounded-lg shadow max-h-60 overflow-y-auto hidden">
-                </ul>
-                <input type="hidden" id="hazardous_name_th" name="chemical_name_th" />
-                <input type="hidden" id="formulation_ratio"
-                    class="w-full p-2 border rounded-lg bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    name="common_name" readonly />
-                <input type="hidden" id="chemical_imports_id"
-                    class="w-full p-2 border rounded-lg bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    name="chemical_imports_id" readonly />
-            </div>
-            <div>
-                <label class="block text-gray-700 mb-1">สูตรอัตรส่วนผสมของสารสำคัญและลักษณะ</label>
-                <input type="text"
-                    class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    name="formula_of_ratio" />
-            </div>
-            <div>
-                <label class="block text-gray-700 mb-1">วันที่ยื่น Phase III</label>
-                <input type="date" name="date_request_phase_3"
-                    class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-            </div>
 
+            {{-- General Information Section --}}
             <div>
-                <label class="block text-gray-700 mb-1">เลข # Phase III</label>
-                <input type="text"
-                    class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    name="request_number_phase_3" />
-            </div>
-            <div>
-                <label class="block text-gray-700 mb-1">ผู้ขอขึ้นทะเบียน</label>
-                <select class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    name="registrant">
-                    <option value="">-- เลือก --</option>
-                    @foreach ($companies as $company)
-                        <option value="{{ $company->full_name }}">{{ $company->full_name }}</option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div>
-                <label class="block text-gray-700 mb-1">ชนิดทะเบียน</label>
-                <select class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    name="type_registration">
-                    <option value="">-- เลือก --</option>
-                    <option value="ชนิดที่ 2">ชนิดที่ 2</option>
-                    <option value="ชนิดที่ 3">ชนิดที่ 3</option>
-                </select>
-            </div>
-
-            <div>
-                <label class="block text-gray-700 mb-1">ประเภททะเบียน</label>
-                <select class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    name="registration_type">
-                    <option value="">-- เลือก --</option>
-                    <option value="นำเข้า (สารเข้มข้น)">นำเข้า (สารเข้มข้น)</option>
-                    <option value="นำเข้า (สำเร็จรูป)">นำเข้า (สำเร็จรูป)</option>
-                    <option value="ผลิต (ผสมปรุงแต่ง)">ผลิต (ผสมปรุงแต่ง)</option>
-                    <option value="นำเข้า (แบ่งบรรจุ)">นำเข้า (แบ่งบรรจุ)</option>
-                </select>
-            </div>
-
-            <div>
-                <label class="block text-gray-700 mb-1">ชื่อการค้า</label>
-                <input type="text"
-                    class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    name="trade_name" />
-            </div>
-            <div>
-                <label class="block text-gray-700 mb-1">ชื่อการที่</label>
-                <select class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    name="name_position">
-                    <option value="">-- เลือก --</option>
-                    <option value="T">T</option>
-                    <option value="-">-</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                </select>
-            </div>
-
-            <div>
-                <label class="block text-gray-700 mb-1">ชื่อผู้นำเข้า</label>
-                <select class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    name="importer">
-                    <option value="">-- เลือก --</option>
-                    @foreach ($companies as $company)
-                        <option value="{{ $company->full_name }}">{{ $company->full_name }}</option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div>
-                <label class="block text-gray-700 mb-1">ชื่อผู้จำหน่าย</label>
-                <select class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    name="distributor">
-                    <option value="">-- เลือก --</option>
-                    @foreach ($companies as $company)
-                        <option value="{{ $company->full_name }}">{{ $company->full_name }}</option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div>
-                <label class="block text-gray-700 mb-1">ชื่อผู้ผลิตและแหล่งผลิต</label>
-                <input type="text"
-                    class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    name="manufacturer" />
-            </div>
-
-            <div>
-                <label class="block text-gray-700 mb-1">ประเภทของการใช้</label>
-                <select class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    name="type_of_use">
-                    <option value="">-- เลือก --</option>
-                    <option value="A : Acaricide (สารกำจัดไรศัตรูพืช)">A : Acaricide (สารกำจัดไรศัตรูพืช)</option>
-                    <option value="F : Fungicide (สารป้องกันกำจัดโรคพืช)">F : Fungicide (สารป้องกันกำจัดโรคพืช)</option>
-                    <option value="H : Herbicide (สารป้องกันกำจัดโรคพืช)">H : Herbicide (สารกำจัดวัชพืช)</option>
-                    <option value="I : Insecticide (สารกำจัดแมลง)">I : Insecticide (สารกำจัดแมลง)</option>
-                    <option value="M : Molluscicide (สารกำจัดหอย)">M : Molluscicide (สารกำจัดหอย)</option>
-                    <option value="N : Nematicide (สารกำจัดไส้เดือนฝอย)">N : Nematicide (สารกำจัดไส้เดือนฝอย)</option>
-                    <option value="P : PlantGrowthRegulators (สารควบคุมการเจริญเติบโตของพืช)">P : PlantGrowthRegulators
-                        (สารควบคุมการเจริญเติบโตของพืช)</option>
-                    <option value="R : Rodenticide (สารกำจัดหนู)">R : Rodenticide (สารกำจัดหนู)</option>
-                </select>
-            </div>
-
-            <div class="md:col-span-2">
-                <label class="block text-gray-700 mb-1">รายละเอียดขนาดบรรจุ</label>
-                <textarea name="packaging_size_details"
-                    class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" rows="2"></textarea>
-            </div>
-
-            <div class="md:col-span-2">
-                <div class="flex flex-col md:flex-row gap-4">
-                    <div class="w-full md:w-1/3">
-                        <label class="block text-gray-700 mb-1">วันที่ยื่นคำขอ</label>
-                        <input type="date" name="date_submit_request"
-                            class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <h3
+                    class="text-2xl font-semibold text-white bg-gradient-to-r from-blue-400 to-indigo-400 px-4 py-3 rounded-t-md">
+                    ข้อมูลทั่วไป
+                </h3>
+                <div class="grid grid-cols-2 md:grid-cols-2 gap-6 mt-4">
+                    <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อสามัญ</label>
+                        <input type="text" id="productSearch"
+                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="พิมพ์ชื่อสามัญ..." oninput="autocompleteSearch(this.value)"
+                            autocomplete="off" />
+                        <ul id="autocomplete-list"
+                            class="absolute z-10 bg-white border w-80 rounded-2xl shadow max-h-60 overflow-y-auto hidden">
+                        </ul>
+                        <input type="hidden" id="hazardous_name_th" name="chemical_name_th" />
+                        <input type="hidden" id="formulation_ratio" name="common_name" />
+                        <input type="hidden" id="chemical_imports_id" name="chemical_imports_id" />
                     </div>
 
-                    <div class="w-full md:w-1/3">
-                        <label class="block text-gray-700 mb-1">เลขที่รับคำขอ</label>
-                        <input type="text" name="request_number_1"
-                            class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    <div>
+                        <label
+                            class="mx-3 text-base block text-gray-700 mb-1 mt-3">สูตรอัตรส่วนผสมของสารสำคัญและลักษณะ</label>
+                        <input type="text"
+                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            name="formula_of_ratio" value="{{ old('formula_of_ratio') }}" />
+                        @error('formula_of_ratio')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
-                    <div class="w-full md:w-1/3">
-                        <label class="block text-gray-700 mb-1">เลข # Phase I</label>
-                        <input type="text" name="request_number_phase_1"
-                            class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ผู้ขอขึ้นทะเบียน</label>
+                        <div class="dropdown" id="registrantDropdown">
+                            <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="registrantBtn">--
+                                เลือกผู้ขอขึ้นทะเบียน --</div>
+                            <div class="dropdown-list" id="registrantList">
+                                <div class="dropdown-item text-gray-500" data-value="">-- เลือกผู้ขอขึ้นทะเบียน --
+                                </div>
+                                @foreach ($companies as $company)
+                                    <div class="dropdown-item" data-value="{{ $company->full_name }}">
+                                        {{ $company->full_name }}</div>
+                                @endforeach
+                            </div>
+                        </div>
+                        <input type="hidden" name="registrant" id="registrantInput" value="{{ old('registrant') }}">
+                        @error('registrant')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชนิดทะเบียน</label>
+                        <div class="dropdown" id="typeRegistrationDropdown">
+                            <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="typeRegistrationBtn">--
+                                เลือกชนิดทะเบียน --</div>
+                            <div class="dropdown-list" id="typeRegistrationList">
+                                <div class="dropdown-item text-gray-500" data-value="">-- เลือกชนิดทะเบียน --</div>
+                                <div class="dropdown-item" data-value="ชนิดที่ 2">ชนิดที่ 2</div>
+                                <div class="dropdown-item" data-value="ชนิดที่ 3">ชนิดที่ 3</div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="type_registration" id="typeRegistrationInput"
+                            value="{{ old('type_registration') }}">
+                        @error('type_registration')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ประเภททะเบียน</label>
+                        <div class="dropdown" id="registrationTypeDropdown">
+                            <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="registrationTypeBtn">--
+                                เลือกประเภททะเบียน --</div>
+                            <div class="dropdown-list" id="registrationTypeList">
+                                <div class="dropdown-item text-gray-500" data-value="">-- เลือกประเภททะเบียน --</div>
+                                <div class="dropdown-item" data-value="นำเข้า (สารเข้มข้น)">นำเข้า (สารเข้มข้น)</div>
+                                <div class="dropdown-item" data-value="นำเข้า (สำเร็จรูป)">นำเข้า (สำเร็จรูป)</div>
+                                <div class="dropdown-item" data-value="ผลิต (ผสมปรุงแต่ง)">ผลิต (ผสมปรุงแต่ง)</div>
+                                <div class="dropdown-item" data-value="นำเข้า (แบ่งบรรจุ)">นำเข้า (แบ่งบรรจุ)</div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="registration_type" id="registrationTypeInput"
+                            value="{{ old('registration_type') }}">
+                        @error('registration_type')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อการค้า</label>
+                        <input type="text"
+                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            name="trade_name" value="{{ old('trade_name') }}" />
+                        @error('trade_name')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อการที่</label>
+                        <div class="dropdown" id="namePositionDropdown">
+                            <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="namePositionBtn">--
+                                เลือกชื่อการที่ --</div>
+                            <div class="dropdown-list" id="namePositionList">
+                                <div class="dropdown-item text-gray-500" data-value="">-- เลือกชื่อการที่ --</div>
+                                <div class="dropdown-item" data-value="T">T</div>
+                                <div class="dropdown-item" data-value="-">-</div>
+                                <div class="dropdown-item" data-value="1">1</div>
+                                <div class="dropdown-item" data-value="2">2</div>
+                                <div class="dropdown-item" data-value="3">3</div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="name_position" id="namePositionInput"
+                            value="{{ old('name_position') }}">
+                        @error('name_position')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อผู้นำเข้า</label>
+                        <div class="dropdown" id="importerDropdown">
+                            <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="importerBtn">--
+                                เลือกผู้นำเข้า --</div>
+                            <div class="dropdown-list" id="importerList">
+                                <div class="dropdown-item text-gray-500" data-value="">-- เลือกผู้นำเข้า --</div>
+                                @foreach ($companies as $company)
+                                    <div class="dropdown-item" data-value="{{ $company->full_name }}">
+                                        {{ $company->full_name }}</div>
+                                @endforeach
+                            </div>
+                        </div>
+                        <input type="hidden" name="importer" id="importerInput" value="{{ old('importer') }}">
+                        @error('importer')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อผู้จำหน่าย</label>
+                        <div class="dropdown" id="distributorDropdown">
+                            <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="distributorBtn">--
+                                เลือกผู้จำหน่าย --</div>
+                            <div class="dropdown-list" id="distributorList">
+                                <div class="dropdown-item text-gray-500" data-value="">-- เลือกผู้จำหน่าย --</div>
+                                @foreach ($companies as $company)
+                                    <div class="dropdown-item" data-value="{{ $company->full_name }}">
+                                        {{ $company->full_name }}</div>
+                                @endforeach
+                            </div>
+                        </div>
+                        <input type="hidden" name="distributor" id="distributorInput"
+                            value="{{ old('distributor') }}">
+                        @error('distributor')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อผู้ผลิตและแหล่งผลิต</label>
+                        <input type="text"
+                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            name="manufacturer" value="{{ old('manufacturer') }}" />
+                        @error('manufacturer')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ประเภทของการใช้</label>
+                        <div class="dropdown" id="typeOfUseDropdown">
+                            <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="typeOfUseBtn">--
+                                เลือกประเภทของการใช้ --</div>
+                            <div class="dropdown-list" id="typeOfUseList">
+                                <div class="dropdown-item text-gray-500" data-value="">-- เลือกประเภทของการใช้ --
+                                </div>
+                                <div class="dropdown-item" data-value="A : Acaricide (สารกำจัดไรศัตรูพืช)">A :
+                                    Acaricide (สารกำจัดไรศัตรูพืช)</div>
+                                <div class="dropdown-item" data-value="F : Fungicide (สารป้องกันกำจัดโรคพืช)">F :
+                                    Fungicide (สารป้องกันกำจัดโรคพืช)</div>
+                                <div class="dropdown-item" data-value="H : Herbicide (สารป้องกันกำจัดโรคพืช)">H :
+                                    Herbicide (สารกำจัดวัชพืช)</div>
+                                <div class="dropdown-item" data-value="I : Insecticide (สารกำจัดแมลง)">I : Insecticide
+                                    (สารกำจัดแมลง)</div>
+                                <div class="dropdown-item" data-value="M : Molluscicide (สารกำจัดหอย)">M :
+                                    Molluscicide (สารกำจัดหอย)</div>
+                                <div class="dropdown-item" data-value="N : Nematicide (สารกำจัดไส้เดือนฝอย)">N :
+                                    Nematicide (สารกำจัดไส้เดือนฝอย)</div>
+                                <div class="dropdown-item"
+                                    data-value="P : PlantGrowthRegulators (สารควบคุมการเจริญเติบโตของพืช)">P :
+                                    PlantGrowthRegulators (สารควบคุมการเจริญเติบโตของพืช)</div>
+                                <div class="dropdown-item" data-value="R : Rodenticide (สารกำจัดหนู)">R : Rodenticide
+                                    (สารกำจัดหนู)</div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="type_of_use" id="typeOfUseInput"
+                            value="{{ old('type_of_use') }}">
+                        @error('type_of_use')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">รายละเอียดขนาดบรรจุ</label>
+                        <textarea name="packaging_size_details"
+                            class="w-full p-3 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500" rows="2">{{ old('packaging_size_details') }}</textarea>
+                        @error('packaging_size_details')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันที่ยื่นคำขอ</label>
+                        <input type="date" name="date_submit_request" value="{{ old('date_submit_request') }}"
+                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        @error('date_submit_request')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลขที่รับคำขอ</label>
+                        <input type="text" name="request_number_1" value="{{ old('request_number_1') }}"
+                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        @error('request_number_1')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div class="md:col-span-2">
+                        <div class="flex flex-col md:flex-row gap-6"> {{-- Increased gap for consistency --}}
+                            <div class="w-full md:w-1/3">
+                                <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันที่ยื่น Phase
+                                    III</label>
+                                <input type="date" name="date_request_phase_3"
+                                    value="{{ old('date_request_phase_3') }}"
+                                    class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                @error('date_request_phase_3')
+                                    <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            <div class="w-full md:w-1/3">
+                                <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลข # Phase III</label>
+                                <input type="text" value="{{ old('request_number_phase_3') }}"
+                                    class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    name="request_number_phase_3" />
+                                @error('request_number_phase_3')
+                                    <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div class="w-full md:w-1/3">
+                                <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลข # Phase I</label>
+                                <input type="text" name="request_number_phase_1"
+                                    value="{{ old('request_number_phase_1') }}"
+                                    class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                @error('request_number_phase_1')
+                                    <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">อื่นๆ (ระบุ)</label>
+                        <textarea name="remarks" class="w-full p-3 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            rows="2">{{ old('remarks') }}</textarea>
+                        @error('remarks')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
             </div>
 
-            <div class="md:col-span-2">
-                <label class="block text-gray-700 mb-1">อื่นๆ (ระบุ)</label>
-                <textarea name="remarks" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    rows="2"></textarea>
-            </div>
-
-            <div class="text-right mt-8">
+            <div class="flex justify-center gap-4 pt-4">
                 <a href="{{ route('newregis.index') }}"
-                    class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg shadow transition duration-300 ">
-                    <i class="fa-solid fa-arrow-left mr-2"></i> ย้อนกลับ
+                    class="bg-gray-500 hover:bg-gray-500 text-white font-bold py-2 px-6 rounded-lg shadow-md flex items-center justify-center">
+                    ยกเลิก
                 </a>
-            </div>
-            <div class="text-left mt-6">
                 <button type="submit"
-                    class="bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline shadow-md">
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg shadow-md">
                     บันทึก
                 </button>
             </div>
-
         </form>
     </div>
 
@@ -191,19 +300,18 @@
         let typingTimer;
         const delay = 300;
         const listElement = document.getElementById("autocomplete-list");
-        // เราไม่จำเป็นต้องใช้ userSelected flag แล้วครับ เพราะ clearFields() จะถูกเรียกใช้เมื่อ keyword เป็นค่าว่าง
-        // หรือเมื่อไม่มีข้อมูลกลับมาจาก API หรือเกิดข้อผิดพลาด
-        // และเรามี logic ใน window.addEventListener("click") เพื่อจัดการกรณีที่ผู้ใช้พิมพ์แล้วไม่ได้เลือก
 
-        // กำหนดตัวแปรสำหรับ Element ของฟิลด์ต่างๆ ล่วงหน้า
         const productSearchInput = document.getElementById("productSearch");
         const hazardousNameThInput = document.getElementById("hazardous_name_th");
         const formulationRatioInput = document.getElementById("formulation_ratio");
         const chemicalImportsId = document.getElementById("chemical_imports_id");
 
-        // เนื่องจาก expiry_date ถูกคอมเมนต์ออกไป ผมจะไม่รวมไว้ใน clearFields()
-        // แต่ถ้าคุณต้องการนำกลับมาใช้ อย่าลืมเพิ่ม const สำหรับมันด้วย
-        // const expiryDateInput = document.querySelector('input[name="expiry_date"]');
+        function clearFields() {
+            hazardousNameThInput.value = "";
+            formulationRatioInput.value = "";
+            chemicalImportsId.value = "";
+            // Add any other fields you want to clear here
+        }
 
         function autocompleteSearch(keyword) {
             clearTimeout(typingTimer);
@@ -211,7 +319,7 @@
             if (!keyword.trim()) {
                 listElement.innerHTML = "";
                 listElement.classList.add("hidden");
-                clearFields(); // ✅ ล้างค่าเมื่อช่องว่าง
+                clearFields();
                 return;
             }
 
@@ -222,9 +330,6 @@
                         listElement.innerHTML = "";
                         listElement.classList.remove("hidden");
 
-                        // ตรวจสอบว่า `data` เป็น array และมีข้อมูลหรือไม่
-                        // หาก API ส่งรูปแบบอื่นมา (เช่น { data: [] } หรือ { results: [] })
-                        // คุณอาจต้องปรับ `data` เป็น `data.data` หรือ `data.results` ก่อน
                         if (Array.isArray(data) && data.length > 0) {
                             data.forEach(item => {
                                 const li = document.createElement("li");
@@ -245,11 +350,12 @@
                             clearFields(); // เคลียร์ค่าเมื่อไม่พบข้อมูล
                         }
                     })
-                    .catch(err => {
-                        console.error("Autocomplete error", err);
-                        clearFields(); // เคลียร์ค่าเมื่อเกิดข้อผิดพลาด
-                        listElement.innerHTML = "";
-                        listElement.classList.add("hidden");
+                    .catch(error => {
+                        console.error('Error fetching data:', error);
+                        listElement.innerHTML =
+                            '<li class="p-2 text-red-500">เกิดข้อผิดพลาดในการดึงข้อมูล</li>';
+                        listElement.classList.remove("hidden");
+                        clearFields();
                     });
             }, delay);
         }
@@ -263,31 +369,68 @@
             // expiryDateInput.value = product.expiry_date || "";
         }
 
-        function clearFields() {
-            hazardousNameThInput.value = "";
-            formulationRatioInput.value = "";
-            chemicalImportsId.value = "";
-            // ถ้ามีการนำ expiry_date กลับมาใช้ ให้ uncomment บรรทัดนี้
-            // if (expiryDateInput) {
-            //     expiryDateInput.value = "";
-            // }
-            // หากคุณต้องการเคลียร์ productSearchInput ด้วยเมื่อ clearFields ถูกเรียก
-            // productSearchInput.value = "";
-        }
+        document.addEventListener('DOMContentLoaded', () => {
+            function setupDropdown(btnId, listId, inputId, oldValue = null) {
+                const btn = document.getElementById(btnId);
+                const list = document.getElementById(listId);
+                const input = document.getElementById(inputId);
+                const items = list.querySelectorAll('.dropdown-item');
 
-        // ซ่อนรายการ autocomplete เมื่อคลิกข้างนอก
-        window.addEventListener("click", function(e) {
-            if (!productSearchInput.contains(e.target) && !listElement.contains(e.target)) {
-                listElement.classList.add("hidden");
-                // ถ้าช่องค้นหาว่างเปล่าหลังการคลิกนอก แสดงว่าผู้ใช้ไม่ได้เลือกรายการ
-                // หรือลบข้อความออกไปแล้ว จึงควรเคลียร์ข้อมูล
-                if (!productSearchInput.value.trim()) {
-                    clearFields();
+                function updateBtn(label, value) {
+                    btn.textContent = label;
+                    if (value === "" || label.includes('--')) {
+                        btn.classList.add('text-gray-500');
+                    } else {
+                        btn.classList.remove('text-gray-500');
+                    }
+                    input.value = value;
                 }
+
+                // Initial state
+                const initial = [...items].find(item => item.dataset.value === "");
+                if (initial) updateBtn(initial.textContent, "");
+
+                // Restore old value from Laravel if available
+                if (oldValue) {
+                    const match = [...items].find(i => i.dataset.value == oldValue);
+                    if (match) updateBtn(match.textContent, match.dataset.value);
+                }
+
+                btn.addEventListener('click', (event) => {
+                    event.stopPropagation(); // Prevent document click from closing immediately
+                    list.classList.toggle('open');
+                    btn.classList.toggle('open');
+                });
+
+                items.forEach(item => {
+                    item.addEventListener('click', () => {
+                        updateBtn(item.textContent, item.dataset.value);
+                        list.classList.remove('open');
+                        btn.classList.remove('open');
+                    });
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!btn.closest('.dropdown').contains(e.target) && !list.contains(e.target)) {
+                        list.classList.remove('open');
+                        btn.classList.remove('open');
+                    }
+                });
             }
+
+            // Setup for all dropdowns
+            setupDropdown('registrantBtn', 'registrantList', 'registrantInput', "{{ old('registrant') }}");
+            setupDropdown('typeRegistrationBtn', 'typeRegistrationList', 'typeRegistrationInput',
+                "{{ old('type_registration') }}");
+            setupDropdown('registrationTypeBtn', 'registrationTypeList', 'registrationTypeInput',
+                "{{ old('registration_type') }}");
+            setupDropdown('namePositionBtn', 'namePositionList', 'namePositionInput',
+                "{{ old('name_position') }}");
+            setupDropdown('importerBtn', 'importerList', 'importerInput', "{{ old('importer') }}");
+            setupDropdown('distributorBtn', 'distributorList', 'distributorInput', "{{ old('distributor') }}");
+            setupDropdown('typeOfUseBtn', 'typeOfUseList', 'typeOfUseInput', "{{ old('type_of_use') }}");
         });
     </script>
-
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @if (session('success'))
         <script>
@@ -305,13 +448,112 @@
     @endif
 
     <style>
-        .bg-gray-200 {
-            background-color: #e2e8f0;
+        * {
+            box-sizing: border-box;
         }
 
-        input[readonly].bg-gray-200 {
-            background-color: #e2e8f0 !important;
+        .dropdown-container {
+            max-width: 300px;
+            margin: auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #374151;
+            font-size: 16px;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-btn {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #edeff3;
+            border-radius: 9999px;
+            background-color: #fff;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dropdown-btn:after {
+            content: "▾";
+            font-size: 26px;
+            color: #7f838a;
+            margin-left: 8px;
+        }
+
+        .dropdown-list {
+            position: absolute;
+            top: 105%;
+            left: 0;
+            width: 100%;
+            background-color: #fff;
+            border: 1px solid #edeff3;
+            border-radius: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            display: none;
+            max-height: 230px;
+            /* แสดงได้ประมาณ 3-4 รายการ */
+            overflow-y: auto;
+            /* เพิ่ม scrollbar ถ้าเกิน */
+        }
+
+        .dropdown-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .dropdown-list::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        .dropdown-list::-webkit-scrollbar-track {
+            background-color: #f1f5f9;
+        }
+
+        .dropdown-list.open {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            border-radius: 20px;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            background-color: #e0f2fe;
+        }
+
+        .hidden-input {
+            display: none;
+        }
+
+        .autocomplete-list {
+            position: absolute;
+            top: 100%;
+            /* อยู่ใต้ input field */
+            left: 0;
+            width: 100%;
+            /* กว้างเท่า input field */
+        }
+
+        .autocomplete-item {
+            color: #333;
+            /* สีตัวอักษรเข้ม */
+            background-color: #fff;
+            /* พื้นหลังสีขาว */
         }
     </style>
-
 </x-app-layout>
