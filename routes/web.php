@@ -8,7 +8,6 @@ use App\Http\Controllers\Admin\{
 
 
 use App\Http\Controllers\ProductionController;
-use App\Http\Controllers\InRegisterController;
 use App\Http\Controllers\ManufactureRegisController;
 use App\Http\Controllers\ChemicalRegistrationController;
 use App\Http\Controllers\RenewRegisController;
