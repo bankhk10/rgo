@@ -101,14 +101,14 @@ class AdminSeeder extends Seeder
         $writer->assignRole($writer_role);
 
         // แผนกและตำแหน่ง
-        $departments = ['ทะเบียน', 'จัดซื้อต่างประเทศ', 'วิจัยและพัฒนา', 'วิชาการ', 'ฝ่ายขาย', 'ไอที'];
+        $departments = ['ทะเบียน', 'จัดซื้อต่างประเทศ', 'วิจัยและพัฒนา', 'วิชาการ', 'ฝ่ายขาย', 'เทคโนโลยีสารสนเทศ'];
         $departmentSlugs = [
             'ทะเบียน' => 'register',
             'จัดซื้อต่างประเทศ' => 'foreign_purchase',
             'วิจัยและพัฒนา' => 'research',
             'วิชาการ' => 'academic',
             'ฝ่ายขาย' => 'sales',
-            'ไอที' => 'it',
+            'เทคโนโลยีสารสนเทศ' => 'it',
         ];
         $positions = [
             'manager' => 'ผู้จัดการแผนก',
@@ -143,7 +143,7 @@ class AdminSeeder extends Seeder
                 'head' => ['User read', 'User update'],
                 'staff' => ['User read'],
             ],
-            'ไอที' => [
+            'เทคโนโลยีสารสนเทศ' => [
                 'manager' => ['Role read', 'Role create', 'Role update', 'Role delete'],
                 'head' => ['Role read', 'Role update'],
                 'staff' => ['Role read'],

@@ -45,7 +45,7 @@
                                                 'ResearchAndDevelopment' => 'วิจัยและพัฒนา',
                                                 'Academic' => 'วิชาการ',
                                                 'SalesDepartment' => 'ฝ่ายขาย',
-                                                'IT' => 'ไอที',
+                                                'IT' => 'เทคโนโลยีสารสนเทศ',
                                             ];
                                             $parts = explode(' ', $roleName);
                                             $position = $positions[$parts[0]] ?? $parts[0];

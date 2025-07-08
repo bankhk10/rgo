@@ -10,7 +10,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M12 2v2m0 16v2m8-10h2M2 12H4m15.364-7.364l1.414 1.414M4.222 19.778l1.414-1.414m12.728 0l1.414 1.414M4.222 4.222l1.414 1.414" />
                     </svg>
-                    ข้อมูลทะเบียนนำเข้าวัตถุดิบ
+                    ข้อมูลทะเบียนผลิต
                 </span>
             </h1>
 
@@ -28,7 +28,7 @@
                             </svg>
                         </div>
                     </div>
-                    <h2 class="text-lg font-bold text-blue-700 mb-1 tracking-wide">ทะเบียนนำเข้าทั้งหมด</h2>
+                    <h2 class="text-lg font-bold text-blue-700 mb-1 tracking-wide">ทะเบียนผลิตทั้งหมด</h2>
                     <p class="text-4xl text-blue-600 font-extrabold mb-1">{{ $total }}</p>
                 </div>
                 <div
@@ -42,7 +42,7 @@
                             </svg>
                         </div>
                     </div>
-                    <h2 class="text-lg font-bold text-yellow-700 mb-1 tracking-wide">ทะเบียนนำเข้าใกล้หมดอายุ</h2>
+                    <h2 class="text-lg font-bold text-yellow-700 mb-1 tracking-wide">ทะเบียนผลิตใกล้หมดอายุ</h2>
                     <p class="text-4xl text-yellow-600 font-extrabold mb-1">{{ $soonCount }}</p>
                 </div>
                 <div
@@ -56,13 +56,13 @@
                             </svg>
                         </div>
                     </div>
-                    <h2 class="text-lg font-bold text-red-700 mb-1 tracking-wide">ทะเบียนนำเข้าหมดอายุ</h2>
+                    <h2 class="text-lg font-bold text-red-700 mb-1 tracking-wide">ทะเบียนผลิตหมดอายุ</h2>
                     <p class="text-4xl text-red-600 font-extrabold mb-1">{{ $expiredCount ?? 0 }}</p>
                 </div>
             </div>
 
             <div class="flex flex-col sm:flex-row justify-between items-center mx-3 mb-2">
-                <form action="{{ route('import.index') }}" method="GET" class="flex items-center gap-2 mb-2">
+                <form action="{{ route('createproduct.index') }}" method="GET" class="flex items-center gap-2 mb-2">
                     <div class="relative flex-grow min-w-[280px]">
                         <label for="search_query"
                             class="mx-3 text-base block text-gray-700 mb-1 mt-3">ค้นหาชื่อ</label>
@@ -238,6 +238,6 @@
                 }
             });
         }
-        document.getElementById('menu-inregister')?.classList.add('side-menu--active');
+        document.getElementById('menu-manufacture')?.classList.add('side-menu--active');
     </script>
 </x-app-layout>

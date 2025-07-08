@@ -145,7 +145,7 @@
                                 <div class="dropdown-item" data-value="ResearchAndDevelopment">วิจัยและพัฒนา</div>
                                 <div class="dropdown-item" data-value="Academic">วิชาการ</div>
                                 <div class="dropdown-item" data-value="SalesDepartment">ฝ่ายขาย</div>
-                                <div class="dropdown-item" data-value="IT">ไอที</div>
+                                <div class="dropdown-item" data-value="IT">เทคโนโลยีสารสนเทศ</div>
                                 <div class="dropdown-item" data-value="no">ไม่มีสิทธิ์ดำเนินการ</div>
                             </div>
                         </div>
@@ -172,7 +172,7 @@
                                     'ResearchAndDevelopment' => 'วิจัยและพัฒนา',
                                     'Academic' => 'วิชาการ',
                                     'SalesDepartment' => 'ฝ่ายขาย',
-                                    'IT' => 'ไอที',
+                                    'IT' => 'เทคโนโลยีสารสนเทศ',
                                 ];
                                 $parts = explode(' ', $roleName);
                                 $position = $positions[$parts[0]] ?? $parts[0];

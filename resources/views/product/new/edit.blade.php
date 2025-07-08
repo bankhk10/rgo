@@ -341,7 +341,7 @@
                                 'ResearchAndDevelopment' => 'วิจัยและพัฒนา',
                                 'Academic' => 'แผนกวิชาการ',
                                 'Registration' => 'แผนกทะเบียน',
-                                'IT' => 'ไอที',
+                                'IT' => 'เทคโนโลยีสารสนเทศ',
                             ][$enDept] ?? $enDept; // fallback กรณีไม่มีใน map
                         }
 

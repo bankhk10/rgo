@@ -45,7 +45,7 @@
                                 </option>
                                 <option value="SalesDepartment"
                                     {{ old('department') == 'SalesDepartment' ? 'selected' : '' }}>ฝ่ายขาย</option>
-                                <option value="IT" {{ old('department') == 'IT' ? 'selected' : '' }}>ไอที</option>
+                                <option value="IT" {{ old('department') == 'IT' ? 'selected' : '' }}>เทคโนโลยีสารสนเทศ</option>
                                 <option value="no" {{ old('department') == 'IT' ? 'selected' : '' }}>ไม่มีสิทธิ์ดำเนินการ</option>
                             </select>
                         </div>

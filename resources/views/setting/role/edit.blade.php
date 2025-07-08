@@ -39,7 +39,7 @@
                                     'ResearchAndDevelopment' => 'วิจัยและพัฒนา',
                                     'Academic' => 'วิชาการ',
                                     'SalesDepartment' => 'ฝ่ายขาย',
-                                    'IT' => 'ไอที',
+                                    'IT' => 'เทคโนโลยีสารสนเทศ',
                                 ];
                             @endphp
                             @foreach ($departments as $key => $label)

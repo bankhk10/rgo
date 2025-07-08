@@ -386,7 +386,7 @@ class ChemicalRegistrationController extends Controller
             'ResearchAndDevelopment' => 'วิจัยและพัฒนา',
             'Academic' => 'แผนกวิชาการ',
             'Registration' => 'แผนกทะเบียน',
-            'IT' => 'ไอที',
+            'IT' => 'เทคโนโลยีสารสนเทศ',
         ];
         $mappedDept = $departmentMap[$userDept] ?? $userDept;
 

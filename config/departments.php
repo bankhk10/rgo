@@ -6,5 +6,5 @@ return [
     'ResearchAndDevelopment' => 'วิจัยและพัฒนา',
     'Academic' => 'แผนกวิชาการ',
     'Registration' => 'แผนกทะเบียน',
-    'IT' => 'ไอที',
+    'IT' => 'เทคโนโลยีสารสนเทศ',
 ];

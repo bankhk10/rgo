@@ -14,6 +14,9 @@ use App\Http\Controllers\RenewRegisController;
 use App\Http\Controllers\ChemicalImportController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProductionRegistrationImportController;
+use App\Http\Controllers\ProductionRegistrationController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -77,6 +80,9 @@ Route::get('/new/product/edit/{registrationNumber}', [ChemicalRegistrationContro
 Route::put('/new/product/update/{registrationNumber}', [ChemicalRegistrationController::class, 'update'])->name('newregis.update');
 Route::delete('/newregis/{id}', [ChemicalRegistrationController::class, 'destroy'])->name('newregis.destroy');
 
+Route::get('/create/product', [ProductionRegistrationController::class, 'index'])->name('createproduct.index');
+
+
 Route::put('/newregis/{drug}/update-subprogress', [ChemicalRegistrationController::class, 'updateSubProgress'])->name('newregis.update-subprogress');
 
 
@@ -87,6 +93,12 @@ Route::get('/manufactture/product', [ManufactureRegisController::class, 'index']
 Route::resource('company', CompanyController::class);
 Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
-
+// import วัตถุดิบ
 Route::get('/chemical-imports/import', [ChemicalImportController::class, 'showImportForm'])->name('chemical_imports.import.form');
 Route::post('/chemical-imports/import', [ChemicalImportController::class, 'import'])->name('chemical_imports.import');
+
+// import ผลิต
+Route::get('/test-import', [ProductionRegistrationImportController::class, 'showForm']);
+Route::post('/import/production-registration', [ProductionRegistrationImportController::class, 'import'])->name('import.production-registration');
+
+
