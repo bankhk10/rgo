@@ -14,7 +14,6 @@
                     ข้อมูลการนำเข้าทั่วไป
                 </h3>
                 <div class="grid grid-cols-2 md:grid-cols-2 gap-6 mt-4">
-                    {{-- บริษัท (company_id) --}}
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">บริษัทนำเข้า</label>
                         <div class="dropdown" id="companyDropdown">
@@ -38,7 +37,7 @@
                         </div>
                         <input type="hidden" name="company_id" id="companyInput" value="{{ old('company_id') }}">
                         @error('company_id')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="text-red-500 text-xs italic mt-1 ml-4">{{ $message }}</p>
                         @enderror
                     </div>
 
@@ -418,6 +417,8 @@
             setupDropdown('storeCompany2Btn', 'storeCompany2List', 'storeCompany2Input',
                 "{{ old('store_company_2') }}", true);
         });
+
+
     </script>
 
     <style>

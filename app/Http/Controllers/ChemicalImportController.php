@@ -110,7 +110,14 @@ class ChemicalImportController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $validatedData = $request->validate([
+            'company_id' => 'required', // This line makes it required
+            // Add other validation rules for your form fields
+        ], [
+            'company_id.required' => 'กรุณาเลือกบริษัทนำเข้า', // Custom error message
+        ]);
+
         ChemicalImport::create($request->all());
         return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จ');
     }

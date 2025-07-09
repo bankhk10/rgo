@@ -217,7 +217,6 @@
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
-
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">สถานที่จัดเก็บที่ 2</label>
                         <div class="dropdown" id="storeCompany2Dropdown">
