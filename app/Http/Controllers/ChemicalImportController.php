@@ -7,6 +7,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\ChemicalImportsImport; // อย่าลืม import Import Class ที่สร้างไว้
 use App\Models\ChemicalImport;
 use App\Models\Company;
+use Carbon\Carbon;
 
 
 class ChemicalImportController extends Controller
@@ -21,6 +22,7 @@ class ChemicalImportController extends Controller
         $query = ChemicalImport::query();
         $query->with('company');
 
+        // ส่วนของการค้นหา (search) ยังคงเดิม
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
@@ -33,6 +35,7 @@ class ChemicalImportController extends Controller
             });
         }
 
+        // ส่วนของการกรองตามช่วงวันหมดอายุ (expiry_date_from/to) ยังคงเดิม
         if ($request->filled('expiry_date_from') && $request->filled('expiry_date_to')) {
             $query->whereBetween('expiry_date', [
                 $request->input('expiry_date_from'),
@@ -40,13 +43,43 @@ class ChemicalImportController extends Controller
             ]);
         }
 
+        // **เพิ่มส่วนนี้: การกรองตาม status_filter**
+        if ($request->filled('status_filter')) {
+            $statusFilter = $request->input('status_filter');
+            $now = Carbon::now();
+
+            if ($statusFilter === 'expired') {
+                $query->whereDate('expiry_date', '<', $now);
+            } elseif ($statusFilter === 'soon_expired') {
+                $query->whereDate('expiry_date', '>=', $now)
+                    ->whereDate('expiry_date', '<=', $now->copy()->addMonths(6));
+            }
+            // ถ้า status_filter ไม่ใช่ 'expired' หรือ 'soon_expired' (เช่น ถ้ามีค่าอื่นที่ไม่รู้จัก หรือไม่มีค่า)
+            // ก็จะไม่เพิ่มเงื่อนไขการกรองนี้ ทำให้แสดงทั้งหมด (หรือตามเงื่อนไข search/date อื่นๆ)
+        }
+
         $imports = $query->latest()->paginate(10)->withQueryString();
 
+        // คำนวณค่าสถานะใหม่โดยใช้ Carbon เพื่อให้แม่นยำตามเวลาปัจจุบัน
         $total = ChemicalImport::count();
-        $expiredCount = ChemicalImport::where('status', 'expired')
+        $expiredCount = ChemicalImport::whereDate('expiry_date', '<', Carbon::now())->count();
+        $soonCount = ChemicalImport::whereDate('expiry_date', '>=', Carbon::now())
+            ->whereDate('expiry_date', '<=', Carbon::now()->addMonths(6))
             ->count();
-        $soonCount = ChemicalImport::where('status', 'soon_expired')
-            ->count();
+
+        // สำคัญ: สำหรับแต่ละรายการใน $imports เราจะกำหนดค่า status ให้ถูกต้องก่อนส่งไปยัง Blade view
+        foreach ($imports as $import) {
+            $expiryDate = Carbon::parse($import->expiry_date);
+            $now = Carbon::now();
+
+            if ($expiryDate->isPast()) {
+                $import->status = 'หมดอายุ';
+            } elseif ($expiryDate->diffInMonths($now) <= 6) {
+                $import->status = 'ใกล้หมดอายุ';
+            } else {
+                $import->status = 'ใช้งานอยู่';
+            }
+        }
 
         return view('import.index', [
             'imports' => $imports,
@@ -54,7 +87,6 @@ class ChemicalImportController extends Controller
             'expiredCount' => $expiredCount,
             'soonCount' => $soonCount,
         ]);
-
     }
 
 

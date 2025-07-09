@@ -16,12 +16,10 @@
                     ข้อมูลการนำเข้าทั่วไป
                 </h3>
                 <div class="grid grid-cols-2 md:grid-cols-2 gap-6 mt-4">
-                    {{-- บริษัท (company_id) --}}
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">บริษัทนำเข้า</label>
                         <div class="dropdown" id="companyDropdown">
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="companyBtn">
-                                {{-- Display selected company name or default --}}
                                 @if (old('company_id'))
                                     {{ $companies->firstWhere('id', old('company_id'))->full_name ?? '-- เลือก --' }}
                                 @else
@@ -31,9 +29,11 @@
                             <div class="dropdown-list" id="companyList">
                                 <div class="dropdown-item text-gray-500" data-value="">-- เลือก --</div>
                                 @foreach ($companies as $company)
-                                    <div class="dropdown-item" data-value="{{ $company->id }}">
-                                        {{ $company->full_name }}
-                                    </div>
+                                    @if ($company->id != 4)
+                                        <div class="dropdown-item" data-value="{{ $company->id }}">
+                                            {{ $company->full_name }}
+                                        </div>
+                                    @endif
                                 @endforeach
                             </div>
                         </div>
@@ -70,7 +70,8 @@
                     {{-- วันหมดอายุ --}}
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันหมดอายุ</label>
-                        <input type="date" name="expiry_date" value="{{ old('expiry_date', $import->expiry_date) }}"
+                        <input type="date" name="expiry_date"
+                            value="{{ old('expiry_date', $import->expiry_date ? \Carbon\Carbon::parse($import->expiry_date)->format('Y-m-d') : '') }}"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('expiry_date')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
@@ -193,7 +194,6 @@
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">สถานที่จัดเก็บที่ 1</label>
                         <div class="dropdown" id="storeCompany1Dropdown">
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="storeCompany1Btn">
-                                {{-- Display selected store company 1 name or default --}}
                                 @if (old('store_company_1'))
                                     {{ $companies->firstWhere('id', old('store_company_1'))->full_name ?? '-- เลือก --' }}
                                 @else
@@ -203,13 +203,14 @@
                             <div class="dropdown-list" id="storeCompany1List">
                                 <div class="dropdown-item text-gray-500" data-value="">-- เลือก --</div>
                                 @foreach ($companies as $company)
-                                    <div class="dropdown-item" data-value="{{ $company->id }}">
-                                        {{ $company->full_name }}
-                                    </div>
+                                    @if ($company->id != 4)
+                                        <div class="dropdown-item" data-value="{{ $company->id }}">
+                                            {{ $company->full_name }}
+                                        </div>
+                                    @endif
                                 @endforeach
                             </div>
                         </div>
-                        {{-- Set initial value from $import or old input --}}
                         <input type="hidden" name="store_company_1" id="storeCompany1Input"
                             value="{{ old('store_company_1', $import->store_company_1) }}">
                         @error('store_company_1')
@@ -231,9 +232,11 @@
                             <div class="dropdown-list" id="storeCompany2List">
                                 <div class="dropdown-item text-gray-500" data-value="">-- เลือก --</div>
                                 @foreach ($companies as $company)
-                                    <div class="dropdown-item" data-value="{{ $company->id }}">
-                                        {{ $company->full_name }}
-                                    </div>
+                                    @if ($company->id != 4)
+                                        <div class="dropdown-item" data-value="{{ $company->id }}">
+                                            {{ $company->full_name }}
+                                        </div>
+                                    @endif
                                 @endforeach
                             </div>
                         </div>
@@ -389,7 +392,8 @@
                                 'storeCompany1Input');
                             const storeCompany2Input = document.getElementById(
                                 'storeCompany2Input');
-                            const currentInputId = inputId; // Get the ID of the current hidden input
+                            const currentInputId =
+                                inputId; // Get the ID of the current hidden input
 
                             let otherValue = '';
                             if (currentInputId === 'storeCompany1Input') {
@@ -437,8 +441,10 @@
             closeMessageBox.addEventListener('click', hideMessageBox);
 
             // Setup for all dropdowns, passing the current $import values
-            setupDropdown('companyBtn', 'companyList', 'companyInput', "{{ old('company_id', $import->company_id) }}");
-            setupDropdown('supplierBtn', 'supplierList', 'supplierInput', "{{ old('supplier', $import->supplier) }}");
+            setupDropdown('companyBtn', 'companyList', 'companyInput',
+                "{{ old('company_id', $import->company_id) }}");
+            setupDropdown('supplierBtn', 'supplierList', 'supplierInput',
+                "{{ old('supplier', $import->supplier) }}");
             setupDropdown('storeCompany1Btn', 'storeCompany1List', 'storeCompany1Input',
                 "{{ old('store_company_1', $import->store_company_1) }}", true);
             setupDropdown('storeCompany2Btn', 'storeCompany2List', 'storeCompany2Input',

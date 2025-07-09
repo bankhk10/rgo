@@ -15,9 +15,10 @@
             </h1>
 
             {{-- สรุปสถานะทะเบียน --}}
-            <div class="flex flex-row justify-around mb-10">
-                <div
-                    class="group h-full bg-gradient-to-br from-blue-200 to-blue-100 p-4 rounded-3xl text-center border-2 border-blue-400 hover:scale-105 transition-all duration-300">
+            <div class="flex flex-row justify-around mb-10 space-x-4">
+                {{-- ทั้งหมด --}}
+                <a href="{{ route('import.index', array_merge(request()->except('status_filter', 'page'), ['page' => 1])) }}"
+                    class="group block h-full bg-gradient-to-br from-blue-200 to-blue-100 p-4 rounded-3xl text-center border-2 border-blue-400 hover:scale-105 transition-all duration-300">
                     <div class="flex justify-center mb-2">
                         <div class="bg-blue-300 rounded-full p-3 group-hover:bg-blue-400 transition">
                             {{-- ไอคอนใหม่ --}}
@@ -29,10 +30,12 @@
                         </div>
                     </div>
                     <h2 class="text-lg font-bold text-blue-700 mb-1 tracking-wide">ทะเบียนนำเข้าทั้งหมด</h2>
-                    <p class="text-4xl text-blue-600 font-extrabold mb-1">{{ $total }}</p>
-                </div>
-                <div
-                    class="group h-full bg-gradient-to-br from-yellow-100 to-yellow-50 p-4 rounded-3xl text-center border-2 border-yellow-200 hover:scale-105 transition-all duration-300">
+                    <p class="text-2xl font-bold text-blue-600">{{ $total ?? 0 }}</p>
+                </a>
+
+                {{-- ใกล้หมดอายุ --}}
+                <a href="{{ route('import.index', array_merge(request()->except('status_filter', 'page'), ['status_filter' => 'soon_expired', 'page' => 1])) }}"
+                    class="group block h-full bg-gradient-to-br from-yellow-100 to-yellow-50 p-4 rounded-3xl text-center border-2 border-yellow-200 hover:scale-105 transition-all duration-300">
                     <div class="flex justify-center mb-2">
                         <div class="bg-yellow-200 rounded-full p-3 group-hover:bg-yellow-300 transition">
                             <svg class="w-8 h-8 text-yellow-500" fill="none" stroke="currentColor" stroke-width="2"
@@ -43,10 +46,12 @@
                         </div>
                     </div>
                     <h2 class="text-lg font-bold text-yellow-700 mb-1 tracking-wide">ทะเบียนนำเข้าใกล้หมดอายุ</h2>
-                    <p class="text-4xl text-yellow-600 font-extrabold mb-1">{{ $soonCount }}</p>
-                </div>
-                <div
-                    class="group h-full bg-gradient-to-br from-red-100 to-red-50 p-4 rounded-3xl text-center border-2 border-red-200 hover:scale-105 transition-all duration-300">
+                    <p class="text-2xl font-bold text-yellow-600">{{ $soonCount ?? 0 }}</p>
+                </a>
+
+                {{-- หมดอายุ --}}
+                <a href="{{ route('import.index', array_merge(request()->except('status_filter', 'page'), ['status_filter' => 'expired', 'page' => 1])) }}"
+                    class="group block h-full bg-gradient-to-br from-red-100 to-red-50 p-4 rounded-3xl text-center border-2 border-red-200 hover:scale-105 transition-all duration-300">
                     <div class="flex justify-center mb-2">
                         <div class="bg-red-200 rounded-full p-3 group-hover:bg-red-300 transition">
                             <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" stroke-width="2"
@@ -57,15 +62,15 @@
                         </div>
                     </div>
                     <h2 class="text-lg font-bold text-red-700 mb-1 tracking-wide">ทะเบียนนำเข้าหมดอายุ</h2>
-                    <p class="text-4xl text-red-600 font-extrabold mb-1">{{ $expiredCount ?? 0 }}</p>
-                </div>
+                    <p class="text-2xl font-bold text-red-600">{{ $expiredCount ?? 0 }}</p>
+                </a>
             </div>
+
 
             <div class="flex flex-col sm:flex-row justify-between items-center mx-3 mb-2">
                 <form action="{{ route('import.index') }}" method="GET" class="flex items-center gap-2 mb-2">
                     <div class="relative flex-grow min-w-[280px]">
-                        <label for="search_query"
-                            class="mx-3 text-base block text-gray-700 mb-1 mt-3">ค้นหาชื่อ</label>
+                        <label for="search_query" class="mx-3 text-base block text-gray-700 mb-1 mt-3">ค้นหาชื่อ</label>
 
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none mt-9">
                             <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2"
@@ -82,17 +87,16 @@
                         <label for="expiry_date_from"
                             class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันที่เริ่ม</label>
                         <input id="expiry_date_from"
-                            class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200 ease-in-out text-gray-700 text-base shadow-sm w-full"
+                            class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200 ease-in-out text-gray-500 text-base shadow-sm w-full"
                             type="date" name="expiry_date_from" value="{{ request('expiry_date_from') }}" />
                     </div>
                     <div class="flex-grow min-w-[180px]">
                         <label for="expiry_date_to"
                             class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันที่สิ้นสุด</label>
                         <input id="expiry_date_to"
-                            class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200 ease-in-out text-gray-700 text-base shadow-sm w-full"
+                            class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200 ease-in-out text-gray-500 text-base shadow-sm w-full"
                             type="date" name="expiry_date_to" value="{{ request('expiry_date_to') }}" />
                     </div>
-                    <!-- ปุ่มค้นหา -->
                     <div class="flex gap-3 mt-10">
                         <button type="submit"
                             class="bg-gradient-to-r from-blue-500 to-blue-500 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold px-6 py-2 rounded-lg shadow-md transform hover:scale-105 transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
@@ -104,14 +108,17 @@
                             ค้นหา
                         </button>
 
-                        {{-- <a href="{{ route('import.index') }}"
-                            class="inline-flex items-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold px-6 py-2 rounded-lg shadow-md transform hover:scale-105 transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50">
-                            <svg class="w-5 h-5 inline-block mr-1 -mt-0.5" fill="none" stroke="currentColor"
-                                stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                            </svg>
-                            ล้างการค้นหา
-                        </a> --}}
+                        {{-- เพิ่มปุ่มล้างการค้นหา --}}
+                        @if (request('search') || request('expiry_date_from') || request('expiry_date_to'))
+                            <a href="{{ route('import.index') }}"
+                                class="inline-flex items-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold px-6 py-2 rounded-lg shadow-md transform hover:scale-105 transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50">
+                                <svg class="w-5 h-5 inline-block mr-1 -mt-0.5" fill="none" stroke="currentColor"
+                                    stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                </svg>
+                                ล้างการค้นหา
+                            </a>
+                        @endif
                     </div>
                 </form>
                 @can('Inregister create')
@@ -133,6 +140,7 @@
                                 <th class="py-4 px-6 text-center">ตัวย่อ</th>
                                 <th class="py-4 px-8">เลขที่ทะเบียน</th>
                                 <th class="py-4 px-8">วันหมดอายุ</th>
+                                <th class="py-4 px-8 text-center">สถานะ</th>
                                 <th class="py-4 px-8 rounded-tr-2xl text-center">การดำเนินการ</th>
                             </tr>
                         </thead>
@@ -146,13 +154,33 @@
                                         <td class="py-4 px-6">{{ $import->chemical_name_th }}</td>
                                         <td class="py-4 px-6">{{ $import->chemical_name_en }}</td>
                                         <td class="py-4 px-6 text-center">{{ $import->company->full_name ?? '' }}</td>
-
                                         <td class="py-4 px-6 text-center">{{ $import->company->name ?? '' }}</td>
                                         <td class="py-4 px-8">{{ $import->registration_no }}</td>
                                         <td class="py-4 px-8">
                                             {{ \Carbon\Carbon::parse($import->expiry_date)->addYears(543)->format('d/m/Y') }}
                                         </td>
+                                        {{-- การตกแต่งสีสถานะ --}}
+                                        <td class="py-4 px-8">
+                                            @php
+                                                $statusClass = '';
+                                                $statusText = $import->status; // ใช้ค่าสถานะที่ถูกส่งมาจาก Controller
 
+                                                if ($statusText == 'หมดอายุ') {
+                                                    $statusClass =
+                                                        'inline-block rounded-full px-3 py-1 font-semibold text-white bg-red-500';
+                                                } elseif ($statusText == 'ใกล้หมดอายุ') {
+                                                    $statusClass =
+                                                        'inline-block rounded-full px-3 py-1 font-semibold text-gray-600 bg-yellow-300';
+                                                } else {
+                                                    $statusClass =
+                                                        'inline-block rounded-full px-3 py-1 font-semibold text-white bg-green-500'; // สถานะปกติ เช่น 'ใช้งานอยู่'
+                                                }
+                                            @endphp
+                                            <span class="{{ $statusClass }}">
+                                                {{ $statusText }}
+                                            </span>
+                                        </td>
+                                        {{-- สิ้นสุดการตกแต่งสีสถานะ --}}
                                         <td class="py-4 px-8 text-center">
                                             <div class="flex items-center gap-3 justify-center">
                                                 @can('Inregister read')
@@ -204,7 +232,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7" class="py-6 px-8 text-center text-gray-400">
+                                        <td colspan="9" class="py-6 px-8 text-center text-gray-400">
                                             ไม่มีข้อมูลทะเบียนนำเข้า</td>
                                     </tr>
                                 @endforelse

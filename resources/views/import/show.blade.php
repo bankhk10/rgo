@@ -90,13 +90,11 @@
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ผู้จำหน่าย</label>
                         <div class="dropdown" id="supplierDropdown">
-                            {{-- Display selected supplier name or default --}}
                             <div style="height: 50px;"
                                 class="text-gray-700 dropdown-btn disabled-field bg-gray-100 cursor-not-allowed"
                                 id="supplierBtn">
                                 {{ $import->supplierCompany->full_name ?? '-- ไม่มีข้อมูล --' }}
                             </div>
-                            {{-- Hidden input is still here for data, but dropdown is disabled via JS --}}
                             <input type="hidden" name="supplier" id="supplierInput" value="{{ $import->supplier }}">
                         </div>
                     </div>
