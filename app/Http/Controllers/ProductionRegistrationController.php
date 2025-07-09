@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\ProductionRegistration; // Added automatically by --model flag
 use App\Models\ChemicalImport; // Added automatically by --model flag
 use Illuminate\Http\Request;
+use App\Models\Company;
+use Illuminate\Support\Facades\Auth;
+use Log;
 
 class ProductionRegistrationController extends Controller
 {
@@ -30,22 +33,14 @@ class ProductionRegistrationController extends Controller
         }
 
         if ($request->filled('expiry_date_from') && $request->filled('expiry_date_to')) {
-            $query->whereBetween('registration_expiry_date', [
-                $request->input('expiry_date_from'),
-                $request->input('expiry_date_to'),
-            ]);
+            $query->whereBetween('registration_expiry_date', [$request->input('expiry_date_from'), $request->input('expiry_date_to')]);
         }
 
         $imports = $query->latest()->paginate(10)->withQueryString();
 
         $total = ProductionRegistration::count();
-        $expiredCount = ProductionRegistration::where('status_date', 'expired')
-            ->count();
-        $soonCount = ProductionRegistration::where('status_date', 'soon_expired')
-            ->count();
-
-        // return view('production_registrations.index', compact('registrations'));
-
+        $expiredCount = ProductionRegistration::where('status_date', 'expired')->count();
+        $soonCount = ProductionRegistration::where('status_date', 'soon_expired')->count();
 
         return view('production_registrations.index', [
             'imports' => $imports,
@@ -55,69 +50,109 @@ class ProductionRegistrationController extends Controller
         ]);
     }
 
-
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        return view('production_registrations.create');
+        $companies = Company::all();
+        return view('production_registrations.create', compact('companies'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
+
     public function store(Request $request)
     {
-        // Validate the request data
-        $validatedData = $request->validate([
-            'registration_number' => 'nullable|string|max:255',
-            'expired_license_date' => 'nullable|date',
-            'chemical_name_th' => 'nullable|string|max:255',
-            'chemical_name_en' => 'nullable|string|max:255',
-            'composition' => 'nullable|string',
-            'manufacturer' => 'nullable|string|max:255',
-            'registrant' => 'nullable|string|max:255',
-            'registration_type' => 'nullable|string|max:255',
-            'importer' => 'nullable|string|max:255',
-            'distributor' => 'nullable|string|max:255',
-            'trade_name' => 'nullable|string|max:255',
-            'trade_name_at' => 'nullable|string|max:255',
-            'type_production_registration' => 'nullable|string|max:255',
-            'usage_production_registration' => 'nullable|string|max:255',
-            'group_of_substances' => 'nullable|string|max:255',
-            'plant' => 'nullable|string|max:255',
-            'pests' => 'nullable|string|max:255',
-            'production_license_number' => 'nullable|string|max:255',
-            'production_license_expiry' => 'nullable|date',
-            'production_license_quantity' => 'nullable|string|max:255',
-            'possession_form_wo2' => 'nullable|string|max:255',
-            'possession_form_expiry' => 'nullable|date',
-            'packaging_size_details' => 'nullable|string|max:255',
-            'registration_number_pass' => 'nullable|string|max:255',
-            'registration_expiry_date' => 'nullable|date',
-            'expired_at' => 'nullable|date',
-            'status_date' => 'nullable|string|max:255',
-            'remarks' => 'nullable|string',
-            'new_or_old' => 'boolean',
-            'step' => 'nullable|string|max:255',
-            'status' => 'nullable|string|max:255',
-            'is_active' => 'boolean',
-            'is_deleted' => 'boolean',
-            'image' => 'nullable|string|max:255', // Or 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048' if uploading files
-            'document' => 'nullable|string|max:255', // Or 'nullable|file|mimes:pdf,doc,docx|max:10240' for documents
-            'progress' => 'nullable|numeric',
-            'sub_progress' => 'nullable|numeric',
-            'created_by' => 'nullable|string|max:255',
-            'updated_by' => 'nullable|string|max:255',
-            // Add more validation rules as needed
-        ]);
+        try {
+            // 1. Validation ข้อมูลจากฟอร์ม
+            $validatedData = $request->validate([
+                'company_id' => 'nullable|exists:companies,id', // ตรวจสอบว่า company_id มีอยู่ในตาราง companies
+                'registration_number' => 'nullable|string|max:255',
+                'expired_license_date' => 'nullable|date',
+                'chemical_name_th' => 'nullable|string|max:255',
+                'chemical_name_en' => 'nullable|string|max:255',
+                'composition' => 'nullable|string|max:1000',
+                'manufacturer' => 'nullable|string|max:255',
+                'registrant' => 'nullable|string|max:255',
+                'registration_type' => 'nullable|string|max:255',
+                'importer' => 'nullable|string|max:255',
+                'distributor' => 'nullable|string|max:255',
+                'trade_name' => 'nullable|string|max:255',
+                'trade_name_at' => 'nullable|string|max:255',
+                'type_production_registration' => 'nullable|string|max:255',
+                'usage_production_registration' => 'nullable|string|max:255',
+                'group_of_substances' => 'nullable|string|max:255',
+                'plant' => 'nullable|string|max:255',
+                'pests' => 'nullable|string|max:255',
+                'production_license_number' => 'nullable|string|max:255',
+                'production_license_expiry' => 'nullable|date',
+                'production_license_quantity' => 'nullable|string|max:255',
+                'possession_form_wo2' => 'nullable|string|max:255',
+                'possession_form_expiry' => 'nullable|date',
+                'packaging_size_details' => 'nullable|string|max:1000',
+                'registration_number_pass' => 'nullable|string|max:255',
+                'registration_expiry_date' => 'nullable|date',
+                'expired_at' => 'nullable|date',
+                'status_date' => 'nullable|string|max:255',
+                'remarks' => 'nullable|string|max:1000',
+                'image' => 'nullable|image|max:2048', // ตัวอย่าง: อนุญาตเฉพาะไฟล์ภาพ ขนาดไม่เกิน 2MB
+                'document' => 'nullable|file|mimes:pdf,doc,docx|max:5120', // ตัวอย่าง: อนุญาตเฉพาะ PDF, DOC, DOCX ขนาดไม่เกิน 5MB
+                'progress' => 'nullable|numeric|min:0|max:100',
+                'sub_progress' => 'nullable|numeric|min:0|max:100',
+                // 'new_or_old'
+                // 'step'
+                // 'status'
+                // 'is_active'
+                // 'is_deleted'
+                // 'created_by'
+                // 'updated_by'
+            ]);
 
-        // Create the new production registration
-        $registration = ProductionRegistration::create($validatedData);
+            // 2. Map ข้อมูลและกำหนดค่าเริ่มต้น/เพิ่มเติม
+            $dataToSave = $validatedData; // เริ่มต้นด้วยข้อมูลที่ผ่านการ Validation
 
-        return redirect()->route('production_registrations.index')
-            ->with('success', 'Production registration created successfully.');
+            // กำหนดค่าเริ่มต้นสำหรับฟิลด์ที่ไม่ได้มาจากฟอร์มโดยตรงหรือต้องการค่า default
+            $dataToSave['new_or_old'] = $request->has('new_or_old') ? true : false; // สมมติว่าเป็น checkbox
+            $dataToSave['step'] = $request->input('step', 'initial'); // ใช้ค่าจากฟอร์ม ถ้าไม่มี ให้ 'initial'
+            $dataToSave['status'] = $request->input('status', 'pending'); // ใช้ค่าจากฟอร์ม ถ้าไม่มี ให้ 'pending'
+            $dataToSave['is_active'] = $request->has('is_active') ? true : false; // สมมติว่าเป็น checkbox
+            $dataToSave['is_deleted'] = false; // ควรตั้งเป็น false เสมอเมื่อสร้างใหม่
+
+            // กำหนด created_by โดยใช้ ID ของผู้ใช้งานที่ล็อกอินอยู่
+            if (Auth::check()) {
+                $dataToSave['created_by'] = Auth::id(); // หรือ Auth::user()->name หากต้องการชื่อ
+            } else {
+                $dataToSave['created_by'] = null; // หรือกำหนดเป็นค่าอื่นหากผู้ใช้ไม่ได้ล็อกอิน
+            }
+
+            // การจัดการไฟล์ (Image และ Document)
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('production_images', 'public'); // เก็บใน storage/app/public/production_images
+                $dataToSave['image'] = $imagePath;
+            }
+
+            if ($request->hasFile('document')) {
+                $documentPath = $request->file('document')->store('production_documents', 'public'); // เก็บใน storage/app/public/production_documents
+                $dataToSave['document'] = $documentPath;
+            }
+
+            // 3. สร้าง Record ใหม่ในฐานข้อมูล
+            $productionRegistration = ProductionRegistration::create($dataToSave);
+
+            // 4. ส่งกลับ Response หรือ Redirect ไปยังหน้าอื่น
+            return redirect()->route('createproduct.index')->with('success', 'บันทึกข้อมูลการขึ้นทะเบียนผลิตเรียบร้อยแล้ว!');
+        } catch (ValidationException $e) {
+            // หากเกิดข้อผิดพลาดในการ Validation
+            return redirect()->back()->withErrors($e->errors())->withInput();
+        } catch (\Exception $e) {
+            // หากเกิดข้อผิดพลาดอื่นๆ
+            return redirect()
+                ->back()
+                ->with('error', 'เกิดข้อผิดพลาดในการบันทึกข้อมูล: ' . $e->getMessage())
+                ->withInput();
+        }
     }
 
     /**
@@ -126,7 +161,9 @@ class ProductionRegistrationController extends Controller
     public function show(ProductionRegistration $productionRegistration)
     {
         // The $productionRegistration instance is automatically resolved by Route Model Binding
-        return view('production_registrations.show', compact('productionRegistration'));
+        $product = $productionRegistration;
+        $companies = Company::all();
+        return view('production_registrations.show', compact('product','companies'));
     }
 
     /**
@@ -134,7 +171,11 @@ class ProductionRegistrationController extends Controller
      */
     public function edit(ProductionRegistration $productionRegistration)
     {
-        return view('production_registrations.edit', compact('productionRegistration'));
+        // โหลดข้อมูลบริษัททั้งหมดเพื่อใช้ใน dropdown (ถ้ามี)
+        $companies = Company::all();
+        $product = $productionRegistration;
+        return view('production_registrations.edit', compact('product', 'companies'));
+        // return view('production_registrations.edit', compact('productionRegistration'));
     }
 
     /**
@@ -142,56 +183,94 @@ class ProductionRegistrationController extends Controller
      */
     public function update(Request $request, ProductionRegistration $productionRegistration)
     {
-        // Validate the request data
-        $validatedData = $request->validate([
-            'registration_number' => 'nullable|string|max:255',
-            'expired_license_date' => 'nullable|date',
-            'chemical_name_th' => 'nullable|string|max:255',
-            'chemical_name_en' => 'nullable|string|max:255',
-            'composition' => 'nullable|string',
-            'manufacturer' => 'nullable|string|max:255',
-            'registrant' => 'nullable|string|max:255',
-            'registration_type' => 'nullable|string|max:255',
-            'importer' => 'nullable|string|max:255',
-            'distributor' => 'nullable|string|max:255',
-            'trade_name' => 'nullable|string|max:255',
-            'trade_name_at' => 'nullable|string|max:255',
-            'type_production_registration' => 'nullable|string|max:255',
-            'usage_production_registration' => 'nullable|string|max:255',
-            'group_of_substances' => 'nullable|string|max:255',
-            'plant' => 'nullable|string|max:255',
-            'pests' => 'nullable|string|max:255',
-            'production_license_number' => 'nullable|string|max:255',
-            'production_license_expiry' => 'nullable|date',
-            'production_license_quantity' => 'nullable|string|max:255',
-            'possession_form_wo2' => 'nullable|string|max:255',
-            'possession_form_expiry' => 'nullable|date',
-            'packaging_size_details' => 'nullable|string|max:255',
-            'registration_number_pass' => 'nullable|string|max:255',
-            'registration_expiry_date' => 'nullable|date',
-            'expired_at' => 'nullable|date',
-            'status_date' => 'nullable|string|max:255',
-            'remarks' => 'nullable|string',
-            'new_or_old' => 'boolean',
-            'step' => 'nullable|string|max:255',
-            'status' => 'nullable|string|max:255',
-            'is_active' => 'boolean',
-            'is_deleted' => 'boolean',
-            'image' => 'nullable|string|max:255',
-            'document' => 'nullable|string|max:255',
-            'progress' => 'nullable|numeric',
-            'sub_progress' => 'nullable|numeric',
-            'created_by' => 'nullable|string|max:255',
-            'updated_by' => 'nullable|string|max:255',
-            // Add more validation rules as needed
-        ]);
+        try {
+            // 1. Validation ข้อมูลจากฟอร์ม
+            $validatedData = $request->validate([
+                'company_id' => 'nullable|exists:companies,id',
+                'registration_number' => 'nullable|string|max:255',
+                'expired_license_date' => 'nullable|date',
+                'chemical_name_th' => 'nullable|string|max:255',
+                'chemical_name_en' => 'nullable|string|max:255',
+                'composition' => 'nullable|string|max:1000',
+                'manufacturer' => 'nullable|string|max:255',
+                'registrant' => 'nullable|string|max:255',
+                'registration_type' => 'nullable|string|max:255',
+                'importer' => 'nullable|string|max:255',
+                'distributor' => 'nullable|string|max:255',
+                'trade_name' => 'nullable|string|max:255',
+                'trade_name_at' => 'nullable|string|max:255',
+                'type_production_registration' => 'nullable|string|max:255',
+                'usage_production_registration' => 'nullable|string|max:255',
+                'group_of_substances' => 'nullable|string|max:255',
+                'plant' => 'nullable|string|max:255',
+                'pests' => 'nullable|string|max:255',
+                'production_license_number' => 'nullable|string|max:255',
+                'production_license_expiry' => 'nullable|date',
+                'production_license_quantity' => 'nullable|string|max:255',
+                'possession_form_wo2' => 'nullable|string|max:255',
+                'possession_form_expiry' => 'nullable|date',
+                'packaging_size_details' => 'nullable|string|max:1000',
+                'registration_number_pass' => 'nullable|string|max:255',
+                'registration_expiry_date' => 'nullable|date',
+                'expired_at' => 'nullable|date',
+                'status_date' => 'nullable|string|max:255',
+                'remarks' => 'nullable|string|max:1000',
+                'image' => 'nullable|image|max:2048', // optional: 'image' if you want to allow changing image
+                'document' => 'nullable|file|mimes:pdf,doc,docx|max:5120', // optional: 'file' if you want to allow changing document
+                'progress' => 'nullable|numeric|min:0|max:100',
+                'sub_progress' => 'nullable|numeric|min:0|max:100',
+                // หมายเหตุ: สำหรับฟิลด์ที่ไม่จำเป็นต้องเปลี่ยนผ่านฟอร์ม (เช่น created_by, is_deleted) ไม่ต้องใส่ใน validation rules
+            ]);
 
-        // Update the production registration
-        $productionRegistration->update($validatedData);
+            // 2. Map ข้อมูลและกำหนดค่าเพิ่มเติม (คล้ายกับ Store แต่ไม่มี created_by)
+            $dataToUpdate = $validatedData;
 
-        return redirect()->route('production_registrations.index')
-            ->with('success', 'Production registration updated successfully.');
+            // กำหนดค่าสำหรับ Checkbox หรือค่า default
+            $dataToUpdate['new_or_old'] = $request->has('new_or_old') ? true : false;
+            $dataToUpdate['is_active'] = $request->has('is_active') ? true : false;
+            // ไม่ต้อง update 'status', 'step' ถ้าฟอร์มไม่ได้ส่งมา หรือถ้ามี logic เฉพาะ
+            // $dataToUpdate['step'] = $request->input('step', $productionRegistration->step);
+            // $dataToUpdate['status'] = $request->input('status', $productionRegistration->status);
+
+            // กำหนด updated_by โดยใช้ ID ของผู้ใช้งานที่ล็อกอินอยู่
+            if (Auth::check()) {
+                $dataToUpdate['updated_by'] = Auth::id(); // หรือ Auth::user()->name หากต้องการชื่อ
+            } else {
+                $dataToUpdate['updated_by'] = null;
+            }
+
+            // การจัดการไฟล์ (Image และ Document)
+            // ถ้ามีการอัปโหลดไฟล์ใหม่ ให้ลบไฟล์เก่าก่อน (ถ้ามี)
+            if ($request->hasFile('image')) {
+                // ลบรูปเก่า (ถ้ามีและไม่ใช่ default image)
+                if ($productionRegistration->image && \Storage::disk('public')->exists($productionRegistration->image)) {
+                    \Storage::disk('public')->delete($productionRegistration->image);
+                }
+                $imagePath = $request->file('image')->store('production_images', 'public');
+                $dataToUpdate['image'] = $imagePath;
+            }
+
+            if ($request->hasFile('document')) {
+                // ลบเอกสารเก่า (ถ้ามี)
+                if ($productionRegistration->document && \Storage::disk('public')->exists($productionRegistration->document)) {
+                    \Storage::disk('public')->delete($productionRegistration->document);
+                }
+                $documentPath = $request->file('document')->store('production_documents', 'public');
+                $dataToUpdate['document'] = $documentPath;
+            }
+
+            // 3. อัปเดต Record ในฐานข้อมูล
+            $productionRegistration->update($dataToUpdate);
+
+            // 4. ส่งกลับ Response หรือ Redirect ไปยังหน้าอื่น
+            return redirect()->route('production-registrations.index')->with('success', 'แก้ไขข้อมูลการขึ้นทะเบียนผลิตเรียบร้อยแล้ว!');
+        } catch (ValidationException $e) {
+            return redirect()->back()->withErrors($e->errors())->withInput();
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'เกิดข้อผิดพลาดในการแก้ไขข้อมูล: ' . $e->getMessage())->withInput();
+        }
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -201,10 +280,8 @@ class ProductionRegistrationController extends Controller
         // Soft delete the registration
         $productionRegistration->delete();
 
-        return redirect()->route('production_registrations.index')
-            ->with('success', 'Production registration deleted successfully.');
+        return redirect()->route('production_registrations.index')->with('success', 'Production registration deleted successfully.');
     }
-
 
     public function showImportForm()
     {
@@ -218,7 +295,7 @@ class ProductionRegistrationController extends Controller
         ]);
 
         try {
-            Excel::import(new ChemicalImportsImport, $request->file('file'));
+            Excel::import(new ChemicalImportsImport(), $request->file('file'));
         } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
             $failures = $e->failures();
 
@@ -231,7 +308,6 @@ class ProductionRegistrationController extends Controller
         } catch (\Exception $e) {
             return back()->with('error', 'เกิดข้อผิดพลาดในการนำเข้าข้อมูล: ' . $e->getMessage());
         }
-
 
         return back()->with('success', 'นำเข้าข้อมูลวัตถุอันตรายเรียบร้อยแล้ว!');
     }

@@ -81,6 +81,12 @@ Route::put('/new/product/update/{registrationNumber}', [ChemicalRegistrationCont
 Route::delete('/newregis/{id}', [ChemicalRegistrationController::class, 'destroy'])->name('newregis.destroy');
 
 Route::get('/create/product', [ProductionRegistrationController::class, 'index'])->name('createproduct.index');
+Route::get('/insert/product', [ProductionRegistrationController::class, 'create'])->name('createproduct.create');
+Route::post('/store/product', [ProductionRegistrationController::class, 'store'])->name('createproduct.store');
+// Route::get('/edit/product/{id}', [ProductionRegistrationController::class, 'edit'])->name('createproduct.edit');
+Route::get('/edit/product/{productionRegistration}', [ProductionRegistrationController::class, 'edit'])->name('createproduct.edit');
+Route::put('/update/product/{productionRegistration}', [ProductionRegistrationController::class, 'update'])->name('createproduct.update');
+Route::get('/show/product/{productionRegistration}', [ProductionRegistrationController::class, 'show'])->name('createproduct.show');
 
 
 Route::put('/newregis/{drug}/update-subprogress', [ChemicalRegistrationController::class, 'updateSubProgress'])->name('newregis.update-subprogress');

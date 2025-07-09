@@ -23,6 +23,7 @@ class ProductionRegistration extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'company_id',
         'registration_number',
         'expired_license_date',
         'chemical_name_th',

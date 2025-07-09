@@ -115,7 +115,7 @@
                     </div>
                 </form>
                 @can('Inregister create')
-                    <a href="{{ route('import.create') }}"
+                    <a href="{{ route('createproduct.create') }}"
                         class="mt-10 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold px-6 py-2 rounded-lg shadow-md transform hover:scale-105 transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
                         + เพิ่มข้อมูลทะเบียนผลิต
                     </a>
@@ -127,12 +127,14 @@
                         <thead>
                             <tr class="bg-indigo-600 text-white text-left">
                                 <th class="py-4 px-8 rounded-tl-2xl">ลำดับ</th>
+                                <th class="py-4 px-6">ชื่อการค้า</th>
                                 <th class="py-4 px-6">ชื่อวัตถุอันตราย (ไทย)</th>
-                                <th class="py-4 px-6">ชื่อวัตถุอันตราย (อังกฤษ)</th>
-                                <th class="py-4 px-6 text-center">ชื่อบริษัท</th>
-                                <th class="py-4 px-6 text-center">ตัวย่อ</th>
-                                <th class="py-4 px-8">เลขที่ทะเบียน</th>
-                                <th class="py-4 px-8">วันหมดอายุ</th>
+                                {{-- <th class="py-4 px-6">ชื่อวัตถุอันตราย (อังกฤษ)</th> --}}
+                                <th class="py-4 px-6 text-center">ผู้ขึ้นทะเบียน</th>
+                                {{-- <th class="py-4 px-6 text-center">ตัวย่อ</th> --}}
+                                <th class="py-4 px-8">เลขที่ทะเบียนผลิต</th>
+                                <th class="py-4 px-8">วันหมดอายุทะเบียน</th>
+                                <th class="py-4 px-8">สถานะ</th>
                                 <th class="py-4 px-8 rounded-tr-2xl text-center">การดำเนินการ</th>
                             </tr>
                         </thead>
@@ -143,20 +145,18 @@
                                         <td class="py-4 px-6 font-semibold text-gray-700">
                                             {{ $loop->iteration + ($imports->currentPage() - 1) * $imports->perPage() }}
                                         </td>
-                                        <td class="py-4 px-6">{{ $import->chemical_name_th }}</td>
-                                        <td class="py-4 px-6">{{ $import->chemical_name_en }}</td>
-                                        <td class="py-4 px-6 text-center">{{ $import->company->full_name ?? '' }}</td>
-
-                                        <td class="py-4 px-6 text-center">{{ $import->company->name ?? '' }}</td>
-                                        <td class="py-4 px-8">{{ $import->registration_no }}</td>
+                                        <td class="py-4 px-6">{{ $import->trade_name ?? '' }}</td>
+                                        <td class="py-4 px-6">{{ $import->chemical_name_th ?? '' }}</td>
+                                        <td class="py-4 px-6 text-center">{{ $import->registrant ?? '' }}</td>
+                                        <td class="py-4 px-6 text-center">{{ $import->registration_number ?? '' }}</td>
                                         <td class="py-4 px-8">
-                                            {{ \Carbon\Carbon::parse($import->expiry_date)->addYears(543)->format('d/m/Y') }}
+                                            {{ \Carbon\Carbon::parse($import->expired_license_date)->addYears(543)->format('d/m/Y') }}
                                         </td>
-
+                                        <td class="py-4 px-6 text-center">{{ $import->status ?? '' }}</td>
                                         <td class="py-4 px-8 text-center">
                                             <div class="flex items-center gap-3 justify-center">
                                                 @can('Inregister read')
-                                                    <a href="{{ route('import.show', $import->id) }}"
+                                                    <a href="{{ route('createproduct.show', $import->id) }}"
                                                         class="inline-flex items-center justify-center p-2 rounded-full text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200"
                                                         title="ดูรายละเอียด">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -170,7 +170,7 @@
                                                     </a>
                                                 @endcan
                                                 @can('Inregister update')
-                                                    <a href="{{ route('import.edit', $import->id) }}"
+                                                    <a href="{{ route('createproduct.edit', $import->id) }}"
                                                         class="inline-flex items-center justify-center p-2 rounded-full text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
                                                         title="แก้ไข">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none"
