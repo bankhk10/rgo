@@ -48,8 +48,10 @@
                                 <div class="dropdown-item text-gray-500" data-value="">-- เลือกผู้ขอขึ้นทะเบียน --
                                 </div>
                                 @foreach ($companies as $company)
-                                    <div class="dropdown-item" data-value="{{ $company->full_name }}">
-                                        {{ $company->full_name }}</div>
+                                    @if ($company->id != 4)
+                                        <div class="dropdown-item" data-value="{{ $company->full_name }}">
+                                            {{ $company->full_name }}</div>
+                                    @endif
                                 @endforeach
                             </div>
                         </div>
@@ -136,8 +138,10 @@
                             <div class="dropdown-list" id="importerList">
                                 <div class="dropdown-item text-gray-500" data-value="">-- เลือกผู้นำเข้า --</div>
                                 @foreach ($companies as $company)
-                                    <div class="dropdown-item" data-value="{{ $company->full_name }}">
-                                        {{ $company->full_name }}</div>
+                                    @if ($company->id != 4)
+                                        <div class="dropdown-item" data-value="{{ $company->full_name }}">
+                                            {{ $company->full_name }}</div>
+                                    @endif
                                 @endforeach
                             </div>
                         </div>

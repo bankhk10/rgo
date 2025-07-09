@@ -6,65 +6,64 @@ use App\Models\ProductionRegistration;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Carbon\Carbon;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
+use Log;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class ProductionRegistrationImport implements ToModel
+
+class ProductionRegistrationImport implements ToModel, WithHeadingRow
 {
     public function model(array $row)
     {
-        // ข้าม header row
-        if ($row[0] === 'registration_number') {
+        $parseDate = function ($dateValue) {
+            if (is_numeric($dateValue) && $dateValue > 0) {
+                try {
+                    return Carbon::createFromTimestamp(Date::excelToTimestamp($dateValue))->toDateString();
+                } catch (\Exception $e) {
+                    return null;
+                }
+            } elseif (is_string($dateValue) && !empty($dateValue)) {
+                try {
+                    return Carbon::parse($dateValue)->toDateString();
+                } catch (\Exception $e) {
+                    return null;
+                }
+            }
             return null;
-        }
+        };
 
         return new ProductionRegistration([
-            'registration_number' => $row[0],
-            'expired_license_date' => $this->toDate($row[1]),
-            'chemical_name_th' => $row[2],
-            'chemical_name_en' => $row[3],
-            'composition' => $row[4],
-            'manufacturer' => $row[5],
-            'registrant' => $row[6],
-            'registration_type' => $row[7],
-            'importer' => $row[8],
-            'distributor' => $row[9],
-            'trade_name' => $row[10],
-            'trade_name_at' => $row[11],
-            'type_production_registration' => $row[12],
-            'usage_production_registration' => $row[13],
-            'group_of_substances' => $row[14],
-            'plant' => $row[15],
-            'pests' => $row[16],
-            'production_license_number' => $row[17],
-            'production_license_expiry' => $this->toDate($row[18]),
-            'production_license_quantity' => $row[19],
-            'possession_form_wo2' => $row[20],
-            'possession_form_expiry' => $this->toDate($row[21]),
-            'packaging_size_details' => $row[22],
-            'registration_number_pass' => $row[23],
-            'registration_expiry_date' => $this->toDate($row[24]),
-            'expired_at' => $this->toDate($row[25]),
-            'status_date' => $row[26],
-            'remarks' => $row[27],
-            'new_or_old' => $row[28] === 'ใหม่' ? true : false,
-            'step' => $row[29],
-            'status' => $row[30] ?? 'pending',
-            'is_active' => $row[31] === '1' ? true : false,
-            'is_deleted' => $row[32] === '1' ? true : false,
-            'image' => $row[33],
-            'document' => $row[34],
-            'progress' => (float) $row[35],
-            'sub_progress' => (float) $row[36],
-            'created_by' => $row[37],
-            'updated_by' => $row[38],
+            'registration_number'           => $row['registration_number'] ?? null,
+            'expired_license_date'          => $parseDate($row['expired_license_date'] ?? null),
+            'chemical_name_th'              => $row['chemical_name_th'] ?? null,
+            'chemical_name_en'              => $row['chemical_name_en'] ?? null,
+            'composition'                   => $row['composition'] ?? null,
+            'manufacturer'                  => $row['manufacturer'] ?? null,
+            'registrant'                    => $row['registrant'] ?? null,
+            'registration_type'             => $row['registration_type'] ?? null,
+            'importer'                      => $row['importer'] ?? null,
+            'distributor'                   => $row['distributor'] ?? null,
+            'trade_name'                    => $row['trade_name'] ?? null,
+            'trade_name_at'                 => $row['trade_name_at'] ?? null,
+            'type_production_registration'  => $row['type_production_registration'] ?? null,
+            'usage_production_registration' => $row['usage_production_registration'] ?? null,
+            'group_of_substances'           => $row['group_of_substances'] ?? null,
+            'plant'                         => $row['plant'] ?? null,
+            'pests'                         => $row['pests'] ?? null,
+            'production_license_number'     => $row['production_license_number'] ?? null,
+            'production_license_expiry'     => $parseDate($row['production_license_expiry'] ?? null),
+            'production_license_quantity'   => $row['production_license_quantity'] ?? null,
+            'possession_form_wo2'           => $row['possession_form_wo2'] ?? null,
+            'possession_form_expiry'        => $parseDate($row['possession_form_expiry'] ?? null),
+            'packaging_size_details'        => $row['packaging_size_details'] ?? null,
+            'registration_number_pass'      => $row['registration_expiry_date'] ?? null, // ดูเหมือนจะอยู่คนละชื่อ
+            'expired_at'                    => $parseDate($row['expired_at'] ?? null),
         ]);
     }
 
-    private function toDate($value)
+
+    public function headingRow(): int
     {
-        try {
-            return $value ? Carbon::parse($value) : null;
-        } catch (\Exception $e) {
-            return null;
-        }
+        return 1; // ให้แพ็กเกจใช้แถวแรกเป็นชื่อคอลัมน์
     }
 }

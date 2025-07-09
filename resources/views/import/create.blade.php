@@ -28,9 +28,11 @@
                             <div class="dropdown-list" id="companyList">
                                 <div class="dropdown-item text-gray-500" data-value="">-- เลือก --</div>
                                 @foreach ($companies as $company)
-                                    <div class="dropdown-item" data-value="{{ $company->id }}">
-                                        {{ $company->full_name }}
-                                    </div>
+                                    @if ($company->id != 4)
+                                        <div class="dropdown-item" data-value="{{ $company->id }}">
+                                            {{ $company->full_name }}
+                                        </div>
+                                    @endif
                                 @endforeach
                             </div>
                         </div>
@@ -189,9 +191,11 @@
                             <div class="dropdown-list" id="storeCompany1List">
                                 <div class="dropdown-item text-gray-500" data-value="">-- เลือก --</div>
                                 @foreach ($companies as $company)
-                                    <div class="dropdown-item" data-value="{{ $company->id }}">
-                                        {{ $company->full_name }}
-                                    </div>
+                                    @if ($company->id != 4)
+                                        <div class="dropdown-item" data-value="{{ $company->id }}">
+                                            {{ $company->full_name }}
+                                        </div>
+                                    @endif
                                 @endforeach
                             </div>
                         </div>
@@ -215,9 +219,11 @@
                             <div class="dropdown-list" id="storeCompany2List">
                                 <div class="dropdown-item text-gray-500" data-value="">-- เลือก --</div>
                                 @foreach ($companies as $company)
-                                    <div class="dropdown-item" data-value="{{ $company->id }}">
-                                        {{ $company->full_name }}
-                                    </div>
+                                    @if ($company->id != 4)
+                                        <div class="dropdown-item" data-value="{{ $company->id }}">
+                                            {{ $company->full_name }}
+                                        </div>
+                                    @endif
                                 @endforeach
                             </div>
                         </div>
