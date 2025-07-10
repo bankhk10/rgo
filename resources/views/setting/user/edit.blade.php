@@ -106,9 +106,9 @@
                         <input type="password" name="password" id="password" placeholder="ใส่รหัสผ่าน"
                             class="w-full p-3 pr-12 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         {{-- <small class="text-gray-500 mx-3">ปล่อยว่างไว้หากไม่ต้องการเปลี่ยนรหัสผ่าน</small> --}}
-                        <span class="mx-2 mt-2 absolute right-4 transform -translate-y-2/2 cursor-pointer text-gray-500"
+                        <span class="mx-2 mt-3 absolute right-4 transform -translate-y-2/2 cursor-pointer text-gray-500"
                             id="togglePassword">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"
+                            <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 24 24"
                                 fill="none" stroke="#aba6a6" stroke-width="0.9375" stroke-linecap="round"
                                 stroke-linejoin="round" class="lucide lucide-eye-off-icon lucide-eye-off">
                                 <path

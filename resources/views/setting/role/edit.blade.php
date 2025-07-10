@@ -21,6 +21,8 @@
                         <select name="position" id="select_position"
                             class="flex-1 min-w-[150px] p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                             <option value="">-- เลือกตำแหน่ง --</option>
+                            <option value="ceo" {{ Str::contains($role->name, 'ceo') ? 'selected' : '' }}>
+                                ผู้บริหาร</option>
                             <option value="manager" {{ Str::contains($role->name, 'manager') ? 'selected' : '' }}>
                                 ผู้จัดการแผนก</option>
                             <option value="head" {{ Str::contains($role->name, 'head') ? 'selected' : '' }}>หัวหน้า
@@ -70,22 +72,24 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($permissions as $menu => $actions)
-                                       @if (!in_array($menu, ['Report', 'Role', 'User', 'RegisterContinue']))
-                                        <tr class="border-b hover:bg-gray-50 transition">
-                                            <td class="py-4 px-8 font-semibold text-gray-700">{{ $menu }}</td>
-                                            @foreach (['read', 'create', 'update', 'delete'] as $action)
-                                                <td class="py-4 px-8 text-center">
-                                                    @if (isset($actions[$action]))
-                                                        <input type="checkbox"
-                                                            id="permission_{{ $actions[$action]->id }}"
-                                                            name="permissions[]" value="{{ $actions[$action]->id }}"
-                                                            class="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
-                                                            @if ($role->permissions->contains('id', $actions[$action]->id)) checked @endif>
-                                                    @endif
+                                        @if (!in_array($menu, ['Report', 'Role', 'User', 'RegisterContinue']))
+                                            <tr class="border-b hover:bg-gray-50 transition">
+                                                <td class="py-4 px-8 font-semibold text-gray-700">{{ $menu }}
                                                 </td>
-                                            @endforeach
-                                        </tr>
-                                         @endif
+                                                @foreach (['read', 'create', 'update', 'delete'] as $action)
+                                                    <td class="py-4 px-8 text-center">
+                                                        @if (isset($actions[$action]))
+                                                            <input type="checkbox"
+                                                                id="permission_{{ $actions[$action]->id }}"
+                                                                name="permissions[]"
+                                                                value="{{ $actions[$action]->id }}"
+                                                                class="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                                                                @if ($role->permissions->contains('id', $actions[$action]->id)) checked @endif>
+                                                        @endif
+                                                    </td>
+                                                @endforeach
+                                            </tr>
+                                        @endif
                                     @endforeach
                                 </tbody>
                             </table>
