@@ -1,6 +1,6 @@
 <x-app-layout>
     <div>
-        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
+        <main class="flex-1 overflow-x-hidden overflow-y-auto">
             <div class="container mx-auto px-6 py-6">
                 <div class="flex justify-between items-center mb-6">
                     <h1 class="text-4xl font-extrabold text-gray-800 tracking-wide">
@@ -25,6 +25,7 @@
                             <select name="position" id="select_position"
                                 class="flex-1 min-w-[150px] p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 <option value="">-- เลือกตำแหน่ง --</option>
+                                <option value="ceo">ผู้บริหาร</option>
                                 <option value="manager">ผู้จัดการแผนก</option>
                                 <option value="head">หัวหน้า</option>
                                 <option value="staff">พนักงาน</option>
@@ -45,8 +46,10 @@
                                 </option>
                                 <option value="SalesDepartment"
                                     {{ old('department') == 'SalesDepartment' ? 'selected' : '' }}>ฝ่ายขาย</option>
-                                <option value="IT" {{ old('department') == 'IT' ? 'selected' : '' }}>เทคโนโลยีสารสนเทศ</option>
-                                <option value="no" {{ old('department') == 'IT' ? 'selected' : '' }}>ไม่มีสิทธิ์ดำเนินการ</option>
+                                <option value="IT" {{ old('department') == 'IT' ? 'selected' : '' }}>
+                                    เทคโนโลยีสารสนเทศ</option>
+                                <option value="no" {{ old('department') == 'IT' ? 'selected' : '' }}>
+                                    ไม่มีสิทธิ์ดำเนินการ</option>
                             </select>
                         </div>
                         @error('name')
@@ -69,23 +72,27 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($permissions as $menu => $actions)
-                                        <tr class="border-b hover:bg-gray-50 transition">
-                                            <td class="py-4 px-8 font-semibold text-gray-700">{{ $menu }}
-                                            </td>
-                                            @foreach (['read', 'create', 'update', 'delete'] as $action)
-                                                <td class="py-4 px-8 text-center">
-                                                    @if (isset($actions[$action]))
-                                                        <input type="checkbox"
-                                                            id="permission_{{ $actions[$action]->id }}"
-                                                            name="permissions[]" value="{{ $actions[$action]->id }}"
-                                                            class="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
-                                                            @if (is_array(old('permissions')) && in_array($actions[$action]->id, old('permissions'))) checked @endif>
-                                                    @endif
+                                        @if (!in_array($menu, ['Report', 'Role', 'User', 'RegisterContinue']))
+                                            <tr class="border-b hover:bg-gray-50 transition">
+                                                <td class="py-4 px-8 font-semibold text-gray-700">{{ $menu }}
                                                 </td>
-                                            @endforeach
-                                        </tr>
+                                                @foreach (['read', 'create', 'update', 'delete'] as $action)
+                                                    <td class="py-4 px-8 text-center">
+                                                        @if (isset($actions[$action]))
+                                                            <input type="checkbox"
+                                                                id="permission_{{ $actions[$action]->id }}"
+                                                                name="permissions[]"
+                                                                value="{{ $actions[$action]->id }}"
+                                                                class="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                                                                @if (is_array(old('permissions')) && in_array($actions[$action]->id, old('permissions'))) checked @endif>
+                                                        @endif
+                                                    </td>
+                                                @endforeach
+                                            </tr>
+                                        @endif
                                     @endforeach
                                 </tbody>
+
                             </table>
                         </div>
                     </div>

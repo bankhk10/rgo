@@ -70,6 +70,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($permissions as $menu => $actions)
+                                       @if (!in_array($menu, ['Report', 'Role', 'User', 'RegisterContinue']))
                                         <tr class="border-b hover:bg-gray-50 transition">
                                             <td class="py-4 px-8 font-semibold text-gray-700">{{ $menu }}</td>
                                             @foreach (['read', 'create', 'update', 'delete'] as $action)
@@ -84,6 +85,7 @@
                                                 </td>
                                             @endforeach
                                         </tr>
+                                         @endif
                                     @endforeach
                                 </tbody>
                             </table>

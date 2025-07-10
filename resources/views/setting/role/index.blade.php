@@ -19,7 +19,7 @@
                         <table class="min-w-full bg-white">
                             <thead>
                                 <tr class="bg-indigo-600 text-white text-left">
-                                    <th class="py-4 px-8 rounded-tl-2xl">ลำดับ</th>
+                                    {{-- <th class="py-4 px-8 rounded-tl-2xl">ลำดับ</th> --}}
                                     <th class="py-3 px-6 text-left w-1/6 min-w-[180px]">ชื่อสิทธิ์การใช้งาน</th>
                                     <th class="py-3 px-6 text-left">สิทธิ์</th>
                                     <th class="py-3 px-6 text-right w-1/6 min-w-[180px]">การดำเนินการ</th>
@@ -57,7 +57,7 @@
 
                                     @foreach ($roles as $index => $role)
                                         <tr class="border-b border-gray-200 hover:bg-gray-100">
-                                            <td class="py-4 px-8 font-semibold text-gray-700">{{ $index + 1 }}</td>
+                                            {{-- <td class="py-4 px-8 font-semibold text-gray-700">{{ $index + 1 }}</td> --}}
                                             <td class="py-3 px-6 text-left whitespace-nowrap">
                                                 <span class="font-medium">{{ translateRoleName($role->name) }}</span>
                                             </td>
