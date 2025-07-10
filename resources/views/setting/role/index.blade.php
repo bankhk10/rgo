@@ -32,6 +32,7 @@
                                         function translateRoleName($roleName)
                                         {
                                             $positions = [
+                                                'ceo' => 'ผู้บริหาร',
                                                 'manager' => 'ผู้จัดการแผนก',
                                                 'head' => 'หัวหน้า',
                                                 'staff' => 'พนักงาน',

@@ -133,14 +133,14 @@
                     <table class="min-w-full bg-white">
                         <thead>
                             <tr class="bg-indigo-600 text-white text-left">
-                                <th class="py-4 px-8 rounded-tl-2xl">ลำดับ</th>
-                                <th class="py-4 px-6">ชื่อวัตถุอันตราย (ไทย)</th>
-                                <th class="py-4 px-6">ชื่อวัตถุอันตราย (อังกฤษ)</th>
-                                <th class="py-4 px-6 text-center">ชื่อบริษัท</th>
-                                <th class="py-4 px-6 text-center">ตัวย่อ</th>
+                                <th class="py-4 px-4 rounded-tl-2xl">ลำดับ</th>
+                                <th class="py-4 px-4">ชื่อวัตถุอันตราย (ไทย)</th>
+                                <th class="py-4 px-4">ชื่อวัตถุอันตราย (อังกฤษ)</th>
+                                <th class="py-4 px-4 text-center">ชื่อบริษัท</th>
+                                <th class="py-4 px-4 text-center">ตัวย่อ</th>
                                 <th class="py-4 px-8">เลขที่ทะเบียน</th>
                                 <th class="py-4 px-8">วันหมดอายุ</th>
-                                <th class="py-4 px-8 text-center">สถานะ</th>
+                                <th class="py-4 px-4 text-center">สถานะ</th>
                                 <th class="py-4 px-8 rounded-tr-2xl text-center">การดำเนินการ</th>
                             </tr>
                         </thead>
@@ -151,10 +151,10 @@
                                         <td class="py-4 px-6 font-semibold text-gray-700">
                                             {{ $loop->iteration + ($imports->currentPage() - 1) * $imports->perPage() }}
                                         </td>
-                                        <td class="py-4 px-6">{{ $import->chemical_name_th }}</td>
-                                        <td class="py-4 px-6">{{ $import->chemical_name_en }}</td>
-                                        <td class="py-4 px-6 text-center">{{ $import->company->full_name ?? '' }}</td>
-                                        <td class="py-4 px-6 text-center">{{ $import->company->name ?? '' }}</td>
+                                        <td class="py-4 px-4">{{ $import->chemical_name_th }}</td>
+                                        <td class="py-4 px-4">{{ $import->chemical_name_en }}</td>
+                                        <td class="py-4 px-4">{{ $import->company->full_name ?? '' }}</td>
+                                        <td class="py-4 px-4 text-center">{{ $import->company->name ?? '' }}</td>
                                         <td class="py-4 px-8">{{ $import->registration_no }}</td>
                                         <td class="py-4 px-8">
                                             {{ \Carbon\Carbon::parse($import->expiry_date)->addYears(543)->format('d/m/Y') }}

@@ -46,7 +46,7 @@
 
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เบอร์โทร</label>
-                        <input type="number" name="phone"
+                        <input type="text" name="phone"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                             value="{{ old('phone', $company->phone) }}" placeholder="ใส่เบอร์โทรศัพท์" />
                         @error('phone')
