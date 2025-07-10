@@ -7,6 +7,7 @@ use App\Models\ChemicalRegistration;
 use App\Models\DrugProgressStep; // Assuming this is the model for drug progress steps
 use Illuminate\Support\Facades\Log; // For logging errors
 use App\Models\Company;
+use Carbon\Carbon;
 
 
 class ChemicalRegistrationController extends Controller
@@ -20,10 +21,9 @@ class ChemicalRegistrationController extends Controller
 
     public function index(Request $request)
     {
-        // Start with a base query for 'new_or_old' products
-        $query = ChemicalRegistration::where('new_or_old', true);
+        $query = ChemicalRegistration::query();
 
-        // Handle search
+        // ค้นหาตามคำค้น
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
@@ -33,7 +33,7 @@ class ChemicalRegistrationController extends Controller
             });
         }
 
-        // ส่วนของการกรองตามช่วงวันหมดอายุ (expiry_date_from/to) ยังคงเดิม
+        // ค้นหาตามวันที่
         if ($request->filled('expiry_date_from') && $request->filled('expiry_date_to')) {
             $query->whereBetween('date_submit_request', [
                 $request->input('expiry_date_from'),
@@ -41,22 +41,54 @@ class ChemicalRegistrationController extends Controller
             ]);
         }
 
+        // ฟิลเตอร์ตามสถานะ
+        $statusFilter = $request->input('status_filter');
+        $today = now();
+        $in180Days = now()->addDays(180);
 
-        // Count for summary cards - these should NOT be affected by the search query
-        $totalNewRegistrations = ChemicalRegistration::where('new_or_old', true)->count();
-        $pendingCount = ChemicalRegistration::where('progress', '<', 100)
-            ->where('new_or_old', true)
-            ->count();
-        $approvedCount = ChemicalRegistration::where('progress', 100)
-            ->where('new_or_old', true)
+        if ($statusFilter === 'expired') {
+            $query->whereDate('expired_license_number', '<', $today);
+        } elseif ($statusFilter === 'soon_expired') {
+            $query->whereBetween('expired_license_number', [$today, $in180Days]);
+        } elseif ($statusFilter === 'new_all') {
+            $query->where('new_or_old', true)
+                ->where('progress', '<', 100);
+        } else {
+            // ขึ้นทะเบียนใหม่ (progress < 100)
+            // $query->where('progress', '<', 100);
+        }
+
+        // สถิติ
+        $totalNewRegistrations = ChemicalRegistration::where('new_or_old', true)->where('progress', '<', 100)->count();
+        $soonExpiredCount = ChemicalRegistration::where('new_or_old', false)
+            ->whereBetween('expired_license_number', [now(), now()->addDays(180)])
             ->count();
 
+        $expiredCount = ChemicalRegistration::where('expired_license_number', '<', $today)
+            ->where('new_or_old', false)
+            ->count();
+
+        $total = ChemicalRegistration::count();
         $paginatedProducts = $query->orderBy('created_at', 'desc')->paginate(5);
 
+        foreach ($paginatedProducts as $import) {
+            $expiryDate = Carbon::parse($import->expired_license_number);
+            $now = Carbon::now();
+
+            if ($expiryDate->isPast()) {
+                $import->status = 'หมดอายุ';
+            } elseif ($expiryDate->diffInMonths($now) <= 6) {
+                $import->status = 'ใกล้หมดอายุ';
+            } else {
+                $import->status = 'ใช้งานอยู่';
+            }
+        }
+
         return view('product.new.index', [
+            'total' => $total,
             'totalNewRegistrations' => $totalNewRegistrations,
-            'pendingCount' => $pendingCount,
-            'approvedCount' => $approvedCount,
+            'soonExpiredCount' => $soonExpiredCount,
+            'expiredCount' => $expiredCount,
             'paginatedProducts' => $paginatedProducts,
         ]);
     }
@@ -271,6 +303,10 @@ class ChemicalRegistrationController extends Controller
 
         foreach ($validatedData as $key => $value) {
             $drug->$key = $value;
+        }
+
+        if (!empty($validatedData['registration_number'])) {
+            $drug->new_or_old = false;
         }
 
         $drug->save();

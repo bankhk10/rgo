@@ -18,6 +18,20 @@
             <div class="flex flex-row justify-around mb-10">
                 {{-- ทั้งหมด --}}
                 <a href="{{ route('newregis.index', array_merge(request()->except('status_filter', 'page'), ['page' => 1])) }}"
+                    class="group h-full bg-gradient-to-br from-green-100 to-green-50 p-4 rounded-3xl text-center border-2 border-green-200 hover:scale-105 transition-all duration-300">
+                    <div class="flex justify-center mb-2">
+                        <div class="bg-green-200 rounded-full p-3 group-hover:bg-green-300 transition">
+                            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                    </div>
+                    <h2 class="text-lg font-bold text-green-700 mb-1 tracking-wide">ทะเบียนทั้งหมด</h2>
+                    <p class="text-4xl text-green-600 font-extrabold mb-1">{{ $total }}</p>
+                </a>
+                {{-- ขึ้นทั้งหมด --}}
+                <a href="{{ route('newregis.index', array_merge(request()->except('status_filter', 'page'), ['status_filter' => 'new_all', 'page' => 1])) }}"
                     class="group block h-full bg-gradient-to-br from-blue-200 to-blue-100 p-4 rounded-3xl text-center border-2 border-blue-400 hover:scale-105 transition-all duration-300">
                     <div class="flex justify-center mb-2">
                         <div class="bg-blue-300 rounded-full p-3 group-hover:bg-blue-400 transition">
@@ -28,10 +42,9 @@
                             </svg>
                         </div>
                     </div>
-                    <h2 class="text-lg font-bold text-blue-700 mb-1 tracking-wide">ขึ้นทะเบียนใหม่ทั้งหมด</h2>
+                    <h2 class="text-lg font-bold text-blue-700 mb-1 tracking-wide">ขึ้นทะเบียนใหม่</h2>
                     <p class="text-2xl font-bold text-blue-600">{{ $totalNewRegistrations ?? 0 }}</p>
                 </a>
-
                 {{-- อยู่ระหว่างดำเนินการ --}}
                 <a href="{{ route('newregis.index', array_merge(request()->except('status_filter', 'page'), ['status_filter' => 'soon_expired', 'page' => 1])) }}"
                     class="group block h-full bg-gradient-to-br from-yellow-100 to-yellow-50 p-4 rounded-3xl text-center border-2 border-yellow-200 hover:scale-105 transition-all duration-300">
@@ -44,27 +57,25 @@
                             </svg>
                         </div>
                     </div>
-                    <h2 class="text-lg font-bold text-yellow-700 mb-1 tracking-wide">อยู่ระหว่างดำเนินการ</h2>
-                    <p class="text-2xl font-bold text-yellow-600">{{ $pendingCount ?? 0 }}</p>
+                    <h2 class="text-lg font-bold text-yellow-700 mb-1 tracking-wide">ทะเบียนใกล้หมดอายุ</h2>
+                    <p class="text-2xl font-bold text-yellow-600">{{ $soonExpiredCount ?? 0 }}</p>
                 </a>
-
-
                 {{-- ขึ้นทะเบียนใหม่เสร็จแล้ว --}}
                 <a href="{{ route('newregis.index', array_merge(request()->except('status_filter', 'page'), ['status_filter' => 'expired', 'page' => 1])) }}"
-                    class="group h-full bg-gradient-to-br from-green-100 to-green-50 p-4 rounded-3xl text-center border-2 border-green-200 hover:scale-105 transition-all duration-300">
+                    class="group block h-full bg-gradient-to-br from-red-100 to-red-50 p-4 rounded-3xl text-center border-2 border-red-200 hover:scale-105 transition-all duration-300">
                     <div class="flex justify-center mb-2">
-                        <div class="bg-green-200 rounded-full p-3 group-hover:bg-green-300 transition">
-                            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" stroke-width="2"
+                        <div class="bg-red-200 rounded-full p-3 group-hover:bg-red-300 transition">
+                            <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" stroke-width="2"
                                 viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3" />
+                                <circle cx="12" cy="12" r="10" />
                             </svg>
                         </div>
                     </div>
-                    <h2 class="text-lg font-bold text-green-700 mb-1 tracking-wide">ขึ้นทะเบียนใหม่เสร็จแล้ว</h2>
-                    <p class="text-4xl text-green-600 font-extrabold mb-1">{{ $approvedCount }}</p>
+                    <h2 class="text-lg font-bold text-red-700 mb-1 tracking-wide">ทะเบียนหมดอายุ</h2>
+                    <p class="text-2xl font-bold text-red-600">{{ $expiredCount ?? 0 }}</p>
                 </a>
             </div>
-
 
             {{-- 1 --}}
 
@@ -142,8 +153,8 @@
                                 <th class="py-4 px-8">ชื่อสามัญ</th>
                                 <th class="py-4 px-8">เลขที่ทะเบียน</th>
                                 <th class="py-4 px-8">วันที่ขอขึ้นทะเบียน</th>
-
                                 <th class="py-4 px-8">สถานะความคืบหน้า</th>
+                                <th class="py-4 px-4 text-center">สถานะ</th>
                                 <th class="py-4 px-8 rounded-tr-2xl text-center">รายละเอียด</th>
                             </tr>
                         </thead>
@@ -340,6 +351,33 @@
                                         <div class="text-xs text-gray-500 text-center mt-1">
                                             {{ $product->progress }}%
                                         </div>
+                                    </td>
+                                    <td class="py-4 px-8">
+                                        @if ($product->progress >= 100)
+                                            @php
+                                                $statusClass = '';
+                                                $statusText = $product->status;
+
+                                                if ($statusText == 'หมดอายุ') {
+                                                    $statusClass =
+                                                        'inline-block rounded-full px-3 py-1 font-semibold text-white bg-red-500';
+                                                } elseif ($statusText == 'ใกล้หมดอายุ') {
+                                                    $statusClass =
+                                                        'inline-block rounded-full px-3 py-1 font-semibold text-gray-600 bg-yellow-300';
+                                                } else {
+                                                    $statusClass =
+                                                        'inline-block rounded-full px-3 py-1 font-semibold text-white bg-green-500'; // สถานะปกติ เช่น 'ใช้งานอยู่'
+                                                }
+                                            @endphp
+                                            <span class="{{ $statusClass }}">
+                                                {{ $statusText }}
+                                            </span>
+                                        @endif
+                                        @if ($product->progress < 100)
+                                            <span class="inline-block rounded-full px-3 py-1 font-semibold text-white bg-blue-500">
+                                                {{ 'ขึ้นทะเบียนใหม่' }}
+                                            </span>
+                                        @endif
                                     </td>
                                     <td class="py-4 px-12 mx-auto">
                                         {{-- ปุ่มดูรายละเอียด --}}

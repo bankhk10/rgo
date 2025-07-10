@@ -18,6 +18,12 @@
                                     placeholder="กรอกเลขที่ทะเบียน" value="{{ $drug->registration_number }}">
                         </div>
                         <div>
+                            <p class="font-semibold text-indigo-600 mb-1">วันที่หมดอายุ</p>
+                            <input type="date" name="expired_license_number"
+                                class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1"
+                                value="{{ $drug->expired_license_number }}">
+                        </div>
+                        <div>
                             <p class="font-semibold text-indigo-600 mb-1">ชื่อสามัญ</p>
                             <input type="text" name="common_name"
                                 class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1 bg-gray-200"
