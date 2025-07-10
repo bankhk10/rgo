@@ -88,7 +88,7 @@
             <div>
                 <h3
                     class="text-2xl font-semibold text-white bg-gradient-to-r from-blue-400 to-indigo-400 px-4 py-3 rounded-t-md">
-                    การเข้าสู่ระบบและสิทธิ์การใช้งาน</h3>
+                    ข้อมูลการเข้าระบบ</h3>
                 <div class="grid grid-cols-3 md:grid-cols-2 gap-6 mt-4">
 
                     <div>

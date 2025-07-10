@@ -10,7 +10,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M12 2v2m0 16v2m8-10h2M2 12H4m15.364-7.364l1.414 1.414M4.222 19.778l1.414-1.414m12.728 0l1.414 1.414M4.222 4.222l1.414 1.414" />
                     </svg>
-                    Dashboard
+                    แดชบอร์ด
                 </span>
             </h1>
 
@@ -34,7 +34,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3" />
                                 <circle cx="12" cy="12" r="10" />
                             </svg> --}}
-                              <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round" class="lucide lucide-clipboard-pen-icon lucide-clipboard-pen">
                                 <rect width="8" height="4" x="8" y="2" rx="1" />
@@ -49,13 +49,14 @@
                     <p class="text-4xl text-red-600 font-extrabold mb-1">{{ $expiredCount ?? 0 }}</p>
                 </div>
 
-                     <div
+                <div
                     class="group h-full bg-gradient-to-br from-red-100 to-red-50 p-4 rounded-3xl text-center border-2 border-red-200 hover:scale-105 transition-all duration-300">
                     <div class="flex justify-center mb-2">
                         <div class="bg-red-200 rounded-full p-3 group-hover:bg-red-300 transition">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" class="lucide lucide-clipboard-check-icon lucide-clipboard-check">
+                                stroke-linejoin="round"
+                                class="lucide lucide-clipboard-check-icon lucide-clipboard-check">
                                 <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
                                 <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
                                 <path d="m9 14 2 2 4-4" />
@@ -81,7 +82,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3" />
                                 <circle cx="12" cy="12" r="10" />
                             </svg> --}}
-                              <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round" class="lucide lucide-clipboard-pen-icon lucide-clipboard-pen">
                                 <rect width="8" height="4" x="8" y="2" rx="1" />
@@ -101,9 +102,10 @@
                     class="group h-full bg-gradient-to-br from-yellow-100 to-yellow-50 p-4 rounded-3xl text-center border-2 border-yellow-200 hover:scale-105 transition-all duration-300">
                     <div class="flex justify-center mb-2">
                         <div class="bg-yellow-200 rounded-full p-3 group-hover:bg-yellow-300 transition">
-                               <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" class="lucide lucide-clipboard-check-icon lucide-clipboard-check">
+                                stroke-linejoin="round"
+                                class="lucide lucide-clipboard-check-icon lucide-clipboard-check">
                                 <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
                                 <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
                                 <path d="m9 14 2 2 4-4" />
@@ -119,50 +121,106 @@
                     <p class="text-4xl text-yellow-600 font-extrabold mb-1">{{ $nearExpiryCount ?? 0 }}</p>
                 </div>
             </div>
-
-            {{-- รายการทะเบียนใกล้หมดอายุ --}}
-            <div class="bg-white rounded-2xl overflow-hidden border border-gray-200">
-                <div class="overflow-x-auto">
-                    <table class="min-w-full bg-white">
-                        <thead>
-                            <tr class="bg-indigo-600 text-white text-left">
-                                <th class="py-4 px-8 rounded-tl-2xl">ลำดับ</th>
-                                <th class="py-4 px-8">ชื่อสามัญ</th>
-                                <th class="py-4 px-8">เลขที่ทะเบียน</th>
-                                <th class="py-4 px-8">วันหมดอายุ</th>
-                                <th class="py-4 px-12 rounded-tr-2xl">สถานะ</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($paginatedNearExpiryDrugs as $index => $drug)
-                                <tr class="border-b hover:bg-yellow-50 transition">
-                                    <td class="py-4 px-8 font-semibold text-gray-700">
-                                        {{ ($paginatedNearExpiryDrugs->currentPage() - 1) * $paginatedNearExpiryDrugs->perPage() + $index + 1 }}
-                                    </td>
-                                    <td class="py-4 px-8">{{ $drug->name }}</td>
-                                    <td class="py-4 px-8">{{ $drug->registration_number }}</td>
-                                    <td class="py-4 px-8">{{ $drug->expiry_date->format('d/m/Y') }}</td>
-                                    <td class="py-4 px-8">
-                                        <span
-                                            class="bg-yellow-200 text-yellow-900 py-1 px-4 rounded-full text-xs font-bold">
-                                            ใกล้หมดอายุ
-                                        </span>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="5" class="py-6 px-8 text-center text-gray-400">
-                                        ไม่มีทะเบียนใกล้หมดอายุ</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-                <div class="px-8 py-6 bg-white border-t border-gray-100 rounded-b-2xl">
-                    {{ $paginatedNearExpiryDrugs->links() }}
-                </div>
-            </div>
-
         </div>
+
+        <div>
+            <canvas id="myChart"></canvas>
+        </div>
+
+        <canvas id="myChart2" width="400" height="400"></canvas>
+
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        {{-- <script>
+            // 1. ประกาศตัวแปร 'data'
+            const data = {
+                labels: [
+                    'ทะเบียนปกติ', // เปลี่ยนชื่อ label ให้สื่อความหมาย
+                    'ใกล้หมดอายุ',
+                    'หมดอายุ'
+                ],
+                datasets: [{
+                    label: 'สถานะทะเบียนนำเข้า', // เปลี่ยน label ให้สื่อความหมาย
+                    data: [250, 50, 10], // ตัวอย่างข้อมูล: 250 ปกติ, 50 ใกล้หมด, 10 หมดอายุ
+                    backgroundColor: [
+                        'rgb(75, 192, 192)', // สีเขียว/ฟ้าสำหรับปกติ
+                        'rgb(255, 205, 86)', // สีเหลืองสำหรับใกล้หมดอายุ
+                        'rgb(255, 99, 132)' // สีแดงสำหรับหมดอายุ
+                    ],
+                    hoverOffset: 4
+                }]
+            };
+
+            // 2. กำหนด context ของ canvas
+            const ctx = document.getElementById('myChart');
+
+            // 3. สร้าง Chart.js Plugin สำหรับแสดงข้อความตรงกลาง
+            const centerTextPlugin = {
+                id: 'centerText', // ID ของ Plugin
+                beforeDraw: function(chart) {
+                    // ดึงข้อมูลจาก chart instance
+                    const width = chart.width;
+                    const height = chart.height;
+                    const ctx = chart.ctx;
+
+                    ctx.restore(); // กู้คืนสถานะ context ก่อนหน้านี้
+
+                    // กำหนดสไตล์ข้อความ
+                    ctx.font = '2em Arial'; // ขนาดและฟอนต์
+                    ctx.textBaseline = 'middle'; // จัดแนวตั้งกลาง
+
+                    // ข้อความที่คุณต้องการแสดง (ตัวอย่าง: นับรวมทั้งหมด)
+                    const total = data.datasets[0].data.reduce((sum, value) => sum + value, 0); // รวมข้อมูลทั้งหมด
+                    const text = `${total}`; // ข้อความที่จะแสดง เช่น จำนวนรวม
+                    const textX = Math.round((width - ctx.measureText(text).width) / 2); // ตำแหน่ง X ตรงกลาง
+                    const textY = height / 2; // ตำแหน่ง Y ตรงกลาง
+
+                    ctx.fillStyle = '#333'; // สีข้อความ
+                    ctx.fillText(text, textX, textY); // วาดข้อความ
+
+                    // เพิ่มข้อความบรรทัดที่สอง (เช่น "รายการ")
+                    ctx.font = '1em Arial';
+                    ctx.fillStyle = '#666';
+                    const subText = 'ทั้งหมด';
+                    const subTextX = Math.round((width - ctx.measureText(subText).width) / 2);
+                    const subTextY = height / 2 + 30; // เลื่อนลงมาเล็กน้อย
+
+                    ctx.fillText(subText, subTextX, subTextY);
+
+                    ctx.save(); // บันทึกสถานะ context
+                }
+            };
+
+            // 4. กำหนด config สำหรับกราฟ
+            const config = {
+                type: 'doughnut',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false, // เพื่อให้สามารถกำหนดขนาด canvas ได้ยืดหยุ่นขึ้น
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'สถานะทะเบียนนำเข้าวัตถุดิบ'
+                        },
+                        // ปิด plugin default ของ Chart.js ที่อาจชนกับ custom text
+                        tooltip: {
+                            enabled: true
+                        }
+                    }
+                },
+                plugins: [centerTextPlugin] // เพิ่ม Plugin ที่เราสร้างเข้าไปใน Chart
+            };
+
+            // 5. สร้างกราฟใหม่ด้วย Chart.js
+            if (ctx) {
+                new Chart(ctx, config);
+            } else {
+                console.error('Canvas element with ID "myChart" not found.');
+            }
+        </script> --}}
     </main>
 </x-app-layout>
