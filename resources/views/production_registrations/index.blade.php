@@ -79,7 +79,8 @@
                             </svg>
                         </div>
                         <input type="text" id="search_query" name="search"
-                            placeholder="ชื่อวัตถุอันตราย /ผู้ขึ้นทะเบียน /เลขที่ทะเบียน" value="{{ request('search') }}"
+                            placeholder="ชื่อวัตถุอันตราย /ผู้ขึ้นทะเบียน /เลขที่ทะเบียน"
+                            value="{{ request('search') }}"
                             class="pl-10 pr-4 py-2 w-96 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-600 transition duration-200 ease-in-out text-gray-700 shadow-sm" />
                     </div>
                     <div class="flex-grow min-w-[180px]">
@@ -96,9 +97,9 @@
                             class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200 ease-in-out text-gray-500 text-base shadow-sm w-full"
                             type="date" name="expiry_date_to" value="{{ request('expiry_date_to') }}" />
                     </div>
-                    <div class="flex gap-3 mt-10">
+                    <div class="flex gap-3">
                         <button type="submit"
-                            class="bg-gradient-to-r from-blue-500 to-blue-500 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold px-6 py-2 rounded-lg shadow-md transform hover:scale-105 transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
+                            class="mt-2 mb-1 bg-gradient-to-r from-blue-500 to-blue-500 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold px-6 py-2 rounded-lg shadow-md transform hover:scale-105 transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
                             <svg class="w-5 h-5 inline-block mr-1 -mt-0.5" fill="none" stroke="currentColor"
                                 stroke-width="2" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -106,7 +107,6 @@
                             </svg>
                             ค้นหา
                         </button>
-
                         @if (request('search') || request('expiry_date_from') || request('expiry_date_to') || request('status_filter'))
                             <a href="{{ route('createproduct.index') }}"
                                 class="inline-flex items-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold px-6 py-2 rounded-lg shadow-md transform hover:scale-105 transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50">
@@ -219,7 +219,7 @@
                                                         </svg>
                                                     </button>
                                                     <form id="delete-form-{{ $import->id }}"
-                                                        action="{{ route('import.destroy', $import->id) }}" method="POST"
+                                                        action="{{ route('createproduct.destroy', $import->id) }}" method="POST"
                                                         style="display: none;">
                                                         @csrf
                                                         @method('delete')

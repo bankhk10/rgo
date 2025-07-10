@@ -90,7 +90,6 @@
                     class="text-2xl font-semibold text-white bg-gradient-to-r from-blue-400 to-indigo-400 px-4 py-3 rounded-t-md">
                     การเข้าสู่ระบบและสิทธิ์การใช้งาน</h3>
                 <div class="grid grid-cols-3 md:grid-cols-2 gap-6 mt-4">
-
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">อีเมล์เข้าสู่ระบบ</label>
                         <input type="email" name="email" value="{{ old('email') }}" placeholder="ใส่อีเมล"

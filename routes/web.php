@@ -87,6 +87,7 @@ Route::post('/store/product', [ProductionRegistrationController::class, 'store']
 Route::get('/edit/product/{productionRegistration}', [ProductionRegistrationController::class, 'edit'])->name('createproduct.edit');
 Route::put('/update/product/{productionRegistration}', [ProductionRegistrationController::class, 'update'])->name('createproduct.update');
 Route::get('/show/product/{productionRegistration}', [ProductionRegistrationController::class, 'show'])->name('createproduct.show');
+Route::delete('/createproducts/{id}', [ProductionRegistrationController::class, 'destroy'])->name('createproduct.destroy');
 
 
 Route::put('/newregis/{drug}/update-subprogress', [ChemicalRegistrationController::class, 'updateSubProgress'])->name('newregis.update-subprogress');

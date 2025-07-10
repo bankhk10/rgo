@@ -312,12 +312,12 @@ class ProductionRegistrationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ProductionRegistration $productionRegistration)
+    public function destroy($id)
     {
-        // Soft delete the registration
-        $productionRegistration->delete();
+        $product = ProductionRegistration::findOrFail($id); // เปลี่ยน YourProductModel เป็นชื่อ Model ของคุณ
+        $product->delete();
 
-        return redirect()->route('production_registrations.index')->with('success', 'Production registration deleted successfully.');
+        return redirect()->route('createproduct.index')->with('success', 'ลบข้อมูลทะเบียนผลิตเรียบร้อยแล้ว');
     }
 
     public function showImportForm()
