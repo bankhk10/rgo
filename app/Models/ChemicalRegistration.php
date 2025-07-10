@@ -74,10 +74,10 @@ class ChemicalRegistration extends Model
         'possession_form_expiry' => 'date',
         'application_received_date' => 'date',
         'expired_at' => 'date',
-        'date_submit_request' => 'date',
         'date_request_phase_3' => 'date',
         'progress' => 'float',
         'sub_progress' => 'float',
+        'date_submit_request' => 'datetime', // เพิ่มบรรทัดนี้
     ];
 
     // Optional: ความสัมพันธ์กับตารางอื่น (ถ้า chemical_imports มี model)

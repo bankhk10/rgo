@@ -30,12 +30,7 @@
                                 class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1"
                                 placeholder="กรอกสูตรอัตรส่วนผสมของ..." value="{{ $drug->formula_of_ratio }}">
                         </div>
-                        <div>
-                            <p class="font-semibold text-indigo-600 mb-1">วันที่ยื่น Phase III</p>
-                            <input type="date" name="date_request_phase_3"
-                                class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1"
-                                value="{{ $drug->date_request_phase_3 }}">
-                        </div>
+
                         <div>
                             <p class="font-semibold text-indigo-600 mb-1">ผู้ขอขึ้นทะเบียน</p>
                             <select
@@ -184,6 +179,18 @@
                                 value="{{ $drug->request_number_1 }}">
                         </div>
                         <div>
+                            <p class="font-semibold text-indigo-600 mb-1">วันที่ยื่น Phase III</p>
+                            <input type="date" name="date_request_phase_3"
+                                class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1"
+                                value="{{ $drug->date_request_phase_3 }}">
+                        </div>
+                        <div>
+                            <p class="font-semibold text-indigo-600 mb-1">เลข # Phase III</p>
+                            <input type="text" name="request_number_phase_3"
+                                class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1"
+                                placeholder="กรอกเลข # Phase III" value="{{ $drug->request_number_phase_3 }}">
+                        </div>
+                        <div>
                             <p class="font-semibold text-indigo-600 mb-1">เลข # Phase I</p>
                             <input type="text" name="request_number_phase_1"
                                 class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1"
@@ -207,11 +214,7 @@
                         </button>
                     </div>
                     </form>
-
                 @endif
-
-
-
                 {{-- ไทม์ไลน์การขึ้นทะเบียน --}}
                 <div class="mt-8">
                     @php
@@ -303,7 +306,7 @@
                                 'items' => [
                                     'แผนกทะเบียน' => [
                                         'แผนกทะเบียนได้รับผล Tox Phase III ที่อนุมัติ
-                    ทำการรวบรวมข้อมูลเอกสารยื่นขอเข้าประชุมพิจารณาขึ้นทะเบียนใหม่',
+                                        ทำการรวบรวมข้อมูลเอกสารยื่นขอเข้าประชุมพิจารณาขึ้นทะเบียนใหม่',
                                     ],
                                 ],
                             ],

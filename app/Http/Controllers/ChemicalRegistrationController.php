@@ -27,10 +27,20 @@ class ChemicalRegistrationController extends Controller
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', '%' . $search . '%')
+                $q->where('trade_name', 'like', '%' . $search . '%')
+                    ->orWhere('chemical_name_th', 'like', '%' . $search . '%')
                     ->orWhere('registration_number', 'like', '%' . $search . '%');
             });
         }
+
+        // ส่วนของการกรองตามช่วงวันหมดอายุ (expiry_date_from/to) ยังคงเดิม
+        if ($request->filled('expiry_date_from') && $request->filled('expiry_date_to')) {
+            $query->whereBetween('date_submit_request', [
+                $request->input('expiry_date_from'),
+                $request->input('expiry_date_to'),
+            ]);
+        }
+
 
         // Count for summary cards - these should NOT be affected by the search query
         $totalNewRegistrations = ChemicalRegistration::where('new_or_old', true)->count();

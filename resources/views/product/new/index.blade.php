@@ -16,11 +16,11 @@
 
             {{-- สรุปสถานะทะเบียน --}}
             <div class="flex flex-row justify-around mb-10">
-                <div
-                    class="group h-full bg-gradient-to-br from-blue-200 to-blue-100 p-4 rounded-3xl text-center border-2 border-blue-400 hover:scale-105 transition-all duration-300">
+                {{-- ทั้งหมด --}}
+                <a href="{{ route('newregis.index', array_merge(request()->except('status_filter', 'page'), ['page' => 1])) }}"
+                    class="group block h-full bg-gradient-to-br from-blue-200 to-blue-100 p-4 rounded-3xl text-center border-2 border-blue-400 hover:scale-105 transition-all duration-300">
                     <div class="flex justify-center mb-2">
                         <div class="bg-blue-300 rounded-full p-3 group-hover:bg-blue-400 transition">
-                            {{-- ไอคอนใหม่ --}}
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-blue-600">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -29,10 +29,12 @@
                         </div>
                     </div>
                     <h2 class="text-lg font-bold text-blue-700 mb-1 tracking-wide">ขึ้นทะเบียนใหม่ทั้งหมด</h2>
-                    <p class="text-4xl text-blue-600 font-extrabold mb-1">{{ $totalNewRegistrations }}</p>
-                </div>
-                <div
-                    class="group h-full bg-gradient-to-br from-yellow-100 to-yellow-50 p-4 rounded-3xl text-center border-2 border-yellow-200 hover:scale-105 transition-all duration-300">
+                    <p class="text-2xl font-bold text-blue-600">{{ $totalNewRegistrations ?? 0 }}</p>
+                </a>
+
+                {{-- อยู่ระหว่างดำเนินการ --}}
+                <a href="{{ route('newregis.index', array_merge(request()->except('status_filter', 'page'), ['status_filter' => 'soon_expired', 'page' => 1])) }}"
+                    class="group block h-full bg-gradient-to-br from-yellow-100 to-yellow-50 p-4 rounded-3xl text-center border-2 border-yellow-200 hover:scale-105 transition-all duration-300">
                     <div class="flex justify-center mb-2">
                         <div class="bg-yellow-200 rounded-full p-3 group-hover:bg-yellow-300 transition">
                             <svg class="w-8 h-8 text-yellow-500" fill="none" stroke="currentColor" stroke-width="2"
@@ -43,10 +45,12 @@
                         </div>
                     </div>
                     <h2 class="text-lg font-bold text-yellow-700 mb-1 tracking-wide">อยู่ระหว่างดำเนินการ</h2>
-                    <p class="text-4xl text-yellow-600 font-extrabold mb-1">{{ $pendingCount }}</p>
+                    <p class="text-2xl font-bold text-yellow-600">{{ $pendingCount ?? 0 }}</p>
+                </a>
 
-                </div>
-                <div
+
+                {{-- ขึ้นทะเบียนใหม่เสร็จแล้ว --}}
+                <a href="{{ route('newregis.index', array_merge(request()->except('status_filter', 'page'), ['status_filter' => 'expired', 'page' => 1])) }}"
                     class="group h-full bg-gradient-to-br from-green-100 to-green-50 p-4 rounded-3xl text-center border-2 border-green-200 hover:scale-105 transition-all duration-300">
                     <div class="flex justify-center mb-2">
                         <div class="bg-green-200 rounded-full p-3 group-hover:bg-green-300 transition">
@@ -58,42 +62,75 @@
                     </div>
                     <h2 class="text-lg font-bold text-green-700 mb-1 tracking-wide">ขึ้นทะเบียนใหม่เสร็จแล้ว</h2>
                     <p class="text-4xl text-green-600 font-extrabold mb-1">{{ $approvedCount }}</p>
-
-                </div>
+                </a>
             </div>
 
+
+            {{-- 1 --}}
+
             <div class="flex flex-col sm:flex-row justify-between items-center mx-3 mb-2">
-                <form action="{{ route('newregis.index') }}" method="GET" class="flex items-center gap-2 mb-4">
-                    <div class="relative w-72">
-                        <!-- ไอคอนแว่น -->
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" fill="none"
-                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8">
+                <form action="{{ route('newregis.index') }}" method="GET" class="flex items-center gap-2 mb-2">
+                    <div class="relative flex-grow min-w-[280px]">
+                        <label for="search_query" class="mx-3 text-base block text-gray-700 mb-1 mt-3">ค้นหาชื่อ</label>
+
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none mt-9">
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                             </svg>
-
-
                         </div>
-                        <!-- ช่องค้นหา -->
-                        <input type="text" name="search" placeholder="ชื่อสามัญ หรือเลขที่ทะเบียน..."
-                            value="{{ request('search') }}"
-                            class="pl-10 pr-4 py-2 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500" />
+                        <input type="text" id="search_query" name="search"
+                            placeholder="ชื่อวัตถุอันตราย /บริษัท /เลขที่ทะเบียน" value="{{ request('search') }}"
+                            class="pl-10 pr-4 py-2 w-96 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-600 transition duration-200 ease-in-out text-gray-700 shadow-sm" />
                     </div>
+                    <div class="flex-grow min-w-[180px]">
+                        <label for="expiry_date_from"
+                            class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันที่เริ่ม</label>
+                        <input id="expiry_date_from"
+                            class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200 ease-in-out text-gray-500 text-base shadow-sm w-full"
+                            type="date" name="expiry_date_from" value="{{ request('expiry_date_from') }}" />
+                    </div>
+                    <div class="flex-grow min-w-[180px]">
+                        <label for="expiry_date_to"
+                            class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันที่สิ้นสุด</label>
+                        <input id="expiry_date_to"
+                            class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200 ease-in-out text-gray-500 text-base shadow-sm w-full"
+                            type="date" name="expiry_date_to" value="{{ request('expiry_date_to') }}" />
+                    </div>
+                    <div class="flex gap-3 mt-10">
+                        <button type="submit"
+                            class="bg-gradient-to-r from-blue-500 to-blue-500 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold px-6 py-2 rounded-lg shadow-md transform hover:scale-105 transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
+                            <svg class="w-5 h-5 inline-block mr-1 -mt-0.5" fill="none" stroke="currentColor"
+                                stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                            </svg>
+                            ค้นหา
+                        </button>
 
-                    <!-- ปุ่มค้นหา -->
-                    <button type="submit"
-                        class="bg-blue-500 hover:bg-blue-700 text-white px-5 py-2 rounded-lg transition">
-                        ค้นหา
-                    </button>
+                        {{-- เพิ่มปุ่มล้างการค้นหา --}}
+                        @if (request('search') || request('expiry_date_from') || request('expiry_date_to'))
+                            <a href="{{ route('newregis.index') }}"
+                                class="inline-flex items-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold px-6 py-2 rounded-lg shadow-md transform hover:scale-105 transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50">
+                                <svg class="w-5 h-5 inline-block mr-1 -mt-0.5" fill="none" stroke="currentColor"
+                                    stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                </svg>
+                                ล้างการค้นหา
+                            </a>
+                        @endif
+                    </div>
                 </form>
                 @can('RegisterNew create')
                     <a href="{{ route('newregis.create') }}"
-                        class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 shadow-md">
-                        + เพิ่มข้อมูลทะเบียน
+                        class="mt-10 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold px-6 py-2 rounded-lg shadow-md transform hover:scale-105 transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
+                        + ขึ้นทะเบียนสินค้าใหม่
                     </a>
                 @endcan
             </div>
+            {{-- 1 --}}
+
 
             <div class="bg-white rounded-2xl overflow-hidden border border-gray-200">
                 <div class="overflow-x-auto">
@@ -105,6 +142,7 @@
                                 <th class="py-4 px-8">ชื่อสามัญ</th>
                                 <th class="py-4 px-8">เลขที่ทะเบียน</th>
                                 <th class="py-4 px-8">วันที่ขอขึ้นทะเบียน</th>
+
                                 <th class="py-4 px-8">สถานะความคืบหน้า</th>
                                 <th class="py-4 px-8 rounded-tr-2xl text-center">รายละเอียด</th>
                             </tr>
@@ -118,7 +156,9 @@
                                     <td class="py-4 px-8">{{ $product->trade_name ?? '' }}</td>
                                     <td class="py-4 px-8">{{ $product->chemicalImport->chemical_name_th ?? '' }}</td>
                                     <td class="py-4 px-8">{{ $product->registration_number ?? '' }}</td>
-                                    <td class="py-4 px-8">{{ $product->created_at->format('d/m/Y') ?? '' }}</td>
+                                    <td class="py-4 px-8">
+                                        {{ \Carbon\Carbon::parse($product->date_submit_request)->addYears(543)->format('d/m/Y') }}
+                                    </td>
                                     <td class="py-4 px-8">
                                         <div class="text-center mb-2">
                                             {{-- แสดงสถานะความคืบหน้า --}}
@@ -341,7 +381,6 @@
                                                         ->whereNull('checked_at')
                                                         ->exists();
                                                     // Log::info($step);
-
                                                 @endphp
 
                                                 @if ($incomplete || auth()->user()->hasRole('admin') || auth()->user()->hasRole('manager'))
