@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Models\Company;
 use Illuminate\Support\Facades\Auth;
 use Log;
+use Carbon\Carbon;
+
 
 class ProductionRegistrationController extends Controller
 {
@@ -32,15 +34,48 @@ class ProductionRegistrationController extends Controller
             });
         }
 
+        // ส่วนของการกรองตามช่วงวันหมดอายุ (expiry_date_from/to) ยังคงเดิม
         if ($request->filled('expiry_date_from') && $request->filled('expiry_date_to')) {
-            $query->whereBetween('registration_expiry_date', [$request->input('expiry_date_from'), $request->input('expiry_date_to')]);
+            $query->whereBetween('expired_license_date', [
+                $request->input('expiry_date_from'),
+                $request->input('expiry_date_to'),
+            ]);
         }
 
-        $imports = $query->latest()->paginate(10)->withQueryString();
+        // **เพิ่มส่วนนี้: การกรองตาม status_filter**
+        if ($request->filled('status_filter')) {
+            $statusFilter = $request->input('status_filter');
+            $now = Carbon::now();
 
+            if ($statusFilter === 'expired') {
+                $query->whereDate('expired_license_date', '<', $now);
+            } elseif ($statusFilter === 'soon_expired') {
+                $query->whereDate('expired_license_date', '>=', $now)
+                    ->whereDate('expired_license_date', '<=', $now->copy()->addMonths(6));
+            }
+        }
+
+
+
+        $imports = $query->latest()->paginate(10)->withQueryString();
         $total = ProductionRegistration::count();
-        $expiredCount = ProductionRegistration::where('status_date', 'expired')->count();
-        $soonCount = ProductionRegistration::where('status_date', 'soon_expired')->count();
+        $expiredCount = ProductionRegistration::whereDate('expired_license_date', '<', Carbon::now())->count();
+        $soonCount = ProductionRegistration::whereDate('expired_license_date', '>=', Carbon::now())
+            ->whereDate('expired_license_date', '<=', Carbon::now()->addMonths(6))
+            ->count();
+
+        foreach ($imports as $import) {
+            $expiryDate = Carbon::parse($import->expired_license_date);
+            $now = Carbon::now();
+
+            if ($expiryDate->isPast()) {
+                $import->status = 'หมดอายุ';
+            } elseif ($expiryDate->diffInMonths($now) <= 6) {
+                $import->status = 'ใกล้หมดอายุ';
+            } else {
+                $import->status = 'ใช้งานอยู่';
+            }
+        }
 
         return view('production_registrations.index', [
             'imports' => $imports,
@@ -142,7 +177,8 @@ class ProductionRegistrationController extends Controller
             $productionRegistration = ProductionRegistration::create($dataToSave);
 
             // 4. ส่งกลับ Response หรือ Redirect ไปยังหน้าอื่น
-            return redirect()->route('createproduct.index')->with('success', 'บันทึกข้อมูลการขึ้นทะเบียนผลิตเรียบร้อยแล้ว!');
+            // return redirect()->route('createproduct.index')->with('success', 'บันทึกข้อมูลการขึ้นทะเบียนผลิตเรียบร้อยแล้ว!');
+            return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จ');
         } catch (ValidationException $e) {
             // หากเกิดข้อผิดพลาดในการ Validation
             return redirect()->back()->withErrors($e->errors())->withInput();
@@ -163,7 +199,7 @@ class ProductionRegistrationController extends Controller
         // The $productionRegistration instance is automatically resolved by Route Model Binding
         $product = $productionRegistration;
         $companies = Company::all();
-        return view('production_registrations.show', compact('product','companies'));
+        return view('production_registrations.show', compact('product', 'companies'));
     }
 
     /**
@@ -263,7 +299,8 @@ class ProductionRegistrationController extends Controller
             $productionRegistration->update($dataToUpdate);
 
             // 4. ส่งกลับ Response หรือ Redirect ไปยังหน้าอื่น
-            return redirect()->route('production-registrations.index')->with('success', 'แก้ไขข้อมูลการขึ้นทะเบียนผลิตเรียบร้อยแล้ว!');
+            // return redirect()->route('production-registrations.index')->with('success', 'แก้ไขข้อมูลการขึ้นทะเบียนผลิตเรียบร้อยแล้ว!');
+            return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จ');
         } catch (ValidationException $e) {
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {

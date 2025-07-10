@@ -65,8 +65,6 @@
                     <p class="text-2xl font-bold text-red-600">{{ $expiredCount ?? 0 }}</p>
                 </a>
             </div>
-
-
             <div class="flex flex-col sm:flex-row justify-between items-center mx-3 mb-2">
                 <form action="{{ route('import.index') }}" method="GET" class="flex items-center gap-2 mb-2">
                     <div class="relative flex-grow min-w-[280px]">
@@ -128,6 +126,7 @@
                     </a>
                 @endcan
             </div>
+
             <div class="bg-white rounded-2xl overflow-hidden border border-gray-200">
                 <div class="overflow-x-auto">
                     <table class="min-w-full bg-white">

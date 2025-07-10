@@ -105,4 +105,13 @@ class ProductionRegistration extends Model
         return $this->belongsTo(Company::class);
     }
 
+    public function importerCompany()
+    {
+        return $this->belongsTo(Company::class, 'importer'); // 'store_company_1' is the foreign key
+    }
+
+    public function distributorCompany()
+    {
+        return $this->belongsTo(Company::class, 'distributor'); // 'store_company_1' is the foreign key
+    }
 }

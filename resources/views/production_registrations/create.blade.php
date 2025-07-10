@@ -143,9 +143,11 @@
                             <div class="dropdown-list" id="importerList">
                                 <div class="dropdown-item text-gray-500" data-value="">-- เลือก --</div>
                                 @foreach ($companies as $company)
-                                    <div class="dropdown-item" data-value="{{ $company->id }}">
-                                        {{ $company->full_name }}
-                                    </div>
+                                    @if ($company->id != 4)
+                                        <div class="dropdown-item" data-value="{{ $company->id }}">
+                                            {{ $company->full_name }}
+                                        </div>
+                                    @endif
                                 @endforeach
                             </div>
                         </div>
@@ -360,7 +362,7 @@
                     </div> --}}
 
                     {{-- เลขที่ทะเบียนผลิตที่ผ่าน (registration_number_pass) --}}
-                    <div>
+                    {{-- <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลขที่ทะเบียนผลิตที่ผ่าน</label>
                         <input type="text" name="registration_number_pass"
                             value="{{ old('registration_number_pass') }}" placeholder="ใส่เลขที่ทะเบียนผลิตที่ผ่าน"
@@ -368,10 +370,10 @@
                         @error('registration_number_pass')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
-                    </div>
+                    </div> --}}
 
                     {{-- เลขที่ใบอนุญาตหมดอายุ (registration_expiry_date) --}}
-                    <div>
+                    {{-- <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลขที่ใบอนุญาตหมดอายุ</label>
                         <input type="date" name="registration_expiry_date"
                             value="{{ old('registration_expiry_date') }}"
@@ -379,17 +381,17 @@
                         @error('registration_expiry_date')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
-                    </div>
+                    </div> --}}
 
                     {{-- หมดอายุเมื่อ (expired_at) --}}
-                    <div>
+                    {{-- <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">หมดอายุเมื่อ</label>
                         <input type="date" name="expired_at" value="{{ old('expired_at') }}"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('expired_at')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
-                    </div>
+                    </div> --}}
 
                     {{-- สถานะวัน (status_date) --}}
                     {{-- <div>
@@ -468,7 +470,7 @@
 
             {{-- Buttons --}}
             <div class="flex justify-center gap-4 pt-4">
-                <a href="{{ route('import.index') }}"
+                <a href="{{ route('createproduct.index') }}"
                     class="bg-gray-500 hover:bg-gray-500 text-white font-bold py-2 px-6 rounded-lg shadow-md flex items-center justify-center">
                     ยกเลิก
                 </a>
@@ -510,7 +512,7 @@
                 confirmButtonText: 'ตกลง'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = "{{ route('import.index') }}";
+                    window.location.href = "{{ route('createproduct.index') }}";
                 }
             });
         </script>
