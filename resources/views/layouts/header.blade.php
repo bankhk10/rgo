@@ -1,4 +1,4 @@
-<header class="flex justify-between items-center py-3 px-6 bg-white-100 sticky top-0 z-50 ">
+<header  id="main-header"  class="flex justify-between items-center py-3 px-6 bg-white-100 sticky top-0 z-50 ">
     <div class="flex items-center">
         {{-- <img src="/images/your_logo.png" alt="Logo" class="h-8 w-auto mr-4"> --}}
 

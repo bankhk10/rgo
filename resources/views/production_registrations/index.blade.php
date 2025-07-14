@@ -108,8 +108,9 @@
                             ค้นหา
                         </button>
                         @if (request('search') || request('expiry_date_from') || request('expiry_date_to') || request('status_filter'))
-                            <a href="{{ route('createproduct.index') }}"
-                                class="inline-flex items-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold px-6 py-2 rounded-lg shadow-md transform hover:scale-105 transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50">
+                            <a href="{{ route('createproduct.index') }}" {{-- class="inline-flex items-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold px-6 py-2 rounded-lg shadow-md transform hover:scale-105 transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50"> --}}
+                                class="mt-2 mb-1 bg-gray-300 hover:bg-gray-400 from-blue-500  text-gray-800 font-semibold px-6 py-2 rounded-lg shadow-md transform hover:scale-105 transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-outline-none focus:ring-opacity-50">
+
                                 <svg class="w-5 h-5 inline-block mr-1 -mt-0.5" fill="none" stroke="currentColor"
                                     stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -219,8 +220,8 @@
                                                         </svg>
                                                     </button>
                                                     <form id="delete-form-{{ $import->id }}"
-                                                        action="{{ route('createproduct.destroy', $import->id) }}" method="POST"
-                                                        style="display: none;">
+                                                        action="{{ route('createproduct.destroy', $import->id) }}"
+                                                        method="POST" style="display: none;">
                                                         @csrf
                                                         @method('delete')
                                                     </form>
