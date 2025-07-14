@@ -6,44 +6,59 @@ use Illuminate\Http\Request;
 use App\Models\ChemicalRegistration;
 use Illuminate\Support\Carbon;
 use Illuminate\Pagination\LengthAwarePaginator;
+use App\Models\ChemicalImport;
+use App\Models\ProductionRegistration;
+
 
 class DashboardController extends Controller
 {
-    //
     public function index()
     {
-        // วันปัจจุบัน
-        $today = Carbon::today();
+        $today = now();
+        // ทะเบียนนำเข้าวัตถุดิบ
+        $totalImport = ChemicalImport::count();
+        $soonImport = ChemicalImport::whereDate('expiry_date', '>=', Carbon::now())
+            ->whereDate('expiry_date', '<=', Carbon::now()->addMonths(6))
+            ->count();
+        $expiredImport = ChemicalImport::whereDate('expiry_date', '<', Carbon::now())->count();
 
-        // 1) ทะเบียนใกล้หมดอายุในอีก 30 วัน
-        $nearExpiryDrugs = ChemicalRegistration::whereDate('registration_expiry_date', '>=', $today)
-            ->whereDate('registration_expiry_date', '<=', $today->copy()->addDays(30))
-            ->orderBy('registration_expiry_date')
-            ->get();
 
-        // 2) ทะเบียนที่หมดอายุแล้ว
-        $expiredDrugs = ChemicalRegistration::whereDate('registration_expiry_date', '<', $today)->get();
+        // ทะเบียนสินค้า
+        $totalRegistrations = ChemicalRegistration::count();
+        $soonRegistrations = ChemicalRegistration::where('new_or_old', false)
+            ->whereBetween('expired_license_number', [now(), now()->addDays(180)])
+            ->count();
+        $expiredRegistrations = ChemicalRegistration::where('expired_license_number', '<', $today)
+            ->where('new_or_old', false)
+            ->count();
 
-        // 3) ทะเบียนที่ยังไม่หมดอายุ
-        $activeDrugs = ChemicalRegistration::whereDate('registration_expiry_date', '>', $today->copy()->addDays(30))->get();
+        // ทะเบียนผลิต
+        $totalProduct = ProductionRegistration::count();
+        $soonProduct = ProductionRegistration::whereDate('expired_license_date', '>=', Carbon::now())
+            ->whereDate('expired_license_date', '<=', Carbon::now()->addMonths(6))
+            ->count();
+        $expiredProduct = ProductionRegistration::whereDate('expired_license_date', '<', Carbon::now())->count();
 
-        // Manual pagination
-        $perPage = 5;
-        $currentPage = request()->get('page', 1);
-        $paginatedNearExpiryDrugs = new LengthAwarePaginator(
-            $nearExpiryDrugs->forPage($currentPage, $perPage),
-            $nearExpiryDrugs->count(),
-            $perPage,
-            $currentPage,
-            ['path' => request()->url()],
-        );
+        // ขึ้นทะเบียนสินค้าใหม่
+        $totalNewRegistrations = ChemicalRegistration::where('new_or_old', true)->where('progress', '<', 100)->count();
+        $betweenNewRegistrations = ChemicalRegistration::where('new_or_old', true)->where('progress', '>', 1)->count();
+
 
         return view('dashboard', [
-            'expiredCount' => $expiredDrugs->count(),
-            'nearExpiryDrugs' => $nearExpiryDrugs,
-            'paginatedNearExpiryDrugs' => $paginatedNearExpiryDrugs,
-            'nearExpiryCount' => $nearExpiryDrugs->count(),
-            'activeCount' => $activeDrugs->count(),
+            'totalImport' =>  $totalImport,
+            'expiredImport' => $expiredImport,
+            'soonImport' => $soonImport,
+
+            'totalRegistrations' =>  $totalRegistrations,
+            'soonRegistrations' => $soonRegistrations,
+            'expiredRegistrations' => $expiredRegistrations,
+
+            'totalProduct' =>  $totalProduct,
+            'soonProduct' => $soonProduct,
+            'expiredProduct' => $expiredProduct,
+
+            'totalNewRegistrations' =>  $totalNewRegistrations,
+            'betweenNewRegistrations' => $betweenNewRegistrations,
         ]);
     }
 }
