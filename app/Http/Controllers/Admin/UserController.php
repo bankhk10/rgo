@@ -128,16 +128,16 @@ class UserController extends Controller
     {
 
         $request->validate([
-            'prefix' => 'required',
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'password' => 'nullable|confirmed',
-            'department' => 'nullable|string|max:255',
-            'position' => 'nullable|string|max:255',
-            'employee_id' => 'nullable|string|max:255|unique:users,employee_id,' . $user->id,
-            'phone_number' => 'nullable|string|max:20',
-            'employment_status' => 'nullable|string|max:255',
-            'role_id' => 'required|exists:roles,id',
+            // 'prefix' => 'required',
+            // 'name' => 'required',
+            // 'email' => 'required|email|unique:users,email,' . $user->id,
+            // 'password' => 'nullable|confirmed',
+            // 'department' => 'nullable|string|max:255',
+            // 'position' => 'nullable|string|max:255',
+            // 'employee_id' => 'nullable|string|max:255|unique:users,employee_id,' . $user->id,
+            // 'phone_number' => 'nullable|string|max:20',
+            // 'employment_status' => 'nullable|string|max:255',
+            // 'role_id' => 'required|exists:roles,id',
         ]);
 
         $user->update([

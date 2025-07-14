@@ -35,7 +35,7 @@
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อผู้ใช้งาน</label>
                         <input type="text" name="name" value="{{ old('name') }}" placeholder="ใส่ชื่อผู้ใช้งาน"
-                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" required/>
                         @error('name')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
@@ -93,7 +93,7 @@
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">อีเมล์เข้าสู่ระบบ</label>
                         <input type="email" name="email" value="{{ old('email') }}" placeholder="ใส่อีเมล"
-                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" required/>
                         @error('email')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
@@ -102,7 +102,7 @@
                     <div class="relative">
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">รหัสผ่าน</label>
                         <input type="password" name="password" id="password" placeholder="ใส่รหัสผ่าน"
-                            class="w-full p-3 pr-12 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                            class="w-full p-3 pr-12 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" required/>
 
                         <span class="mx-2 mt-3 absolute right-4 transform -translate-y-2/2 cursor-pointer text-gray-500"
                             id="togglePassword">
