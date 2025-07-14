@@ -62,4 +62,17 @@
 
 </body>
 
+{{-- SweetAlert --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@if ($errors->has('email'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'ไม่สามารถเข้าสู่ระบบได้',
+            text: '{{ $errors->first('email') }}'
+        });
+    </script>
+@endif
+
+
 </html>
