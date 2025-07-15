@@ -17,17 +17,40 @@
                 </h3>
                 <div class="grid grid-cols-2 md:grid-cols-2 gap-6 mt-4">
                     <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลขที่ทะเบียน</label>
+                        <input type="text"
+                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            name="registration_number"
+                            value="{{ old('registration_number', $registration->registration_number) }}" />
+                        @error('registration_number')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันที่หมดอายุ</label>
+                        <input type="date" name="expired_license_number"
+                            value="{{ old('expired_license_number', $registration->expired_license_number) }}"
+                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        @error('expired_license_number')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อสามัญ</label>
                         <input type="text" id="productSearch"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="พิมพ์ชื่อสามัญ..." oninput="autocompleteSearch(this.value)"
-                            autocomplete="off" value="{{ old('chemical_name_th', $registration->chemical_name_th) }}" />
+                            placeholder="พิมพ์ชื่อสามัญ..." oninput="autocompleteSearch(this.value)" autocomplete="off"
+                            value="{{ old('chemical_name_th', $registration->chemical_name_th) }}" />
                         <ul id="autocomplete-list"
                             class="absolute z-10 bg-white border w-80 rounded-2xl shadow max-h-60 overflow-y-auto hidden">
                         </ul>
-                        <input type="hidden" id="hazardous_name_th" name="chemical_name_th" value="{{ old('chemical_name_th', $registration->chemical_name_th) }}" />
-                        <input type="hidden" id="formulation_ratio" name="common_name" value="{{ old('common_name', $registration->common_name) }}" />
-                        <input type="hidden" id="chemical_imports_id" name="chemical_imports_id" value="{{ old('chemical_imports_id', $registration->chemical_imports_id) }}" />
+                        <input type="hidden" id="hazardous_name_th" name="chemical_name_th"
+                            value="{{ old('chemical_name_th', $registration->chemical_name_th) }}" />
+                        <input type="hidden" id="formulation_ratio" name="common_name"
+                            value="{{ old('common_name', $registration->common_name) }}" />
+                        <input type="hidden" id="chemical_imports_id" name="chemical_imports_id"
+                            value="{{ old('chemical_imports_id', $registration->chemical_imports_id) }}" />
                     </div>
 
                     <div>
@@ -35,7 +58,8 @@
                             class="mx-3 text-base block text-gray-700 mb-1 mt-3">สูตรอัตราส่วนผสมของสารสำคัญและลักษณะ</label>
                         <input type="text"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            name="formula_of_ratio" value="{{ old('formula_of_ratio', $registration->formula_of_ratio) }}" />
+                            name="formula_of_ratio"
+                            value="{{ old('formula_of_ratio', $registration->formula_of_ratio) }}" />
                         @error('formula_of_ratio')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
@@ -57,7 +81,8 @@
                                 @endforeach
                             </div>
                         </div>
-                        <input type="hidden" name="registrant" id="registrantInput" value="{{ old('registrant', $registration->registrant) }}">
+                        <input type="hidden" name="registrant" id="registrantInput"
+                            value="{{ old('registrant', $registration->registrant) }}">
                         @error('registrant')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
@@ -147,7 +172,8 @@
                                 @endforeach
                             </div>
                         </div>
-                        <input type="hidden" name="importer" id="importerInput" value="{{ old('importer', $registration->importer) }}">
+                        <input type="hidden" name="importer" id="importerInput"
+                            value="{{ old('importer', $registration->importer) }}">
                         @error('importer')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
@@ -228,7 +254,8 @@
 
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันที่ยื่นคำขอ</label>
-                        <input type="date" name="date_submit_request" value="{{ old('date_submit_request', $registration->date_submit_request) }}"
+                        <input type="date" name="date_submit_request"
+                            value="{{ old('date_submit_request', $registration->date_submit_request) }}"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('date_submit_request')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
@@ -236,7 +263,8 @@
                     </div>
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลขที่รับคำขอ</label>
-                        <input type="text" name="request_number_1" value="{{ old('request_number_1', $registration->request_number_1) }}"
+                        <input type="text" name="request_number_1"
+                            value="{{ old('request_number_1', $registration->request_number_1) }}"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('request_number_1')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
@@ -256,7 +284,8 @@
                             </div>
                             <div class="w-full md:w-1/3">
                                 <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลข # Phase III</label>
-                                <input type="text" value="{{ old('request_number_phase_3', $registration->request_number_phase_3) }}"
+                                <input type="text"
+                                    value="{{ old('request_number_phase_3', $registration->request_number_phase_3) }}"
                                     class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     name="request_number_phase_3" />
                                 @error('request_number_phase_3')
@@ -398,7 +427,7 @@
                     if (match) updateBtn(match.textContent, match.dataset.value);
                     else updateBtn(initial.textContent, ""); // If no match, set to default
                 } else {
-                     // Set initial state if no old value
+                    // Set initial state if no old value
                     const initial = [...items].find(item => item.dataset.value === "");
                     if (initial) updateBtn(initial.textContent, "");
                 }
@@ -427,13 +456,20 @@
             }
 
             // Setup for all dropdowns, passing the current $registration data
-            setupDropdown('registrantBtn', 'registrantList', 'registrantInput', "{{ old('registrant', $registration->registrant) }}");
-            setupDropdown('typeRegistrationBtn', 'typeRegistrationList', 'typeRegistrationInput', "{{ old('type_registration', $registration->type_registration) }}");
-            setupDropdown('registrationTypeBtn', 'registrationTypeList', 'registrationTypeInput', "{{ old('registration_type', $registration->registration_type) }}");
-            setupDropdown('namePositionBtn', 'namePositionList', 'namePositionInput', "{{ old('name_position', $registration->name_position) }}");
-            setupDropdown('importerBtn', 'importerList', 'importerInput', "{{ old('importer', $registration->importer) }}");
-            setupDropdown('distributorBtn', 'distributorList', 'distributorInput', "{{ old('distributor', $registration->distributor) }}");
-            setupDropdown('typeOfUseBtn', 'typeOfUseList', 'typeOfUseInput', "{{ old('type_of_use', $registration->type_of_use) }}");
+            setupDropdown('registrantBtn', 'registrantList', 'registrantInput',
+                "{{ old('registrant', $registration->registrant) }}");
+            setupDropdown('typeRegistrationBtn', 'typeRegistrationList', 'typeRegistrationInput',
+                "{{ old('type_registration', $registration->type_registration) }}");
+            setupDropdown('registrationTypeBtn', 'registrationTypeList', 'registrationTypeInput',
+                "{{ old('registration_type', $registration->registration_type) }}");
+            setupDropdown('namePositionBtn', 'namePositionList', 'namePositionInput',
+                "{{ old('name_position', $registration->name_position) }}");
+            setupDropdown('importerBtn', 'importerList', 'importerInput',
+                "{{ old('importer', $registration->importer) }}");
+            setupDropdown('distributorBtn', 'distributorList', 'distributorInput',
+                "{{ old('distributor', $registration->distributor) }}");
+            setupDropdown('typeOfUseBtn', 'typeOfUseList', 'typeOfUseInput',
+                "{{ old('type_of_use', $registration->type_of_use) }}");
 
             // Manually pre-fill the productSearch input for the autocomplete
             // This is needed because its value is not directly bound to old() or $registration
