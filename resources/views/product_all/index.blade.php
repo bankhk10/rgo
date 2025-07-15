@@ -10,13 +10,11 @@
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M12 2v2m0 16v2m8-10h2M2 12H4m15.364-7.364l1.414 1.414M4.222 19.778l1.414-1.414m12.728 0l1.414 1.414M4.222 4.222l1.414 1.414" />
                     </svg>
-                    ขึ้นทะเบียนสินค้าใหม่
+                    ทะเบียนสินค้าทั้งหมด
                 </span>
             </h1>
-
             {{-- สรุปสถานะทะเบียน --}}
-
-            {{-- <div class="flex flex-row justify-around mb-10"> --}}
+            <div class="flex flex-row justify-around mb-10">
                 {{-- ทั้งหมด --}}
                 {{-- <a href="{{ route('newregis.index', array_merge(request()->except('status_filter', 'page'), ['page' => 1])) }}"
                     class="group h-full bg-gradient-to-br from-green-100 to-green-50 p-4 rounded-3xl text-center border-2 border-green-200 hover:scale-105 transition-all duration-300">
@@ -32,7 +30,7 @@
                     <p class="text-4xl text-green-600 font-extrabold mb-1">{{ $total }}</p>
                 </a> --}}
                 {{-- ขึ้นทั้งหมด --}}
-                {{-- <a href="{{ route('newregis.index', array_merge(request()->except('status_filter', 'page'), ['status_filter' => 'new_all', 'page' => 1])) }}"
+                <a href="{{ route('newregis.index', array_merge(request()->except('status_filter', 'page'), ['status_filter' => 'new_all', 'page' => 1])) }}"
                     class="group block h-full bg-gradient-to-br from-blue-200 to-blue-100 p-4 rounded-3xl text-center border-2 border-blue-400 hover:scale-105 transition-all duration-300">
                     <div class="flex justify-center mb-2">
                         <div class="bg-blue-300 rounded-full p-3 group-hover:bg-blue-400 transition">
@@ -43,11 +41,11 @@
                             </svg>
                         </div>
                     </div>
-                    <h2 class="text-lg font-bold text-blue-700 mb-1 tracking-wide">ขึ้นทะเบียนใหม่</h2>
+                    <h2 class="text-lg font-bold text-blue-700 mb-1 tracking-wide">ทะเบียนทั้งหมด</h2>
                     <p class="text-2xl font-bold text-blue-600">{{ $totalNewRegistrations ?? 0 }}</p>
-                </a> --}}
+                </a>
                 {{-- อยู่ระหว่างดำเนินการ --}}
-                {{-- <a href="{{ route('newregis.index', array_merge(request()->except('status_filter', 'page'), ['status_filter' => 'soon_expired', 'page' => 1])) }}"
+                <a href="{{ route('newregis.index', array_merge(request()->except('status_filter', 'page'), ['status_filter' => 'soon_expired', 'page' => 1])) }}"
                     class="group block h-full bg-gradient-to-br from-yellow-100 to-yellow-50 p-4 rounded-3xl text-center border-2 border-yellow-200 hover:scale-105 transition-all duration-300">
                     <div class="flex justify-center mb-2">
                         <div class="bg-yellow-200 rounded-full p-3 group-hover:bg-yellow-300 transition">
@@ -60,9 +58,9 @@
                     </div>
                     <h2 class="text-lg font-bold text-yellow-700 mb-1 tracking-wide">ทะเบียนใกล้หมดอายุ</h2>
                     <p class="text-2xl font-bold text-yellow-600">{{ $soonExpiredCount ?? 0 }}</p>
-                </a> --}}
+                </a>
                 {{-- ขึ้นทะเบียนใหม่เสร็จแล้ว --}}
-                {{-- <a href="{{ route('newregis.index', array_merge(request()->except('status_filter', 'page'), ['status_filter' => 'expired', 'page' => 1])) }}"
+                <a href="{{ route('newregis.index', array_merge(request()->except('status_filter', 'page'), ['status_filter' => 'expired', 'page' => 1])) }}"
                     class="group block h-full bg-gradient-to-br from-red-100 to-red-50 p-4 rounded-3xl text-center border-2 border-red-200 hover:scale-105 transition-all duration-300">
                     <div class="flex justify-center mb-2">
                         <div class="bg-red-200 rounded-full p-3 group-hover:bg-red-300 transition">
@@ -76,9 +74,7 @@
                     <h2 class="text-lg font-bold text-red-700 mb-1 tracking-wide">ทะเบียนหมดอายุ</h2>
                     <p class="text-2xl font-bold text-red-600">{{ $expiredCount ?? 0 }}</p>
                 </a>
-            </div> --}}
-
-
+            </div>
 
             {{-- 1 --}}
 
@@ -136,15 +132,8 @@
                         @endif
                     </div>
                 </form>
-                @can('RegisterNew create')
-                    <a href="{{ route('newregis.create') }}"
-                        class="mt-10 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold px-6 py-2 rounded-lg shadow-md transform hover:scale-105 transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
-                        + ขึ้นทะเบียนสินค้าใหม่
-                    </a>
-                @endcan
             </div>
             {{-- 1 --}}
-
 
             <div class="bg-white rounded-2xl overflow-hidden border border-gray-200">
                 <div class="overflow-x-auto">
@@ -154,10 +143,11 @@
                                 <th class="py-4 px-8 rounded-tl-2xl">ลำดับ</th>
                                 <th class="py-4 px-8">ชื่อทางการค้า</th>
                                 <th class="py-4 px-8">ชื่อสามัญ</th>
+                                <th class="py-4 px-8">ผู้ขึ้นทะเบียน</th>
                                 <th class="py-4 px-8">เลขที่ทะเบียน</th>
-                                <th class="py-4 px-8">วันที่ขอขึ้นทะเบียน</th>
-                                <th class="py-4 px-8">สถานะความคืบหน้า</th>
-                                <th class="py-4 px-4 text-center">สถานะ</th>
+                                <th class="py-4 px-8">วันหมดอายุ</th>
+                                {{-- <th class="py-4 px-8">สถานะความคืบหน้า</th> --}}
+                                {{-- <th class="py-4 px-4 text-center">สถานะ</th> --}}
                                 <th class="py-4 px-8 rounded-tr-2xl text-center">รายละเอียด</th>
                             </tr>
                         </thead>
@@ -169,80 +159,13 @@
                                     </td>
                                     <td class="py-4 px-8">{{ $product->trade_name ?? '' }}</td>
                                     <td class="py-4 px-8">{{ $product->chemicalImport->chemical_name_th ?? '' }}</td>
+                                    <td class="py-4 px-8">{{ $product->importer ?? '' }}</td>
                                     <td class="py-4 px-8">{{ $product->registration_number ?? '' }}</td>
                                     <td class="py-4 px-8">
                                         {{ \Carbon\Carbon::parse($product->date_submit_request)->addYears(543)->format('d/m/Y') }}
                                     </td>
-                                    <td class="py-4 px-8">
-                                        @php
-                                            $stepTitles = [
-                                                1 => 'คณะ PDC อนุมัติให้ดำเนินการขึ้นทะเบียน',
-                                                2 => 'นำเข้าตัวอย่าง',
-                                                3 => 'ส่งตัวอย่างข้อมูลศึกษาความเป็นพิษ (ทำTox)',
-                                                4 => 'ยื่นคำขอขึ้นทะเบียน',
-                                                5 => 'แผนการทดลอง Eff, PHI (ถ้ามี) + Phase1+ผลวิเคราะห์ (อนุมัติ)',
-                                                6 => 'ยื่น Phase3 (ผลการทดลอง Eff, PHI (ถ้ามี) อนุมัติ+ผลวิเคราะห์อนุมัติ)',
-                                                7 => 'Phase3 อนุมัติ (ยื่นเอกสารเข้าประชุมพิจารณาขึ้นทะเบียน)',
-                                                8 => 'ยื่นขอออกทะเบียน',
-                                            ];
 
-                                            $currentStep = $product->current_step_number ?? 1;
-                                            if ($currentStep == 1) {
-                                                $calculatedProgress = 12.5;
-                                            } elseif ($currentStep == 2) {
-                                                $calculatedProgress = 25;
-                                            } elseif ($currentStep == 3) {
-                                                $calculatedProgress = 37.5;
-                                            } elseif ($currentStep == 4) {
-                                                $calculatedProgress = 50;
-                                            } elseif ($currentStep == 5) {
-                                                $calculatedProgress = 62.5;
-                                            } elseif ($currentStep == 6) {
-                                                $calculatedProgress = 75;
-                                            } elseif ($currentStep == 7) {
-                                                $calculatedProgress = 87.5;
-                                            } elseif ($currentStep == 8) {
-                                                $calculatedProgress = 100;
-                                            } else {
-                                                $calculatedProgress = 0;
-                                            }
-
-                                        @endphp
-                                        {{-- ชื่อขั้นตอน --}}
-                                        <div class="text-center mb-2">
-                                            @if ($calculatedProgress >= 100)
-                                                <p class="text-green-600 font-semibold">สำเร็จ</p>
-                                            @else
-                                                <div x-data="{ tooltip: false }" class="relative inline-block">
-                                                    <p class="text-yellow-700 font-semibold cursor-pointer"
-                                                        @mouseenter="tooltip = true" @mouseleave="tooltip = false">
-                                                        ขั้นตอนที่ {{ $currentStep }}
-                                                    </p>
-                                                    <div x-show="tooltip"
-                                                        x-transition:enter="transition ease-out duration-200"
-                                                        x-transition:enter-start="opacity-0 scale-90"
-                                                        x-transition:enter-end="opacity-100 scale-100"
-                                                        x-transition:leave="transition ease-in duration-200"
-                                                        x-transition:leave-start="opacity-100 scale-100"
-                                                        x-transition:leave-end="opacity-0 scale-90"
-                                                        class="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none -translate-x-1/2 left-1/2 -top-10"
-                                                        style="min-width: max-content;">
-                                                        {{ $stepTitles[$currentStep] ?? 'ไม่ทราบขั้นตอน' }}
-                                                    </div>
-                                                </div>
-                                            @endif
-                                        </div>
-
-                                        {{-- แถบความคืบหน้า --}}
-                                        <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
-                                            <div class="h-2.5 bg-green-500"
-                                                style="width: {{ $calculatedProgress }}%;"></div>
-                                        </div>
-                                        <div class="text-xs text-gray-500 text-center mt-1">
-                                            {{ number_format($calculatedProgress, 1) }}%
-                                        </div>
-                                    </td>
-                                    <td class="py-4 px-8">
+                                    {{-- <td class="py-4 px-8">
                                         @if ($product->progress >= 100)
                                             @php
                                                 $statusClass = '';
@@ -269,7 +192,7 @@
                                                 {{ 'ขึ้นทะเบียนใหม่' }}
                                             </span>
                                         @endif
-                                    </td>
+                                    </td> --}}
                                     <td class="py-4 px-12 mx-auto">
                                         {{-- ปุ่มดูรายละเอียด --}}
                                         <div class="flex items-center gap-3 justify-center">
@@ -313,7 +236,7 @@
                                                 @endphp
 
                                                 @if ($incomplete || auth()->user()->hasRole('admin') || auth()->user()->hasRole('manager'))
-                                                    <a href="{{ route('newregis.edit', $product->id) }}"
+                                                    <a href="{{ route('newregis.editall', $product->id) }}"
                                                         class="inline-flex items-center justify-center p-2 rounded-full text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
                                                         title="แก้ไข">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none"

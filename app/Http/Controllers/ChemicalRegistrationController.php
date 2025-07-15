@@ -22,6 +22,7 @@ class ChemicalRegistrationController extends Controller
     public function index(Request $request)
     {
         $query = ChemicalRegistration::query();
+        $query->where('new_or_old', true);
 
         // ค้นหาตามคำค้น
         if ($request->has('search') && $request->search != '') {
@@ -298,75 +299,78 @@ class ChemicalRegistrationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $drug = ChemicalRegistration::findOrFail($id);
+        try {
+            $drug = ChemicalRegistration::findOrFail($id);
 
-        $rules = [
-            'chemical_imports_id' => 'nullable|integer',
-            'registration_number' => 'nullable|string',
-            'registration_number_pass' => 'nullable|string',
-            'registration_expiry_date' => 'nullable|date',
-            'chemical_name_th' => 'nullable|string',
-            'chemical_name_en' => 'nullable|string',
-            'composition' => 'nullable|string',
-            'manufacturer' => 'nullable|string',
-            'registrant' => 'nullable|string',
-            'registration_type' => 'nullable|string',
-            'importer' => 'nullable|string',
-            'distributor' => 'nullable|string',
-            'trade_name' => 'nullable|string',
-            'trade_name_at' => 'nullable|string',
-            'production_license_number' => 'nullable|string',
-            'production_license_expiry' => 'nullable|date',
-            'production_license_quantity' => 'nullable|string',
-            'possession_form_wo2' => 'nullable|string',
-            'possession_form_expiry' => 'nullable|date',
-            'application_received_date' => 'nullable|date',
-            'expired_license_number' => 'nullable|string',
-            'expired_at' => 'nullable|date',
-            'old_license_quantity' => 'nullable|string',
-            'packaging_size' => 'nullable|string',
-            'formula_of_ratio' => 'nullable|string',
-            'type_registration' => 'nullable|string',
-            'common_name' => 'nullable|string',
-            'packaging_size_details' => 'nullable|string',
-            'type_of_use' => 'nullable|string',
-            'date_submit_request' => 'nullable|date',
-            'request_number_1' => 'nullable|string',
-            'request_number_phase_1' => 'nullable|string',
-            'date_request_phase_3' => 'nullable|date',
-            'request_number_phase_3' => 'nullable|string',
-            'name_position' => 'nullable|string',
-            'remarks' => 'nullable|string',
-            'new_or_old' => 'nullable|boolean',
-            'step' => 'nullable|string',
-            'chemical_type' => 'nullable|string',
-            'company' => 'nullable|string',
-            'store_company_1' => 'nullable|string',
-            'store_company_2' => 'nullable|string',
-            'status' => 'nullable|string',
-            'is_active' => 'nullable|boolean',
-            'is_deleted' => 'nullable|boolean',
-            'image' => 'nullable|string',
-            'document' => 'nullable|string',
-            'progress' => 'nullable|numeric',
-            'sub_progress' => 'nullable|numeric',
-            'created_by' => 'nullable|string',
-            'updated_by' => 'nullable|string',
-        ];
+            $rules = [
+                'chemical_imports_id' => 'nullable|integer',
+                'registration_number' => 'nullable|string',
+                'registration_number_pass' => 'nullable|string',
+                'registration_expiry_date' => 'nullable|date',
+                'chemical_name_th' => 'nullable|string',
+                'chemical_name_en' => 'nullable|string',
+                'composition' => 'nullable|string',
+                'manufacturer' => 'nullable|string',
+                'registrant' => 'nullable|string',
+                'registration_type' => 'nullable|string',
+                'importer' => 'nullable|string',
+                'distributor' => 'nullable|string',
+                'trade_name' => 'nullable|string',
+                'trade_name_at' => 'nullable|string',
+                'production_license_number' => 'nullable|string',
+                'production_license_expiry' => 'nullable|date',
+                'production_license_quantity' => 'nullable|string',
+                'possession_form_wo2' => 'nullable|string',
+                'possession_form_expiry' => 'nullable|date',
+                'application_received_date' => 'nullable|date',
+                'expired_license_number' => 'nullable|string',
+                'expired_at' => 'nullable|date',
+                'old_license_quantity' => 'nullable|string',
+                'packaging_size' => 'nullable|string',
+                'formula_of_ratio' => 'nullable|string',
+                'type_registration' => 'nullable|string',
+                'common_name' => 'nullable|string',
+                'packaging_size_details' => 'nullable|string',
+                'type_of_use' => 'nullable|string',
+                'date_submit_request' => 'nullable|date',
+                'request_number_1' => 'nullable|string',
+                'request_number_phase_1' => 'nullable|string',
+                'date_request_phase_3' => 'nullable|date',
+                'request_number_phase_3' => 'nullable|string',
+                'name_position' => 'nullable|string',
+                'remarks' => 'nullable|string',
+                'new_or_old' => 'nullable|boolean',
+                'step' => 'nullable|string',
+                'chemical_type' => 'nullable|string',
+                'company' => 'nullable|string',
+                'store_company_1' => 'nullable|string',
+                'store_company_2' => 'nullable|string',
+                'status' => 'nullable|string',
+                'is_active' => 'nullable|boolean',
+                'is_deleted' => 'nullable|boolean',
+                'image' => 'nullable|string',
+                'document' => 'nullable|string',
+                'progress' => 'nullable|numeric',
+                'sub_progress' => 'nullable|numeric',
+                'created_by' => 'nullable|string',
+                'updated_by' => 'nullable|string',
+            ];
 
-        $validatedData = $request->validate($rules);
+            $validatedData = $request->validate($rules);
 
-        foreach ($validatedData as $key => $value) {
-            $drug->$key = $value;
+            // ตั้งค่าเพิ่มเติม (หากมีเลขทะเบียนให้ถือว่าเป็นของเก่า)
+            if (!empty($validatedData['registration_number'])) {
+                $validatedData['new_or_old'] = false;
+            }
+
+            $drug->fill($validatedData);
+            $drug->save();
+
+            return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จ');
+        } catch (\Throwable $th) {
+            // Log::error('Update error: ' . $th->getMessage());
+            return redirect()->back()->with('error', 'เกิดข้อผิดพลาด');
         }
-
-        if (!empty($validatedData['registration_number'])) {
-            $drug->new_or_old = false;
-        }
-
-        $drug->save();
-        return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จ');
-        // return redirect()->route('newregis.index')->with('success', 'บันทึกข้อมูลสำเร็จ');
     }
 
 
@@ -598,5 +602,196 @@ class ChemicalRegistrationController extends Controller
 
 
         return redirect()->back()->with('success', 'อัปเดตความคืบหน้าเรียบร้อยแล้ว');
+    }
+
+    public function indexAll(Request $request)
+    {
+        $query = ChemicalRegistration::query();
+        $query->where('new_or_old', false);
+        // ค้นหาตามคำค้น
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('trade_name', 'like', '%' . $search . '%')
+                    ->orWhere('chemical_name_th', 'like', '%' . $search . '%')
+                    ->orWhere('registration_number', 'like', '%' . $search . '%');
+            });
+        }
+
+        // ค้นหาตามวันที่
+        if ($request->filled('expiry_date_from') && $request->filled('expiry_date_to')) {
+            $query->whereBetween('date_submit_request', [
+                $request->input('expiry_date_from'),
+                $request->input('expiry_date_to'),
+            ]);
+        }
+
+        // ฟิลเตอร์ตามสถานะ
+        $statusFilter = $request->input('status_filter');
+        $today = now();
+        $in180Days = now()->addDays(180);
+
+        if ($statusFilter === 'expired') {
+            $query->whereDate('expired_license_number', '<', $today);
+        } elseif ($statusFilter === 'soon_expired') {
+            $query->whereBetween('expired_license_number', [$today, $in180Days]);
+        } elseif ($statusFilter === 'new_all') {
+            $query->where('new_or_old', true)
+                ->where('progress', '<', 100);
+        } else {
+            // ขึ้นทะเบียนใหม่ (progress < 100)
+            // $query->where('progress', '<', 100);
+        }
+
+        // สถิติ
+        $totalNewRegistrations = ChemicalRegistration::where('new_or_old', true)->where('progress', '<', 100)->count();
+        $soonExpiredCount = ChemicalRegistration::where('new_or_old', false)
+            ->whereBetween('expired_license_number', [now(), now()->addDays(180)])
+            ->count();
+
+        $expiredCount = ChemicalRegistration::where('expired_license_number', '<', $today)
+            ->where('new_or_old', false)
+            ->count();
+
+        $total = ChemicalRegistration::count();
+        $paginatedProducts = $query->orderBy('created_at', 'desc')->paginate(5);
+
+        foreach ($paginatedProducts as $product) {
+            // สถานะใบอนุญาต
+            $expiryDate = Carbon::parse($product->expired_license_number);
+            $now = Carbon::now();
+
+            if ($expiryDate->isPast()) {
+                $product->status = 'หมดอายุ';
+            } elseif ($expiryDate->diffInMonths($now) <= 6) {
+                $product->status = 'ใกล้หมดอายุ';
+            } else {
+                $product->status = 'ใช้งานอยู่';
+            }
+
+            // 👇 คำนวณ progress จริงแบบ dynamic
+            $product->progress = $product->calculated_progress;
+
+            // (ถ้าอยากเก็บ current_step_number ก็ได้)
+            // $product->current_step_number = DrugProgressStep::where('chemical_registrations_id', $product->id)
+            //     ->selectRaw('step_number, COUNT(*) as total, SUM(CASE WHEN checked_at IS NOT NULL THEN 1 ELSE 0 END) as done')
+            //     ->groupBy('step_number')
+            //     ->get()
+            //     ->filter(fn($step) => $step->total == $step->done)
+            //     ->pluck('step_number')
+            //     ->max() ?? 1;
+
+            $product->current_step_number  = DrugProgressStep::where('chemical_registrations_id', $product->id)
+                ->max('step_number');
+        }
+
+        return view('product_all.index', [
+            'total' => $total,
+            'totalNewRegistrations' => $totalNewRegistrations,
+            'soonExpiredCount' => $soonExpiredCount,
+            'expiredCount' => $expiredCount,
+            'paginatedProducts' => $paginatedProducts,
+        ]);
+    }
+
+    public function editAll(Request $request, $id)
+    {
+        $companies = Company::all();
+        $registration = ChemicalRegistration::where('id', $id)->first();
+        if (!$registration) {
+            abort(404, 'ไม่พบข้อมูล');
+        }
+
+        $checkplan = $registration->checkPlan($id);
+        if ($checkplan) {
+            $checkplan = 'มี';
+        } else {
+            $checkplan = 'ไม่มี';
+        }
+
+        return view('product_all.edit', compact('registration', 'companies', 'checkplan'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function updateAll(Request $request, $id)
+    {
+        try {
+            $drug = ChemicalRegistration::findOrFail($id);
+
+            $rules = [
+                'chemical_imports_id' => 'nullable|integer',
+                'registration_number' => 'nullable|string',
+                'registration_number_pass' => 'nullable|string',
+                'registration_expiry_date' => 'nullable|date',
+                'chemical_name_th' => 'nullable|string',
+                'chemical_name_en' => 'nullable|string',
+                'composition' => 'nullable|string',
+                'manufacturer' => 'nullable|string',
+                'registrant' => 'nullable|string',
+                'registration_type' => 'nullable|string',
+                'importer' => 'nullable|string',
+                'distributor' => 'nullable|string',
+                'trade_name' => 'nullable|string',
+                'trade_name_at' => 'nullable|string',
+                'production_license_number' => 'nullable|string',
+                'production_license_expiry' => 'nullable|date',
+                'production_license_quantity' => 'nullable|string',
+                'possession_form_wo2' => 'nullable|string',
+                'possession_form_expiry' => 'nullable|date',
+                'application_received_date' => 'nullable|date',
+                'expired_license_number' => 'nullable|string',
+                'expired_at' => 'nullable|date',
+                'old_license_quantity' => 'nullable|string',
+                'packaging_size' => 'nullable|string',
+                'formula_of_ratio' => 'nullable|string',
+                'type_registration' => 'nullable|string',
+                'common_name' => 'nullable|string',
+                'packaging_size_details' => 'nullable|string',
+                'type_of_use' => 'nullable|string',
+                'date_submit_request' => 'nullable|date',
+                'request_number_1' => 'nullable|string',
+                'request_number_phase_1' => 'nullable|string',
+                'date_request_phase_3' => 'nullable|date',
+                'request_number_phase_3' => 'nullable|string',
+                'name_position' => 'nullable|string',
+                'remarks' => 'nullable|string',
+                'new_or_old' => 'nullable|boolean',
+                'step' => 'nullable|string',
+                'chemical_type' => 'nullable|string',
+                'company' => 'nullable|string',
+                'store_company_1' => 'nullable|string',
+                'store_company_2' => 'nullable|string',
+                'status' => 'nullable|string',
+                'is_active' => 'nullable|boolean',
+                'is_deleted' => 'nullable|boolean',
+                'image' => 'nullable|string',
+                'document' => 'nullable|string',
+                'progress' => 'nullable|numeric',
+                'sub_progress' => 'nullable|numeric',
+                'created_by' => 'nullable|string',
+                'updated_by' => 'nullable|string',
+            ];
+
+            $validatedData = $request->validate($rules);
+
+            // ตั้งค่าเพิ่มเติม (หากมีเลขทะเบียนให้ถือว่าเป็นของเก่า)
+            if (!empty($validatedData['registration_number'])) {
+                $validatedData['new_or_old'] = false;
+            }
+
+            $drug->fill($validatedData);
+            $drug->save();
+
+            return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จ');
+        } catch (\Throwable $th) {
+            // Log::error('Update error: ' . $th->getMessage());
+            return redirect()->back()->with('error', 'เกิดข้อผิดพลาด');
+        }
     }
 }

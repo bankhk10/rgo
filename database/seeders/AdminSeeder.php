@@ -85,6 +85,11 @@ class AdminSeeder extends Seeder
             'RegisterManufacture create',
             'RegisterManufacture update',
             'RegisterManufacture delete',
+            // Register All
+            'RegisterAll read',
+            'RegisterAll create',
+            'RegisterAll update',
+            'RegisterAll delete',
             // Company
             'Company read',
             'Company create',

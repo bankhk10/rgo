@@ -55,6 +55,11 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/new/product/update/{registrationNumber}', [ChemicalRegistrationController::class, 'update'])->name('newregis.update');
     Route::delete('/newregis/{id}', [ChemicalRegistrationController::class, 'destroy'])->name('newregis.destroy');
     Route::put('/newregis/{drug}/update-subprogress', [ChemicalRegistrationController::class, 'updateSubProgress'])->name('newregis.update-subprogress');
+    Route::get('/new/productall', [ChemicalRegistrationController::class, 'indexAll'])->name('newregis.productall');
+    Route::get('/new/productall/{newregi}/edit', [ChemicalRegistrationController::class, 'editAll'])->name('newregis.editall');
+    Route::put('/new/productall/{newregi}', [ChemicalRegistrationController::class, 'updateAll'])->name('newregis.updateall');
+
+
 
     Route::get('/create/product', [ProductionRegistrationController::class, 'index'])->name('createproduct.index');
     Route::get('/insert/product', [ProductionRegistrationController::class, 'create'])->name('createproduct.create');
