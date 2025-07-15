@@ -171,31 +171,49 @@
                                         {{ \Carbon\Carbon::parse($product->date_submit_request)->addYears(543)->format('d/m/Y') }}
                                     </td>
                                     <td class="py-4 px-8">
+                                        @php
+                                            $stepTitles = [
+                                                1 => 'คณะ PDC อนุมัติให้ดำเนินการขึ้นทะเบียน',
+                                                2 => 'นำเข้าตัวอย่าง',
+                                                3 => 'ส่งตัวอย่างข้อมูลศึกษาความเป็นพิษ (ทำTox)',
+                                                4 => 'ยื่นคำขอขึ้นทะเบียน',
+                                                5 => 'แผนการทดลอง Eff, PHI (ถ้ามี) + Phase1+ผลวิเคราะห์ (อนุมัติ)',
+                                                6 => 'ยื่น Phase3 (ผลการทดลอง Eff, PHI (ถ้ามี) อนุมัติ+ผลวิเคราะห์อนุมัติ)',
+                                                7 => 'Phase3 อนุมัติ (ยื่นเอกสารเข้าประชุมพิจารณาขึ้นทะเบียน)',
+                                                8 => 'ยื่นขอออกทะเบียน',
+                                            ];
+
+                                            $currentStep = $product->current_step_number ?? 1;
+                                            if ($currentStep == 1) {
+                                                $calculatedProgress = 12.5;
+                                            } elseif ($currentStep == 2) {
+                                                $calculatedProgress = 25;
+                                            } elseif ($currentStep == 3) {
+                                                $calculatedProgress = 37.5;
+                                            } elseif ($currentStep == 4) {
+                                                $calculatedProgress = 50;
+                                            } elseif ($currentStep == 5) {
+                                                $calculatedProgress = 62.5;
+                                            } elseif ($currentStep == 6) {
+                                                $calculatedProgress = 75;
+                                            } elseif ($currentStep == 7) {
+                                                $calculatedProgress = 87.5;
+                                            } elseif ($currentStep == 8) {
+                                                $calculatedProgress = 100;
+                                            } else {
+                                                $calculatedProgress = 0;
+                                            }
+
+                                        @endphp
+                                        {{-- ชื่อขั้นตอน --}}
                                         <div class="text-center mb-2">
-                                            {{-- แสดงสถานะความคืบหน้า --}}
-                                            @if ($product->progress == 0 || $product->progress < 12.5)
-                                                <div x-data="{ tooltip: false }" class="relative inline-block">
-                                                    <p class="text-red-600 font-semibold cursor-pointer"
-                                                        @mouseenter="tooltip = true" @mouseleave="tooltip = false">
-                                                        ขั้นตอนที่ 1
-                                                    </p>
-                                                    <div x-show="tooltip"
-                                                        x-transition:enter="transition ease-out duration-200"
-                                                        x-transition:enter-start="opacity-0 scale-90"
-                                                        x-transition:enter-end="opacity-100 scale-100"
-                                                        x-transition:leave="transition ease-in duration-200"
-                                                        x-transition:leave-start="opacity-100 scale-100"
-                                                        x-transition:leave-end="opacity-0 scale-90"
-                                                        class="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none -translate-x-1/2 left-1/2 -top-10"
-                                                        style="min-width: max-content;">
-                                                        คณะ PDC อนุมัติให้ดำเนินการขึ้นทะเบียน
-                                                    </div>
-                                                </div>
-                                            @elseif ($product->progress >= 12.5 && $product->progress < 25)
+                                            @if ($calculatedProgress >= 100)
+                                                <p class="text-green-600 font-semibold">สำเร็จ</p>
+                                            @else
                                                 <div x-data="{ tooltip: false }" class="relative inline-block">
                                                     <p class="text-yellow-700 font-semibold cursor-pointer"
                                                         @mouseenter="tooltip = true" @mouseleave="tooltip = false">
-                                                        ขั้นตอนที่ 2
+                                                        ขั้นตอนที่ {{ $currentStep }}
                                                     </p>
                                                     <div x-show="tooltip"
                                                         x-transition:enter="transition ease-out duration-200"
@@ -206,150 +224,19 @@
                                                         x-transition:leave-end="opacity-0 scale-90"
                                                         class="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none -translate-x-1/2 left-1/2 -top-10"
                                                         style="min-width: max-content;">
-                                                        นำเข้าตัวอย่าง
-                                                    </div>
-                                                </div>
-                                            @elseif ($product->progress >= 25 && $product->progress < 35.5)
-                                                <div x-data="{ tooltip: false }" class="relative inline-block">
-                                                    <p class="text-yellow-700 font-semibold cursor-pointer"
-                                                        @mouseenter="tooltip = true" @mouseleave="tooltip = false">
-                                                        ขั้นตอนที่ 3
-                                                    </p>
-                                                    <div x-show="tooltip"
-                                                        x-transition:enter="transition ease-out duration-200"
-                                                        x-transition:enter-start="opacity-0 scale-90"
-                                                        x-transition:enter-end="opacity-100 scale-100"
-                                                        x-transition:leave="transition ease-in duration-200"
-                                                        x-transition:leave-start="opacity-100 scale-100"
-                                                        x-transition:leave-end="opacity-0 scale-90"
-                                                        class="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none -translate-x-1/2 left-1/2 -top-10"
-                                                        style="min-width: max-content;">
-                                                        ส่งตัวอย่างข้อมูลศึกษาความเป็นพิษ (ทำTox)
-                                                    </div>
-                                                </div>
-                                            @elseif ($product->progress >= 35.5 && $product->progress < 50)
-                                                <div x-data="{ tooltip: false }" class="relative inline-block">
-                                                    <p class="text-yellow-700 font-semibold cursor-pointer"
-                                                        @mouseenter="tooltip = true" @mouseleave="tooltip = false">
-                                                        ขั้นตอนที่ 4
-                                                    </p>
-                                                    <div x-show="tooltip"
-                                                        x-transition:enter="transition ease-out duration-200"
-                                                        x-transition:enter-start="opacity-0 scale-90"
-                                                        x-transition:enter-end="opacity-100 scale-100"
-                                                        x-transition:leave="transition ease-in duration-200"
-                                                        x-transition:leave-start="opacity-100 scale-100"
-                                                        x-transition:leave-end="opacity-0 scale-90"
-                                                        class="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none -translate-x-1/2 left-1/2 -top-10"
-                                                        style="min-width: max-content;">
-                                                        ยื่นคำขอขึ้นทะเบียน
-                                                    </div>
-                                                </div>
-                                            @elseif ($product->progress >= 50 && $product->progress < 62.5)
-                                                <div x-data="{ tooltip: false }" class="relative inline-block">
-                                                    <p class="text-yellow-700 font-semibold cursor-pointer"
-                                                        @mouseenter="tooltip = true" @mouseleave="tooltip = false">
-                                                        ขั้นตอนที่ 5
-                                                    </p>
-                                                    <div x-show="tooltip"
-                                                        x-transition:enter="transition ease-out duration-200"
-                                                        x-transition:enter-start="opacity-0 scale-90"
-                                                        x-transition:enter-end="opacity-100 scale-100"
-                                                        x-transition:leave="transition ease-in duration-200"
-                                                        x-transition:leave-start="opacity-100 scale-100"
-                                                        x-transition:leave-end="opacity-0 scale-90"
-                                                        class="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none -translate-x-1/2 left-1/2 -top-10"
-                                                        style="min-width: max-content;">
-                                                        แผนการทดลอง Eff, PHI (ถ้ามี) + Phase1+ผลวิเคราะห์ (อนุมัติ)
-                                                    </div>
-                                                </div>
-                                            @elseif ($product->progress >= 62.5 && $product->progress < 75)
-                                                <div x-data="{ tooltip: false }" class="relative inline-block">
-                                                    <p class="text-yellow-700 font-semibold cursor-pointer"
-                                                        @mouseenter="tooltip = true" @mouseleave="tooltip = false">
-                                                        ขั้นตอนที่ 6
-                                                    </p>
-                                                    <div x-show="tooltip"
-                                                        x-transition:enter="transition ease-out duration-200"
-                                                        x-transition:enter-start="opacity-0 scale-90"
-                                                        x-transition:enter-end="opacity-100 scale-100"
-                                                        x-transition:leave="transition ease-in duration-200"
-                                                        x-transition:leave-start="opacity-100 scale-100"
-                                                        x-transition:leave-end="opacity-0 scale-90"
-                                                        class="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none -translate-x-1/2 left-1/2 -top-10"
-                                                        style="min-width: max-content;">
-                                                        ยื่น Phase3 (ผลการทดลอง Eff, PHI
-                                                        (ถ้ามี)
-                                                        อนุมัติ+ผลวิเคราะห์อนุมัติ)
-                                                    </div>
-                                                </div>
-                                            @elseif ($product->progress >= 75 && $product->progress < 87.5)
-                                                <div x-data="{ tooltip: false }" class="relative inline-block">
-                                                    <p class="text-yellow-700 font-semibold cursor-pointer"
-                                                        @mouseenter="tooltip = true" @mouseleave="tooltip = false">
-                                                        ขั้นตอนที่ 7
-                                                    </p>
-                                                    <div x-show="tooltip"
-                                                        x-transition:enter="transition ease-out duration-200"
-                                                        x-transition:enter-start="opacity-0 scale-90"
-                                                        x-transition:enter-end="opacity-100 scale-100"
-                                                        x-transition:leave="transition ease-in duration-200"
-                                                        x-transition:leave-start="opacity-100 scale-100"
-                                                        x-transition:leave-end="opacity-0 scale-90"
-                                                        class="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none -translate-x-1/2 left-1/2 -top-10"
-                                                        style="min-width: max-content;">
-                                                        Phase3 อนุมัติ (ยื่นเอกสารเข้าประชุมพิจารณาขึ้นทะเบียน)
-                                                    </div>
-                                                </div>
-                                            @elseif ($product->progress >= 87.5 && $product->progress <= 99)
-                                                <div x-data="{ tooltip: false }" class="relative inline-block">
-                                                    <p class="text-yellow-700 font-semibold cursor-pointer"
-                                                        @mouseenter="tooltip = true" @mouseleave="tooltip = false">
-                                                        ขั้นตอนที่ 8
-                                                    </p>
-                                                    <div x-show="tooltip"
-                                                        x-transition:enter="transition ease-out duration-200"
-                                                        x-transition:enter-start="opacity-0 scale-90"
-                                                        x-transition:enter-end="opacity-100 scale-100"
-                                                        x-transition:leave="transition ease-in duration-200"
-                                                        x-transition:leave-start="opacity-100 scale-100"
-                                                        x-transition:leave-end="opacity-0 scale-90"
-                                                        class="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none -translate-x-1/2 left-1/2 -top-10"
-                                                        style="min-width: max-content;">
-                                                        ยื่นขอออกทะเบียน
-                                                    </div>
-                                                </div>
-                                            @elseif ($product->progress == 100)
-                                                <div x-data="{ tooltip: false }" class="relative inline-block">
-                                                    <p class="text-green-600 font-semibold cursor-pointer"
-                                                        @mouseenter="tooltip = true" @mouseleave="tooltip = false">
-                                                        สำเร็จ
-                                                    </p>
-                                                    <div x-show="tooltip"
-                                                        x-transition:enter="transition ease-out duration-200"
-                                                        x-transition:enter-start="opacity-0 scale-90"
-                                                        x-transition:enter-end="opacity-100 scale-100"
-                                                        x-transition:leave="transition ease-in duration-200"
-                                                        x-transition:leave-start="opacity-100 scale-100"
-                                                        x-transition:leave-end="opacity-0 scale-90"
-                                                        class="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none -translate-x-1/2 left-1/2 -top-10"
-                                                        style="min-width: max-content;">
-                                                        สำเร็จ
+                                                        {{ $stepTitles[$currentStep] ?? 'ไม่ทราบขั้นตอน' }}
                                                     </div>
                                                 </div>
                                             @endif
                                         </div>
+
                                         {{-- แถบความคืบหน้า --}}
-                                        <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                            <div class="h-2.5 rounded-full
-                                                @if ($product->progress < 25) bg-red-500
-                                                @elseif ($product->progress < 75) bg-yellow-500
-                                                @else bg-green-500 @endif"
-                                                style="width: {{ $product->progress }}%">
-                                            </div>
+                                        <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+                                            <div class="h-2.5 bg-green-500"
+                                                style="width: {{ $calculatedProgress }}%;"></div>
                                         </div>
                                         <div class="text-xs text-gray-500 text-center mt-1">
-                                            {{ $product->progress }}%
+                                            {{ number_format($calculatedProgress, 1) }}%
                                         </div>
                                     </td>
                                     <td class="py-4 px-8">
@@ -374,7 +261,8 @@
                                             </span>
                                         @endif
                                         @if ($product->progress < 100)
-                                            <span class="inline-block rounded-full px-3 py-1 font-semibold text-white bg-blue-500">
+                                            <span
+                                                class="inline-block rounded-full px-3 py-1 font-semibold text-white bg-blue-500">
                                                 {{ 'ขึ้นทะเบียนใหม่' }}
                                             </span>
                                         @endif

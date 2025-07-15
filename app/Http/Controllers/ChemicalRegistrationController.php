@@ -71,17 +71,33 @@ class ChemicalRegistrationController extends Controller
         $total = ChemicalRegistration::count();
         $paginatedProducts = $query->orderBy('created_at', 'desc')->paginate(5);
 
-        foreach ($paginatedProducts as $import) {
-            $expiryDate = Carbon::parse($import->expired_license_number);
+        foreach ($paginatedProducts as $product) {
+            // สถานะใบอนุญาต
+            $expiryDate = Carbon::parse($product->expired_license_number);
             $now = Carbon::now();
 
             if ($expiryDate->isPast()) {
-                $import->status = 'หมดอายุ';
+                $product->status = 'หมดอายุ';
             } elseif ($expiryDate->diffInMonths($now) <= 6) {
-                $import->status = 'ใกล้หมดอายุ';
+                $product->status = 'ใกล้หมดอายุ';
             } else {
-                $import->status = 'ใช้งานอยู่';
+                $product->status = 'ใช้งานอยู่';
             }
+
+            // 👇 คำนวณ progress จริงแบบ dynamic
+            $product->progress = $product->calculated_progress;
+
+            // (ถ้าอยากเก็บ current_step_number ก็ได้)
+            // $product->current_step_number = DrugProgressStep::where('chemical_registrations_id', $product->id)
+            //     ->selectRaw('step_number, COUNT(*) as total, SUM(CASE WHEN checked_at IS NOT NULL THEN 1 ELSE 0 END) as done')
+            //     ->groupBy('step_number')
+            //     ->get()
+            //     ->filter(fn($step) => $step->total == $step->done)
+            //     ->pluck('step_number')
+            //     ->max() ?? 1;
+
+            $product->current_step_number  = DrugProgressStep::where('chemical_registrations_id', $product->id)
+                ->max('step_number');
         }
 
         return view('product.new.index', [
@@ -210,7 +226,21 @@ class ChemicalRegistrationController extends Controller
             abort(404, 'ไม่พบข้อมูล');
         }
 
-        return view('product.new.show', compact('drug'));
+        $checkplan = $drug->checkPlan($id);
+        if ($checkplan) {
+            $checkplan = 'มี';
+        } else {
+            $checkplan = 'ไม่มี';
+        }
+
+        // $step_number = DrugProgressStep::where('chemical_registrations_id', $drug->id)
+        //     ->whereNotNull('checked_at')
+        //     ->first();
+
+        $step_number  = DrugProgressStep::where('chemical_registrations_id', $drug->id)
+            ->max('step_number');
+
+        return view('product.new.show', compact('drug', 'checkplan', 'step_number'));
     }
     /**
      * Show the form for editing the specified resource.
@@ -218,7 +248,7 @@ class ChemicalRegistrationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
         $companies = Company::all();
         $drug = ChemicalRegistration::where('id', $id)->first();
@@ -236,7 +266,6 @@ class ChemicalRegistrationController extends Controller
         // if (!auth()->user()->can('edit', $drug)) {
         //     abort(403, 'คุณไม่มีสิทธิ์แก้ไขข้อมูลนี้');
         // }
-        
 
         return view('product.new.edit', compact('drug', 'companies', 'checkplan'));
     }
@@ -476,21 +505,18 @@ class ChemicalRegistrationController extends Controller
                             'sub_step_label' => $label,
                             'department' => $department,
                             'checked_at' => in_array($index, $selectedIndexes) ? now() : null,
-                            'note' => $notes[$index] ?? null,
+                            'created_by' => $notes[$index] ?? null,
                         ]
                     );
                 }
                 $index++;
             }
         }
-
         // ✅ คำนวณ progress
         $totalSteps = count($rawStructure);
         $completedSteps = 0;
-
         foreach ($rawStructure as $step => $groupedItems) {
             $flat = collect($groupedItems);
-
             // ✅ ลบแผนกวิชาการในขั้นตอน 4–6 ถ้า "แผนการทดลอง = ไม่มี"
             if ($isPlanNone && in_array($step, [4, 5, 6])) {
                 $flat = $flat->reject(fn($items, $dept) => $dept === 'แผนกวิชาการ');
@@ -501,14 +527,56 @@ class ChemicalRegistrationController extends Controller
                 ->where('step_number', $step)
                 ->whereNotNull('checked_at')
                 ->count();
-
             if ($flatItems->count() > 0 && $countChecked === $flatItems->count()) {
                 $completedSteps++;
             }
         }
-
         $drug->progress = round(($completedSteps / $totalSteps) * 100, 2);
         $drug->save();
+        // ✅ เช็คว่าขั้นตอนปัจจุบัน (ที่ติ๊ก) ครบหรือไม่
+        $flatCurrentStep = collect($stepStructure);
+        if ($isPlanNone && in_array($stepNumber, [4, 5, 6])) {
+            $flatCurrentStep = $flatCurrentStep->reject(fn($items, $dept) => $dept === 'แผนกวิชาการ');
+        }
+        $totalSubStepsInStep = $flatCurrentStep->flatten()->count();
+        $checkedCountInStep = DrugProgressStep::where('chemical_registrations_id', $drug->id)
+            ->where('step_number', $stepNumber)
+            ->whereNotNull('checked_at')
+            ->count();
+
+        if ($totalSubStepsInStep > 0 && $checkedCountInStep === $totalSubStepsInStep) {
+            // ✅ อัปเดตค่า sub_progress ที่ ChemicalRegistration
+            $drug->sub_progress = $stepNumber;
+            $drug->save();
+
+            // ✅ สร้างรายการ sub step สำหรับขั้นตอนถัดไป
+            $nextStep = $stepNumber + 1;
+            if (isset($rawStructure[$nextStep])) {
+                $nextStepStructure = $rawStructure[$nextStep];
+
+                if ($isPlanNone && in_array($nextStep, [4, 5, 6])) {
+                    $nextStepStructure = collect($nextStepStructure)
+                        ->reject(fn($_, $dept) => $dept === 'แผนกวิชาการ')
+                        ->all();
+                }
+
+                $nextIndex = 0;
+                foreach ($nextStepStructure as $department => $subSteps) {
+                    foreach ($subSteps as $label) {
+                        DrugProgressStep::firstOrCreate([
+                            'chemical_registrations_id' => $drug->id,
+                            'step_number' => $nextStep,
+                            'sub_step_index' => $nextIndex,
+                        ], [
+                            'sub_step_label' => $label,
+                            'department' => $department,
+                        ]);
+                        $nextIndex++;
+                    }
+                }
+            }
+        }
+
 
         return redirect()->back()->with('success', 'อัปเดตความคืบหน้าเรียบร้อยแล้ว');
     }
