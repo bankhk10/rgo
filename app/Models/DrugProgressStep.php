@@ -14,6 +14,7 @@ class DrugProgressStep extends Model
         'sub_step_label',
         'department',
         'checked_at',
+        'created_by',
     ];
 
     public function drug()

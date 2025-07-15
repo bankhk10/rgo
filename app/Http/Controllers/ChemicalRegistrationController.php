@@ -226,12 +226,19 @@ class ChemicalRegistrationController extends Controller
             abort(404, 'ไม่พบข้อมูล');
         }
 
+        $checkplan = $drug->checkPlan($id);
+        if ($checkplan) {
+            $checkplan = 'มี';
+        } else{
+            $checkplan = 'ไม่มี';
+
+        }
         // ตรวจสอบว่าผู้ใช้มีสิทธิ์แก้ไขหรือไม่
         // if (!auth()->user()->can('edit', $drug)) {
         //     abort(403, 'คุณไม่มีสิทธิ์แก้ไขข้อมูลนี้');
         // }
 
-        return view('product.new.edit', compact('drug', 'companies'));
+        return view('product.new.edit', compact('drug', 'companies', 'checkplan'));
     }
 
     /**
@@ -337,11 +344,12 @@ class ChemicalRegistrationController extends Controller
             return redirect()->back()->with('error', 'เกิดข้อผิดพลาดในการลบข้อมูล');
         }
     }
+
     public function updateSubProgress(Request $request, ChemicalRegistration $drug)
     {
         $stepNumber = (int) $request->input('step_number');
         $selectedIndexes = $request->input('sub_steps', []);
-
+        $notes = $request->input('sub_step_notes', []); // array เช่น [5 => 'แผนการทดลองอย่างละเอียด']
         // ข้อมูลแบบเดียวกับ Blade
         $rawStructure = [
             1 => [
@@ -444,6 +452,7 @@ class ChemicalRegistrationController extends Controller
         foreach ($stepStructure as $department => $subSteps) {
             foreach ($subSteps as $label) {
                 if ($department === $mappedDept || auth()->user()->hasRole('admin') || auth()->user()->hasRole('manager')) {
+
                     DrugProgressStep::updateOrCreate(
                         [
                             'chemical_registrations_id' => $drug->id,
@@ -454,6 +463,7 @@ class ChemicalRegistrationController extends Controller
                             'sub_step_label' => $label,
                             'department' => $department,
                             'checked_at' => in_array($index, $selectedIndexes) ? now() : null,
+                            'created_by' => $notes[$index] ?? null, // หากมี note ให้บันทึกลง
                         ]
                     );
                 } else {

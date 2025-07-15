@@ -222,6 +222,7 @@
                     </form>
                 @endif
                 {{-- ไทม์ไลน์การขึ้นทะเบียน --}}
+
                 <div class="mt-8">
                     @php
                         $subStepsAll = [
@@ -434,11 +435,9 @@
                                         $userDeptComplete =
                                             $userTotalCount > 0 && $userCheckedCount === $userTotalCount;
                                     @endphp
-
                                     {{-- รายการ checkbox --}}
                                     <div class="space-y-6">
                                         @php $checkboxIndex = 0; @endphp
-
                                         @foreach ($allDepartments as $dept => $subItems)
                                             @php
                                                 $showDept =
@@ -456,20 +455,47 @@
                                                                 $record = $savedSubSteps[$checkboxIndex] ?? null;
                                                                 $isChecked = $record && $record->checked_at;
                                                             @endphp
-                                                            <div class="flex items-center justify-between">
+                                                            <div class="flex flex-col gap-1">
                                                                 <div class="flex items-center space-x-3">
                                                                     <input type="checkbox" name="sub_steps[]"
                                                                         id="substep_{{ $stepNumber }}_{{ $checkboxIndex }}"
                                                                         value="{{ $checkboxIndex }}"
                                                                         {{ $isChecked ? 'checked' : '' }}
-                                                                        {{-- {{ !$isEditable || $dept !== $mappedUserDept || $userDeptComplete ? 'disabled' : '' }} --}}
                                                                         {{ !$isEditable || (!auth()->user()->hasRole('admin') && !auth()->user()->hasRole('manager') && $dept !== $mappedUserDept) || $userDeptComplete ? 'disabled' : '' }}
-                                                                        class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-
+                                                                        class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                                                                        onchange="toggleInput({{ $stepNumber }}, {{ $checkboxIndex }})">
                                                                     <label
                                                                         for="substep_{{ $stepNumber }}_{{ $checkboxIndex }}"
                                                                         class="text-sm text-gray-800">{{ $label }}</label>
                                                                 </div>
+
+                                                                @if ($label === 'แผนการทดลอง')
+                                                                    <div id="radio_container_{{ $stepNumber }}_{{ $checkboxIndex }}"
+                                                                        class="ml-6 mt-2 space-x-4"
+                                                                        style="{{ $isChecked ? '' : 'display: none;' }}">
+                                                                        <label class="inline-flex items-center">
+                                                                            <input type="radio"
+                                                                                class="form-radio text-green-500 w-5 h-5"
+                                                                                name="sub_step_notes[{{ $checkboxIndex }}]"
+                                                                                value="no"
+                                                                                {{ $checkplan == 'ไม่มี' ? 'checked' : '' }}
+                                                                                {{ !$isEditable ? 'disabled' : '' }}>
+                                                                            <span
+                                                                                class="ml-2 text-gray-800">ไม่มี</span>
+                                                                        </label>
+
+                                                                        <label class="inline-flex items-center">
+                                                                            <input type="radio"
+                                                                                class="form-radio text-yellow-500 w-5 h-5"
+                                                                                name="sub_step_notes[{{ $checkboxIndex }}]"
+                                                                                value="yes"
+                                                                                {{ $checkplan == 'มี' ? 'checked' : '' }}
+                                                                                {{ !$isEditable ? 'disabled' : '' }}>
+                                                                            <span class="ml-2 text-gray-800">มี</span>
+                                                                        </label>
+                                                                    </div>
+                                                                @endif
+
                                                             </div>
                                                             @php $checkboxIndex++; @endphp
                                                         @endforeach
@@ -523,13 +549,51 @@
                     @endforeach
 
                 </div>
+
             </div>
         </div>
     </main>
 
+
+
+
     <script>
         document.getElementById('menu-newregis')?.classList.add('side-menu--active');
+
+        // Store the last selected radio value for each "แผนการทดลอง" checkbox
+        const lastSelectedRadioValue = {};
+        function toggleInput(stepNumber, checkboxIndex) {
+            const checkbox = document.getElementById(`substep_${stepNumber}_${checkboxIndex}`);
+            const radioContainer = document.getElementById(`radio_container_${stepNumber}_${checkboxIndex}`);
+
+            if (checkbox && radioContainer) {
+                if (checkbox.checked) {
+                    radioContainer.style.display = ''; // Show the div
+
+                    // Restore the last selected value, or default to 'no' (ไม่มี)
+                    const savedValue = lastSelectedRadioValue[`${stepNumber}_${checkboxIndex}`] || 'no';
+
+                    const radios = radioContainer.querySelectorAll('input[type="radio"]');
+                    radios.forEach(radio => {
+                        radio.checked = (radio.value === savedValue);
+                    });
+                } else {
+                    // When unchecked, save the currently selected radio button value
+                    const currentRadios = radioContainer.querySelectorAll('input[type="radio"]');
+                    currentRadios.forEach(radio => {
+                        if (radio.checked) {
+                            lastSelectedRadioValue[`${stepNumber}_${checkboxIndex}`] = radio.value;
+                        }
+                    });
+
+                    radioContainer.style.display = 'none'; // Hide the div
+                    // Optionally, uncheck all radio buttons when the checkbox is unchecked to clear its state
+                    currentRadios.forEach(radio => radio.checked = false);
+                }
+            }
+        }
     </script>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @if (session('success'))
         <script>
@@ -545,4 +609,7 @@
             });
         </script>
     @endif
+
+
+
 </x-app-layout>

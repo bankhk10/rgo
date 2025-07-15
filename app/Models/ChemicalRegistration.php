@@ -96,4 +96,10 @@ class ChemicalRegistration extends Model
         return $this->hasMany(DrugProgressStep::class, 'chemical_registrations_id')
             ->where('step_number', $stepNumber);
     }
+
+    public function checkPlan($id)
+    {
+        return DrugProgressStep::where('chemical_registrations_id', $id)
+            ->where('created_by', 'yes')->exists();
+    }
 }

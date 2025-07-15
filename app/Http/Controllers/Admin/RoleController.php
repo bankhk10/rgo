@@ -53,7 +53,7 @@ class RoleController extends Controller
             // 'Role' => 'สิทธิ์',
             // 'User' => 'ผู้ใช้',
             'Inregister' => 'ทะเบียนนำเข้าวัตถุดิบ',
-            'RegisterNew' => 'ทะเบียนสินค้าทั้งหมด',
+            'RegisterNew' => 'ขึ้นทะเบียนสินค้าใหม่',
             'RegisterManufacture' => 'ทะเบียนผลิตทั้งหมด',
             'Company' => 'บริษัท',
         ];
@@ -114,7 +114,7 @@ class RoleController extends Controller
         // กำหนดชื่อเมนูภาษาไทย
         $menuNames = [
             'Inregister' => 'ทะเบียนนำเข้าวัตถุดิบ',
-            'RegisterNew' => 'ทะเบียนสินค้าทั้งหมด',
+            'RegisterNew' => 'ขึ้นทะเบียนสินค้าใหม่',
             'RegisterManufacture' => 'ทะเบียนผลิตทั้งหมด',
             'Company' => 'บริษัท',
             // เพิ่มเมนูอื่นๆ ตามต้องการ
