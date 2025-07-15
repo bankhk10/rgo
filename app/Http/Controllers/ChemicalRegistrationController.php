@@ -229,14 +229,14 @@ class ChemicalRegistrationController extends Controller
         $checkplan = $drug->checkPlan($id);
         if ($checkplan) {
             $checkplan = 'มี';
-        } else{
+        } else {
             $checkplan = 'ไม่มี';
-
         }
         // ตรวจสอบว่าผู้ใช้มีสิทธิ์แก้ไขหรือไม่
         // if (!auth()->user()->can('edit', $drug)) {
         //     abort(403, 'คุณไม่มีสิทธิ์แก้ไขข้อมูลนี้');
         // }
+        
 
         return view('product.new.edit', compact('drug', 'companies', 'checkplan'));
     }
@@ -349,8 +349,9 @@ class ChemicalRegistrationController extends Controller
     {
         $stepNumber = (int) $request->input('step_number');
         $selectedIndexes = $request->input('sub_steps', []);
-        $notes = $request->input('sub_step_notes', []); // array เช่น [5 => 'แผนการทดลองอย่างละเอียด']
-        // ข้อมูลแบบเดียวกับ Blade
+        $notes = $request->input('sub_step_notes', []);
+
+        // Raw structure (เหมือนเดิม)
         $rawStructure = [
             1 => [
                 'จัดซื้อต่างประเทศ' => ['ทะเบียน', 'ใบอนุญาตในประเทศผู้ผลิต', 'เอกสารอนุญาตอื่นๆ'],
@@ -444,6 +445,13 @@ class ChemicalRegistrationController extends Controller
         ];
         $mappedDept = $departmentMap[$userDept] ?? $userDept;
 
+        // ✅ ตรวจว่าแผนการทดลองเป็น "ไม่มี" หรือไม่
+        $planIndex = collect($rawStructure[1])->flatten()->search('แผนการทดลอง');
+        $planNoteRecord = DrugProgressStep::where('chemical_registrations_id', $drug->id)
+            ->where('step_number', 1)
+            ->where('sub_step_index', $planIndex)
+            ->first();
+        $isPlanNone = $planNoteRecord && $planNoteRecord->note === 'no';
 
         $stepStructure = $rawStructure[$stepNumber] ?? [];
         $flatItems = [];
@@ -451,8 +459,13 @@ class ChemicalRegistrationController extends Controller
 
         foreach ($stepStructure as $department => $subSteps) {
             foreach ($subSteps as $label) {
-                if ($department === $mappedDept || auth()->user()->hasRole('admin') || auth()->user()->hasRole('manager')) {
+                // ✅ ข้ามแผนกวิชาการในขั้นตอน 4–6 ถ้า "แผนการทดลอง = ไม่มี"
+                if ($isPlanNone && in_array($stepNumber, [4, 5, 6]) && $department === 'แผนกวิชาการ') {
+                    $index++;
+                    continue;
+                }
 
+                if ($department === $mappedDept || auth()->user()->hasRole('admin') || auth()->user()->hasRole('manager')) {
                     DrugProgressStep::updateOrCreate(
                         [
                             'chemical_registrations_id' => $drug->id,
@@ -463,27 +476,33 @@ class ChemicalRegistrationController extends Controller
                             'sub_step_label' => $label,
                             'department' => $department,
                             'checked_at' => in_array($index, $selectedIndexes) ? now() : null,
-                            'created_by' => $notes[$index] ?? null, // หากมี note ให้บันทึกลง
+                            'note' => $notes[$index] ?? null,
                         ]
                     );
-                } else {
                 }
                 $index++;
             }
         }
 
-        // คำนวณ progress
+        // ✅ คำนวณ progress
         $totalSteps = count($rawStructure);
         $completedSteps = 0;
 
         foreach ($rawStructure as $step => $groupedItems) {
-            $flat = collect($groupedItems)->flatten()->values();
+            $flat = collect($groupedItems);
+
+            // ✅ ลบแผนกวิชาการในขั้นตอน 4–6 ถ้า "แผนการทดลอง = ไม่มี"
+            if ($isPlanNone && in_array($step, [4, 5, 6])) {
+                $flat = $flat->reject(fn($items, $dept) => $dept === 'แผนกวิชาการ');
+            }
+
+            $flatItems = $flat->flatten()->values();
             $countChecked = DrugProgressStep::where('chemical_registrations_id', $drug->id)
                 ->where('step_number', $step)
                 ->whereNotNull('checked_at')
                 ->count();
 
-            if ($flat->count() > 0 && $countChecked === $flat->count()) {
+            if ($flatItems->count() > 0 && $countChecked === $flatItems->count()) {
                 $completedSteps++;
             }
         }

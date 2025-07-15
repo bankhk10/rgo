@@ -225,6 +225,7 @@
 
                 <div class="mt-8">
                     @php
+                        // ข้อมูลขั้นตอนทั้งหมด
                         $subStepsAll = [
                             1 => [
                                 'title' => 'คณะ PDC อนุมัติให้ดำเนินการขึ้นทะเบียน',
@@ -331,18 +332,23 @@
                             ],
                         ];
 
+                        // ดึงค่าจาก "แผนการทดลอง" ในขั้นตอนที่ 1
+                        $planIndex = collect($subStepsAll[1]['items'])->flatten()->search('แผนการทดลอง');
+                        $planNote = $checkplan;
+                        $hideAcademicSteps = $planNote == 'ไม่มี';
+
+                        // เก็บ flag ว่าขั้นตอนใดทำครบแล้วบ้าง
                         $completedStepFlags = [];
                         foreach ($subStepsAll as $step => $data) {
-                            $totalSubSteps = collect($data['items'])->flatten()->count();
+                            $departments = collect($data['items']);
+                            if ($hideAcademicSteps && in_array($step, [4, 5, 6])) {
+                                $departments = $departments->reject(fn($_, $dept) => $dept === 'แผนกวิชาการ');
+                            }
+                            $totalSubSteps = $departments->flatten()->count();
                             $completedCount = $drug->stepSubSteps($step)->whereNotNull('checked_at')->count();
                             $completedStepFlags[$step] = $totalSubSteps > 0 && $completedCount === $totalSubSteps;
                         }
 
-                        // $canEdit = auth()->user()->hasRole('admin') || auth()->user()->hasRole('manager');
-
-                    @endphp
-
-                    @php
                         function mapDepartment($enDept)
                         {
                             return [
@@ -352,39 +358,39 @@
                                 'Academic' => 'แผนกวิชาการ',
                                 'Registration' => 'แผนกทะเบียน',
                                 'IT' => 'เทคโนโลยีสารสนเทศ',
-                            ][$enDept] ?? $enDept; // fallback กรณีไม่มีใน map
+                            ][$enDept] ?? $enDept;
                         }
 
-                        $userDept = auth()->user()->department;
-                        $mappedUserDept = mapDepartment($userDept);
+                        $mappedUserDept = mapDepartment(auth()->user()->department);
                     @endphp
-
 
                     @foreach ($subStepsAll as $stepNumber => $stepData)
                         @php
                             $stepTitle = $stepData['title'];
                             $allDepartments = $stepData['items'];
-                            $userDept = auth()->user()->department;
 
-                            // กรองแผนกให้เห็นเฉพาะของตัวเอง (ยกเว้น admin/manager)
+                            // กรองแผนกวิชาการออกถ้าจำเป็น
+                            if ($hideAcademicSteps && in_array($stepNumber, [4, 5, 6])) {
+                                $allDepartments = collect($allDepartments)
+                                    ->reject(fn($_, $dept) => $dept === 'แผนกวิชาการ')
+                                    ->all();
+                            }
+
                             $departments =
                                 !auth()->user()->hasRole('admin') && !auth()->user()->hasRole('manager')
                                     ? collect($allDepartments)
-                                        ->filter(fn($items, $deptName) => $deptName === $mappedUserDept)
+                                        ->filter(fn($_, $deptName) => $deptName === $mappedUserDept)
                                         ->all()
                                     : $allDepartments;
 
                             $savedSubSteps = $drug->stepSubSteps($stepNumber)->get()->keyBy('sub_step_index');
 
-                            $allSubLabels = collect($allDepartments)->flatten()->values()->all();
+                            $allSubLabels = collect($departments)->flatten()->values()->all();
                             $totalSub = count($allSubLabels);
                             $completedCount = $savedSubSteps->whereNotNull('checked_at')->count();
                             $percent = $totalSub > 0 ? round(($completedCount / $totalSub) * 100, 2) : 0;
 
-                            $completedStepFlags[$stepNumber] = $totalSub > 0 && $completedCount === $totalSub;
-
                             $canEdit = auth()->user()->hasRole('admin') || auth()->user()->hasRole('manager');
-                            // auth()->user()->hasRole('staff InternationalProcurement');
                             $previousStepsCompleted = collect(range(1, $stepNumber - 1))->every(
                                 fn($s) => $completedStepFlags[$s] ?? false,
                             );
@@ -404,7 +410,7 @@
                                         ขั้นตอนที่ {{ $stepNumber }}: {{ $stepTitle }}
                                     </h4>
 
-                                    {{-- แถบสถานะ --}}
+                                    {{-- แถบเปอร์เซ็นต์ --}}
                                     <div class="mb-4">
                                         <div class="w-full bg-gray-200 rounded-full h-2.5">
                                             <div class="h-2.5 rounded-full @if ($percent < 25) bg-red-500 @elseif ($percent < 75) bg-yellow-500 @else bg-green-500 @endif"
@@ -414,37 +420,26 @@
                                         <div class="text-xs text-gray-500 text-right mt-1">{{ $percent }}%</div>
                                     </div>
 
-                                    @php
-                                        $userCheckedCount = 0;
-                                        $userTotalCount = 0;
-
-                                        foreach ($departments as $dept => $subItems) {
-                                            if ($dept === $mappedUserDept) {
-                                                foreach ($subItems as $label) {
-                                                    $record = $savedSubSteps[$userTotalCount] ?? null;
-                                                    if ($record && $record->checked_at) {
-                                                        $userCheckedCount++;
-                                                    }
-                                                    $userTotalCount++;
-                                                }
-                                            } else {
-                                                $userTotalCount += count($subItems);
-                                            }
-                                        }
-
-                                        $userDeptComplete =
-                                            $userTotalCount > 0 && $userCheckedCount === $userTotalCount;
-                                    @endphp
                                     {{-- รายการ checkbox --}}
                                     <div class="space-y-6">
                                         @php $checkboxIndex = 0; @endphp
-                                        @foreach ($allDepartments as $dept => $subItems)
+                                        @foreach ($stepData['items'] as $dept => $subItems)
                                             @php
+                                                $skipThisDept =
+                                                    $hideAcademicSteps &&
+                                                    in_array($stepNumber, [4, 5, 6]) &&
+                                                    $dept === 'แผนกวิชาการ';
+                                                if ($skipThisDept) {
+                                                    $checkboxIndex += count($subItems);
+                                                    continue;
+                                                }
+
                                                 $showDept =
                                                     auth()->user()->hasRole('admin') ||
                                                     auth()->user()->hasRole('manager') ||
                                                     $dept === $mappedUserDept;
                                             @endphp
+
                                             @if ($showDept)
                                                 <div>
                                                     <h5 class="text-sm font-bold text-gray-700 mb-2">
@@ -454,6 +449,7 @@
                                                             @php
                                                                 $record = $savedSubSteps[$checkboxIndex] ?? null;
                                                                 $isChecked = $record && $record->checked_at;
+                                                                // $checkplan = $record->note ?? '';
                                                             @endphp
                                                             <div class="flex flex-col gap-1">
                                                                 <div class="flex items-center space-x-3">
@@ -461,7 +457,7 @@
                                                                         id="substep_{{ $stepNumber }}_{{ $checkboxIndex }}"
                                                                         value="{{ $checkboxIndex }}"
                                                                         {{ $isChecked ? 'checked' : '' }}
-                                                                        {{ !$isEditable || (!auth()->user()->hasRole('admin') && !auth()->user()->hasRole('manager') && $dept !== $mappedUserDept) || $userDeptComplete ? 'disabled' : '' }}
+                                                                        {{ !$isEditable || (!auth()->user()->hasRole('admin') && !auth()->user()->hasRole('manager') && $dept !== $mappedUserDept)  }}
                                                                         class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
                                                                         onchange="toggleInput({{ $stepNumber }}, {{ $checkboxIndex }})">
                                                                     <label
@@ -483,7 +479,6 @@
                                                                             <span
                                                                                 class="ml-2 text-gray-800">ไม่มี</span>
                                                                         </label>
-
                                                                         <label class="inline-flex items-center">
                                                                             <input type="radio"
                                                                                 class="form-radio text-yellow-500 w-5 h-5"
@@ -495,7 +490,6 @@
                                                                         </label>
                                                                     </div>
                                                                 @endif
-
                                                             </div>
                                                             @php $checkboxIndex++; @endphp
                                                         @endforeach
@@ -511,7 +505,6 @@
                                         // ตรวจสอบว่าแผนกของผู้ใช้งานติ๊กครบแล้วหรือยัง
                                         $userCheckedCount = 0;
                                         $userTotalCount = 0;
-
                                         foreach ($departments as $dept => $subItems) {
                                             if ($dept === $mappedUserDept) {
                                                 foreach ($subItems as $label) {
@@ -522,12 +515,10 @@
                                                     $userTotalCount++;
                                                 }
                                             } else {
-                                                $userTotalCount += count($subItems); // นับ index ต่อ
+                                                $userTotalCount += count($subItems);
                                             }
                                         }
-
-                                        $userDeptComplete =
-                                            $userTotalCount > 0 && $userCheckedCount === $userTotalCount;
+                                        $userDeptComplete = $userTotalCount > 0 && $userCheckedCount === $userTotalCount;
                                     @endphp
 
                                     @if ($isEditable && !$userDeptComplete)
@@ -542,13 +533,12 @@
                                             </button>
                                         </div>
                                     @endif
-
                                 </div>
                             </form>
                         @endif
                     @endforeach
-
                 </div>
+
 
             </div>
         </div>
@@ -562,6 +552,7 @@
 
         // Store the last selected radio value for each "แผนการทดลอง" checkbox
         const lastSelectedRadioValue = {};
+
         function toggleInput(stepNumber, checkboxIndex) {
             const checkbox = document.getElementById(`substep_${stepNumber}_${checkboxIndex}`);
             const radioContainer = document.getElementById(`radio_container_${stepNumber}_${checkboxIndex}`);
