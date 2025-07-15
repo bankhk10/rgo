@@ -193,19 +193,38 @@ class ChemicalRegistrationController extends Controller
             $chemical_registration = ChemicalRegistration::create($validatedData);
             // 4. สร้างหัวข้อย่อยเริ่มต้นให้กับขั้นตอนที่ 1 โดยไม่มีการเลือก (checked_at = null)
             // กำหนดหัวข้อย่อยขั้นตอน 1 จำนวน 3 หัวข้อ (ตาม requirement ล่าสุด)
-            $subStepsStep1 = ['พิจารณาเบื้องต้น', 'อนุมัติแนวทาง', 'ส่งเรื่องต่อ'];
+            $rawStructure = [
+                1 => [
+                    'จัดซื้อต่างประเทศ' => ['ทะเบียน', 'ใบอนุญาตในประเทศผู้ผลิต', 'เอกสารอนุญาตอื่นๆ'],
+                    'ฝ่ายขาย' => ['รายชื่อผู้ขอขึ้นทะเบียน', 'ชื่อการค้า', 'Packing'],
+                    'วิจัยและพัฒนา' => ['เตรียมข้อมูลผลิตตัวอย่าง'],
+                    'แผนกวิชาการ' => ['แผนการทดลอง'],
+                    'แผนกทะเบียน' => [
+                        'ตรวจสอบเอกสารขึ้นทะเบียน',
+                        'ตรวจชื่อการค้า',
+                        'ขอใบอนุญาตนำเข้าตัวอย่าง',
+                        'อื่นๆ',
+                    ],
+                ],
+            ];
 
-            foreach ($subStepsStep1 as $index => $label) {
-                DrugProgressStep::create([
-                    'chemical_registrations_id' => $chemical_registration->id,
-                    'step_number' => 1,
-                    'sub_step_index' => $index,
-                    'sub_step_label' => $label,
-                    'checked_at' => null,
-                ]);
+            // สร้างหัวข้อย่อยเริ่มต้นเฉพาะขั้นตอนที่ 1
+            $stepNumber = 1;
+            $subStepIndex = 0;
+
+            foreach ($rawStructure[$stepNumber] as $department => $subSteps) {
+                foreach ($subSteps as $label) {
+                    DrugProgressStep::create([
+                        'chemical_registrations_id' => $chemical_registration->id,
+                        'step_number' => $stepNumber,
+                        'sub_step_index' => $subStepIndex,
+                        'sub_step_label' => $label,
+                        'checked_at' => null,
+                    ]);
+                    $subStepIndex++;
+                }
             }
 
-            // return redirect()->route('newregis.index')->with('success', 'บันทึกข้อมูลสำเร็จแล้ว!');
             return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จ');
         } catch (\Exception $e) {
             // \Log::error("Error creating product: " . $e->getMessage());
