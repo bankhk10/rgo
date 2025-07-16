@@ -32,7 +32,7 @@
                     <div class="w-full sm:w-[300px] max-w-xs">
                         <h2 class="text-center text-lg font-bold text-blue-700 mb-4">ทะเบียนนำเข้าวัตถุดิบ</h2>
                         <hr>
-                        <div class="aspect-w-1 aspect-h-1">
+                        <div class="aspect-w-1 aspect-h-1 mt-10">
                             <canvas id="myChart"></canvas>
                         </div>
                     </div>
@@ -41,7 +41,7 @@
                     <div class="w-full sm:w-[300px] max-w-xs">
                         <h2 class="text-center text-lg font-bold text-blue-700 mb-4">ทะเบียนสินค้า</h2>
                         <hr>
-                        <div class="aspect-w-1 aspect-h-1">
+                        <div class="aspect-w-1 aspect-h-1 mt-10">
                             <canvas id="myChart2"></canvas>
                         </div>
                     </div>
@@ -50,7 +50,7 @@
                     <div class="w-full sm:w-[300px] max-w-xs">
                         <h2 class="text-center text-lg font-bold text-blue-700 mb-4">ทะเบียนผลิต</h2>
                         <hr>
-                        <div class="aspect-w-1 aspect-h-1">
+                        <div class="aspect-w-1 aspect-h-1 mt-10">
                             <canvas id="myChart3"></canvas>
                         </div>
                     </div>
@@ -59,7 +59,7 @@
                     <div class="w-full sm:w-[300px] max-w-xs">
                         <h2 class="text-center text-lg font-bold text-blue-700 mb-4">ขึ้นทะเบียนสินค้าใหม่</h2>
                         <hr>
-                        <div class="aspect-w-1 aspect-h-1">
+                        <div class="aspect-w-1 aspect-h-1 mt-10">
                             <canvas id="myChart4"></canvas>
                         </div>
                     </div>
@@ -87,9 +87,9 @@
                 label: 'จำนวน',
                 data: [{{ $totalImport }}, {{ $soonImport }}, {{ $expiredImport }}],
                 backgroundColor: [
-                    'rgba(112, 217, 11, 1)', // สีเขียว (ทั้งหมด)
-                    'rgba(252, 193, 4, 1)', // สีเหลือง (ใกล้หมดอายุ)
-                    'rgba(252, 43, 4, 1)' // สีแดง (หมดอายุ)
+                    'rgba(31, 100, 66, 1)', // สีเขียว (ทั้งหมด)
+                    'rgba(255, 255, 0, 1)', // สีเหลือง (ใกล้หมดอายุ)
+                    'rgba(254, 2, 2, 1)' // สีแดง (หมดอายุ)
                 ],
                 hoverOffset: 4
             }]
@@ -98,6 +98,19 @@
         const configMyChart = {
             type: 'doughnut',
             data: dataMyChart,
+            options: {
+                plugins: {
+                    legend: {
+                        position: 'bottom', // << เอา label ไว้ล่างวงกลม
+                        labels: {
+                            font: {
+                                size: 14
+                            },
+                            padding: 20
+                        }
+                    }
+                }
+            }
         };
 
         // *** ข้อมูลและ Config สำหรับ myChart2 (ทะเบียนสินค้า) ***
@@ -111,9 +124,9 @@
                 label: 'จำนวน',
                 data: [{{ $totalRegistrations }}, {{ $soonRegistrations }}, {{ $expiredRegistrations }}],
                 backgroundColor: [
-                    'rgba(112, 217, 11, 1)', // สีเขียว (ทั้งหมด)
-                    'rgba(252, 193, 4, 1)', // สีเหลือง (ใกล้หมดอายุ)
-                    'rgba(252, 43, 4, 1)' // สีแดง (หมดอายุ)
+                    'rgba(7, 115, 44, 0.8)', // สีเขียว (ทั้งหมด)
+                    'rgba(230, 223, 8, 1)', // สีเหลือง (ใกล้หมดอายุ)
+                    'rgba(254, 2, 2, 1)' // สีแดง (หมดอายุ)
                 ],
                 hoverOffset: 4
             }]
@@ -122,7 +135,19 @@
         const configMyChart2 = {
             type: 'doughnut',
             data: dataMyChart2,
-            // ไม่มี plugins แล้ว
+            options: {
+                plugins: {
+                    legend: {
+                        position: 'bottom', // << เอา label ไว้ล่างวงกลม
+                        labels: {
+                            font: {
+                                size: 14
+                            },
+                            padding: 20
+                        }
+                    }
+                }
+            }
         };
 
         // *** ข้อมูลและ Config สำหรับ myChart3 (ทะเบียนผลิต) ***
@@ -136,9 +161,9 @@
                 label: 'จำนวน',
                 data: [{{ $totalProduct }}, {{ $soonProduct }}, {{ $expiredProduct }}],
                 backgroundColor: [
-                    'rgba(112, 217, 11, 1)', // สีเขียว (ทั้งหมด)
-                    'rgba(252, 193, 4, 1)', // สีเหลือง (ใกล้หมดอายุ)
-                    'rgba(252, 43, 4, 1)' // สีแดง (หมดอายุ)
+                    'rgba(7, 115, 44, 0.8)', // สีเขียว (ทั้งหมด)
+                    'rgba(230, 223, 8, 1)', // สีเหลือง (ใกล้หมดอายุ)
+                    'rgba(254, 2, 2, 1)' // สีแดง (หมดอายุ)
                 ],
                 hoverOffset: 4
             }]
@@ -147,7 +172,19 @@
         const configMyChart3 = {
             type: 'doughnut',
             data: dataMyChart3,
-            // ไม่มี plugins แล้ว
+            options: {
+                plugins: {
+                    legend: {
+                        position: 'bottom', // << เอา label ไว้ล่างวงกลม
+                        labels: {
+                            font: {
+                                size: 14
+                            },
+                            padding: 20
+                        }
+                    }
+                }
+            }
         };
 
         // *** ข้อมูลและ Config สำหรับ myChart3 (ทะเบียนผลิต) ***
@@ -161,9 +198,9 @@
                 label: 'จำนวน',
                 data: [{{ $totalNewRegistrations }}, {{ $betweenNewRegistrations }}],
                 backgroundColor: [
-                    'rgba(112, 217, 11, 1)', // สีเขียว (ทั้งหมด)
-                    'rgba(252, 193, 4, 1)', // สีเหลือง (ใกล้หมดอายุ)
-                    // 'rgba(252, 43, 4, 1)' // สีแดง (หมดอายุ)
+                    'rgba(7, 115, 44, 0.8)', // สีเขียว (ทั้งหมด)
+                    'rgba(230, 223, 8, 1)', // สีเหลือง (ใกล้หมดอายุ)
+                    'rgba(254, 2, 2, 1)' // สีแดง (หมดอายุ)
                 ],
                 hoverOffset: 4
             }]
@@ -172,7 +209,19 @@
         const configMyChart4 = {
             type: 'doughnut',
             data: dataMyChart4,
-            // ไม่มี plugins แล้ว
+            options: {
+                plugins: {
+                    legend: {
+                        position: 'bottom', // << เอา label ไว้ล่างวงกลม
+                        labels: {
+                            font: {
+                                size: 14
+                            },
+                            padding: 20
+                        }
+                    }
+                }
+            }
         };
 
         // *** สร้างกราฟโดนัททั้งสาม ***

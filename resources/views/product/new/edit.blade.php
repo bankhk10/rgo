@@ -27,7 +27,7 @@
                                 <p class="font-semibold text-indigo-600 mb-1">ชื่อสามัญ</p>
                                 <input type="text" name="common_name"
                                     class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1 bg-gray-200"
-                                    placeholder="กรอกชื่อสามัญ" value="{{ $drug->chemicalImport->chemical_name_th }}"
+                                    placeholder="กรอกชื่อสามัญ" value="{{ $drug->chemicalImport->chemical_name_th ?? '' }}"
                                     readonly>
                             </div>
                             <div>
