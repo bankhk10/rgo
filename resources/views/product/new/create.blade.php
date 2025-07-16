@@ -19,7 +19,7 @@
                         <input type="text" id="productSearch"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="พิมพ์ชื่อสามัญ..." oninput="autocompleteSearch(this.value)"
-                            autocomplete="off" />
+                            autocomplete="off" required/>
                         <ul id="autocomplete-list"
                             class="absolute z-10 bg-white border w-80 rounded-2xl shadow max-h-60 overflow-y-auto hidden">
                         </ul>
