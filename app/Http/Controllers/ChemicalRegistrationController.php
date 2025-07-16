@@ -608,19 +608,21 @@ class ChemicalRegistrationController extends Controller
     {
         $query = ChemicalRegistration::query();
         $query->where('new_or_old', false);
+
         // ค้นหาตามคำค้น
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('trade_name', 'like', '%' . $search . '%')
                     ->orWhere('chemical_name_th', 'like', '%' . $search . '%')
+                    ->orWhere('registrant', 'like', '%' . $search . '%')
                     ->orWhere('registration_number', 'like', '%' . $search . '%');
             });
         }
 
         // ค้นหาตามวันที่
         if ($request->filled('expiry_date_from') && $request->filled('expiry_date_to')) {
-            $query->whereBetween('date_submit_request', [
+            $query->whereBetween('expired_license_number', [
                 $request->input('expiry_date_from'),
                 $request->input('expiry_date_to'),
             ]);
@@ -628,8 +630,8 @@ class ChemicalRegistrationController extends Controller
 
         // ฟิลเตอร์ตามสถานะ
         $statusFilter = $request->input('status_filter');
-        $today = now();
-        $in180Days = now()->addDays(180);
+        $today = Carbon::now(); // ใช้ Carbon::now()
+        $in180Days = Carbon::now()->addDays(180); // ใช้ Carbon::now()->addDays()
 
         if ($statusFilter === 'expired') {
             $query->whereDate('expired_license_number', '<', $today);
@@ -639,55 +641,38 @@ class ChemicalRegistrationController extends Controller
             $query->where('new_or_old', true)
                 ->where('progress', '<', 100);
         } else {
-            // ขึ้นทะเบียนใหม่ (progress < 100)
-            // $query->where('progress', '<', 100);
+            // หากไม่มี filter หรือเป็นค่าอื่น ให้แสดงรายการปกติที่ new_or_old เป็น false
+            // คุณได้กำหนด query->where('new_or_old', false); ไว้แล้ว
         }
 
-        // สถิติ
-        $totalNewRegistrations = ChemicalRegistration::where('new_or_old', true)->where('progress', '<', 100)->count();
+        $paginatedProducts = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString(); // เพิ่ม withQueryString() เพื่อให้ pagination link เก็บ query parameters เดิมไว้
+
+
+        $total = ChemicalRegistration::where('new_or_old', false)->count();
         $soonExpiredCount = ChemicalRegistration::where('new_or_old', false)
-            ->whereBetween('expired_license_number', [now(), now()->addDays(180)])
+            ->whereDate('expired_license_number', '<=', Carbon::now()->addMonths(6))
             ->count();
+        $expiredCount = ChemicalRegistration::where('new_or_old', false)
+            ->whereDate('expired_license_number', '<', Carbon::now())->count();
 
-        $expiredCount = ChemicalRegistration::where('expired_license_number', '<', $today)
-            ->where('new_or_old', false)
-            ->count();
+        // Log::info($expiredCount);
 
-        $total = ChemicalRegistration::count();
-        $paginatedProducts = $query->orderBy('created_at', 'desc')->paginate(5);
-
+        // สำคัญ: กำหนดค่า status ให้กับแต่ละรายการใน paginatedProducts
         foreach ($paginatedProducts as $product) {
-            // สถานะใบอนุญาต
             $expiryDate = Carbon::parse($product->expired_license_number);
             $now = Carbon::now();
 
-            if ($expiryDate->isPast()) {
+            if ($expiryDate <= $today) {
                 $product->status = 'หมดอายุ';
-            } elseif ($expiryDate->diffInMonths($now) <= 6) {
+            } elseif ($expiryDate->diffInDays($now) <= 180) { // เปรียบเทียบเป็นวันสำหรับ 180 วัน
                 $product->status = 'ใกล้หมดอายุ';
             } else {
                 $product->status = 'ใช้งานอยู่';
             }
-
-            // 👇 คำนวณ progress จริงแบบ dynamic
-            $product->progress = $product->calculated_progress;
-
-            // (ถ้าอยากเก็บ current_step_number ก็ได้)
-            // $product->current_step_number = DrugProgressStep::where('chemical_registrations_id', $product->id)
-            //     ->selectRaw('step_number, COUNT(*) as total, SUM(CASE WHEN checked_at IS NOT NULL THEN 1 ELSE 0 END) as done')
-            //     ->groupBy('step_number')
-            //     ->get()
-            //     ->filter(fn($step) => $step->total == $step->done)
-            //     ->pluck('step_number')
-            //     ->max() ?? 1;
-
-            $product->current_step_number  = DrugProgressStep::where('chemical_registrations_id', $product->id)
-                ->max('step_number');
         }
 
         return view('product_all.index', [
             'total' => $total,
-            'totalNewRegistrations' => $totalNewRegistrations,
             'soonExpiredCount' => $soonExpiredCount,
             'expiredCount' => $expiredCount,
             'paginatedProducts' => $paginatedProducts,
@@ -793,5 +778,23 @@ class ChemicalRegistrationController extends Controller
             // Log::error('Update error: ' . $th->getMessage());
             return redirect()->back()->with('error', 'เกิดข้อผิดพลาด');
         }
+    }
+
+    public function showAll(Request $request, $id)
+    {
+        $companies = Company::all();
+        $registration = ChemicalRegistration::where('id', $id)->first();
+        if (!$registration) {
+            abort(404, 'ไม่พบข้อมูล');
+        }
+
+        $checkplan = $registration->checkPlan($id);
+        if ($checkplan) {
+            $checkplan = 'มี';
+        } else {
+            $checkplan = 'ไม่มี';
+        }
+
+        return view('product_all.show', compact('registration', 'companies', 'checkplan'));
     }
 }

@@ -58,6 +58,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/new/productall', [ChemicalRegistrationController::class, 'indexAll'])->name('newregis.productall');
     Route::get('/new/productall/{newregi}/edit', [ChemicalRegistrationController::class, 'editAll'])->name('newregis.editall');
     Route::put('/new/productall/{newregi}', [ChemicalRegistrationController::class, 'updateAll'])->name('newregis.updateall');
+    Route::get('/new/productall/{newregi}/show', [ChemicalRegistrationController::class, 'showAll'])->name('newregis.showall');
+
 
 
 

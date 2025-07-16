@@ -30,7 +30,7 @@
                     <p class="text-4xl text-green-600 font-extrabold mb-1">{{ $total }}</p>
                 </a> --}}
                 {{-- ขึ้นทั้งหมด --}}
-                <a href="{{ route('newregis.index', array_merge(request()->except('status_filter', 'page'), ['status_filter' => 'new_all', 'page' => 1])) }}"
+                <a href="{{ route('newregis.productall', array_merge(request()->except('status_filter', 'page'), ['page' => 1])) }}"
                     class="group block h-full bg-gradient-to-br from-blue-200 to-blue-100 p-4 rounded-3xl text-center border-2 border-blue-400 hover:scale-105 transition-all duration-300">
                     <div class="flex justify-center mb-2">
                         <div class="bg-blue-300 rounded-full p-3 group-hover:bg-blue-400 transition">
@@ -42,10 +42,10 @@
                         </div>
                     </div>
                     <h2 class="text-lg font-bold text-blue-700 mb-1 tracking-wide">ทะเบียนทั้งหมด</h2>
-                    <p class="text-2xl font-bold text-blue-600">{{ $totalNewRegistrations ?? 0 }}</p>
+                    <p class="text-2xl font-bold text-blue-600">{{ $total ?? 0 }}</p>
                 </a>
                 {{-- อยู่ระหว่างดำเนินการ --}}
-                <a href="{{ route('newregis.index', array_merge(request()->except('status_filter', 'page'), ['status_filter' => 'soon_expired', 'page' => 1])) }}"
+                <a href="{{ route('newregis.productall', array_merge(request()->except('status_filter', 'page'), ['status_filter' => 'soon_expired', 'page' => 1])) }}"
                     class="group block h-full bg-gradient-to-br from-yellow-100 to-yellow-50 p-4 rounded-3xl text-center border-2 border-yellow-200 hover:scale-105 transition-all duration-300">
                     <div class="flex justify-center mb-2">
                         <div class="bg-yellow-200 rounded-full p-3 group-hover:bg-yellow-300 transition">
@@ -60,7 +60,7 @@
                     <p class="text-2xl font-bold text-yellow-600">{{ $soonExpiredCount ?? 0 }}</p>
                 </a>
                 {{-- ขึ้นทะเบียนใหม่เสร็จแล้ว --}}
-                <a href="{{ route('newregis.index', array_merge(request()->except('status_filter', 'page'), ['status_filter' => 'expired', 'page' => 1])) }}"
+                <a href="{{ route('newregis.productall', array_merge(request()->except('status_filter', 'page'), ['status_filter' => 'expired', 'page' => 1])) }}"
                     class="group block h-full bg-gradient-to-br from-red-100 to-red-50 p-4 rounded-3xl text-center border-2 border-red-200 hover:scale-105 transition-all duration-300">
                     <div class="flex justify-center mb-2">
                         <div class="bg-red-200 rounded-full p-3 group-hover:bg-red-300 transition">
@@ -79,7 +79,7 @@
             {{-- 1 --}}
 
             <div class="flex flex-col sm:flex-row justify-between items-center mx-3 mb-2">
-                <form action="{{ route('newregis.index') }}" method="GET" class="flex items-center gap-2 mb-2">
+                <form action="{{ route('newregis.productall') }}" method="GET" class="flex items-center gap-2 mb-2">
                     <div class="relative flex-grow min-w-[280px]">
                         <label for="search_query" class="mx-3 text-base block text-gray-700 mb-1 mt-3">ค้นหาชื่อ</label>
 
@@ -121,7 +121,7 @@
 
                         {{-- เพิ่มปุ่มล้างการค้นหา --}}
                         @if (request('search') || request('expiry_date_from') || request('expiry_date_to'))
-                            <a href="{{ route('newregis.index') }}"
+                            <a href="{{ route('newregis.productall') }}"
                                 class="inline-flex items-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold px-6 py-2 rounded-lg shadow-md transform hover:scale-105 transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50">
                                 <svg class="w-5 h-5 inline-block mr-1 -mt-0.5" fill="none" stroke="currentColor"
                                     stroke-width="2" viewBox="0 0 24 24">
@@ -146,6 +146,7 @@
                                 <th class="py-4 px-8">ผู้ขึ้นทะเบียน</th>
                                 <th class="py-4 px-8">เลขที่ทะเบียน</th>
                                 <th class="py-4 px-8">วันหมดอายุ</th>
+                                <th class="py-4 px-8">สถานะ</th>
                                 {{-- <th class="py-4 px-8">สถานะความคืบหน้า</th> --}}
                                 {{-- <th class="py-4 px-4 text-center">สถานะ</th> --}}
                                 <th class="py-4 px-8 rounded-tr-2xl text-center">รายละเอียด</th>
@@ -163,6 +164,25 @@
                                     <td class="py-4 px-8">{{ $product->registration_number ?? '' }}</td>
                                     <td class="py-4 px-8">
                                         {{ \Carbon\Carbon::parse($product->date_submit_request)->addYears(543)->format('d/m/Y') }}
+                                    </td>
+                                    <td class="py-4 px-8">
+                                        @php
+                                            $statusClass = '';
+                                            $statusText = $product->status;
+                                            if ($statusText == 'หมดอายุ') {
+                                                $statusClass =
+                                                    'inline-block rounded-full px-3 py-1 font-semibold text-white bg-red-500';
+                                            } elseif ($statusText == 'ใกล้หมดอายุ') {
+                                                $statusClass =
+                                                    'inline-block rounded-full px-3 py-1 font-semibold text-gray-600 bg-yellow-300';
+                                            } else {
+                                                $statusClass =
+                                                    'inline-block rounded-full px-3 py-1 font-semibold text-white bg-green-500'; // สถานะปกติ เช่น 'ใช้งานอยู่'
+                                            }
+                                        @endphp
+                                        <span class="{{ $statusClass }}">
+                                            {{ $statusText }}
+                                        </span>
                                     </td>
 
                                     {{-- <td class="py-4 px-8">
@@ -197,7 +217,7 @@
                                         {{-- ปุ่มดูรายละเอียด --}}
                                         <div class="flex items-center gap-3 justify-center">
                                             @can('RegisterNew read')
-                                                <a href="{{ route('newregis.show', $product->id) }}"
+                                                <a href="{{ route('newregis.showall', $product->id) }}"
                                                     class="inline-flex items-center justify-center p-2 rounded-full text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200"
                                                     title="ดูรายละเอียด">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"

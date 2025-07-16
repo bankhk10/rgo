@@ -125,6 +125,12 @@
                                 </select>
                             </div>
                             <div>
+                                <p class="font-semibold text-indigo-600 mb-1">ชื่อผู้ผลิตและแหล่งผลิต</p>
+                                <input type="text" name="manufacturer"
+                                    class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1" placeholder="กรอกชื่อผู้ผลิตและแหล่งผลิต"
+                                    value="{{ $drug->manufacturer }}">
+                            </div>
+                            <div>
                                 <p class="font-semibold text-indigo-600 mb-1">ชื่อผู้จำหน่าย</p>
                                 <select
                                     class="w-5/6 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
