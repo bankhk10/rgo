@@ -147,8 +147,6 @@
                                 <th class="py-4 px-8">เลขที่ทะเบียน</th>
                                 <th class="py-4 px-8">วันหมดอายุ</th>
                                 <th class="py-4 px-8">สถานะ</th>
-                                {{-- <th class="py-4 px-8">สถานะความคืบหน้า</th> --}}
-                                {{-- <th class="py-4 px-4 text-center">สถานะ</th> --}}
                                 <th class="py-4 px-8 rounded-tr-2xl text-center">รายละเอียด</th>
                             </tr>
                         </thead>
@@ -184,35 +182,6 @@
                                             {{ $statusText }}
                                         </span>
                                     </td>
-
-                                    {{-- <td class="py-4 px-8">
-                                        @if ($product->progress >= 100)
-                                            @php
-                                                $statusClass = '';
-                                                $statusText = $product->status;
-
-                                                if ($statusText == 'หมดอายุ') {
-                                                    $statusClass =
-                                                        'inline-block rounded-full px-3 py-1 font-semibold text-white bg-red-500';
-                                                } elseif ($statusText == 'ใกล้หมดอายุ') {
-                                                    $statusClass =
-                                                        'inline-block rounded-full px-3 py-1 font-semibold text-gray-600 bg-yellow-300';
-                                                } else {
-                                                    $statusClass =
-                                                        'inline-block rounded-full px-3 py-1 font-semibold text-white bg-green-500'; // สถานะปกติ เช่น 'ใช้งานอยู่'
-                                                }
-                                            @endphp
-                                            <span class="{{ $statusClass }}">
-                                                {{ $statusText }}
-                                            </span>
-                                        @endif
-                                        @if ($product->progress < 100)
-                                            <span
-                                                class="inline-block rounded-full px-3 py-1 font-semibold text-white bg-blue-500">
-                                                {{ 'ขึ้นทะเบียนใหม่' }}
-                                            </span>
-                                        @endif
-                                    </td> --}}
                                     <td class="py-4 px-12 mx-auto">
                                         {{-- ปุ่มดูรายละเอียด --}}
                                         <div class="flex items-center gap-3 justify-center">
