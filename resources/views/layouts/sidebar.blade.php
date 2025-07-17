@@ -41,7 +41,7 @@
                     </a>
                 </li>
             @endcanany
-            {{-- @canany('RegisterAll read', 'RegisterAll create', 'RegisterAll update', 'RegisterAll delete') --}}
+            @canany('RegisterAll read', 'RegisterAll create', 'RegisterAll update', 'RegisterAll delete')
             <li>
                 <a href="{{ route('newregis.productall') }}" class="side-menu" id="menu-newregisall">
                     <div class="side-menu__icon">
@@ -56,7 +56,7 @@
                     <div class="side-menu__title">ทะเบียนสินค้าทั้งหมด</div>
                 </a>
             </li>
-            {{-- @endcanany --}}
+            @endcanany
 
             @canany('RegisterNew read', 'RegisterNew create', 'RegisterNew update', 'RegisterNew delete')
                 <li>

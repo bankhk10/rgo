@@ -124,8 +124,8 @@
                 label: 'จำนวน',
                 data: [{{ $totalRegistrations }}, {{ $soonRegistrations }}, {{ $expiredRegistrations }}],
                 backgroundColor: [
-                    'rgba(7, 115, 44, 0.8)', // สีเขียว (ทั้งหมด)
-                    'rgba(230, 223, 8, 1)', // สีเหลือง (ใกล้หมดอายุ)
+                     'rgba(31, 100, 66, 1)', // สีเขียว (ทั้งหมด)
+                    'rgba(255, 255, 0, 1)', // สีเหลือง (ใกล้หมดอายุ)
                     'rgba(254, 2, 2, 1)' // สีแดง (หมดอายุ)
                 ],
                 hoverOffset: 4
@@ -161,8 +161,8 @@
                 label: 'จำนวน',
                 data: [{{ $totalProduct }}, {{ $soonProduct }}, {{ $expiredProduct }}],
                 backgroundColor: [
-                    'rgba(7, 115, 44, 0.8)', // สีเขียว (ทั้งหมด)
-                    'rgba(230, 223, 8, 1)', // สีเหลือง (ใกล้หมดอายุ)
+                     'rgba(31, 100, 66, 1)', // สีเขียว (ทั้งหมด)
+                    'rgba(255, 255, 0, 1)', // สีเหลือง (ใกล้หมดอายุ)
                     'rgba(254, 2, 2, 1)' // สีแดง (หมดอายุ)
                 ],
                 hoverOffset: 4
@@ -198,8 +198,8 @@
                 label: 'จำนวน',
                 data: [{{ $totalNewRegistrations }}, {{ $betweenNewRegistrations }}],
                 backgroundColor: [
-                    'rgba(7, 115, 44, 0.8)', // สีเขียว (ทั้งหมด)
-                    'rgba(230, 223, 8, 1)', // สีเหลือง (ใกล้หมดอายุ)
+                     'rgba(31, 100, 66, 1)', // สีเขียว (ทั้งหมด)
+                    'rgba(255, 255, 0, 1)', // สีเหลือง (ใกล้หมดอายุ)
                     'rgba(254, 2, 2, 1)' // สีแดง (หมดอายุ)
                 ],
                 hoverOffset: 4

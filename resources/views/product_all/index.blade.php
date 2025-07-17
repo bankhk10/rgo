@@ -185,7 +185,7 @@
                                     <td class="py-4 px-12 mx-auto">
                                         {{-- ปุ่มดูรายละเอียด --}}
                                         <div class="flex items-center gap-3 justify-center">
-                                            @can('RegisterNew read')
+                                            @can('RegisterAll read')
                                                 <a href="{{ route('newregis.showall', $product->id) }}"
                                                     class="inline-flex items-center justify-center p-2 rounded-full text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200"
                                                     title="ดูรายละเอียด">
@@ -199,7 +199,7 @@
                                                     </svg>
                                                 </a>
                                             @endcan
-                                            @can('RegisterNew update')
+                                            @can('RegisterAll update')
                                                 @php
                                                     $userDept = auth()->user()->department;
                                                     $deptMap = [
@@ -250,7 +250,7 @@
                                                     </svg>
                                                 </a>
                                             @endcan --}}
-                                            @can('RegisterNew delete')
+                                            @can('RegisterAll delete')
                                                 <button onclick="confirmDelete({{ $product->id }})"
                                                     class="inline-flex items-center justify-center p-2 rounded-full text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all duration-200"
                                                     title="ลบ">

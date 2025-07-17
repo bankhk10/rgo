@@ -438,13 +438,13 @@
                                                                 @endphp
                                                                 <div class="flex flex-col gap-1">
                                                                     <div class="flex items-center space-x-3">
-                                                                        <input type="checkbox" name="sub_steps[]"
+                                                                        <input disabled type="checkbox" name="sub_steps[]"
                                                                             id="substep_{{ $stepNumber }}_{{ $checkboxIndex }}"
                                                                             value="{{ $checkboxIndex }}"
                                                                             {{ $isChecked ? 'checked' : '' }}
                                                                             {{ !$isEditable || (!auth()->user()->hasRole('admin') && !auth()->user()->hasRole('manager') && $dept !== $mappedUserDept) }}
                                                                             class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-                                                                            onchange="toggleInput({{ $stepNumber }}, {{ $checkboxIndex }})">
+                                                                            onchange="toggleInput({{ $stepNumber }}, {{ $checkboxIndex }})" >
                                                                         <label
                                                                             for="substep_{{ $stepNumber }}_{{ $checkboxIndex }}"
                                                                             class="text-sm text-gray-800">{{ $label }}</label>
@@ -455,7 +455,7 @@
                                                                             class="ml-6 mt-2 space-x-4"
                                                                             style="{{ $isChecked ? '' : 'display: none;' }}">
                                                                             <label class="inline-flex items-center">
-                                                                                <input type="radio"
+                                                                                <input disabled type="radio"
                                                                                     class="form-radio text-green-500 w-5 h-5"
                                                                                     name="sub_step_notes[{{ $checkboxIndex }}]"
                                                                                     value="no"
