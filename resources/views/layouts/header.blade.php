@@ -1,4 +1,4 @@
-<header  id="main-header"  class="flex justify-between items-center py-3 px-6 bg-white-100 sticky top-0 z-50 ">
+<header id="main-header" class="flex justify-between items-center py-3 px-6 bg-white-100 sticky top-0 z-50 ">
     <div class="flex items-center">
         {{-- <img src="/images/your_logo.png" alt="Logo" class="h-8 w-auto mr-4"> --}}
 
@@ -12,8 +12,19 @@
 
     <div class="flex items-center space-x-4">
         @if (auth()->user())
-            <span class="text-gray-700 text-lg hidden md:block">
-                คุณ  {{ auth()->user()->name }}
+            @php
+                $userDept = auth()->user()->department;
+                $deptMap = [
+                    'InternationalProcurement' => 'จัดซื้อต่างประเทศ',
+                    'SalesDepartment' => 'ฝ่ายขาย',
+                    'ResearchAndDevelopment' => 'วิจัยและพัฒนา',
+                    'Academic' => 'แผนกวิชาการ',
+                    'Registration' => 'แผนกทะเบียน',
+                ];
+                $mappedDept = $deptMap[$userDept] ?? $userDept;
+            @endphp
+            <span class="text-white text-lg hidden md:block">
+                คุณ {{ auth()->user()->name }} {{ '[ '. $mappedDept .' ]' }}
                 {{-- {{ auth()->user()->prefix }} {{ auth()->user()->first_name }} {{ auth()->user()->last_name }} --}}
             </span>
         @endif
