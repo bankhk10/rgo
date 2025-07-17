@@ -135,19 +135,19 @@ class ChemicalRegistrationController extends Controller
     {
         // dd($request->all());
         $validatedData = $request->validate([
-            'chemical_imports_id' => 'nullable|integer', // Changed from string to integer based on schema
+            'chemical_imports_id' => 'required|integer', // Changed from string to integer based on schema
             'registration_number' => 'nullable|string',
             'registration_number_pass' => 'nullable|string',
             'registration_expiry_date' => 'nullable|date',
             'chemical_name_th' => 'nullable|string',
             'chemical_name_en' => 'nullable|string',
             'composition' => 'nullable|string', // text field can be validated as string
-            'manufacturer' => 'nullable|string',
-            'registrant' => 'nullable|string',
-            'registration_type' => 'nullable|string',
-            'importer' => 'nullable|string',
-            'distributor' => 'nullable|string',
-            'trade_name' => 'nullable|string',
+            'manufacturer' => 'required|string',
+            'registrant' => 'required|string',
+            'registration_type' => 'required|string',
+            'importer' => 'required|string',
+            'distributor' => 'required|string',
+            'trade_name' => 'required|string',
             'trade_name_at' => 'nullable|string',
             'production_license_number' => 'nullable|string',
             'production_license_expiry' => 'nullable|date',
@@ -159,17 +159,17 @@ class ChemicalRegistrationController extends Controller
             'expired_at' => 'nullable|date',
             'old_license_quantity' => 'nullable|string',
             'packaging_size' => 'nullable|string',
-            'formula_of_ratio' => 'nullable|string',
-            'type_registration' => 'nullable|string',
+            'formula_of_ratio' => 'required|string',
+            'type_registration' => 'required|string',
             'common_name' => 'nullable|string',
             'packaging_size_details' => 'nullable|string',
-            'type_of_use' => 'nullable|string',
+            'type_of_use' => 'required|string',
             'date_submit_request' => 'nullable|date',
             'request_number_1' => 'nullable|string',
             'request_number_phase_1' => 'nullable|string',
             'date_request_phase_3' => 'nullable|date',
             'request_number_phase_3' => 'nullable|string',
-            'name_position' => 'nullable|string',
+            'name_position' => 'required|string',
             'remarks' => 'nullable|string', // text field can be validated as string
             'new_or_old' => 'nullable|boolean', // boolean field
             'step' => 'nullable|string',
@@ -301,21 +301,20 @@ class ChemicalRegistrationController extends Controller
     {
         try {
             $drug = ChemicalRegistration::findOrFail($id);
-
-            $rules = [
-                'chemical_imports_id' => 'nullable|integer',
+            $validatedData = $request->validate([
+                'chemical_imports_id' => 'required|integer', // ตัวอย่าง: ฟิลด์นี้ถูกกำหนดให้ required
                 'registration_number' => 'nullable|string',
                 'registration_number_pass' => 'nullable|string',
                 'registration_expiry_date' => 'nullable|date',
                 'chemical_name_th' => 'nullable|string',
                 'chemical_name_en' => 'nullable|string',
                 'composition' => 'nullable|string',
-                'manufacturer' => 'nullable|string',
-                'registrant' => 'nullable|string',
-                'registration_type' => 'nullable|string',
-                'importer' => 'nullable|string',
-                'distributor' => 'nullable|string',
-                'trade_name' => 'nullable|string',
+                'manufacturer' => 'required|string', // ตัวอย่าง: ฟิลด์นี้ถูกกำหนดให้ required
+                'registrant' => 'required|string', // ตัวอย่าง: ฟิลด์นี้ถูกกำหนดให้ required
+                'registration_type' => 'required|string', // ตัวอย่าง: ฟิลด์นี้ถูกกำหนดให้ required
+                'importer' => 'required|string', // ตัวอย่าง: ฟิลด์นี้ถูกกำหนดให้ required
+                'distributor' => 'required|string', // ตัวอย่าง: ฟิลด์นี้ถูกกำหนดให้ required
+                'trade_name' => 'required|string', // ตัวอย่าง: ฟิลด์นี้ถูกกำหนดให้ required
                 'trade_name_at' => 'nullable|string',
                 'production_license_number' => 'nullable|string',
                 'production_license_expiry' => 'nullable|date',
@@ -327,17 +326,17 @@ class ChemicalRegistrationController extends Controller
                 'expired_at' => 'nullable|date',
                 'old_license_quantity' => 'nullable|string',
                 'packaging_size' => 'nullable|string',
-                'formula_of_ratio' => 'nullable|string',
+                'formula_of_ratio' => 'required|string', // ตัวอย่าง: ฟิลด์นี้ถูกกำหนดให้ required
                 'type_registration' => 'nullable|string',
                 'common_name' => 'nullable|string',
                 'packaging_size_details' => 'nullable|string',
-                'type_of_use' => 'nullable|string',
+                'type_of_use' => 'required|string', // ตัวอย่าง: ฟิลด์นี้ถูกกำหนดให้ required
                 'date_submit_request' => 'nullable|date',
                 'request_number_1' => 'nullable|string',
                 'request_number_phase_1' => 'nullable|string',
                 'date_request_phase_3' => 'nullable|date',
                 'request_number_phase_3' => 'nullable|string',
-                'name_position' => 'nullable|string',
+                'name_position' => 'required|string', // ตัวอย่าง: ฟิลด์นี้ถูกกำหนดให้ required
                 'remarks' => 'nullable|string',
                 'new_or_old' => 'nullable|boolean',
                 'step' => 'nullable|string',
@@ -354,9 +353,7 @@ class ChemicalRegistrationController extends Controller
                 'sub_progress' => 'nullable|numeric',
                 'created_by' => 'nullable|string',
                 'updated_by' => 'nullable|string',
-            ];
-
-            $validatedData = $request->validate($rules);
+            ]);
 
             // ตั้งค่าเพิ่มเติม (หากมีเลขทะเบียนให้ถือว่าเป็นของเก่า)
             if (!empty($validatedData['registration_number'])) {
@@ -367,9 +364,9 @@ class ChemicalRegistrationController extends Controller
             $drug->save();
 
             return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จ');
-        } catch (\Throwable $th) {
-            // Log::error('Update error: ' . $th->getMessage());
-            return redirect()->back()->with('error', 'เกิดข้อผิดพลาด');
+        } catch (\Exception $e) {
+            // ในกรณีที่เกิดข้อผิดพลาดอื่นๆ ที่ไม่ใช่ validation error
+            return redirect()->back()->withInput()->withErrors(['error' => 'เกิดข้อผิดพลาดในการบันทึกข้อมูล: ' . $e->getMessage()]);
         }
     }
 
@@ -392,7 +389,7 @@ class ChemicalRegistrationController extends Controller
 
             return redirect()->route('newregis.index')->with('success', 'ลบข้อมูลเรียบร้อยแล้ว');
         } catch (\Exception $e) {
-            \Log::error("Error deleting chemical registration: " . $e->getMessage());
+            // \Log::error("Error deleting chemical registration: " . $e->getMessage());
             return redirect()->back()->with('error', 'เกิดข้อผิดพลาดในการลบข้อมูล');
         }
     }
@@ -710,19 +707,19 @@ class ChemicalRegistrationController extends Controller
             $drug = ChemicalRegistration::findOrFail($id);
 
             $rules = [
-                'chemical_imports_id' => 'nullable|integer',
+                'chemical_imports_id' => 'required|integer',
                 'registration_number' => 'nullable|string',
                 'registration_number_pass' => 'nullable|string',
                 'registration_expiry_date' => 'nullable|date',
                 'chemical_name_th' => 'nullable|string',
                 'chemical_name_en' => 'nullable|string',
                 'composition' => 'nullable|string',
-                'manufacturer' => 'nullable|string',
-                'registrant' => 'nullable|string',
-                'registration_type' => 'nullable|string',
-                'importer' => 'nullable|string',
-                'distributor' => 'nullable|string',
-                'trade_name' => 'nullable|string',
+                'manufacturer' => 'required|string',
+                'registrant' => 'required|string',
+                'registration_type' => 'required|string',
+                'importer' => 'required|string',
+                'distributor' => 'required|string',
+                'trade_name' => 'required|string',
                 'trade_name_at' => 'nullable|string',
                 'production_license_number' => 'nullable|string',
                 'production_license_expiry' => 'nullable|date',
@@ -734,17 +731,17 @@ class ChemicalRegistrationController extends Controller
                 'expired_at' => 'nullable|date',
                 'old_license_quantity' => 'nullable|string',
                 'packaging_size' => 'nullable|string',
-                'formula_of_ratio' => 'nullable|string',
+                'formula_of_ratio' => 'required|string',
                 'type_registration' => 'nullable|string',
                 'common_name' => 'nullable|string',
                 'packaging_size_details' => 'nullable|string',
-                'type_of_use' => 'nullable|string',
+                'type_of_use' => 'required|string',
                 'date_submit_request' => 'nullable|date',
                 'request_number_1' => 'nullable|string',
                 'request_number_phase_1' => 'nullable|string',
                 'date_request_phase_3' => 'nullable|date',
                 'request_number_phase_3' => 'nullable|string',
-                'name_position' => 'nullable|string',
+                'name_position' => 'required|string',
                 'remarks' => 'nullable|string',
                 'new_or_old' => 'nullable|boolean',
                 'step' => 'nullable|string',

@@ -15,22 +15,27 @@
                 </h3>
                 <div class="grid grid-cols-2 md:grid-cols-2 gap-6 mt-4">
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อสามัญ</label>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อสามัญ
+                            <span class="text-red-500"> *</span>
+                        </label>
                         <input type="text" id="productSearch"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="พิมพ์ชื่อสามัญ..." oninput="autocompleteSearch(this.value)"
-                            autocomplete="off" required/>
+                            autocomplete="off" />
                         <ul id="autocomplete-list"
                             class="absolute z-10 bg-white border w-80 rounded-2xl shadow max-h-60 overflow-y-auto hidden">
                         </ul>
                         <input type="hidden" id="hazardous_name_th" name="chemical_name_th" />
                         <input type="hidden" id="formulation_ratio" name="common_name" />
                         <input type="hidden" id="chemical_imports_id" name="chemical_imports_id" />
+                        @error('chemical_imports_id')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div>
-                        <label
-                            class="mx-3 text-base block text-gray-700 mb-1 mt-3">สูตรอัตรส่วนผสมของสารสำคัญและลักษณะ</label>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">สูตรอัตรส่วนผสมของสารสำคัญและลักษณะ
+                            <span class="text-red-500"> *</span></label>
                         <input type="text"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                             name="formula_of_ratio" value="{{ old('formula_of_ratio') }}" />
@@ -40,7 +45,8 @@
                     </div>
 
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ผู้ขอขึ้นทะเบียน</label>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ผู้ขอขึ้นทะเบียน<span
+                                class="text-red-500"> *</span></label>
                         <div class="dropdown" id="registrantDropdown">
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="registrantBtn">--
                                 เลือกผู้ขอขึ้นทะเบียน --</div>
@@ -62,7 +68,8 @@
                     </div>
 
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชนิดทะเบียน</label>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชนิดทะเบียน <span
+                                class="text-red-500"> *</span></label>
                         <div class="dropdown" id="typeRegistrationDropdown">
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="typeRegistrationBtn">--
                                 เลือกชนิดทะเบียน --</div>
@@ -80,7 +87,8 @@
                     </div>
 
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ประเภททะเบียน</label>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ประเภททะเบียน <span
+                                class="text-red-500"> *</span></label>
                         <div class="dropdown" id="registrationTypeDropdown">
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="registrationTypeBtn">--
                                 เลือกประเภททะเบียน --</div>
@@ -100,7 +108,8 @@
                     </div>
 
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อการค้า</label>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อการค้า <span
+                                class="text-red-500"> *</span></label>
                         <input type="text"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                             name="trade_name" value="{{ old('trade_name') }}" />
@@ -110,7 +119,8 @@
                     </div>
 
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อการที่</label>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อการค้าที่ <span
+                                class="text-red-500"> *</span></label>
                         <div class="dropdown" id="namePositionDropdown">
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="namePositionBtn">--
                                 เลือกชื่อการที่ --</div>
@@ -131,7 +141,8 @@
                     </div>
 
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อผู้นำเข้า</label>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อผู้นำเข้า <span
+                                class="text-red-500"> *</span></label>
                         <div class="dropdown" id="importerDropdown">
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="importerBtn">--
                                 เลือกผู้นำเข้า --</div>
@@ -152,7 +163,8 @@
                     </div>
 
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อผู้จำหน่าย</label>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อผู้จำหน่าย <span
+                                class="text-red-500"> *</span></label>
                         <div class="dropdown" id="distributorDropdown">
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="distributorBtn">--
                                 เลือกผู้จำหน่าย --</div>
@@ -172,7 +184,8 @@
                     </div>
 
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อผู้ผลิตและแหล่งผลิต</label>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อผู้ผลิตและแหล่งผลิต <span
+                                class="text-red-500"> *</span></label>
                         <input type="text"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                             name="manufacturer" value="{{ old('manufacturer') }}" />
@@ -182,7 +195,8 @@
                     </div>
 
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ประเภทของการใช้</label>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ประเภทของการใช้ <span
+                                class="text-red-500"> *</span></label>
                         <div class="dropdown" id="typeOfUseDropdown">
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="typeOfUseBtn">--
                                 เลือกประเภทของการใช้ --</div>

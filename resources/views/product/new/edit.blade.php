@@ -7,6 +7,37 @@
             <div class="bg-white rounded-2xl overflow-hidden shadow-lg p-8 border border-gray-200">
                 {{-- รายละเอียดข้อมูลยา --}}
                 @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('manager'))
+
+                    @if ($errors->any())
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
+                            role="alert">
+                            <strong class="font-bold">เกิดข้อผิดพลาด!</strong>
+                            <span class="block sm:inline">โปรดตรวจสอบข้อมูลที่คุณกรอกอีกครั้ง</span>
+                            <ul class="mt-2 list-disc list-inside">
+                                {{-- วนลูปแสดงข้อความผิดพลาดทั้งหมดจาก Laravel Validator --}}
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    {{-- ส่วนนี้สำหรับข้อผิดพลาดทั่วไปที่มาจาก Controller's catch block (เช่น database error) --}}
+                    @if (session('error'))
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
+                            role="alert">
+                            <span class="block sm:inline">{{ session('error') }}</span>
+                        </div>
+                    @endif
+
+                    {{-- เพื่อแสดงข้อผิดพลาดที่ส่งมาจาก catch block เช่น 'error' => 'เกิดข้อผิดพลาดในการบันทึกข้อมูล: ...' --}}
+                    @if (session('error'))
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
+                            role="alert">
+                            <span class="block sm:inline">{{ session('error') }}</span>
+                        </div>
+                    @endif
+
                     <form method="POST" action="{{ route('newregis.update', $drug->id) }}">
                         <div class="grid grid-cols-3 gap-6 text-lg text-gray-700 ml-16">
                             <div>
@@ -27,14 +58,17 @@
                                 <p class="font-semibold text-indigo-600 mb-1">ชื่อสามัญ</p>
                                 <input type="text" name="common_name"
                                     class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1 bg-gray-200"
-                                    placeholder="กรอกชื่อสามัญ" value="{{ $drug->chemicalImport->chemical_name_th ?? '' }}"
-                                    readonly>
+                                    placeholder="กรอกชื่อสามัญ"
+                                    value="{{ $drug->chemicalImport->chemical_name_th ?? '' }}" readonly>
                             </div>
                             <div>
-                                <p class="font-semibold text-indigo-600 mb-1">สูตรอัตรส่วนผสมสารสำคัญและลักษณะ</p>
+                                <p class="font-semibold text-indigo-600 mb-1">สูตรอัตรส่วนผสมของสารสำคัญและลักษณะ *</p>
                                 <input type="text" name="formula_of_ratio"
                                     class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1"
                                     placeholder="กรอกสูตรอัตรส่วนผสมของ..." value="{{ $drug->formula_of_ratio }}">
+                                @error('formula_of_ratio')
+                                    <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
 
                             <div>
@@ -50,6 +84,9 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                @error('registrant')
+                                    <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div>
                                 <p class="font-semibold text-indigo-600 mb-1">ชนิดทะเบียน</p>
@@ -91,6 +128,9 @@
                                 <input type="text" name="trade_name"
                                     class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1" placeholder="กรอกชื่อการค้า"
                                     value="{{ $drug->trade_name }}">
+                                @error('trade_name')
+                                    <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div>
                                 <p class="font-semibold text-indigo-600 mb-1">ชื่อการที่</p>
@@ -127,8 +167,8 @@
                             <div>
                                 <p class="font-semibold text-indigo-600 mb-1">ชื่อผู้ผลิตและแหล่งผลิต</p>
                                 <input type="text" name="manufacturer"
-                                    class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1" placeholder="กรอกชื่อผู้ผลิตและแหล่งผลิต"
-                                    value="{{ $drug->manufacturer }}">
+                                    class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1"
+                                    placeholder="กรอกชื่อผู้ผลิตและแหล่งผลิต" value="{{ $drug->manufacturer }}">
                             </div>
                             <div>
                                 <p class="font-semibold text-indigo-600 mb-1">ชื่อผู้จำหน่าย</p>
@@ -237,6 +277,10 @@
                         </div>
                     </form>
                 @endif
+
+
+
+
                 {{-- ไทม์ไลน์การขึ้นทะเบียน --}}
 
                 <div class="mt-8">
