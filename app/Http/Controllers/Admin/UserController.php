@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Company;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Log;
@@ -21,10 +22,10 @@ class UserController extends Controller
      */
     function __construct()
     {
-        $this->middleware('role_or_permission:User read|User create|User update|User delete', ['only' => ['index', 'show']]);
-        $this->middleware('role_or_permission:User create', ['only' => ['create', 'store']]);
-        $this->middleware('role_or_permission:User update', ['only' => ['edit', 'update']]);
-        $this->middleware('role_or_permission:User delete', ['only' => ['destroy']]);
+        // $this->middleware('role_or_permission:User read|User create|User update|User delete', ['only' => ['index', 'show']]);
+        // $this->middleware('role_or_permission:User create', ['only' => ['create', 'store']]);
+        // $this->middleware('role_or_permission:User update', ['only' => ['edit', 'update']]);
+        // $this->middleware('role_or_permission:User delete', ['only' => ['destroy']]);
     }
 
     /**
@@ -46,7 +47,8 @@ class UserController extends Controller
     public function create()
     {
         $roles = Role::get();
-        return view('setting.user.new', ['roles' => $roles]);
+        $companies = Company::get();
+        return view('setting.user.new', ['roles' => $roles, 'companies' => $companies]);
     }
 
     /**
@@ -114,7 +116,8 @@ class UserController extends Controller
     {
         $role = Role::get();
         $user->roles;
-        return view('setting.user.edit', ['user' => $user, 'roles' => $role]);
+        $companies = Company::get();
+        return view('setting.user.edit', ['user' => $user, 'roles' => $role, 'companies' => $companies]);
     }
 
     /**

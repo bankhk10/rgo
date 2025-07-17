@@ -427,14 +427,14 @@
                                     </h4>
 
                                     {{-- แถบเปอร์เซ็นต์ --}}
-                                    <div class="mb-4">
+                                    {{-- <div class="mb-4">
                                         <div class="w-full bg-gray-200 rounded-full h-2.5">
                                             <div class="h-2.5 rounded-full @if ($percent < 25) bg-red-500 @elseif ($percent < 75) bg-yellow-500 @else bg-green-500 @endif"
                                                 style="width: {{ $percent }}%">
                                             </div>
                                         </div>
                                         <div class="text-xs text-gray-500 text-right mt-1">{{ $percent }}%</div>
-                                    </div>
+                                    </div> --}}
 
                                     {{-- รายการ checkbox --}}
                                     <div class="space-y-6">

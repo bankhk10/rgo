@@ -245,12 +245,12 @@
             <div class="flex justify-center gap-4 pt-4">
                 <a href="{{ route('newregis.index') }}"
                     class="bg-gray-500 hover:bg-gray-500 text-white font-bold py-2 px-6 rounded-lg shadow-md flex items-center justify-center">
-                    ยกเลิก
+                    ย้อนกลับ
                 </a>
-                <button type="submit"
+                {{-- <button type="submit"
                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg shadow-md">
                     บันทึก
-                </button>
+                </button> --}}
             </div>
         </form>
     </div>

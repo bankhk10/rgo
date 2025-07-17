@@ -62,7 +62,7 @@
                         @enderror
                     </div>
 
-                    <div>
+                    {{-- <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">รหัสพนักงาน</label>
                         <input type="text" name="employee_id" value="{{ old('employee_id', $user->employee_id) }}"
                             placeholder="ใส่รหัสพนักงาน"
@@ -70,12 +70,29 @@
                         @error('employee_id')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
+                    </div> --}}
+
+                    <div class="dropdown" id="affiliation">
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">สังกัดบริษัท</label>
+                        <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="affiliationBtn">--
+                            เลือกสังกัดบริษัท
+                            --</div>
+                        <div class="dropdown-list" id="affiliationList">
+                            <div class="dropdown-item text-gray-500" data-value="">-- เลือกสังกัดบริษัท --</div>
+                            @foreach ($companies as $companie)
+                                <div class="dropdown-item" data-value="{{ $companie->id }}">
+                                    {{ $companie->full_name }}
+                                </div>
+                            @endforeach
+                        </div>
+                        <input type="hidden" name="employee_id" id="affiliationInput"
+                            value="{{ old('affiliation_id') }}">
                     </div>
 
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เบอร์โทรศัพท์</label>
-                        <input type="number" name="phone_number" value="{{ old('phone_number', $user->phone_number) }}"
-                            placeholder="ใส่เบอร์โทรศัพท์"
+                        <input type="number" name="phone_number"
+                            value="{{ old('phone_number', $user->phone_number) }}" placeholder="ใส่เบอร์โทรศัพท์"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('phone_number')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
@@ -316,6 +333,10 @@
             // Setup for 'employment_status' dropdown
             setupDropdown('statusBtn', 'statusList', 'statusInput',
                 "{{ old('employment_status', $user->employment_status) }}");
+
+            // สังกัดบริษัท
+            setupDropdown('affiliationBtn', 'affiliationList', 'affiliationInput',
+                "{{ old('affiliation_id', $user->employee_id) }}");
 
             setupDropdown('prefixBtn', 'prefixList', 'prefixInput', "{{ old('prefix', $user->prefix) }}");
 
