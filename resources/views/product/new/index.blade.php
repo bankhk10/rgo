@@ -154,7 +154,7 @@
                                 <th class="py-4 px-8">ชื่อสามัญ</th>
                                 <th class="py-4 px-8">เลขที่ทะเบียน</th>
                                 <th class="py-4 px-8">วันที่ขอขึ้นทะเบียน</th>
-                                {{-- <th class="py-4 px-8">สถานะความคืบหน้า</th> --}}
+                                <th class="py-4 px-8">สถานะความคืบหน้า</th>
                                 <th class="py-4 px-4 text-center">สถานะ</th>
                                 <th class="py-4 px-8 rounded-tr-2xl text-center">รายละเอียด</th>
                             </tr>
@@ -171,7 +171,7 @@
                                     <td class="py-4 px-8">
                                         {{ \Carbon\Carbon::parse($product->date_submit_request)->addYears(543)->format('d/m/Y') }}
                                     </td>
-                                    {{-- <td class="py-4 px-8">
+                                    <td class="py-4 px-8">
                                         @php
                                             $stepTitles = [
                                                 1 => 'คณะ PDC อนุมัติให้ดำเนินการขึ้นทะเบียน',
@@ -184,40 +184,73 @@
                                                 8 => 'ยื่นขอออกทะเบียน',
                                             ];
 
-                                            $currentStep = $product->current_step_number ?? 1;
-                                            if ($currentStep == 1) {
-                                                $calculatedProgress = 12.5;
-                                            } elseif ($currentStep == 2) {
-                                                $calculatedProgress = 25;
-                                            } elseif ($currentStep == 3) {
-                                                $calculatedProgress = 37.5;
-                                            } elseif ($currentStep == 4) {
-                                                $calculatedProgress = 50;
-                                            } elseif ($currentStep == 5) {
-                                                $calculatedProgress = 62.5;
-                                            } elseif ($currentStep == 6) {
-                                                $calculatedProgress = 75;
-                                            } elseif ($currentStep == 7) {
-                                                $calculatedProgress = 87.5;
-                                            } elseif ($currentStep == 8) {
-                                                $calculatedProgress = 100;
-                                            } else {
-                                                $calculatedProgress = 0;
-                                            }
 
+                                            $show_step_number = 0;
+                                            $number_step_number = 0;
                                             if (isset($product->step_summary[$product->current_step_number])) {
                                                 $summary = $product->step_summary[$product->current_step_number];
+                                                if ($summary->step_number == 1) {
+                                                    $number_step_number = 1;
+                                                    if ($summary->unchecked_count >= 12 ) {
+                                                        $show_step_number = 0;
+                                                    } else {
+                                                        $show_step_number = 12.5;
+                                                    }
+                                                } elseif ($summary->step_number == 2) {
+                                                    $number_step_number = 2;
+                                                    $show_step_number = 25;
+                                                } elseif ($summary->step_number == 3) {
+                                                    $number_step_number = 3;
+                                                    $show_step_number = 37.5;
+                                                } elseif ($summary->step_number == 4) {
+                                                    if ($summary->unchecked_count == 1) {
+                                                        $number_step_number = 5;
+                                                        $show_step_number = 62.5;
+                                                    } else {
+                                                        $number_step_number = 4;
+                                                        $show_step_number = 50;
+                                                    }
+                                                } elseif ($summary->step_number == 5) {
+                                                    if ($summary->unchecked_count == 2) {
+                                                        $number_step_number = 6;
+                                                        $show_step_number = 75;
+                                                    } else {
+                                                        $number_step_number = 5;
+                                                        $show_step_number = 62.5;
+                                                    }
+                                                } elseif ($summary->step_number == 6) {
+                                                    if ($summary->unchecked_count == 2) {
+                                                        $number_step_number = 7;
+                                                        $show_step_number = 87.5;
+                                                    } else {
+                                                        $number_step_number = 6;
+                                                        $show_step_number = 75;
+                                                    }
+                                                } elseif ($summary->step_number == 7) {
+                                                    $number_step_number = 7;
+                                                    $show_step_number = 87.5;
+                                                } else {
+                                                    $number_step_number = 8;
+                                                    if ($summary->unchecked_count == 0) {
+                                                        $show_step_number = 100;
+                                                    } else {
+                                                        $show_step_number = 90;
+                                                    }
+                                                }
                                             }
 
                                         @endphp
+                                        {{-- ชื่อขั้นตอน --}}
                                         <div class="text-center mb-2">
-                                            @if ($calculatedProgress >= 100)
+                                            {{-- {{ ' ขั้นตอน -  '.$number_step_number }}---
+                                            {{ ' สี -  ' .$show_step_number }} --}}
+                                            @if ($show_step_number >= 100)
                                                 <p class="text-green-600 font-semibold">สำเร็จ</p>
                                             @else
                                                 <div x-data="{ tooltip: false }" class="relative inline-block">
                                                     <p class="text-yellow-700 font-semibold cursor-pointer"
                                                         @mouseenter="tooltip = true" @mouseleave="tooltip = false">
-                                                        ขั้นตอนที่ {{ $currentStep }}
+                                                        ขั้นตอนที่ {{ $number_step_number }}
                                                     </p>
                                                     <div x-show="tooltip"
                                                         x-transition:enter="transition ease-out duration-200"
@@ -228,20 +261,21 @@
                                                         x-transition:leave-end="opacity-0 scale-90"
                                                         class="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none -translate-x-1/2 left-1/2 -top-10"
                                                         style="min-width: max-content;">
-                                                        {{ $stepTitles[$currentStep] ?? 'ไม่ทราบขั้นตอน' }}
+                                                        {{ $stepTitles[$number_step_number] ?? 'ไม่ทราบขั้นตอน' }}
                                                     </div>
                                                 </div>
                                             @endif
                                         </div>
+
+                                        {{-- แถบความคืบหน้า --}}
                                         <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
                                             <div class="h-2.5 bg-green-500"
-                                                style="width: {{ $calculatedProgress }}%;"></div>
+                                                style="width: {{ $show_step_number }}%;"></div>
                                         </div>
                                         <div class="text-xs text-gray-500 text-center mt-1">
-                                            {{ number_format($calculatedProgress, 1) }}%
+                                            {{ number_format($show_step_number, 1) }}%
                                         </div>
-                                    </td> --}}
-
+                                    </td>
                                     <td class="py-4 px-8">
                                         @if ($product->progress >= 100)
                                             @php
