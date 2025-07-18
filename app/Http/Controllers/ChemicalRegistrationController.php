@@ -8,6 +8,7 @@ use App\Models\DrugProgressStep; // Assuming this is the model for drug progress
 use Illuminate\Support\Facades\Log; // For logging errors
 use App\Models\Company;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 
 class ChemicalRegistrationController extends Controller
@@ -85,21 +86,48 @@ class ChemicalRegistrationController extends Controller
                 $product->status = 'ใช้งานอยู่';
             }
 
-            // 👇 คำนวณ progress จริงแบบ dynamic
+            // Progress จาก field ที่คำนวณไว้ใน DB (หรือจะคำนวณเองก็ได้)
             $product->progress = $product->calculated_progress;
 
-            // (ถ้าอยากเก็บ current_step_number ก็ได้)
-            // $product->current_step_number = DrugProgressStep::where('chemical_registrations_id', $product->id)
-            //     ->selectRaw('step_number, COUNT(*) as total, SUM(CASE WHEN checked_at IS NOT NULL THEN 1 ELSE 0 END) as done')
-            //     ->groupBy('step_number')
-            //     ->get()
-            //     ->filter(fn($step) => $step->total == $step->done)
-            //     ->pluck('step_number')
-            //     ->max() ?? 1;
+            // Step ปัจจุบัน (max step_number)
+            $product->current_step_number = DrugProgressStep::where('chemical_registrations_id', $product->id)
+                ->max('step_number');
+
+            // ดึงข้อมูล last_index, last_is_checked, unchecked_count สำหรับ step ล่าสุด
+            $stepSummary = DrugProgressStep::select([
+                'step_number',
+                DB::raw('MAX(sub_step_index) as last_index'),
+                DB::raw("
+                MAX(
+                    CASE
+                        WHEN sub_step_index = (
+                            SELECT MAX(sub_step_index)
+                            FROM drug_progress_steps d2
+                            WHERE d2.chemical_registrations_id = drug_progress_steps.chemical_registrations_id
+                              AND d2.step_number = drug_progress_steps.step_number
+                        )
+                        AND checked_at IS NOT NULL
+                    THEN 1 ELSE 0 END
+                ) as last_is_checked
+            "),
+                DB::raw('SUM(CASE WHEN checked_at IS NULL THEN 1 ELSE 0 END) as unchecked_count'),
+            ])
+                ->where('chemical_registrations_id', $product->id)
+                ->groupBy('step_number')
+                ->get()
+                ->keyBy('step_number');
+
+            // แปะข้อมูลสรุปให้ product
+            $product->step_summary = $stepSummary;
+
+            // Log::info($stepSummary);
+
 
             $product->current_step_number  = DrugProgressStep::where('chemical_registrations_id', $product->id)
                 ->max('step_number');
         }
+
+
 
         return view('product.new.index', [
             'total' => $total,
@@ -217,6 +245,7 @@ class ChemicalRegistrationController extends Controller
                 foreach ($subSteps as $label) {
                     DrugProgressStep::create([
                         'chemical_registrations_id' => $chemical_registration->id,
+                        'department' => $department,
                         'step_number' => $stepNumber,
                         'sub_step_index' => $subStepIndex,
                         'sub_step_label' => $label,
@@ -358,6 +387,7 @@ class ChemicalRegistrationController extends Controller
             // ตั้งค่าเพิ่มเติม (หากมีเลขทะเบียนให้ถือว่าเป็นของเก่า)
             if (!empty($validatedData['registration_number'])) {
                 $validatedData['new_or_old'] = false;
+                $validatedData['progress'] = 100;
             }
 
             $drug->fill($validatedData);
@@ -399,7 +429,6 @@ class ChemicalRegistrationController extends Controller
         $stepNumber = (int) $request->input('step_number');
         $selectedIndexes = $request->input('sub_steps', []);
         $notes = $request->input('sub_step_notes', []);
-
         // Raw structure (เหมือนเดิม)
         $rawStructure = [
             1 => [
@@ -456,12 +485,12 @@ class ChemicalRegistrationController extends Controller
                 ],
             ],
             6 => [
-                'แผนกวิชาการ' => ['ติดตามผลการทดลอง Eff', 'ผลการทดลอง PHI (ถ้ามี) จนอนุมัติ'],
                 'แผนกทะเบียน' => [
                     'รวบรวมข้อมูล',
                     ' ผล Eff +ผล PHI (ถ้ามี) ที่อนุมัติ',
                     ' เอกสารตามที่ DOA กำหนด และติดตามผล Phase III',
                 ],
+                'แผนกวิชาการ' => ['ติดตามผลการทดลอง Eff', 'ผลการทดลอง PHI (ถ้ามี) จนอนุมัติ'],
                 'จัดซื้อต่างประเทศ' => [
                     'ประสานขอเอกสารจากผู้ผลิตเพิ่มเติมในกรณีที่ผลพิจารณา Tox Phase III ไม่ผ่าน',
                 ],
@@ -481,6 +510,7 @@ class ChemicalRegistrationController extends Controller
                 ],
             ],
         ];
+
 
 
         $userDept = auth()->user()->department;
@@ -596,7 +626,6 @@ class ChemicalRegistrationController extends Controller
                 }
             }
         }
-
 
         return redirect()->back()->with('success', 'อัปเดตความคืบหน้าเรียบร้อยแล้ว');
     }

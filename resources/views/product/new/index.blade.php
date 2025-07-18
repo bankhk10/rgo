@@ -154,7 +154,7 @@
                                 <th class="py-4 px-8">ชื่อสามัญ</th>
                                 <th class="py-4 px-8">เลขที่ทะเบียน</th>
                                 <th class="py-4 px-8">วันที่ขอขึ้นทะเบียน</th>
-                                <th class="py-4 px-8">สถานะความคืบหน้า</th>
+                                {{-- <th class="py-4 px-8">สถานะความคืบหน้า</th> --}}
                                 <th class="py-4 px-4 text-center">สถานะ</th>
                                 <th class="py-4 px-8 rounded-tr-2xl text-center">รายละเอียด</th>
                             </tr>
@@ -171,7 +171,7 @@
                                     <td class="py-4 px-8">
                                         {{ \Carbon\Carbon::parse($product->date_submit_request)->addYears(543)->format('d/m/Y') }}
                                     </td>
-                                    <td class="py-4 px-8">
+                                    {{-- <td class="py-4 px-8">
                                         @php
                                             $stepTitles = [
                                                 1 => 'คณะ PDC อนุมัติให้ดำเนินการขึ้นทะเบียน',
@@ -205,8 +205,11 @@
                                                 $calculatedProgress = 0;
                                             }
 
+                                            if (isset($product->step_summary[$product->current_step_number])) {
+                                                $summary = $product->step_summary[$product->current_step_number];
+                                            }
+
                                         @endphp
-                                        {{-- ชื่อขั้นตอน --}}
                                         <div class="text-center mb-2">
                                             @if ($calculatedProgress >= 100)
                                                 <p class="text-green-600 font-semibold">สำเร็จ</p>
@@ -230,8 +233,6 @@
                                                 </div>
                                             @endif
                                         </div>
-
-                                        {{-- แถบความคืบหน้า --}}
                                         <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
                                             <div class="h-2.5 bg-green-500"
                                                 style="width: {{ $calculatedProgress }}%;"></div>
@@ -239,7 +240,8 @@
                                         <div class="text-xs text-gray-500 text-center mt-1">
                                             {{ number_format($calculatedProgress, 1) }}%
                                         </div>
-                                    </td>
+                                    </td> --}}
+
                                     <td class="py-4 px-8">
                                         @if ($product->progress >= 100)
                                             @php

@@ -178,7 +178,7 @@
 
 
                 {{-- สถานะความคืบหน้าโดยรวม --}}
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-lg text-gray-700 mt-6">
+                {{-- <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-lg text-gray-700 mt-6">
                     <div>
                         <p class="font-semibold text-indigo-600">สถานะความคืบหน้าโดยรวม:</p>
                         <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
@@ -193,7 +193,7 @@
                             {{ $drug->progress }}%
                         </div>
                     </div>
-                </div>
+                </div> --}}
                 @if ($step_number != 8)
                     <div class="mt-8">
                         @php
@@ -395,7 +395,7 @@
                                         </h4>
 
                                         {{-- แถบเปอร์เซ็นต์ --}}
-                                        <div class="mb-4">
+                                        {{-- <div class="mb-4">
                                             <div class="w-full bg-gray-200 rounded-full h-2.5">
                                                 <div class="h-2.5 rounded-full @if ($percent < 25) bg-red-500 @elseif ($percent < 75) bg-yellow-500 @else bg-green-500 @endif"
                                                     style="width: {{ $percent }}%">
@@ -403,7 +403,7 @@
                                             </div>
                                             <div class="text-xs text-gray-500 text-right mt-1">{{ $percent }}%
                                             </div>
-                                        </div>
+                                        </div> --}}
 
                                         {{-- รายการ checkbox --}}
                                         <div class="space-y-6">
