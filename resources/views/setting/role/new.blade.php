@@ -30,7 +30,7 @@
                                 <option value="head">หัวหน้า</option>
                                 <option value="staff">พนักงาน</option>
                             </select>
-                            แผนก
+                             <label class="text-xl text-gray-600 whitespace-nowrap">แผนก </label>
                             <select name="department" id="select_department"
                                 class="flex-1 min-w-[150px] p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 <option value="">-- เลือกแผนก --</option>

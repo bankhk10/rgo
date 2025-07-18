@@ -17,8 +17,8 @@
             {{-- สรุปสถานะทะเบียน --}}
 
             {{-- <div class="flex flex-row justify-around mb-10"> --}}
-                {{-- ทั้งหมด --}}
-                {{-- <a href="{{ route('newregis.index', array_merge(request()->except('status_filter', 'page'), ['page' => 1])) }}"
+            {{-- ทั้งหมด --}}
+            {{-- <a href="{{ route('newregis.index', array_merge(request()->except('status_filter', 'page'), ['page' => 1])) }}"
                     class="group h-full bg-gradient-to-br from-green-100 to-green-50 p-4 rounded-3xl text-center border-2 border-green-200 hover:scale-105 transition-all duration-300">
                     <div class="flex justify-center mb-2">
                         <div class="bg-green-200 rounded-full p-3 group-hover:bg-green-300 transition">
@@ -31,8 +31,8 @@
                     <h2 class="text-lg font-bold text-green-700 mb-1 tracking-wide">ทะเบียนทั้งหมด</h2>
                     <p class="text-4xl text-green-600 font-extrabold mb-1">{{ $total }}</p>
                 </a> --}}
-                {{-- ขึ้นทั้งหมด --}}
-                {{-- <a href="{{ route('newregis.index', array_merge(request()->except('status_filter', 'page'), ['status_filter' => 'new_all', 'page' => 1])) }}"
+            {{-- ขึ้นทั้งหมด --}}
+            {{-- <a href="{{ route('newregis.index', array_merge(request()->except('status_filter', 'page'), ['status_filter' => 'new_all', 'page' => 1])) }}"
                     class="group block h-full bg-gradient-to-br from-blue-200 to-blue-100 p-4 rounded-3xl text-center border-2 border-blue-400 hover:scale-105 transition-all duration-300">
                     <div class="flex justify-center mb-2">
                         <div class="bg-blue-300 rounded-full p-3 group-hover:bg-blue-400 transition">
@@ -46,8 +46,8 @@
                     <h2 class="text-lg font-bold text-blue-700 mb-1 tracking-wide">ขึ้นทะเบียนใหม่</h2>
                     <p class="text-2xl font-bold text-blue-600">{{ $totalNewRegistrations ?? 0 }}</p>
                 </a> --}}
-                {{-- อยู่ระหว่างดำเนินการ --}}
-                {{-- <a href="{{ route('newregis.index', array_merge(request()->except('status_filter', 'page'), ['status_filter' => 'soon_expired', 'page' => 1])) }}"
+            {{-- อยู่ระหว่างดำเนินการ --}}
+            {{-- <a href="{{ route('newregis.index', array_merge(request()->except('status_filter', 'page'), ['status_filter' => 'soon_expired', 'page' => 1])) }}"
                     class="group block h-full bg-gradient-to-br from-yellow-100 to-yellow-50 p-4 rounded-3xl text-center border-2 border-yellow-200 hover:scale-105 transition-all duration-300">
                     <div class="flex justify-center mb-2">
                         <div class="bg-yellow-200 rounded-full p-3 group-hover:bg-yellow-300 transition">
@@ -61,8 +61,8 @@
                     <h2 class="text-lg font-bold text-yellow-700 mb-1 tracking-wide">ทะเบียนใกล้หมดอายุ</h2>
                     <p class="text-2xl font-bold text-yellow-600">{{ $soonExpiredCount ?? 0 }}</p>
                 </a> --}}
-                {{-- ขึ้นทะเบียนใหม่เสร็จแล้ว --}}
-                {{-- <a href="{{ route('newregis.index', array_merge(request()->except('status_filter', 'page'), ['status_filter' => 'expired', 'page' => 1])) }}"
+            {{-- ขึ้นทะเบียนใหม่เสร็จแล้ว --}}
+            {{-- <a href="{{ route('newregis.index', array_merge(request()->except('status_filter', 'page'), ['status_filter' => 'expired', 'page' => 1])) }}"
                     class="group block h-full bg-gradient-to-br from-red-100 to-red-50 p-4 rounded-3xl text-center border-2 border-red-200 hover:scale-105 transition-all duration-300">
                     <div class="flex justify-center mb-2">
                         <div class="bg-red-200 rounded-full p-3 group-hover:bg-red-300 transition">
@@ -95,8 +95,8 @@
                         </div>
                         <input type="text" id="search_query" name="search"
                             placeholder="ชื่อสามัญ /ชื่อการค้า /เลขที่ทะเบียน" value="{{ request('search') }}"
-                                class="pl-10 pr-4 py-2 w-[500px] rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-600 transition duration-200 ease-in-out text-gray-700 shadow-sm" />
-                            {{-- class="pl-10 pr-4 py-2 w-96 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-600 transition duration-200 ease-in-out text-gray-700 shadow-sm" /> --}}
+                            class="pl-10 pr-4 py-2 w-[500px] rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-600 transition duration-200 ease-in-out text-gray-700 shadow-sm" />
+                        {{-- class="pl-10 pr-4 py-2 w-96 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-600 transition duration-200 ease-in-out text-gray-700 shadow-sm" /> --}}
                     </div>
                     <div class="flex-grow min-w-[180px]">
                         <label for="expiry_date_from"
@@ -161,7 +161,7 @@
                         </thead>
                         <tbody>
                             @forelse ($paginatedProducts as $index => $product)
-                                <tr class="border-b hover:bg-yellow-50 transition">
+                                <tr class="border-b hover:bg-indigo-50 transition">
                                     <td class="py-4 px-8 font-semibold text-gray-700">
                                         {{ ($paginatedProducts->currentPage() - 1) * $paginatedProducts->perPage() + $index + 1 }}
                                     </td>

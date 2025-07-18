@@ -153,7 +153,7 @@
                         </thead>
                         <tbody>
                             @forelse ($paginatedProducts as $index => $product)
-                                <tr class="border-b hover:bg-yellow-50 transition">
+                                <tr class="border-b hover:bg-indigo-50 transition">
                                     <td class="py-4 px-8 font-semibold text-gray-700">
                                         {{ ($paginatedProducts->currentPage() - 1) * $paginatedProducts->perPage() + $index + 1 }}
                                     </td>
