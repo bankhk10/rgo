@@ -3,9 +3,10 @@
         <h2 class="text-4xl font-extrabold text-gray-700 mb-8 pb-4 text-center border-b border-gray-300">
             แก้ไขข้อมูลทะเบียนผลิต
         </h2>
+
         <form method="POST" action="{{ route('createproduct.update', $product->id) }}" class="space-y-10">
             @csrf
-            @method('PUT') {{-- Add this line for PUT method --}}
+            @method('PUT') {{-- เพิ่มส่วนนี้สำหรับการอัปเดตข้อมูล --}}
             <div>
                 <h3
                     class="text-2xl font-semibold text-white bg-gradient-to-r from-blue-400 to-indigo-400 px-4 py-3 rounded-t-md">
@@ -18,6 +19,7 @@
                         </label>
                         <div class="dropdown" id="companyDropdown">
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="companyBtn">
+                                {{-- แสดงชื่อบริษัทที่ถูกเลือก หรือ '-- เลือก --' ถ้าไม่มี --}}
                                 @if (old('company_id', $product->company_id))
                                     {{ $companies->firstWhere('id', old('company_id', $product->company_id))->full_name ?? '-- เลือก --' }}
                                 @else
@@ -35,6 +37,7 @@
                                 @endforeach
                             </div>
                         </div>
+                        {{-- ใช้ old() สำหรับค่าที่ส่งกลับมาเมื่อเกิด error หรือใช้ค่าจาก $product เมื่อโหลดหน้าครั้งแรก --}}
                         <input type="hidden" name="company_id" id="companyInput"
                             value="{{ old('company_id', $product->company_id) }}">
                         @error('company_id')
@@ -54,13 +57,12 @@
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันหมดอายุทะเบียน</label>
                         <input type="date" name="expired_license_date"
-                            value="{{ old('expired_license_date', $product->expired_license_date ? \Carbon\Carbon::parse($product->expired_license_date)->format('Y-m-d') : '') }}"
+                            value="{{ old('expired_license_date', $product->expired_license_date) }}"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('expired_license_date')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
-
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อวัตถุอันตราย (ไทย)</label>
                         <input type="text" name="chemical_name_th"
@@ -102,10 +104,27 @@
                     </div>
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ประเภททะเบียน</label>
-                        <input type="text" name="registration_type"
-                            value="{{ old('registration_type', $product->registration_type) }}"
-                            placeholder="ใส่ประเภททะเบียน"
-                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        <div class="dropdown" id="registrationTypeDropdown">
+                            <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="registrationTypeBtn">
+                                @php
+                                    $registrationTypes = [
+                                        'F' => 'F',
+                                        'R' => 'R',
+                                        'R(F)' => 'R(F)',
+                                    ];
+                                @endphp
+                                {{-- แสดงประเภททะเบียนที่ถูกเลือก หรือ '-- เลือก --' ถ้าไม่มี --}}
+                                {{ $registrationTypes[old('registration_type', $product->registration_type)] ?? '-- เลือก --' }}
+                            </div>
+                            <div class="dropdown-list" id="registrationTypeList">
+                                <div class="dropdown-item text-gray-500" data-value="">-- เลือกประเภททะเบียน --</div>
+                                <div class="dropdown-item" data-value="F">F</div>
+                                <div class="dropdown-item" data-value="R">R</div>
+                                <div class="dropdown-item" data-value="R(F)">R(F)</div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="registration_type" id="registrationTypeInput"
+                            value="{{ old('registration_type', $product->registration_type) }}">
                         @error('registration_type')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
@@ -114,6 +133,7 @@
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อผู้นำเข้า</label>
                         <div class="dropdown" id="importerDropdown">
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="importerBtn">
+                                {{-- แสดงชื่อผู้นำเข้าที่ถูกเลือก หรือ '-- เลือก --' ถ้าไม่มี --}}
                                 @if (old('importer', $product->importer))
                                     {{ $companies->firstWhere('id', old('importer', $product->importer))->full_name ?? '-- เลือก --' }}
                                 @else
@@ -141,6 +161,7 @@
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อผู้จำหน่าย</label>
                         <div class="dropdown" id="distributorDropdown">
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="distributorBtn">
+                                {{-- แสดงชื่อผู้จำหน่ายที่ถูกเลือก หรือ '-- เลือก --' ถ้าไม่มี --}}
                                 @if (old('distributor', $product->distributor))
                                     {{ $companies->firstWhere('id', old('distributor', $product->distributor))->full_name ?? '-- เลือก --' }}
                                 @else
@@ -242,7 +263,7 @@
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันหมดอายุใบอนุญาต</label>
                         <input type="date" name="production_license_expiry"
-                            value="{{ old('production_license_expiry', $product->production_license_expiry ? \Carbon\Carbon::parse($product->production_license_expiry)->format('Y-m-d') : '') }}"
+                            value="{{ old('production_license_expiry', $product->production_license_expiry) }}"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('production_license_expiry')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
@@ -275,10 +296,18 @@
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
-
-                    {{-- You might want to update `updated_by` on the backend --}}
+                    {{-- Hidden fields ที่ต้องการให้คงค่าไว้ --}}
+                    <input type="hidden" name="new_or_old" value="{{ old('new_or_old', $product->new_or_old) }}">
+                    <input type="hidden" name="step" value="{{ old('step', $product->step) }}">
+                    <input type="hidden" name="status" value="{{ old('status', $product->status) }}">
+                    <input type="hidden" name="is_active" value="{{ old('is_active', $product->is_active) }}">
+                    <input type="hidden" name="is_deleted" value="{{ old('is_deleted', $product->is_deleted) }}">
+                    <input type="hidden" name="progress" value="{{ old('progress', $product->progress) }}">
+                    <input type="hidden" name="sub_progress"
+                        value="{{ old('sub_progress', $product->sub_progress) }}">
+                    <input type="hidden" name="created_by" value="{{ old('created_by', $product->created_by) }}">
                     <input type="hidden" name="updated_by"
-                        value="{{ old('updated_by', auth()->user()->name ?? '') }}">
+                        value="{{ old('updated_by', auth()->user()->name ?? $product->updated_by) }}">
                 </div>
             </div>
             <div class="flex justify-center gap-4 pt-4">
@@ -345,12 +374,22 @@
                     }
                     input.value = value;
                 }
-                const initial = [...items].find(item => item.dataset.value === "");
-                if (initial) updateBtn(initial.textContent, "");
+
+                // Set initial value based on oldValue (from old() or $product data)
                 if (oldValue) {
                     const match = [...items].find(i => i.dataset.value == oldValue);
-                    if (match) updateBtn(match.textContent, match.dataset.value);
+                    if (match) {
+                        updateBtn(match.textContent, match.dataset.value);
+                    } else {
+                        // If oldValue doesn't match any dropdown item, reset to default
+                        const initial = [...items].find(item => item.dataset.value === "");
+                        if (initial) updateBtn(initial.textContent, "");
+                    }
+                } else {
+                    const initial = [...items].find(item => item.dataset.value === "");
+                    if (initial) updateBtn(initial.textContent, "");
                 }
+
 
                 btn.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -399,19 +438,15 @@
 
             closeMessageBox.addEventListener('click', hideMessageBox);
 
-            // Populate dropdowns with existing values
+            // Setup for all dropdowns, passing existing product data
             setupDropdown('companyBtn', 'companyList', 'companyInput',
                 "{{ old('company_id', $product->company_id) }}");
             setupDropdown('importerBtn', 'importerList', 'importerInput',
                 "{{ old('importer', $product->importer) }}");
             setupDropdown('distributorBtn', 'distributorList', 'distributorInput',
                 "{{ old('distributor', $product->distributor) }}");
-            // Assuming these are also dropdowns based on original code, populate them if they are.
-            // If they are just text inputs, you don't need setupDropdown for them.
-            setupDropdown('typeProductionBtn', 'typeProductionList', 'typeProductionInput',
-                "{{ old('type_production_registration', $product->type_production_registration) }}");
-            setupDropdown('usageProductionBtn', 'usageProductionList', 'usageProductionInput',
-                "{{ old('usage_production_registration', $product->usage_production_registration) }}");
+            setupDropdown('registrationTypeBtn', 'registrationTypeList', 'registrationTypeInput',
+                "{{ old('registration_type', $product->registration_type) }}");
         });
     </script>
 

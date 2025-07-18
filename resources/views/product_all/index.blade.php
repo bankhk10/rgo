@@ -82,7 +82,6 @@
                 <form action="{{ route('newregis.productall') }}" method="GET" class="flex items-center gap-2 mb-2">
                     <div class="relative flex-grow min-w-[280px]">
                         <label for="search_query" class="mx-3 text-base block text-gray-700 mb-1 mt-3">ค้นหาชื่อ</label>
-
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none mt-9">
                             <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2"
                                 viewBox="0 0 24 24">
@@ -92,7 +91,8 @@
                         </div>
                         <input type="text" id="search_query" name="search"
                             placeholder="ชื่อสามัญ /ชื่อการค้า /เลขที่ทะเบียน" value="{{ request('search') }}"
-                            class="pl-10 pr-4 py-2 w-96 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-600 transition duration-200 ease-in-out text-gray-700 shadow-sm" />
+                            class="pl-10 pr-4 py-2 w-[500px] rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-600 transition duration-200 ease-in-out text-gray-700 shadow-sm" />
+                        {{-- class="pl-10 pr-4 py-2 w-96 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-600 transition duration-200 ease-in-out text-gray-700 shadow-sm" /> --}}
                     </div>
                     <div class="flex-grow min-w-[180px]">
                         <label for="expiry_date_from"
@@ -118,7 +118,8 @@
                             </svg>
                             ค้นหา
                         </button>
-
+                    </div>
+                    <div class="mt-9">
                         {{-- เพิ่มปุ่มล้างการค้นหา --}}
                         @if (request('search') || request('expiry_date_from') || request('expiry_date_to'))
                             <a href="{{ route('newregis.productall') }}"
@@ -127,7 +128,7 @@
                                     stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                                 </svg>
-                                ล้างการค้นหา
+                                ล้างค้นหา
                             </a>
                         @endif
                     </div>
@@ -141,7 +142,7 @@
                         <thead>
                             <tr class="bg-indigo-600 text-white text-left">
                                 <th class="py-4 px-8 rounded-tl-2xl">ลำดับ</th>
-                                <th class="py-4 px-8">ชื่อทางการค้า</th>
+                                <th class="py-4 px-8">ชื่อการค้า</th>
                                 <th class="py-4 px-8">ชื่อสามัญ</th>
                                 <th class="py-4 px-8">ผู้ขึ้นทะเบียน</th>
                                 <th class="py-4 px-8">เลขที่ทะเบียน</th>

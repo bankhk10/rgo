@@ -81,7 +81,8 @@
                         <input type="text" id="search_query" name="search"
                             placeholder="ชื่อวัตถุอันตราย /ผู้ขึ้นทะเบียน /เลขที่ทะเบียน"
                             value="{{ request('search') }}"
-                            class="pl-10 pr-4 py-2 w-96 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-600 transition duration-200 ease-in-out text-gray-700 shadow-sm" />
+                            class="pl-10 pr-4 py-2 w-[500px] rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-600 transition duration-200 ease-in-out text-gray-700 shadow-sm" />
+                        {{-- class="pl-10 pr-4 py-2 w-96 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-600 transition duration-200 ease-in-out text-gray-700 shadow-sm" /> --}}
                     </div>
                     <div class="flex-grow min-w-[180px]">
                         <label for="expiry_date_from"
@@ -115,15 +116,15 @@
                                     stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                                 </svg>
-                                ล้างการค้นหา
+                                ล้างค้นหา
                             </a>
                         @endif
                     </div>
                 </form>
                 @can('Inregister create')
                     <a href="{{ route('createproduct.create') }}"
-                        class="mt-10 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold px-6 py-2 rounded-lg shadow-md transform hover:scale-105 transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
-                        + เพิ่มข้อมูลทะเบียนผลิต
+                        class="mt-8 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold px-6 py-2 rounded-lg shadow-md transform hover:scale-105 transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
+                        + เพิ่มข้อมูล
                     </a>
                 @endcan
             </div>
