@@ -184,14 +184,13 @@
                                                 8 => 'ยื่นขอออกทะเบียน',
                                             ];
 
-
                                             $show_step_number = 0;
                                             $number_step_number = 0;
                                             if (isset($product->step_summary[$product->current_step_number])) {
                                                 $summary = $product->step_summary[$product->current_step_number];
                                                 if ($summary->step_number == 1) {
                                                     $number_step_number = 1;
-                                                    if ($summary->unchecked_count >= 12 ) {
+                                                    if ($summary->unchecked_count >= 12) {
                                                         $show_step_number = 0;
                                                     } else {
                                                         $show_step_number = 12.5;
@@ -242,8 +241,6 @@
                                         @endphp
                                         {{-- ชื่อขั้นตอน --}}
                                         <div class="text-center mb-2">
-                                            {{-- {{ ' ขั้นตอน -  '.$number_step_number }}---
-                                            {{ ' สี -  ' .$show_step_number }} --}}
                                             @if ($show_step_number >= 100)
                                                 <p class="text-green-600 font-semibold">สำเร็จ</p>
                                             @else
@@ -269,8 +266,8 @@
 
                                         {{-- แถบความคืบหน้า --}}
                                         <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
-                                            <div class="h-2.5 bg-green-500"
-                                                style="width: {{ $show_step_number }}%;"></div>
+                                            <div class="h-2.5 bg-green-500" style="width: {{ $show_step_number }}%;">
+                                            </div>
                                         </div>
                                         <div class="text-xs text-gray-500 text-center mt-1">
                                             {{ number_format($show_step_number, 1) }}%

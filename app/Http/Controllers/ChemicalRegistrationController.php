@@ -289,6 +289,8 @@ class ChemicalRegistrationController extends Controller
         $step_number  = DrugProgressStep::where('chemical_registrations_id', $drug->id)
             ->max('step_number');
 
+
+
         return view('product.new.show', compact('drug', 'checkplan', 'step_number'));
     }
     /**
@@ -429,6 +431,15 @@ class ChemicalRegistrationController extends Controller
         $stepNumber = (int) $request->input('step_number');
         $selectedIndexes = $request->input('sub_steps', []);
         $notes = $request->input('sub_step_notes', []);
+
+
+        // $sub_sub_progress = $drug->sub_progress;
+        // if ( $sub_sub_progress > $sub_sub_progress) {
+        //     # code...
+        // }
+
+
+
         // Raw structure (เหมือนเดิม)
         $rawStructure = [
             1 => [

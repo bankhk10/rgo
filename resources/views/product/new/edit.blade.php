@@ -470,6 +470,7 @@
                                         ขั้นตอนที่ {{ $stepNumber }}: {{ $stepTitle }}
                                     </h4>
 
+
                                     {{-- แถบเปอร์เซ็นต์ --}}
                                     {{-- <div class="mb-4">
                                         <div class="w-full bg-gray-200 rounded-full h-2.5">
