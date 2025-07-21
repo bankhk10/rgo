@@ -53,32 +53,32 @@
                 @php
                     $totalSteps = 8;
                     $steps = [
-                        1 => ['label' => 'คณะ PDC อนุมัติให้ดำเนินการขึ้นทะเบียน', 'progress_threshold' => 12.5], // 1/8 * 100
+                        1 => ['label' => 'คณะ PDC อนุมัติให้ดำเนินการขึ้นทะเบียน', 'progress_threshold' => 12.6], // 1/8 * 100
                         2 => [
                             'label' =>
                                 'นำเข้าตัวอย่าง                                                               <span class="text-white"></span>',
-                            'progress_threshold' => 25,
+                            'progress_threshold' => 26,
                         ],
-                        3 => ['label' => 'ส่งตัวอย่างข้อมูลศึกษาความเป็นพิษ (ทำTox)', 'progress_threshold' => 37.5], // 3/8 * 100
+                        3 => ['label' => 'ส่งตัวอย่างข้อมูลศึกษาความเป็นพิษ (ทำTox)', 'progress_threshold' => 37.6], // 3/8 * 100
                         4 => [
                             'label' => 'ยื่นคำขอขึ้นทะเบียน<span class="text-white"></span>',
-                            'progress_threshold' => 50,
+                            'progress_threshold' => 51,
                         ],
                         5 => [
                             'label' => 'แผนการทดลอง Eff, PHI (ถ้ามี) + Phase1 + ผลวิเคราะห์ (อนุมัติ)',
-                            'progress_threshold' => 62.5,
+                            'progress_threshold' => 62.6,
                         ], // 5/8 * 100
                         6 => [
                             'label' => 'ยื่น Phase3 (ผลการทดลอง Eff, PHI (ถ้ามี) อนุมัติ + ผลวิเคราะห์อนุมัติ)',
-                            'progress_threshold' => 75,
+                            'progress_threshold' => 76,
                         ], // 6/8 * 100
                         7 => [
                             'label' => 'Phase3 อนุมัติ (ยื่นเอกสารเข้าประชุมพิจารณา <br> ขึ้นทะเบียน)',
-                            'progress_threshold' => 87.5,
+                            'progress_threshold' => 87.6,
                         ], // 7/8 * 100
                         8 => [
                             'label' => 'ยื่นขอออกทะเบียน <span class="text-white"><br>.</span>',
-                            'progress_threshold' => 90,
+                            'progress_threshold' => 91,
                         ],
                     ];
 
@@ -194,7 +194,7 @@
                         </div>
                     </div>
                 </div>
-                @if ($step_number != 8)
+                @if ($drug->progress <= 99)
                     <div class="mt-8">
                         @php
                             $subStepsAll = [

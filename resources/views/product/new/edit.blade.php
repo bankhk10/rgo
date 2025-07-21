@@ -463,8 +463,65 @@
                             <form method="POST" action="{{ route('newregis.update-subprogress', $drug->id) }}">
                                 @csrf
                                 @method('PUT')
-                                <input type="hidden" name="step_number" value="{{ $stepNumber }}">
 
+                                @php
+                                    $show_step_number = 0;
+                                    $number_step_number = 0;
+                                    if (isset($drug->step_summary[$drug->current_step_number])) {
+                                        $summary = $drug->step_summary[$drug->current_step_number];
+                                        if ($summary->step_number == 1) {
+                                            $number_step_number = 1;
+                                            if ($summary->unchecked_count >= 12) {
+                                                $show_step_number = 0;
+                                            } else {
+                                                $show_step_number = 12.5;
+                                            }
+                                        } elseif ($summary->step_number == 2) {
+                                            $number_step_number = 2;
+                                            $show_step_number = 25;
+                                        } elseif ($summary->step_number == 3) {
+                                            $number_step_number = 3;
+                                            $show_step_number = 37.5;
+                                        } elseif ($summary->step_number == 4) {
+                                            if ($summary->unchecked_count == 1) {
+                                                $number_step_number = 5;
+                                                $show_step_number = 62.5;
+                                            } else {
+                                                $number_step_number = 4;
+                                                $show_step_number = 50;
+                                            }
+                                        } elseif ($summary->step_number == 5) {
+                                            if ($summary->unchecked_count == 2) {
+                                                $number_step_number = 6;
+                                                $show_step_number = 75;
+                                            } else {
+                                                $number_step_number = 5;
+                                                $show_step_number = 62.5;
+                                            }
+                                        } elseif ($summary->step_number == 6) {
+                                            if ($summary->unchecked_count == 2) {
+                                                $number_step_number = 7;
+                                                $show_step_number = 87.5;
+                                            } else {
+                                                $number_step_number = 6;
+                                                $show_step_number = 75;
+                                            }
+                                        } elseif ($summary->step_number == 7) {
+                                            $number_step_number = 7;
+                                            $show_step_number = 87.5;
+                                        } else {
+                                            $number_step_number = 8;
+                                            if ($summary->unchecked_count == 0) {
+                                                $show_step_number = 100;
+                                            } else {
+                                                $show_step_number = 90;
+                                            }
+                                        }
+                                    }
+                                @endphp
+
+                                <input type="hidden" name="step_number" value="{{ $stepNumber }}">
+                                <input type="hidden" name="progress" value="{{ $show_step_number }}">
                                 <div class="mt-8 bg-gray-50 border border-gray-200 rounded-xl p-4">
                                     <h4 class="text-lg font-semibold text-indigo-600 mb-3">
                                         ขั้นตอนที่ {{ $stepNumber }}: {{ $stepTitle }}

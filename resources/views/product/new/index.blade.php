@@ -186,6 +186,7 @@
 
                                             $show_step_number = 0;
                                             $number_step_number = 0;
+                                            // $isPlanNone = 0;
                                             if (isset($product->step_summary[$product->current_step_number])) {
                                                 $summary = $product->step_summary[$product->current_step_number];
                                                 if ($summary->step_number == 1) {
@@ -202,7 +203,7 @@
                                                     $number_step_number = 3;
                                                     $show_step_number = 37.5;
                                                 } elseif ($summary->step_number == 4) {
-                                                    if ($summary->unchecked_count == 1) {
+                                                    if ($summary->unchecked_count == 1 && $product->isPlanNone == 1) {
                                                         $number_step_number = 5;
                                                         $show_step_number = 62.5;
                                                     } else {
@@ -210,7 +211,7 @@
                                                         $show_step_number = 50;
                                                     }
                                                 } elseif ($summary->step_number == 5) {
-                                                    if ($summary->unchecked_count == 2) {
+                                                    if ($summary->unchecked_count == 2 && $product->isPlanNone == 1) {
                                                         $number_step_number = 6;
                                                         $show_step_number = 75;
                                                     } else {
@@ -218,7 +219,7 @@
                                                         $show_step_number = 62.5;
                                                     }
                                                 } elseif ($summary->step_number == 6) {
-                                                    if ($summary->unchecked_count == 2) {
+                                                    if ($summary->unchecked_count == 2 && $product->isPlanNone == 1) {
                                                         $number_step_number = 7;
                                                         $show_step_number = 87.5;
                                                     } else {
@@ -245,6 +246,7 @@
                                                 <p class="text-green-600 font-semibold">สำเร็จ</p>
                                             @else
                                                 <div x-data="{ tooltip: false }" class="relative inline-block">
+
                                                     <p class="text-yellow-700 font-semibold cursor-pointer"
                                                         @mouseenter="tooltip = true" @mouseleave="tooltip = false">
                                                         ขั้นตอนที่ {{ $number_step_number }}
