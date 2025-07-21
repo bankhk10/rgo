@@ -1,6 +1,5 @@
-<div class="flex mt-[4.7rem] md:mt-0">
-    <nav class="side-nav w-[220px] text-white min-h-screen">
-        <!-- ✅ Logo อยู่ด้านบนสุดของเมนู -->
+<div class="flex md:mt-0">
+    <nav class="side-nav text-white min-h-screen">
         <div class="flex items-center justify-center py-6">
             <img alt="Logo" class="h-21" src="{{ asset('images/logo.png') }}" />
         </div>
@@ -42,20 +41,20 @@
                 </li>
             @endcanany
             @canany('RegisterAll read', 'RegisterAll create', 'RegisterAll update', 'RegisterAll delete')
-            <li>
-                <a href="{{ route('newregis.productall') }}" class="side-menu" id="menu-newregisall">
-                    <div class="side-menu__icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="lucide lucide-files-icon lucide-files">
-                            <path d="M20 7h-3a2 2 0 0 1-2-2V2" />
-                            <path d="M9 18a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7l4 4v10a2 2 0 0 1-2 2Z" />
-                            <path d="M3 7.6v12.8A1.6 1.6 0 0 0 4.6 22h9.8" />
-                        </svg>
-                    </div>
-                    <div class="side-menu__title">ทะเบียนสินค้าทั้งหมด</div>
-                </a>
-            </li>
+                <li>
+                    <a href="{{ route('newregis.productall') }}" class="side-menu" id="menu-newregisall">
+                        <div class="side-menu__icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-files-icon lucide-files">
+                                <path d="M20 7h-3a2 2 0 0 1-2-2V2" />
+                                <path d="M9 18a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7l4 4v10a2 2 0 0 1-2 2Z" />
+                                <path d="M3 7.6v12.8A1.6 1.6 0 0 0 4.6 22h9.8" />
+                            </svg>
+                        </div>
+                        <div class="side-menu__title">ทะเบียนสินค้าทั้งหมด</div>
+                    </a>
+                </li>
             @endcanany
 
             @canany('RegisterNew read', 'RegisterNew create', 'RegisterNew update', 'RegisterNew delete')
@@ -77,71 +76,6 @@
                 </li>
             @endcanany
 
-
-            {{-- @canany('RegisterContinue read',
-    'RegisterContinue create',
-    'RegisterContinue update',
-    'RegisterContinue
-                delete')
-                <li>
-                    <a href="{{ route('renewregis.index') }}" class="side-menu" id="menu-renewregis">
-                        <div class="side-menu__icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" class="lucide lucide-pen-line-icon lucide-pen-line">
-                                <path d="M12 20h9" />
-                                <path
-                                    d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z" />
-                            </svg>
-                        </div>
-
-                        <div class="side-menu__title">ต่อทะเบียนสินค้าเก่า</div>
-                    </a>
-                </li>
-            @endcanany --}}
-
-
-            {{-- @canany('Post read', 'Post create', 'Post update', 'Post delete')
-                <li x-data="{ open: {{ Route::is('admin.posts.*', 'admin.production.*', 'admin.import.*') ? 'true' : 'false' }} }">
-                    <a href="javascript:;"
-                       @click="open = !open"
-                       class="side-menu">
-                        <div class="side-menu__icon"><i data-lucide="file-text"></i></div>
-                        <div class="side-menu__title">
-                            ข้อมูลทะเบียน
-                            <div class="side-menu__sub-icon transform"
-                                 :class="{ 'rotate-180': open }">
-                                <i data-lucide="chevron-down"></i>
-                            </div>
-                        </div>
-                    </a>
-                    <ul class="side-menu__sub-open"
-                        x-show="open"
-                        x-transition>
-                        <li>
-                            <a href="{{ route('admin.posts.index') }}"
-                               class="side-menu {{ Route::currentRouteNamed('admin.posts.index') ? 'side-menu--active' : '' }}">
-                                <div class="side-menu__icon"><i data-lucide="activity"></i></div>
-                                <div class="side-menu__title">ข้อมูลการขึ้นทะเบียน</div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('admin.production.index') }}"
-                               class="side-menu {{ Route::currentRouteNamed('admin.production.index') ? 'side-menu--active' : '' }}">
-                                <div class="side-menu__icon"><i data-lucide="activity"></i></div>
-                                <div class="side-menu__title">ข้อมูลทะเบียนการผลิต</div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('admin.import.index') }}"
-                               class="side-menu {{ Route::currentRouteNamed('admin.import.index') ? 'side-menu--active' : '' }}">
-                                <div class="side-menu__icon"><i data-lucide="activity"></i></div>
-                                <div class="side-menu__title">ทะเบียนนำเข้าวัตถุดิบ</div>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-            @endcanany --}}
             @canany('Permission read', 'Permission create', 'Permission update', 'Permission delete')
                 <li>
                     <a href="{{ route('admin.permissions.index') }}" class="side-menu" id="menu-permissions">
