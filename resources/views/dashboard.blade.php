@@ -1,82 +1,123 @@
 <x-app-layout>
     <main class="flex-1 overflow-x-hidden overflow-y-auto">
-        <div class="container mx-auto px-6 py-6">
-            <div class="bg-white rounded-2xl shadow-md max-w-full mx-auto py-10 px-4">
-                <h1 class="text-4xl font-extrabold text-center text-indigo-700 mt-5 mb-20 tracking-wide">
-                    <span class="inline-flex items-center gap-2">
-                        <svg class="w-10 h-10 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2"
-                            viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M12 8c-1.657 0-3 1.343-3 3v1c0 1.657 1.343 3 3 3s3-1.343 3-3v-1c0-1.657-1.343-3-3-3z" />
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M12 2v2m0 16v2m8-10h2M2 12H4m15.364-7.364l1.414 1.414M4.222 19.778l1.414-1.414m12.728 0l1.414 1.414M4.222 4.222l1.414 1.414" />
-                        </svg>
-                        แดชบอร์ด
-                    </span>
-                </h1>
-                <div class="flex flex-row justify-around mb-8">
-                    <a
-                        class="group bg-gradient-to-br from-green-100 to-green-50 p-4 rounded-3xl text-center border-2 border-green-200 hover:scale-105 transition-all duration-300"
-                        style="width: 300px; height: 200px;">
-                        <div class="flex justify-center mb-2">
-                            <div class="bg-green-200 rounded-full p-3 group-hover:bg-green-300 transition">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round"
-                                    class="lucide lucide-clipboard-pen-icon lucide-clipboard-pen">
-                                    <rect width="8" height="4" x="8" y="2" rx="1" />
-                                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-5.5" />
-                                    <path d="M4 13.5V6a2 2 0 0 1 2-2h2" />
-                                    <path
-                                        d="M13.378 15.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z" />
-                                </svg>
-                            </div>
-                        </div>
-                        <h2 class="text-lg font-bold text-green-700 mb-1 tracking-wide">ขึ้นทะเบียนสินค้าใหม่</h2>
-                        <p class="text-4xl text-green-600 font-extrabold mb-1">{{ $totalNewRegistrations }}</p>
-                    </a>
-                </div>
-
-                <div class="flex flex-wrap justify-center gap-8 mt-10 mb-10">
-                    {{-- กราฟ 1 --}}
-                    <div class="w-full sm:w-[300px] max-w-xs">
-                        <h2 class="text-center text-lg font-bold text-blue-700 mb-4">ทะเบียนนำเข้าวัตถุดิบ</h2>
-                        <hr>
-                        <div class="aspect-w-1 aspect-h-1 mt-10">
-                            <canvas id="myChart"></canvas>
+        <div class=" rounded-2xl shadow-md max-w-full mx-auto py-10 px-4">
+            <h1 class="text-4xl font-extrabold text-center text-indigo-700 mt-5 mb-10 tracking-wide">
+                <span class="inline-flex items-center gap-2">
+                    <svg class="w-10 h-10 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 8c-1.657 0-3 1.343-3 3v1c0 1.657 1.343 3 3 3s3-1.343 3-3v-1c0-1.657-1.343-3-3-3z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 2v2m0 16v2m8-10h2M2 12H4m15.364-7.364l1.414 1.414M4.222 19.778l1.414-1.414m12.728 0l1.414 1.414M4.222 4.222l1.414 1.414" />
+                    </svg>
+                    แดชบอร์ด
+                </span>
+            </h1>
+            <div class="flex flex-row justify-around mb-8">
+                <a href="{{ route('newregis.index') }}" class="group bg-gradient-to-br from-green-100 to-green-50 p-4 rounded-3xl text-center border-2 border-green-200 hover:scale-105 transition-all duration-300"
+                    style="width: 300px; height: 200px;">
+                    <div class="flex justify-center mb-2">
+                        <div class="bg-green-200 rounded-full p-3 group-hover:bg-green-300 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-clipboard-pen-icon lucide-clipboard-pen">
+                                <rect width="8" height="4" x="8" y="2" rx="1" />
+                                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-5.5" />
+                                <path d="M4 13.5V6a2 2 0 0 1 2-2h2" />
+                                <path
+                                    d="M13.378 15.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z" />
+                            </svg>
                         </div>
                     </div>
-
-                    {{-- กราฟ 2 --}}
-                    <div class="w-full sm:w-[300px] max-w-xs">
-                        <h2 class="text-center text-lg font-bold text-blue-700 mb-4">ทะเบียนสินค้า</h2>
-                        <hr>
-                        <div class="aspect-w-1 aspect-h-1 mt-10">
-                            <canvas id="myChart2"></canvas>
-                        </div>
-                    </div>
-
-                    {{-- กราฟ 3 --}}
-                    <div class="w-full sm:w-[300px] max-w-xs">
-                        <h2 class="text-center text-lg font-bold text-blue-700 mb-4">ทะเบียนผลิต</h2>
-                        <hr>
-                        <div class="aspect-w-1 aspect-h-1 mt-10">
-                            <canvas id="myChart3"></canvas>
-                        </div>
-                    </div>
-
-                    {{-- กราฟ 4 --}}
-                    {{-- <div class="w-full sm:w-[300px] max-w-xs">
-                        <h2 class="text-center text-lg font-bold text-blue-700 mb-4">ขึ้นทะเบียนสินค้าใหม่</h2>
-                        <hr>
-                        <div class="aspect-w-1 aspect-h-1 mt-10">
-                            <canvas id="myChart4"></canvas>
-                        </div>
-                    </div> --}}
-                </div>
+                    <h2 class="text-lg font-bold text-green-700 mb-1 tracking-wide">ขึ้นทะเบียนสินค้าใหม่</h2>
+                    <p class="text-4xl text-green-600 font-extrabold mb-1">{{ $totalNewRegistrations }}</p>
+                </a>
             </div>
 
+            <div class="flex flex-wrap justify-center gap-10 mt-10 mb-10">
+                {{-- กราฟ 1 --}}
+                <a href="{{ route('import.index') }}" class="group">
+                    <div class="w-full sm:w-[300px] max-w-xs bg-white p-6 rounded-2xl shadow-md border border-gray-200">
+                        <h2 class="text-center text-lg font-bold text-blue-700 mb-4">ทะเบียนนำเข้าวัตถุดิบ</h2>
+                        <hr>
+                        <div class="aspect-w-1 aspect-h-1 mt-4 mb-10">
+                            <canvas id="myChart"></canvas>
+                        </div>
+                        <div class="flex justify-center items-center gap-4 mt-4 text-sm">
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full"
+                                    style="background-color: rgba(31, 100, 66, 1);"></span>
+                                <span>ทั้งหมด</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full"
+                                    style="background-color: rgba(255, 255, 0, 1);"></span>
+                                <span>ใกล้หมดอายุ</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full" style="background-color: rgba(254, 2, 2, 1);"></span>
+                                <span>หมดอายุ</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+
+                {{-- กราฟ 3 --}}
+                <a href="{{ route('createproduct.index') }}" class="group">
+                    <div class="w-full sm:w-[300px] max-w-xs bg-white p-6 rounded-2xl shadow-md border border-gray-200">
+                        <h2 class="text-center text-lg font-bold text-blue-700 mb-4">ทะเบียนผลิต</h2>
+                        <hr>
+                        <div class="aspect-w-1 aspect-h-1 mt-4 mb-10">
+                            <canvas id="myChart3"></canvas>
+                        </div>
+                        <div class="flex justify-center items-center gap-4 mt-4 text-sm">
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full"
+                                    style="background-color: rgba(31, 100, 66, 1);"></span>
+                                <span>ทั้งหมด</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full"
+                                    style="background-color: rgba(255, 255, 0, 1);"></span>
+                                <span>ใกล้หมดอายุ</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full" style="background-color: rgba(254, 2, 2, 1);"></span>
+                                <span>หมดอายุ</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                {{-- กราฟ 2 --}}
+                <a href="{{ route('newregis.productall') }}" class="group">
+                    <div class="w-full sm:w-[300px] max-w-xs bg-white p-6 rounded-2xl shadow-md border border-gray-200">
+                        <h2 class="text-center text-lg font-bold text-blue-700 mb-4">ทะเบียนสินค้า</h2>
+                        <hr>
+                        <div class="aspect-w-1 aspect-h-1 mt-4 mb-10">
+                            <canvas id="myChart2"></canvas>
+                        </div>
+                        <div class="flex justify-center items-center gap-4 mt-4 text-sm">
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full"
+                                    style="background-color: rgba(31, 100, 66, 1);"></span>
+                                <span>ทั้งหมด</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full"
+                                    style="background-color: rgba(255, 255, 0, 1);"></span>
+                                <span>ใกล้หมดอายุ</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full" style="background-color: rgba(254, 2, 2, 1);"></span>
+                                <span>หมดอายุ</span>
+                            </div>
+                        </div>
+                    </div>
+            </div>
         </div>
+
 
         {{-- <div class="container mx-auto px-6 py-6">
             <h2 class="text-center text-lg font-bold text-red-700 mb-5 tracking-wide">
@@ -111,13 +152,7 @@
             options: {
                 plugins: {
                     legend: {
-                        position: 'bottom', // << เอา label ไว้ล่างวงกลม
-                        labels: {
-                            font: {
-                                size: 14
-                            },
-                            padding: 20
-                        }
+                        display: false // <--- เพิ่มบรรทัดนี้เพื่อซ่อน legend
                     }
                 }
             }
@@ -148,13 +183,7 @@
             options: {
                 plugins: {
                     legend: {
-                        position: 'bottom', // << เอา label ไว้ล่างวงกลม
-                        labels: {
-                            font: {
-                                size: 14
-                            },
-                            padding: 20
-                        }
+                        display: false
                     }
                 }
             }
@@ -185,13 +214,7 @@
             options: {
                 plugins: {
                     legend: {
-                        position: 'bottom', // << เอา label ไว้ล่างวงกลม
-                        labels: {
-                            font: {
-                                size: 14
-                            },
-                            padding: 20
-                        }
+                        display: false
                     }
                 }
             }
@@ -222,13 +245,7 @@
             options: {
                 plugins: {
                     legend: {
-                        position: 'bottom', // << เอา label ไว้ล่างวงกลม
-                        labels: {
-                            font: {
-                                size: 14
-                            },
-                            padding: 20
-                        }
+                        display: false
                     }
                 }
             }

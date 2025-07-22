@@ -172,7 +172,7 @@
                                                         'inline-block rounded-full px-3 py-1 font-semibold text-gray-600 bg-yellow-300';
                                                 } else {
                                                     $statusClass =
-                                                        'inline-block rounded-full px-3 py-1 font-semibold text-white bg-green-500'; // สถานะปกติ เช่น 'ใช้งานอยู่'
+                                                        'inline-block rounded-full px-3 py-1 font-semibold text-white bg-green-700'; // สถานะปกติ เช่น 'ใช้งานอยู่'
                                                 }
                                             @endphp
                                             <span class="{{ $statusClass }}">
@@ -184,7 +184,7 @@
                                             <div class="flex items-center gap-3 justify-center">
                                                 @can('Inregister read')
                                                     <a href="{{ route('import.show', $import->id) }}"
-                                                        class="inline-flex items-center justify-center p-2 rounded-full text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200"
+                                                        class="inline-flex items-center justify-center p-2 rounded-full text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200"
                                                         title="ดูรายละเอียด">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                             viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
