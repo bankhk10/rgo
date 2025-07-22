@@ -38,7 +38,7 @@
             x-transition:leave="transition ease-in-out duration-300 transform" x-transition:leave-start="translate-x-0"
             x-transition:leave-end="-translate-x-full"
             class="fixed inset-y-0 left-0 z-30 w-64 overflow-y-auto bg-blue-800 lg:hidden" x-cloak>
-            @include('layouts.mobile-menu')
+            {{-- @include('layouts.mobile-menu') --}}
         </div>
 
     </div>
