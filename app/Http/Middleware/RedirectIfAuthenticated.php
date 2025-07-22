@@ -6,6 +6,8 @@ use App\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+
 
 class RedirectIfAuthenticated
 {
@@ -22,6 +24,7 @@ class RedirectIfAuthenticated
         $guards = empty($guards) ? [null] : $guards;
 
         foreach ($guards as $guard) {
+            Log::info($guard);
             if($guard == 'front' && Auth::guard($guard)->check()){
                 return redirect(RouteServiceProvider::HOME);
             }
