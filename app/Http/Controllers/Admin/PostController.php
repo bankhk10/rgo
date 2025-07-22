@@ -55,8 +55,6 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        // dd($data);
-        // Log::info("message", $data);
         $data['user_id'] = Auth::user()->id;
         $data['title'] = 'admin';
         $data['description'] = 'admin';

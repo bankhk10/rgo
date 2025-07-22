@@ -299,8 +299,6 @@ class ChemicalRegistrationController extends Controller
         // เช็กแผน
         $checkplan = $drug->checkPlan($id) ? 'มี' : 'ไม่มี';
 
-        Log::info($checkplan);
-
         // ดึง step ล่าสุด
         $currentStep = DrugProgressStep::where('chemical_registrations_id', $id)->max('step_number') ?? 0;
 
@@ -418,9 +416,6 @@ class ChemicalRegistrationController extends Controller
 
         // แปะข้อมูลสรุปให้ product
         $drug->step_summary = $stepSummary;
-
-        // Log::info($stepSummary);
-
 
         $drug->current_step_number  = DrugProgressStep::where('chemical_registrations_id', $id)
             ->max('step_number');
@@ -541,8 +536,6 @@ class ChemicalRegistrationController extends Controller
         $selectedIndexes = $request->input('sub_steps', []);
         $notes = $request->input('sub_step_notes', []);
         $show_step_number = $request->input('progress');
-        // Log::info($show_step_number);
-
         $drug->progress = $show_step_number;
         $drug->save();
 
@@ -800,8 +793,6 @@ class ChemicalRegistrationController extends Controller
             ->count();
         $expiredCount = ChemicalRegistration::where('new_or_old', false)
             ->whereDate('expired_license_number', '<', Carbon::now())->count();
-
-        // Log::info($expiredCount);
 
         // สำคัญ: กำหนดค่า status ให้กับแต่ละรายการใน paginatedProducts
         foreach ($paginatedProducts as $product) {

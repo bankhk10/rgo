@@ -342,7 +342,6 @@
                                                         ->where('department', $mappedDept)
                                                         ->whereNull('checked_at')
                                                         ->exists();
-                                                    // Log::info($step);
                                                 @endphp
 
                                                 @if ($incomplete || auth()->user()->hasRole('admin') || auth()->user()->hasRole('manager'))

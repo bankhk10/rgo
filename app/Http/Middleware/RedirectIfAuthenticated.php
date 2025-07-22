@@ -24,7 +24,6 @@ class RedirectIfAuthenticated
         $guards = empty($guards) ? [null] : $guards;
 
         foreach ($guards as $guard) {
-            Log::info($guard);
             if($guard == 'front' && Auth::guard($guard)->check()){
                 return redirect(RouteServiceProvider::HOME);
             }

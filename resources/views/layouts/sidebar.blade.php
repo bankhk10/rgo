@@ -1,5 +1,5 @@
 <div class="flex md:mt-0">
-    <nav class="side-nav text-white min-h-screen">
+    <nav class="side-nav text-white min-h-screen flex flex-col">
         <div class="flex items-center justify-center py-6">
             <img alt="Logo" class="h-21" src="{{ asset('images/logo.png') }}" />
         </div>
@@ -110,6 +110,8 @@
                 </li>
             @endcanany
         </ul>
+        <p class="mt-auto p-4">Copyright 2025 รุ่น 1.0.0</p>
+        {{-- <p class="mt-20">Copyright 2025 รุ่น 1.0.0</p> --}}
     </nav>
 </div>
 

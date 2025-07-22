@@ -196,7 +196,7 @@
             </form>
         </div>
     </div>
-    <p class="mt-10">Copyright 2025 รุ่น 1.0.0 Created by แผนกเทคโนโลยีสารสนเทศ</p>
+    <p class="mt-10">Copyright 2025 รุ่น 1.0.0</p>
     <script>
         const togglePassword = document.getElementById('togglePassword');
         const passwordInput = document.getElementById('passwordInput');
@@ -210,9 +210,6 @@
         });
     </script>
 </body>
-
-
-
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @if ($errors->has('email'))
     <script>
@@ -225,5 +222,3 @@
 @endif
 
 </html>
-
-{{-- <p class="mt-10">Copyright 2025 รุ่น 1.0.0 Created by แผนกเทคโนโลยีสารสนเทศ</p> --}}
