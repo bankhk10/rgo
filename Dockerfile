@@ -8,6 +8,8 @@ WORKDIR /var/www/html
 RUN apk update && apk add --no-cache \
     nginx \
     supervisor \
+    nodejs \
+    npm \
     libzip-dev \
     zip \
     unzip \
