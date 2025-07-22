@@ -65,7 +65,7 @@
             @endcanany
             @canany('RegisterAll read', 'RegisterAll create', 'RegisterAll update', 'RegisterAll delete')
                 <li>
-                    <a href="{{ route('createproduct.index') }}"
+                    <a href="{{ route('newregis.productall') }}"
                         class="flex items-center gap-x-3 rounded-lg p-3 text-gray-300 transition-colors duration-200 hover:bg-blue-700 hover:text-white">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -80,7 +80,7 @@
             @endcanany
             @canany('RegisterNew read', 'RegisterNew create', 'RegisterNew update', 'RegisterNew delete')
                 <li>
-                    <a href="{{ route('createproduct.index') }}"
+                    <a href="{{ route('newregis.index') }}"
                         class="flex items-center gap-x-3 rounded-lg p-3 text-gray-300 transition-colors duration-200 hover:bg-blue-700 hover:text-white">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -97,7 +97,7 @@
             @endcanany
             @canany('Role read', 'Role create', 'Role update', 'Role delete')
                 <li>
-                    <a href="{{ route('createproduct.index') }}"
+                    <a href="{{ route('admin.roles.index') }}"
                         class="flex items-center gap-x-3 rounded-lg p-3 text-gray-300 transition-colors duration-200 hover:bg-blue-700 hover:text-white">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -112,7 +112,7 @@
             @endcanany
             @canany('User read', 'User create', 'User update', 'User delete')
                 <li>
-                    <a href="{{ route('createproduct.index') }}"
+                    <a href="{{ route('admin.users.index') }}"
                         class="flex items-center gap-x-3 rounded-lg p-3 text-gray-300 transition-colors duration-200 hover:bg-blue-700 hover:text-white">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -127,7 +127,7 @@
             @endcanany
             @canany('User read', 'User create', 'User update', 'User delete')
                 <li>
-                    <a href="{{ route('createproduct.index') }}"
+                    <a href="{{ route('company.index') }}"
                         class="flex items-center gap-x-3 rounded-lg p-3 text-gray-300 transition-colors duration-200 hover:bg-blue-700 hover:text-white">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -178,7 +178,13 @@
         {{-- ปุ่มออกจากระบบ --}}
         <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form-mobile').submit();"
             class="px-6 flex items-center gap-x-3 rounded-lg p-3 text-gray-300 transition-colors duration-200 hover:bg-blue-700 hover:text-white">
-            <i data-lucide="log-out" class="h-5 w-5"></i>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" class="lucide lucide-log-out-icon lucide-log-out">
+                <path d="m16 17 5-5-5-5" />
+                <path d="M21 12H9" />
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            </svg>
             <span>ออกจากระบบ</span>
         </a>
 
@@ -187,6 +193,8 @@
             @csrf
         </form>
     </div>
+    <p class="mt-auto p-4">Copyright 2025 รุ่น 1.0.0</p>
+
 </div>
 <script>
     window.addEventListener('load', function() {
