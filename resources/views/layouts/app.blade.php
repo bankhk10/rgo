@@ -11,11 +11,17 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <script src="{{ asset('js/app.js') }}" defer></script>
 </head>
+
 <body class="font-sans antialiased">
     <div x-data="{ sidebarOpen: false }" class="flex h-screen">
-        <div :class="sidebarOpen ? 'block' : 'hidden'" @click="sidebarOpen = false"
-            class="fixed z-20 inset-0 bg-black opacity-50 transition-opacity lg:hidden"></div>
-        @include('layouts.sidebar')
+        {{-- <div :class="sidebarOpen ? 'block' : 'hidden'" @click="sidebarOpen = false"
+            class="fixed z-20 inset-0 bg-black opacity-50 transition-opacity lg:hidden"></div> --}}
+        {{-- 1. Desktop Sidebar --}}
+        {{-- แสดงเฉพาะจอใหญ่ (lg) และซ่อนในจอเล็ก --}}
+        <div class="hidden lg:flex lg:flex-shrink-0">
+            @include('layouts.sidebar')
+        </div>
+        {{-- @include('layouts.sidebar') --}}
         <div class="flex-1 flex flex-col overflow-hidden ">
             @include('layouts.header')
             <main class="overflow-y-auto">
@@ -23,6 +29,16 @@
                     {{ $slot }}
                 </div>
             </main>
+        </div>
+
+        <div x-show="sidebarOpen" @click="sidebarOpen = false"
+            class="fixed inset-0 z-20 bg-blue-500 opacity-50 transition-opacity lg:hidden" x-cloak></div>
+        <div x-show="sidebarOpen" x-transition:enter="transition ease-in-out duration-300 transform"
+            x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0"
+            x-transition:leave="transition ease-in-out duration-300 transform" x-transition:leave-start="translate-x-0"
+            x-transition:leave-end="-translate-x-full"
+            class="fixed inset-y-0 left-0 z-30 w-64 overflow-y-auto bg-blue-800 lg:hidden" x-cloak>
+            @include('layouts.mobile-menu')
         </div>
 
     </div>
