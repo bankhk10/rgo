@@ -27,6 +27,7 @@ class User extends Authenticatable
         'password',
         'profile',
         'department', // เพิ่มแผนก
+        'affiliation', // สังกัด
         'position',   // เพิ่มตำแหน่ง
         'employee_id', // เพิ่มรหัสพนักงาน
         'phone_number', // เพิ่มเบอร์โทรศัพท์

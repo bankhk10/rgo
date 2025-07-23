@@ -69,13 +69,13 @@
                         <div class="dropdown-list" id="affiliationList">
                             <div class="dropdown-item text-gray-500" data-value="">-- เลือกสังกัดบริษัท --</div>
                             @foreach ($companies as $companie)
-                                <div class="dropdown-item" data-value="{{ $companie->id }}">
+                                <div class="dropdown-item" data-value="{{ $companie->full_name }}">
                                     {{ $companie->full_name }}
                                 </div>
                             @endforeach
                         </div>
-                        <input type="hidden" name="employee_id" id="affiliationInput"
-                            value="{{ old('affiliation_id') }}">
+                        <input type="hidden" name="affiliation" id="affiliationInput"
+                            value="{{ old('affiliation') }}">
                     </div>
 
                     <div>
@@ -171,6 +171,7 @@
                                     'Academic' => 'วิชาการ',
                                     'SalesDepartment' => 'ฝ่ายขาย',
                                     'IT' => 'เทคโนโลยีสารสนเทศ',
+                                    'no' => 'ไม่มีสิทธิ์ดำเนินการ',
                                 ];
                                 $parts = explode(' ', $roleName);
                                 $position = $positions[$parts[0]] ?? $parts[0];
@@ -304,7 +305,7 @@
             setupDropdown('roleBtn', 'roleList', 'roleInput', "{{ old('role_id') }}");
 
             // สังกัดบริษัท
-            setupDropdown('affiliationBtn', 'affiliationList', 'affiliationInput', "{{ old('affiliation_id') }}");
+            setupDropdown('affiliationBtn', 'affiliationList', 'affiliationInput', "{{ old('affiliation') }}");
 
             // Setup for 'employment_status' dropdown
             setupDropdown('statusBtn', 'statusList', 'statusInput', "{{ old('employment_status') }}");

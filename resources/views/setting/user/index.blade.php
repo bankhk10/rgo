@@ -40,6 +40,7 @@
                                                 'manager' => 'ผู้จัดการแผนก',
                                                 'head' => 'หัวหน้า',
                                                 'staff' => 'พนักงาน',
+                                                'ceo' => 'ผู้บริหาร',
                                             ];
                                             $departments = [
                                                 'Registration' => 'ทะเบียน',
@@ -48,6 +49,7 @@
                                                 'Academic' => 'วิชาการ',
                                                 'SalesDepartment' => 'ฝ่ายขาย',
                                                 'IT' => 'เทคโนโลยีสารสนเทศ',
+                                                'no' => 'ไม่มีสิทธิ์ดำเนินการ',
                                             ];
                                             $parts = explode(' ', $roleName);
                                             $position = $positions[$parts[0]] ?? $parts[0];

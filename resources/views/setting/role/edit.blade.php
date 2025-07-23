@@ -30,7 +30,7 @@
                             <option value="staff" {{ Str::contains($role->name, 'staff') ? 'selected' : '' }}>พนักงาน
                             </option>
                         </select>
-
+                        <label class="text-xl text-gray-600 whitespace-nowrap">แผนก </label>
                         <select name="department" id="select_department"
                             class="flex-1 min-w-[150px] p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                             <option value="">-- เลือกแผนก --</option>
@@ -42,6 +42,7 @@
                                     'Academic' => 'วิชาการ',
                                     'SalesDepartment' => 'ฝ่ายขาย',
                                     'IT' => 'เทคโนโลยีสารสนเทศ',
+                                    'no' => 'ไม่มีสิทธิ์ดำเนินการ',
                                 ];
                             @endphp
                             @foreach ($departments as $key => $label)

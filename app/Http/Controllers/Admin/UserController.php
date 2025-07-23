@@ -80,6 +80,7 @@ class UserController extends Controller
                 'profile' => 'aa_user.png',
                 'password' => bcrypt($request->password),
                 'department' => $request->department,
+                'affiliation' => $request->affiliation,
                 'position' => $request->position,
                 'employee_id' => $request->employee_id,
                 'phone_number' => $request->phone_number,
