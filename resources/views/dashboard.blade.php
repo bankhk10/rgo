@@ -38,7 +38,7 @@
             <div class="flex flex-wrap justify-center gap-10 mt-10 mb-10">
                 {{-- กราฟ 1 --}}
                 <a href="{{ route('import.index') }}" class="group">
-                    <div class="w-full sm:w-[300px] max-w-xs bg-gray-100 p-6 rounded-2xl shadow-md border border-gray-200">
+                    <div class="w-full sm:w-[300px] max-w-xs bg-white p-6 rounded-2xl shadow-md border border-gray-200">
                         <h2 class="text-center text-lg font-bold text-blue-700 mb-4">ทะเบียนนำเข้าวัตถุดิบ</h2>
                         <hr>
                         <div class="aspect-w-1 aspect-h-1 mt-4 mb-10">
@@ -66,7 +66,7 @@
 
                 {{-- กราฟ 3 --}}
                 <a href="{{ route('createproduct.index') }}" class="group">
-                    <div class="w-full sm:w-[300px] max-w-xs bg-gray-100 p-6 rounded-2xl shadow-md border border-gray-200">
+                    <div class="w-full sm:w-[300px] max-w-xs bg-white p-6 rounded-2xl shadow-md border border-gray-200">
                         <h2 class="text-center text-lg font-bold text-blue-700 mb-4">ทะเบียนผลิต</h2>
                         <hr>
                         <div class="aspect-w-1 aspect-h-1 mt-4 mb-10">
@@ -93,7 +93,7 @@
 
                 {{-- กราฟ 2 --}}
                 <a href="{{ route('newregis.productall') }}" class="group">
-                    <div class="w-full sm:w-[300px] max-w-xs bg-gray-100 p-6 rounded-2xl shadow-md border border-gray-200">
+                    <div class="w-full sm:w-[300px] max-w-xs bg-white p-6 rounded-2xl shadow-md border border-gray-200">
                         <h2 class="text-center text-lg font-bold text-blue-700 mb-4">ทะเบียนสินค้า</h2>
                         <hr>
                         <div class="aspect-w-1 aspect-h-1 mt-4 mb-10">
