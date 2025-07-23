@@ -11,32 +11,58 @@ class ChemicalImport extends Model
 
     protected $fillable = [
         'company_id',
-        'registration_no',
-        'expiry_date',
+        'registration_number',
+        'expired_license_date',
         'chemical_name_th',
         'chemical_name_en',
-        'formula',
-        'trade_name',
+        'composition',
         'manufacturer',
-        'supplier',
-        'license_no',
-        'store_company_1',
-        'store_company_2',
-        'import_quantity',
-        'remaining_quantity',
-        'second_expiry_date',
+        'registrant',
+        'registration_type',
+        'importer',
+        'distributor',
+        'trade_name',
+        'trade_name_at',
+        'type_production_registration',
+        'usage_production_registration',
+        'group_of_substances',
+        'plant',
+        'pests',
+        'production_license_number',
+        'production_license_expiry',
+        'production_license_quantity',
         'possession_form_wo2',
         'possession_form_expiry',
-        'packaging',
-        'status',
+        'packaging_size_details',
+        'registration_number_pass',
+        'registration_expiry_date',
+        'expired_at',
+        'status_date',
         'remarks',
+        'new_or_old',
+        'step',
+        'status',
+        'is_active',
+        'is_deleted',
+        'image',
+        'document',
+        'progress',
+        'sub_progress',
+        'created_by',
+        'updated_by',
     ];
 
     protected $casts = [
-        'expiry_date' => 'date',
-        'second_expiry_date' => 'date',
+        'expired_license_date' => 'date',
+        'production_license_expiry' => 'date',
         'possession_form_expiry' => 'date',
-        'import_quantity' => 'float',
+        'registration_expiry_date' => 'date',
+        'expired_at' => 'date',
+        'new_or_old' => 'boolean',
+        'is_active' => 'boolean',
+        'is_deleted' => 'boolean',
+        'progress' => 'decimal:2', // Cast to decimal with 2 precision
+        'sub_progress' => 'decimal:2', // Cast to decimal with 2 precision
     ];
 
     public function company()
@@ -44,18 +70,13 @@ class ChemicalImport extends Model
         return $this->belongsTo(Company::class);
     }
 
-    public function storeCompany1()
+    public function importerCompany()
     {
-        return $this->belongsTo(Company::class, 'store_company_1'); // 'store_company_1' is the foreign key
+        return $this->belongsTo(Company::class, 'importer'); // 'store_company_1' is the foreign key
     }
 
-    public function storeCompany2()
+    public function distributorCompany()
     {
-        return $this->belongsTo(Company::class, 'store_company_2'); // 'store_company_2' is the foreign key
-    }
-
-    public function supplierCompany()
-    {
-        return $this->belongsTo(Company::class, 'supplier'); // 'store_company_2' is the foreign key
+        return $this->belongsTo(Company::class, 'distributor'); // 'store_company_1' is the foreign key
     }
 }

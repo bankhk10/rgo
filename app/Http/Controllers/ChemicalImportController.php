@@ -8,6 +8,8 @@ use App\Imports\ChemicalImportsImport; // อย่าลืม import Import Cl
 use App\Models\ChemicalImport;
 use App\Models\Company;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Log;
 
 
 class ChemicalImportController extends Controller
@@ -37,7 +39,7 @@ class ChemicalImportController extends Controller
 
         // ส่วนของการกรองตามช่วงวันหมดอายุ (expiry_date_from/to) ยังคงเดิม
         if ($request->filled('expiry_date_from') && $request->filled('expiry_date_to')) {
-            $query->whereBetween('expiry_date', [
+            $query->whereBetween('expired_license_date', [
                 $request->input('expiry_date_from'),
                 $request->input('expiry_date_to'),
             ]);
@@ -49,10 +51,10 @@ class ChemicalImportController extends Controller
             $now = Carbon::now();
 
             if ($statusFilter === 'expired') {
-                $query->whereDate('expiry_date', '<', $now);
+                $query->whereDate('expired_license_date', '<', $now);
             } elseif ($statusFilter === 'soon_expired') {
-                $query->whereDate('expiry_date', '>=', $now)
-                    ->whereDate('expiry_date', '<=', $now->copy()->addMonths(6));
+                $query->whereDate('expired_license_date', '>=', $now)
+                    ->whereDate('expired_license_date', '<=', $now->copy()->addMonths(6));
             }
             // ถ้า status_filter ไม่ใช่ 'expired' หรือ 'soon_expired' (เช่น ถ้ามีค่าอื่นที่ไม่รู้จัก หรือไม่มีค่า)
             // ก็จะไม่เพิ่มเงื่อนไขการกรองนี้ ทำให้แสดงทั้งหมด (หรือตามเงื่อนไข search/date อื่นๆ)
@@ -62,14 +64,14 @@ class ChemicalImportController extends Controller
 
         // คำนวณค่าสถานะใหม่โดยใช้ Carbon เพื่อให้แม่นยำตามเวลาปัจจุบัน
         $total = ChemicalImport::count();
-        $expiredCount = ChemicalImport::whereDate('expiry_date', '<', Carbon::now())->count();
-        $soonCount = ChemicalImport::whereDate('expiry_date', '>=', Carbon::now())
-            ->whereDate('expiry_date', '<=', Carbon::now()->addMonths(6))
+        $expiredCount = ChemicalImport::whereDate('expired_license_date', '<', Carbon::now())->count();
+        $soonCount = ChemicalImport::whereDate('expired_license_date', '>=', Carbon::now())
+            ->whereDate('expired_license_date', '<=', Carbon::now()->addMonths(6))
             ->count();
 
         // สำคัญ: สำหรับแต่ละรายการใน $imports เราจะกำหนดค่า status ให้ถูกต้องก่อนส่งไปยัง Blade view
         foreach ($imports as $import) {
-            $expiryDate = Carbon::parse($import->expiry_date);
+            $expiryDate = Carbon::parse($import->expired_license_date);
             $now = Carbon::now();
 
             if ($expiryDate->isPast()) {
@@ -111,15 +113,93 @@ class ChemicalImportController extends Controller
     public function store(Request $request)
     {
 
-        $validatedData = $request->validate([
-            'company_id' => 'required', // This line makes it required
-            // Add other validation rules for your form fields
-        ], [
-            'company_id.required' => 'กรุณาเลือกบริษัทนำเข้า', // Custom error message
-        ]);
 
-        ChemicalImport::create($request->all());
-        return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จ');
+        try {
+            // 1. Validation ข้อมูลจากฟอร์ม
+            $validatedData = $request->validate([
+                'company_id' => 'nullable|exists:companies,id', // ตรวจสอบว่า company_id มีอยู่ในตาราง companies
+                'registration_number' => 'nullable|string|max:255',
+                'expired_license_date' => 'nullable|date',
+                'chemical_name_th' => 'nullable|string|max:255',
+                'chemical_name_en' => 'nullable|string|max:255',
+                'composition' => 'nullable|string|max:1000',
+                'manufacturer' => 'nullable|string|max:255',
+                'registrant' => 'nullable|string|max:255',
+                'registration_type' => 'nullable|string|max:255',
+                'importer' => 'nullable|string|max:255',
+                'distributor' => 'nullable|string|max:255',
+                'trade_name' => 'nullable|string|max:255',
+                'trade_name_at' => 'nullable|string|max:255',
+                'type_production_registration' => 'nullable|string|max:255',
+                'usage_production_registration' => 'nullable|string|max:255',
+                'group_of_substances' => 'nullable|string|max:255',
+                'plant' => 'nullable|string|max:255',
+                'pests' => 'nullable|string|max:255',
+                'production_license_number' => 'nullable|string|max:255',
+                'production_license_expiry' => 'nullable|date',
+                'production_license_quantity' => 'nullable|string|max:255',
+                'possession_form_wo2' => 'nullable|string|max:255',
+                'possession_form_expiry' => 'nullable|date',
+                'packaging_size_details' => 'nullable|string|max:1000',
+                'registration_number_pass' => 'nullable|string|max:255',
+                'registration_expiry_date' => 'nullable|date',
+                'expired_at' => 'nullable|date',
+                'status_date' => 'nullable|string|max:255',
+                'remarks' => 'nullable|string|max:1000',
+                'image' => 'nullable|image|max:2048', // ตัวอย่าง: อนุญาตเฉพาะไฟล์ภาพ ขนาดไม่เกิน 2MB
+                'document' => 'nullable|file|mimes:pdf,doc,docx|max:5120', // ตัวอย่าง: อนุญาตเฉพาะ PDF, DOC, DOCX ขนาดไม่เกิน 5MB
+                'progress' => 'nullable|numeric|min:0|max:100',
+                'sub_progress' => 'nullable|numeric|min:0|max:100',
+
+            ]);
+
+            // 2. Map ข้อมูลและกำหนดค่าเริ่มต้น/เพิ่มเติม
+            $dataToSave = $validatedData; // เริ่มต้นด้วยข้อมูลที่ผ่านการ Validation
+
+            // กำหนดค่าเริ่มต้นสำหรับฟิลด์ที่ไม่ได้มาจากฟอร์มโดยตรงหรือต้องการค่า default
+            $dataToSave['new_or_old'] = $request->has('new_or_old') ? true : false; // สมมติว่าเป็น checkbox
+            $dataToSave['step'] = $request->input('step', 'initial'); // ใช้ค่าจากฟอร์ม ถ้าไม่มี ให้ 'initial'
+            $dataToSave['status'] = $request->input('status', 'pending'); // ใช้ค่าจากฟอร์ม ถ้าไม่มี ให้ 'pending'
+            $dataToSave['is_active'] = $request->has('is_active') ? true : false; // สมมติว่าเป็น checkbox
+            $dataToSave['is_deleted'] = false; // ควรตั้งเป็น false เสมอเมื่อสร้างใหม่
+
+            // กำหนด created_by โดยใช้ ID ของผู้ใช้งานที่ล็อกอินอยู่
+            if (Auth::check()) {
+                $dataToSave['created_by'] = Auth::id(); // หรือ Auth::user()->name หากต้องการชื่อ
+            } else {
+                $dataToSave['created_by'] = null; // หรือกำหนดเป็นค่าอื่นหากผู้ใช้ไม่ได้ล็อกอิน
+            }
+
+            // การจัดการไฟล์ (Image และ Document)
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('production_images', 'public'); // เก็บใน storage/app/public/production_images
+                $dataToSave['image'] = $imagePath;
+            }
+
+            if ($request->hasFile('document')) {
+                $documentPath = $request->file('document')->store('production_documents', 'public'); // เก็บใน storage/app/public/production_documents
+                $dataToSave['document'] = $documentPath;
+            }
+
+            // 3. สร้าง Record ใหม่ในฐานข้อมูล
+            ChemicalImport::create($dataToSave);
+
+            // 4. ส่งกลับ Response หรือ Redirect ไปยังหน้าอื่น
+            // return redirect()->route('createproduct.index')->with('success', 'บันทึกข้อมูลการขึ้นทะเบียนผลิตเรียบร้อยแล้ว!');
+            return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จ');
+        } catch (ValidationException $e) {
+            // หากเกิดข้อผิดพลาดในการ Validation
+            return redirect()->back()->withErrors($e->errors())->withInput();
+        } catch (\Exception $e) {
+            // หากเกิดข้อผิดพลาดอื่นๆ
+            return redirect()
+                ->back()
+                ->with('error', 'เกิดข้อผิดพลาดในการบันทึกข้อมูล: ' . $e->getMessage())
+                ->withInput();
+        }
+
+        // ChemicalImport::create($request->all());
+        // return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จ');
     }
 
     /**
@@ -130,7 +210,11 @@ class ChemicalImportController extends Controller
      */
     public function show(ChemicalImport $import)
     {
-        return view('import.show', compact('import'));
+
+        $product = $import;
+        $companies = Company::all();
+        return view('import.show', compact('product', 'companies'));
+        // return view('import.show', compact('import'));
     }
 
     /**

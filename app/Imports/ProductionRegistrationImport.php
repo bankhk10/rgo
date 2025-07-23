@@ -56,7 +56,7 @@ class ProductionRegistrationImport implements ToModel, WithHeadingRow
             'possession_form_wo2'           => $row['possession_form_wo2'] ?? null,
             'possession_form_expiry'        => $parseDate($row['possession_form_expiry'] ?? null),
             'packaging_size_details'        => $row['packaging_size_details'] ?? null,
-            'registration_number_pass'      => $row['registration_expiry_date'] ?? null, // ดูเหมือนจะอยู่คนละชื่อ
+            'registration_number_pass'      => $row['registration_number_pass'] ?? null, // ดูเหมือนจะอยู่คนละชื่อ
             'expired_at'                    => $parseDate($row['expired_at'] ?? null),
         ]);
     }

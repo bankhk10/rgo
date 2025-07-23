@@ -154,9 +154,9 @@
                                         <td class="py-4 px-4">{{ $import->chemical_name_en }}</td>
                                         <td class="py-4 px-4">{{ $import->company->full_name ?? '' }}</td>
                                         <td class="py-4 px-4 text-center">{{ $import->company->name ?? '' }}</td>
-                                        <td class="py-4 px-8">{{ $import->registration_no }}</td>
+                                        <td class="py-4 px-8">{{ $import->registration_number }}</td>
                                         <td class="py-4 px-8">
-                                            {{ \Carbon\Carbon::parse($import->expiry_date)->addYears(543)->format('d/m/Y') }}
+                                            {{ \Carbon\Carbon::parse($import->expired_license_date)->addYears(543)->format('d/m/Y') }}
                                         </td>
                                         {{-- การตกแต่งสีสถานะ --}}
                                         <td class="py-4 px-8">
