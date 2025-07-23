@@ -14,7 +14,8 @@
                 </span>
             </h1>
             <div class="flex flex-row justify-around mb-8">
-                <a href="{{ route('newregis.index') }}" class="group bg-gradient-to-br from-green-100 to-green-50 p-4 rounded-3xl text-center border-2 border-green-200 hover:scale-105 transition-all duration-300"
+                <a href="{{ route('newregis.index') }}"
+                    class="group bg-gradient-to-br from-green-100 to-green-50 p-4 rounded-3xl text-center border-2 border-green-200 hover:scale-105 transition-all duration-300"
                     style="width: 300px; height: 200px;">
                     <div class="flex justify-center mb-2">
                         <div class="bg-green-200 rounded-full p-3 group-hover:bg-green-300 transition">
@@ -37,7 +38,7 @@
             <div class="flex flex-wrap justify-center gap-10 mt-10 mb-10">
                 {{-- กราฟ 1 --}}
                 <a href="{{ route('import.index') }}" class="group">
-                    <div class="w-full sm:w-[300px] max-w-xs bg-white p-6 rounded-2xl shadow-md border border-gray-200">
+                    <div class="w-full sm:w-[300px] max-w-xs bg-gray-100 p-6 rounded-2xl shadow-md border border-gray-200">
                         <h2 class="text-center text-lg font-bold text-blue-700 mb-4">ทะเบียนนำเข้าวัตถุดิบ</h2>
                         <hr>
                         <div class="aspect-w-1 aspect-h-1 mt-4 mb-10">
@@ -46,12 +47,12 @@
                         <div class="flex justify-center items-center gap-4 mt-4 text-sm">
                             <div class="flex items-center gap-2">
                                 <span class="w-3 h-3 rounded-full"
-                                    style="background-color: rgba(31, 100, 66, 1);"></span>
+                                    style="background-color: rgba(26, 168, 88, 1);"></span>
                                 <span>ทั้งหมด</span>
                             </div>
                             <div class="flex items-center gap-2">
                                 <span class="w-3 h-3 rounded-full"
-                                    style="background-color: rgba(255, 255, 0, 1);"></span>
+                                    style="background-color: rgba(235, 179, 8, 1);"></span>
                                 <span>ใกล้หมดอายุ</span>
                             </div>
                             <div class="flex items-center gap-2">
@@ -65,7 +66,7 @@
 
                 {{-- กราฟ 3 --}}
                 <a href="{{ route('createproduct.index') }}" class="group">
-                    <div class="w-full sm:w-[300px] max-w-xs bg-white p-6 rounded-2xl shadow-md border border-gray-200">
+                    <div class="w-full sm:w-[300px] max-w-xs bg-gray-100 p-6 rounded-2xl shadow-md border border-gray-200">
                         <h2 class="text-center text-lg font-bold text-blue-700 mb-4">ทะเบียนผลิต</h2>
                         <hr>
                         <div class="aspect-w-1 aspect-h-1 mt-4 mb-10">
@@ -74,12 +75,12 @@
                         <div class="flex justify-center items-center gap-4 mt-4 text-sm">
                             <div class="flex items-center gap-2">
                                 <span class="w-3 h-3 rounded-full"
-                                    style="background-color: rgba(31, 100, 66, 1);"></span>
+                                    style="background-color: rgba(26, 168, 88, 1);"></span>
                                 <span>ทั้งหมด</span>
                             </div>
                             <div class="flex items-center gap-2">
                                 <span class="w-3 h-3 rounded-full"
-                                    style="background-color: rgba(255, 255, 0, 1);"></span>
+                                    style="background-color: rgba(235, 179, 8, 1);"></span>
                                 <span>ใกล้หมดอายุ</span>
                             </div>
                             <div class="flex items-center gap-2">
@@ -92,7 +93,7 @@
 
                 {{-- กราฟ 2 --}}
                 <a href="{{ route('newregis.productall') }}" class="group">
-                    <div class="w-full sm:w-[300px] max-w-xs bg-white p-6 rounded-2xl shadow-md border border-gray-200">
+                    <div class="w-full sm:w-[300px] max-w-xs bg-gray-100 p-6 rounded-2xl shadow-md border border-gray-200">
                         <h2 class="text-center text-lg font-bold text-blue-700 mb-4">ทะเบียนสินค้า</h2>
                         <hr>
                         <div class="aspect-w-1 aspect-h-1 mt-4 mb-10">
@@ -101,12 +102,12 @@
                         <div class="flex justify-center items-center gap-4 mt-4 text-sm">
                             <div class="flex items-center gap-2">
                                 <span class="w-3 h-3 rounded-full"
-                                    style="background-color: rgba(31, 100, 66, 1);"></span>
+                                    style="background-color: rgba(26, 168, 88, 1);"></span>
                                 <span>ทั้งหมด</span>
                             </div>
                             <div class="flex items-center gap-2">
                                 <span class="w-3 h-3 rounded-full"
-                                    style="background-color: rgba(255, 255, 0, 1);"></span>
+                                    style="background-color: rgba(235, 179, 8, 1);"></span>
                                 <span>ใกล้หมดอายุ</span>
                             </div>
                             <div class="flex items-center gap-2">
@@ -138,8 +139,8 @@
                 label: 'จำนวน',
                 data: [{{ $totalImport }}, {{ $soonImport }}, {{ $expiredImport }}],
                 backgroundColor: [
-                    'rgba(31, 100, 66, 1)', // สีเขียว (ทั้งหมด)
-                    'rgba(255, 255, 0, 1)', // สีเหลือง (ใกล้หมดอายุ)
+                    'rgba(26, 168, 88, 1)', // สีเขียว (ทั้งหมด)
+                    'rgba(235, 179, 8, 1)', // สีเหลือง (ใกล้หมดอายุ)
                     'rgba(254, 2, 2, 1)' // สีแดง (หมดอายุ)
                 ],
                 hoverOffset: 4
@@ -169,8 +170,8 @@
                 label: 'จำนวน',
                 data: [{{ $totalRegistrations }}, {{ $soonRegistrations }}, {{ $expiredRegistrations }}],
                 backgroundColor: [
-                    'rgba(31, 100, 66, 1)', // สีเขียว (ทั้งหมด)
-                    'rgba(255, 255, 0, 1)', // สีเหลือง (ใกล้หมดอายุ)
+                    'rgba(26, 168, 88, 1)', // สีเขียว (ทั้งหมด)
+                    'rgba(235, 179, 8, 1)', // สีเหลือง (ใกล้หมดอายุ)
                     'rgba(254, 2, 2, 1)' // สีแดง (หมดอายุ)
                 ],
                 hoverOffset: 4
@@ -200,8 +201,8 @@
                 label: 'จำนวน',
                 data: [{{ $totalProduct }}, {{ $soonProduct }}, {{ $expiredProduct }}],
                 backgroundColor: [
-                    'rgba(31, 100, 66, 1)', // สีเขียว (ทั้งหมด)
-                    'rgba(255, 255, 0, 1)', // สีเหลือง (ใกล้หมดอายุ)
+                    'rgba(26, 168, 88, 1)', // สีเขียว (ทั้งหมด)
+                    'rgba(235, 179, 8, 1)', // สีเหลือง (ใกล้หมดอายุ)
                     'rgba(254, 2, 2, 1)' // สีแดง (หมดอายุ)
                 ],
                 hoverOffset: 4
