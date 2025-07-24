@@ -140,7 +140,7 @@
                 <div>
                     <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันหมดอายุใบแจ้งครอบครอง วอ.2</label>
                     <p class="w-full p-3 border rounded-full bg-gray-100 text-gray-700">
-                        {{ $product->possession_form_expiry ?? '-' }}
+                        {{ $product->possession_form_expiry ? \Carbon\Carbon::parse($product->possession_form_expiry)->format('d/m/Y') : '-' }}
                     </p>
                 </div>
                 <div>
@@ -152,7 +152,7 @@
                 <div>
                     <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">หมดอายุเมื่อ</label>
                     <p class="w-full p-3 border rounded-full bg-gray-100 text-gray-700">
-                        {{ $product->expired_at ? \Carbon\Carbon::parse($product->production_license_expiry)->format('d/m/Y') : '-' }}
+                        {{ $product->expired_at ? \Carbon\Carbon::parse($product->expired_at)->format('d/m/Y') : '-' }}
                     </p>
                 </div>
                 <div class="md:col-span-2">

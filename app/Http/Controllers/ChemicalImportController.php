@@ -112,8 +112,6 @@ class ChemicalImportController extends Controller
      */
     public function store(Request $request)
     {
-
-
         try {
             // 1. Validation ข้อมูลจากฟอร์ม
             $validatedData = $request->validate([
@@ -181,25 +179,16 @@ class ChemicalImportController extends Controller
                 $dataToSave['document'] = $documentPath;
             }
 
-            // 3. สร้าง Record ใหม่ในฐานข้อมูล
             ChemicalImport::create($dataToSave);
-
-            // 4. ส่งกลับ Response หรือ Redirect ไปยังหน้าอื่น
-            // return redirect()->route('createproduct.index')->with('success', 'บันทึกข้อมูลการขึ้นทะเบียนผลิตเรียบร้อยแล้ว!');
             return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จ');
         } catch (ValidationException $e) {
-            // หากเกิดข้อผิดพลาดในการ Validation
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
-            // หากเกิดข้อผิดพลาดอื่นๆ
             return redirect()
                 ->back()
                 ->with('error', 'เกิดข้อผิดพลาดในการบันทึกข้อมูล: ' . $e->getMessage())
                 ->withInput();
         }
-
-        // ChemicalImport::create($request->all());
-        // return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จ');
     }
 
     /**
@@ -237,33 +226,97 @@ class ChemicalImportController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ChemicalImport $import)
+            public function update(Request $request, ChemicalImport $import)
     {
-        // Validate input
-        $validated = $request->validate([
-            'company_id'          => 'required|exists:companies,id',
-            'registration_no'     => 'nullable|string|max:255',
-            'expiry_date'         => 'nullable|date',
-            'second_expiry_date'  => 'nullable|date',
-            'chemical_name_th'    => 'nullable|string|max:255',
-            'chemical_name_en'    => 'nullable|string|max:255',
-            'formula'             => 'nullable|string|max:255',
-            'trade_name'          => 'nullable|string|max:255',
-            'manufacturer'        => 'nullable|string|max:255',
-            'supplier'            => 'nullable|string|max:255',
-            'license_no'          => 'nullable|string|max:255',
-            'import_quantity'     => 'nullable|numeric|min:0',
-            'remaining_quantity'  => 'nullable|numeric|min:0',
-            'packaging'           => 'nullable|string',
-            'remarks'                => 'nullable|string',
-            'store_company_1'     => 'nullable|string|different:store_company_2',
-            'store_company_2'     => 'nullable|string|different:store_company_1',
-        ]);
+        try {
+            // 1. Validation ข้อมูลจากฟอร์ม
+            $validatedData = $request->validate([
+                'company_id' => 'nullable|exists:companies,id',
+                'registration_number' => 'nullable|string|max:255',
+                'expired_license_date' => 'nullable|date',
+                'chemical_name_th' => 'nullable|string|max:255',
+                'chemical_name_en' => 'nullable|string|max:255',
+                'composition' => 'nullable|string|max:1000',
+                'manufacturer' => 'nullable|string|max:255',
+                'registrant' => 'nullable|string|max:255',
+                'registration_type' => 'nullable|string|max:255',
+                'importer' => 'nullable|string|max:255',
+                'distributor' => 'nullable|string|max:255',
+                'trade_name' => 'nullable|string|max:255',
+                'trade_name_at' => 'nullable|string|max:255',
+                'type_production_registration' => 'nullable|string|max:255',
+                'usage_production_registration' => 'nullable|string|max:255',
+                'group_of_substances' => 'nullable|string|max:255',
+                'plant' => 'nullable|string|max:255',
+                'pests' => 'nullable|string|max:255',
+                'production_license_number' => 'nullable|string|max:255',
+                'production_license_expiry' => 'nullable|date',
+                'production_license_quantity' => 'nullable|string|max:255',
+                'possession_form_wo2' => 'nullable|string|max:255',
+                'possession_form_expiry' => 'nullable|date',
+                'packaging_size_details' => 'nullable|string|max:1000',
+                'registration_number_pass' => 'nullable|string|max:255',
+                'registration_expiry_date' => 'nullable|date',
+                'expired_at' => 'nullable|date',
+                'status_date' => 'nullable|string|max:255',
+                'remarks' => 'nullable|string|max:1000',
+                'image' => 'nullable|image|max:2048', // optional: 'image' if you want to allow changing image
+                'document' => 'nullable|file|mimes:pdf,doc,docx|max:5120', // optional: 'file' if you want to allow changing document
+                'progress' => 'nullable|numeric|min:0|max:100',
+                'sub_progress' => 'nullable|numeric|min:0|max:100',
+                // หมายเหตุ: สำหรับฟิลด์ที่ไม่จำเป็นต้องเปลี่ยนผ่านฟอร์ม (เช่น created_by, is_deleted) ไม่ต้องใส่ใน validation rules
+            ]);
 
-        $import->update($validated);
+            // 2. Map ข้อมูลและกำหนดค่าเพิ่มเติม (คล้ายกับ Store แต่ไม่มี created_by)
+            $dataToUpdate = $validatedData;
 
-        return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จ');
+            // กำหนดค่าสำหรับ Checkbox หรือค่า default
+            $dataToUpdate['new_or_old'] = $request->has('new_or_old') ? true : false;
+            $dataToUpdate['is_active'] = $request->has('is_active') ? true : false;
+            // ไม่ต้อง update 'status', 'step' ถ้าฟอร์มไม่ได้ส่งมา หรือถ้ามี logic เฉพาะ
+            // $dataToUpdate['step'] = $request->input('step', $productionRegistration->step);
+            // $dataToUpdate['status'] = $request->input('status', $productionRegistration->status);
+
+            // กำหนด updated_by โดยใช้ ID ของผู้ใช้งานที่ล็อกอินอยู่
+            if (Auth::check()) {
+                $dataToUpdate['updated_by'] = Auth::id(); // หรือ Auth::user()->name หากต้องการชื่อ
+            } else {
+                $dataToUpdate['updated_by'] = null;
+            }
+
+            // การจัดการไฟล์ (Image และ Document)
+            // ถ้ามีการอัปโหลดไฟล์ใหม่ ให้ลบไฟล์เก่าก่อน (ถ้ามี)
+            if ($request->hasFile('image')) {
+                // ลบรูปเก่า (ถ้ามีและไม่ใช่ default image)
+                if ($import->image && \Storage::disk('public')->exists($import->image)) {
+                    \Storage::disk('public')->delete($import->image);
+                }
+                $imagePath = $request->file('image')->store('production_images', 'public');
+                $dataToUpdate['image'] = $imagePath;
+            }
+
+            if ($request->hasFile('document')) {
+                // ลบเอกสารเก่า (ถ้ามี)
+                if ($import->document && \Storage::disk('public')->exists($import->document)) {
+                    \Storage::disk('public')->delete($import->document);
+                }
+                $documentPath = $request->file('document')->store('production_documents', 'public');
+                $dataToUpdate['document'] = $documentPath;
+            }
+
+            // 3. อัปเดต Record ในฐานข้อมูล
+            $import->update($dataToUpdate);
+
+            // 4. ส่งกลับ Response หรือ Redirect ไปยังหน้าอื่น
+            // return redirect()->route('production-registrations.index')->with('success', 'แก้ไขข้อมูลการขึ้นทะเบียนผลิตเรียบร้อยแล้ว!');
+            return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จ');
+        } catch (ValidationException $e) {
+            return redirect()->back()->withErrors($e->errors())->withInput();
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'เกิดข้อผิดพลาดในการแก้ไขข้อมูล: ' . $e->getMessage())->withInput();
+        }
     }
+
 
     /**
      * Remove the specified resource from storage.

@@ -285,7 +285,7 @@
                     <div>
                         <label for="registration_number_pass"
                             class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลขที่ใบอนุญาตหมดอายุ</label>
-                        <input type="number" name="registration_number_pass" id="registration_number_pass"
+                        <input type="text" name="registration_number_pass" id="registration_number_pass"
                             value="{{ old('registration_number_pass') }}" placeholder="ใส่เลขที่ใบอนุญาตหมดอายุ"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('registration_number_pass')
@@ -294,10 +294,10 @@
                     </div>
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">หมดอายุเมื่อ</label>
-                        <input type="date" name="production_license_expiry"
-                            value="{{ old('production_license_expiry') }}"
+                        <input type="date" name="expired_at"
+                            value="{{ old('expired_at') }}"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                        @error('production_license_expiry')
+                        @error('expired_at')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
@@ -360,6 +360,16 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if ($errors->has('registration_number'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'เลขทะเบียนซ้ำ',
+                text: '{{ $errors->first('registration_number') }}'
+            });
+        </script>
+    @endif
+
     @if (session('success'))
         <script>
             Swal.fire({

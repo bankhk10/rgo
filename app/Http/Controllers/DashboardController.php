@@ -17,10 +17,10 @@ class DashboardController extends Controller
         $today = now();
         // ทะเบียนนำเข้าวัตถุดิบ
         $totalImport = ChemicalImport::count();
-        $soonImport = ChemicalImport::whereDate('expiry_date', '>=', Carbon::now())
-            ->whereDate('expiry_date', '<=', Carbon::now()->addMonths(6))
+        $soonImport = ChemicalImport::whereDate('expired_license_date', '>=', Carbon::now())
+            ->whereDate('expired_license_date', '<=', Carbon::now()->addMonths(6))
             ->count();
-        $expiredImport = ChemicalImport::whereDate('expiry_date', '<', Carbon::now())->count();
+        $expiredImport = ChemicalImport::whereDate('expired_license_date', '<', Carbon::now())->count();
 
 
         // ทะเบียนสินค้า
