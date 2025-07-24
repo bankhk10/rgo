@@ -131,6 +131,30 @@
                         {{ $product->production_license_quantity ?? '-' }}
                     </p>
                 </div>
+                <div>
+                    <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ใบแจ้งครอบครอง วอ.2</label>
+                    <p class="w-full p-3 border rounded-full bg-gray-100 text-gray-700">
+                        {{ $product->possession_form_wo2 ?? '-' }}
+                    </p>
+                </div>
+                <div>
+                    <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันหมดอายุใบแจ้งครอบครอง วอ.2</label>
+                    <p class="w-full p-3 border rounded-full bg-gray-100 text-gray-700">
+                        {{ $product->possession_form_expiry ? \Carbon\Carbon::parse($product->possession_form_expiry)->format('d/m/Y') : '-' }}
+                    </p>
+                </div>
+                <div>
+                    <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลขที่ใบอนุญาตหมดอายุ</label>
+                    <p class="w-full p-3 border rounded-full bg-gray-100 text-gray-700">
+                        {{ $product->registration_number_pass ?? '-' }}
+                    </p>
+                </div>
+                <div>
+                    <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">หมดอายุเมื่อ</label>
+                    <p class="w-full p-3 border rounded-full bg-gray-100 text-gray-700">
+                        {{ $product->expired_at ? \Carbon\Carbon::parse($product->expired_at)->format('d/m/Y') : '-' }}
+                    </p>
+                </div>
             </div>
         </div>
 
@@ -144,7 +168,7 @@
                 <div class="md:col-span-2">
                     <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">รายละเอียดขนาดบรรจุ</label>
                     <textarea readonly name="packaging_size_details" placeholder=""
-                        class=" bg-gray-100 w-full p-3 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        class="text-gray-700 bg-gray-100 w-full p-3 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                         rows="2">{{ old('packaging_size_details', $product->packaging_size_details) }}</textarea>
                 </div>
             </div>
@@ -162,6 +186,10 @@
             </a> --}}
         </div>
     </div>
+
+    <script>
+        document.getElementById('menu-manufacture')?.classList.add('side-menu--active');
+    </script>
 
     {{-- Remove SweetAlert and Custom Message Box script and style if not needed for show page --}}
     {{-- You can keep them if you plan to add dynamic alerts on this page --}}

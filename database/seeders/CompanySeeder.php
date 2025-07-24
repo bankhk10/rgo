@@ -129,6 +129,7 @@ class CompanySeeder extends Seeder
             ['name' => '-', 'full_name' => 'ไทยเบสท์โฮลดิ้ง บจก.', 'address' => null, 'email' => null, 'phone' => null, 'tax_id' => null, 'type' => 3, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
             ['name' => '-', 'full_name' => 'นายเกษตร บจก.', 'address' => null, 'email' => null, 'phone' => null, 'tax_id' => null, 'type' => 3, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
             ['name' => '-', 'full_name' => 'บีแฟค อินเตอร์ บจก.', 'address' => null, 'email' => null, 'phone' => null, 'tax_id' => null, 'type' => 3, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['name' => '-', 'full_name' => 'เอสทีม อินเตอร์เทรด บจก.', 'address' => null, 'email' => null, 'phone' => null, 'tax_id' => null, 'type' => 3, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
         ]);
     }
 }

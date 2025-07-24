@@ -27,7 +27,7 @@
                             <div class="dropdown-list" id="companyList">
                                 <div class="dropdown-item text-gray-500" data-value="">-- เลือก --</div>
                                 @foreach ($companies as $company)
-                                    @if ($company->id != 4)
+                                    @if ($company->type == 1 || $company->type == 2)
                                         <div class="dropdown-item" data-value="{{ $company->id }}">
                                             {{ $company->full_name }}
                                         </div>
@@ -255,11 +255,48 @@
                     </div>
                     <div>
                         <label for="production_license_quantity"
-                            class="mx-3 text-base block text-gray-700 mb-1 mt-3">ปริมาณผลิต (ตามใบอนุญาต)</label>
+                            class="mx-3 text-base block text-gray-700 mb-1 mt-3">ปริมาณผลิตใบอนุญาต</label>
                         <input type="number" name="production_license_quantity" id="production_license_quantity"
                             value="{{ old('production_license_quantity') }}" placeholder="ใส่ปริมาณผลิต"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('production_license_quantity')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ใบแจ้งครอบครอง วอ.2</label>
+                        <input type="text" name="possession_form_wo2" value="{{ old('possession_form_wo2') }}"
+                            placeholder="ใส่เลขที่ใบอนุญาต"
+                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        @error('possession_form_wo2')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันหมดอายุใบแจ้งครอบครอง
+                            วอ.2</label>
+                        <input type="date" name="possession_form_expiry"
+                            value="{{ old('possession_form_expiry') }}"
+                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        @error('possession_form_expiry')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div>
+                        <label for="registration_number_pass"
+                            class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลขที่ใบอนุญาตหมดอายุ</label>
+                        <input type="text" name="registration_number_pass" id="registration_number_pass"
+                            value="{{ old('registration_number_pass') }}" placeholder="ใส่เลขที่ใบอนุญาตหมดอายุ"
+                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        @error('registration_number_pass')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">หมดอายุเมื่อ</label>
+                        <input type="date" name="expired_at" value="{{ old('expired_at') }}"
+                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        @error('expired_at')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>

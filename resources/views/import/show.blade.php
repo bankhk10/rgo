@@ -11,12 +11,12 @@
                 ข้อมูลการนำเข้าทั่วไป
             </h3>
             <div class="grid grid-cols-2 md:grid-cols-2 gap-6 mt-4">
-                {{-- <div>
+                <div>
                     <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">บริษัทที่ขึ้นทะเบียนผลิต</label>
                     <p class="w-full p-3 border rounded-full bg-gray-100 text-gray-700">
                         {{ $product->company->full_name ?? '-' }}
                     </p>
-                </div> --}}
+                </div>
                 <div>
                     <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลขที่ทะเบียน</label>
                     <p class="w-full p-3 border rounded-full bg-gray-100 text-gray-700">

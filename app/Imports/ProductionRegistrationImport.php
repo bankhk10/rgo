@@ -33,6 +33,7 @@ class ProductionRegistrationImport implements ToModel, WithHeadingRow
         };
 
         return new ProductionRegistration([
+            'company_id'          =>  $row['company_id'] ?? null, // คุณต้องมีคอลัมน์ company_id ใน Excel หรือหา id จากชื่อบริษัท
             'registration_number'           => $row['registration_number'] ?? null,
             'expired_license_date'          => $parseDate($row['expired_license_date'] ?? null),
             'chemical_name_th'              => $row['chemical_name_th'] ?? null,
@@ -56,7 +57,7 @@ class ProductionRegistrationImport implements ToModel, WithHeadingRow
             'possession_form_wo2'           => $row['possession_form_wo2'] ?? null,
             'possession_form_expiry'        => $parseDate($row['possession_form_expiry'] ?? null),
             'packaging_size_details'        => $row['packaging_size_details'] ?? null,
-            'registration_number_pass'      => $row['registration_number_pass'] ?? null, // ดูเหมือนจะอยู่คนละชื่อ
+            'registration_number_pass'      => $row['registration_number_pass'] ?? null,
             'expired_at'                    => $parseDate($row['expired_at'] ?? null),
         ]);
     }

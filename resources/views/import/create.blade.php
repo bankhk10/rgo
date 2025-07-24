@@ -12,8 +12,8 @@
                     ข้อมูลการนำเข้าทั่วไป
                 </h3>
                 <div class="grid grid-cols-2 md:grid-cols-2 gap-6 mt-4">
-                    {{-- <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">บริษัทที่ขึ้นทะเบียนผลิต
+                    <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">บริษัทที่ขึ้นทะเบียน
                             <span class="text-red-500"> *</span>
                         </label>
                         <div class="dropdown" id="companyDropdown">
@@ -27,7 +27,7 @@
                             <div class="dropdown-list" id="companyList">
                                 <div class="dropdown-item text-gray-500" data-value="">-- เลือก --</div>
                                 @foreach ($companies as $company)
-                                    @if ($company->id != 4)
+                                    @if ($company->type == 1)
                                         <div class="dropdown-item" data-value="{{ $company->id }}">
                                             {{ $company->full_name }}
                                         </div>
@@ -39,7 +39,7 @@
                         @error('company_id')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
-                    </div> --}}
+                    </div>
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลขที่ทะเบียน</label>
                         <input type="text" name="registration_number" value="{{ old('registration_number') }}"
@@ -135,11 +135,11 @@
                             <div class="dropdown-list" id="importerList">
                                 <div class="dropdown-item text-gray-500" data-value="">-- เลือก --</div>
                                 @foreach ($companies as $company)
-                                    @if ($company->type == 1)
+                                    {{-- @if ($company->type == 1) --}}
                                         <div class="dropdown-item" data-value="{{ $company->id }}">
                                             {{ $company->full_name }}
                                         </div>
-                                    @endif
+                                    {{-- @endif --}}
                                 @endforeach
                             </div>
                         </div>
@@ -460,7 +460,7 @@
             closeMessageBox.addEventListener('click', hideMessageBox);
 
             // Setup for all dropdowns
-            // setupDropdown('companyBtn', 'companyList', 'companyInput', "{{ old('company_id') }}");
+            setupDropdown('companyBtn', 'companyList', 'companyInput', "{{ old('company_id') }}");
             setupDropdown('importerBtn', 'importerList', 'importerInput', "{{ old('importer') }}");
             setupDropdown('distributorBtn', 'distributorList', 'distributorInput', "{{ old('distributor') }}");
             // There were no typeProductionBtn/List/Input and usageProductionBtn/List/Input in the provided HTML.

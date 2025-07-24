@@ -20,11 +20,7 @@
                     ข้อมูลการนำเข้าทั่วไป
                 </h3>
                 <div class="grid grid-cols-2 md:grid-cols-2 gap-6 mt-4">
-                    {{--
-                        Commented out section is left as-is. If you re-enable it,
-                        you'll need to apply the same 'old(..., $import->...)' pattern.
-                    --}}
-                    {{-- <div>
+                    <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">บริษัทที่ขึ้นทะเบียนผลิต
                             <span class="text-red-500"> *</span>
                         </label>
@@ -32,14 +28,15 @@
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="companyBtn">
                                 @php
                                     $selectedCompanyId = old('company_id', $import->company_id);
-                                    $companyName = $companies->firstWhere('id', $selectedCompanyId)->full_name ?? '-- เลือก --';
+                                    $companyName =
+                                        $companies->firstWhere('id', $selectedCompanyId)->full_name ?? '-- เลือก --';
                                 @endphp
                                 {{ $companyName }}
                             </div>
                             <div class="dropdown-list" id="companyList">
                                 <div class="dropdown-item text-gray-500" data-value="">-- เลือก --</div>
                                 @foreach ($companies as $company)
-                                    @if ($company->id != 4)
+                                    @if ($company->type == 1)
                                         <div class="dropdown-item" data-value="{{ $company->id }}">
                                             {{ $company->full_name }}
                                         </div>
@@ -47,11 +44,12 @@
                                 @endforeach
                             </div>
                         </div>
-                        <input type="hidden" name="company_id" id="companyInput" value="{{ old('company_id', $import->company_id) }}">
+                        <input type="hidden" name="company_id" id="companyInput"
+                            value="{{ old('company_id', $import->company_id) }}">
                         @error('company_id')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
-                    </div> --}}
+                    </div>
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลขที่ทะเบียน</label>
                         <input type="text" name="registration_number"
@@ -146,11 +144,11 @@
                             <div class="dropdown-list" id="importerList">
                                 <div class="dropdown-item text-gray-500" data-value="">-- เลือก --</div>
                                 @foreach ($companies as $company)
-                                    @if ($company->type == 1)
-                                        <div class="dropdown-item" data-value="{{ $company->id }}">
-                                            {{ $company->full_name }}
-                                        </div>
-                                    @endif
+                                    {{-- @if ($company->type == 1) --}}
+                                    <div class="dropdown-item" data-value="{{ $company->id }}">
+                                        {{ $company->full_name }}
+                                    </div>
+                                    {{-- @endif --}}
                                 @endforeach
                             </div>
                         </div>
@@ -286,7 +284,7 @@
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ใบแจ้งครอบครอง วอ.2</label>
                         <input type="text" name="possession_form_wo2"
-                            value="{{ old('possession_form_wo2', $import->possession_form_wo2) }}"
+                            value="{{ old('possession_form_wo2', $import->possession_form_wo2 ?? '') }}"
                             placeholder="ใส่เลขที่ใบอนุญาต"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('possession_form_wo2')
@@ -316,7 +314,6 @@
                     </div>
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">หมดอายุเมื่อ</label>
-                        {{-- CORRECTED: Changed name from duplicate 'production_license_expiry' --}}
                         <input type="date" name="expired_at"
                             value="{{ old('expired_at', $import->expired_at ? $import->expired_at->format('Y-m-d') : '-') }}"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
@@ -465,7 +462,8 @@
             }
 
             // Setup for all dropdowns, passing the current data
-            // setupDropdown('companyBtn', 'companyList', 'companyInput', "{{ old('company_id', $import->company_id) }}");
+            setupDropdown('companyBtn', 'companyList', 'companyInput',
+                "{{ old('company_id', $import->company_id) }}");
             setupDropdown('importerBtn', 'importerList', 'importerInput',
                 "{{ old('importer', $import->importer) }}");
             setupDropdown('distributorBtn', 'distributorList', 'distributorInput',
