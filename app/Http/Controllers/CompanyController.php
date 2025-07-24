@@ -15,7 +15,7 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        $companies = Company::latest()->paginate(10);
+        $companies = Company::orderBy('id', 'asc')->paginate(10);
         return view('company.index', ['companies' => $companies]);
     }
 
@@ -51,7 +51,6 @@ class CompanyController extends Controller
 
         // return redirect()->route('company.index')->with('success', 'บริษัทใหม่ถูกเพิ่มเรียบร้อยแล้ว');
         return redirect()->back()->with('success', 'บันทึกเรียบร้อยแล้ว');
-
     }
 
     /**
@@ -93,7 +92,7 @@ class CompanyController extends Controller
             'tax_id' => 'nullable|string|max:50',
         ]);
 
-        $company->update($request->only('full_name','name', 'address', 'email', 'phone', 'tax_id'));
+        $company->update($request->only('full_name', 'name', 'address', 'email', 'phone', 'tax_id'));
 
         return redirect()->back()->with('success', 'บันทึกเรียบร้อยแล้ว');
         // return redirect()->route('company.index')->with('success', 'อัปเดตข้อมูลบริษัทเรียบร้อยแล้ว');
