@@ -19,7 +19,7 @@
                         <table class="min-w-full bg-white">
                             <thead>
                                 <tr class="bg-indigo-600 text-white text-left">
-                                    <th class="py-3 px-6 rounded-tl-2xl">id</th>
+                                    {{-- <th class="py-3 px-6 rounded-tl-2xl">id</th> --}}
                                     <th class="py-3 px-6 rounded-tl-2xl">ชื่อบริษัท</th>
                                     <th class="py-3 px-6">ตัวย่อ</th>
                                     <th class="py-3 px-6">ที่อยู่</th>
@@ -33,7 +33,7 @@
                                 @can('Company read')
                                     @foreach ($companies as $company)
                                         <tr class="border-b hover:bg-indigo-50 transition">
-                                            <td class="py-4 px-6">{{ $company->id }}</td>
+                                            {{-- <td class="py-4 px-6">{{ $company->id }}</td> --}}
                                             <td class="py-4 px-6">{{ $company->full_name }}</td>
                                             <td class="py-4 px-6">{{ $company->name }}</td>
                                             <td class="py-4 px-6">{{ $company->address }}</td>
