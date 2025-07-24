@@ -115,17 +115,15 @@
                         <div class="dropdown" id="registrationTypeDropdown">
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="registrationTypeBtn">
                                 @php
-                                    $registrationTypes = ['F' => 'F', 'R' => 'R', 'R(F)' => 'R(F)'];
-                                    // Use old value first, then model's value
-$selectedType = old('registration_type', $import->registration_type);
+                                    $registrationTypes = ['T' => 'T', 'I' => 'I', 'R(F)' => 'R(F)'];
+                                    $selectedType = old('registration_type', $import->registration_type);
                                 @endphp
                                 {{ $registrationTypes[$selectedType] ?? '-- เลือก --' }}
                             </div>
                             <div class="dropdown-list" id="registrationTypeList">
                                 <div class="dropdown-item text-gray-500" data-value="">-- เลือกประเภททะเบียน --</div>
-                                <div class="dropdown-item" data-value="F">F</div>
-                                <div class="dropdown-item" data-value="R">R</div>
-                                <div class="dropdown-item" data-value="R(F)">R(F)</div>
+                                <div class="dropdown-item" data-value="T">T</div>
+                                <div class="dropdown-item" data-value="I">I</div>
                             </div>
                         </div>
                         <input type="hidden" name="registration_type" id="registrationTypeInput"

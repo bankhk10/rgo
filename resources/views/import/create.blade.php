@@ -100,9 +100,9 @@
                                 @if (old('registration_type'))
                                     @php
                                         $registrationTypes = [
-                                            'F' => 'F',
-                                            'R' => 'R',
-                                            'R(F)' => 'R(F)',
+                                            'T' => 'T',
+                                            'I' => 'I',
+                                            // 'R(F)' => 'R(F)',
                                         ];
                                     @endphp
                                     {{ $registrationTypes[old('registration_type')] ?? '-- เลือก --' }}
@@ -112,9 +112,8 @@
                             </div>
                             <div class="dropdown-list" id="registrationTypeList">
                                 <div class="dropdown-item text-gray-500" data-value="">-- เลือกประเภททะเบียน --</div>
-                                <div class="dropdown-item" data-value="F">F</div>
-                                <div class="dropdown-item" data-value="R">R</div>
-                                <div class="dropdown-item" data-value="R(F)">R(F)</div>
+                                <div class="dropdown-item" data-value="T">T</div>
+                                <div class="dropdown-item" data-value="I">I</div>
                             </div>
                         </div>
                         <input type="hidden" name="registration_type" id="registrationTypeInput"
@@ -294,8 +293,7 @@
                     </div>
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">หมดอายุเมื่อ</label>
-                        <input type="date" name="expired_at"
-                            value="{{ old('expired_at') }}"
+                        <input type="date" name="expired_at" value="{{ old('expired_at') }}"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('expired_at')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
