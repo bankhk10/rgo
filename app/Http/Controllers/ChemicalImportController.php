@@ -30,7 +30,7 @@ class ChemicalImportController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('chemical_name_th', 'like', "%$search%")
                     ->orWhere('chemical_name_en', 'like', "%$search%")
-                    ->orWhere('registration_no', 'like', "%$search%")
+                    ->orWhere('production_license_number', 'like', "%$search%")
                     ->orWhereHas('company', function ($q2) use ($search) {
                         $q2->where('full_name', 'like', "%$search%");
                     });
@@ -226,7 +226,7 @@ class ChemicalImportController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-            public function update(Request $request, ChemicalImport $import)
+    public function update(Request $request, ChemicalImport $import)
     {
         try {
             // 1. Validation ข้อมูลจากฟอร์ม
