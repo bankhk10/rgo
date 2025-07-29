@@ -24,6 +24,8 @@ class ChemicalImportController extends Controller
         $query = ChemicalImport::query();
         $query->with('company');
 
+
+
         // ส่วนของการค้นหา (search) ยังคงเดิม
         if ($request->filled('search')) {
             $search = $request->input('search');
