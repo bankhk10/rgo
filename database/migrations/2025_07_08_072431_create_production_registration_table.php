@@ -24,7 +24,7 @@ class CreateProductionRegistrationTable extends Migration
             $table->string('chemical_name_th')->nullable(); // ชื่อวัตถุอันตราย (ไทย)
             $table->string('chemical_name_en')->nullable(); // ชื่อวัตถุอันตราย (อังกฤษ)
             $table->text('composition')->nullable(); // % และสูตร
-            $table->string('manufacturer')->nullable(); // ชื่อผู้ผลิตและแหล่งผลิต
+            $table->text('manufacturer')->nullable(); // ชื่อผู้ผลิตและแหล่งผลิต
             $table->string('registrant')->nullable(); // ผู้ขึ้นทะเบียน
             $table->string('registration_type')->nullable(); // ประเภททะเบียน
             $table->string('importer')->nullable(); // ชื่อผู้นำเข้า
@@ -41,7 +41,7 @@ class CreateProductionRegistrationTable extends Migration
             $table->string('production_license_quantity')->nullable(); // ปริมาณผลิตใบอนุญาต
             $table->string('possession_form_wo2')->nullable(); // ใบแจ้งครอบครอง วอ.2
             $table->date('possession_form_expiry')->nullable(); // วันหมดอายุใบแจ้งครอบครอง วอ.2
-            $table->string('packaging_size_details')->nullable(); // รายละเอียดขนาดบรรจุ
+            $table->text('packaging_size_details')->nullable(); // รายละเอียดขนาดบรรจุ
             $table->string('registration_number_pass')->nullable(); // เลขที่ทะเบียนผลิตที่ผ่าน
             $table->date('registration_expiry_date')->nullable(); // เลขที่ใบอนุญาตหมดอายุ
             $table->date('expired_at')->nullable(); // หมดอายุเมื่อ

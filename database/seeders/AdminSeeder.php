@@ -155,36 +155,36 @@ class AdminSeeder extends Seeder
             ],
         ];
 
-        foreach ($departments as $department) {
-            $slug = $departmentSlugs[$department] ?? Str::slug($department, '_');
+        // foreach ($departments as $department) {
+        //     $slug = $departmentSlugs[$department] ?? Str::slug($department, '_');
 
-            foreach ($positions as $key => $positionName) {
-                $roleName = "{$key}_{$slug}";
+        //     foreach ($positions as $key => $positionName) {
+        //         $roleName = "{$key}_{$slug}";
 
-                $role = Role::firstOrCreate(['name' => $roleName]);
+        //         $role = Role::firstOrCreate(['name' => $roleName]);
 
-                $email = "{$key}_{$slug}@company.com";
-                $employeeId = strtoupper(substr($key, 0, 2)) . strtoupper(substr($slug, 0, 2)) . rand(100, 999);
+        //         $email = "{$key}_{$slug}@company.com";
+        //         $employeeId = strtoupper(substr($key, 0, 2)) . strtoupper(substr($slug, 0, 2)) . rand(100, 999);
 
-                $user = User::firstOrCreate(
-                    ['email' => $email],
-                    [
-                        'employee_id' => $employeeId,
-                        'name' => "{$positionName}แผนก{$department}",
-                        'department' => $department,
-                        'position' => $positionName,
-                        'phone_number' => '0800000000',
-                        'password' => bcrypt('password'),
-                        'employment_status' => 'active',
-                    ]
-                );
+        //         $user = User::firstOrCreate(
+        //             ['email' => $email],
+        //             [
+        //                 'employee_id' => $employeeId,
+        //                 'name' => "{$positionName}แผนก{$department}",
+        //                 'department' => $department,
+        //                 'position' => $positionName,
+        //                 'phone_number' => '0800000000',
+        //                 'password' => bcrypt('password'),
+        //                 'employment_status' => 'active',
+        //             ]
+        //         );
 
-                $user->assignRole($role);
+        //         $user->assignRole($role);
 
-                if (isset($permissionMap[$department][$key])) {
-                    $role->syncPermissions($permissionMap[$department][$key]);
-                }
-            }
-        }
+        //         if (isset($permissionMap[$department][$key])) {
+        //             $role->syncPermissions($permissionMap[$department][$key]);
+        //         }
+        //     }
+        // }
     }
 }

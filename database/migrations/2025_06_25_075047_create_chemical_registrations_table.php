@@ -17,7 +17,7 @@ class CreateChemicalRegistrationsTable extends Migration
             $table->string('chemical_name_th')->nullable(); // ชื่อวัตถุอันตราย (ไทย)
             $table->string('chemical_name_en')->nullable(); // ชื่อวัตถุอันตราย (อังกฤษ)
             $table->text('composition')->nullable(); // % และสูตร
-            $table->string('manufacturer')->nullable(); // ชื่อผู้ผลิตและแหล่งผลิต
+            $table->text('manufacturer')->nullable(); // ชื่อผู้ผลิตและแหล่งผลิต
             $table->string('registrant')->nullable(); // ผู้ขอขึ้นทะเบียน
             $table->string('registration_type')->nullable(); // ประเภททะเบียน
             $table->string('importer')->nullable(); // ชื่อผู้นำเข้า
@@ -37,7 +37,7 @@ class CreateChemicalRegistrationsTable extends Migration
             $table->string('formula_of_ratio')->nullable(); // สูตรอัตรส่วนผสมของสารสำคัญและลักษณะ
             $table->string('type_registration')->nullable(); // ชนิดทะเบียน
             $table->string('common_name')->nullable(); // ชื่อสามัญ
-            $table->string('packaging_size_details')->nullable(); // รายละเอียดขนาดบรรจุ
+            $table->text('packaging_size_details')->nullable(); // รายละเอียดขนาดบรรจุ
             $table->string('type_of_use')->nullable(); // ประเภทของการใช้
             $table->date('date_submit_request')->nullable(); //  วันที่ยื่นคำขอ..
             $table->string('request_number_1')->nullable(); //  เลขที่รับคำขอ......
