@@ -232,8 +232,8 @@
                 label: 'จำนวน',
                 data: [{{ $totalNewRegistrations }}, {{ $betweenNewRegistrations }}],
                 backgroundColor: [
-                    'rgba(31, 100, 66, 1)', // สีเขียว (ทั้งหมด)
-                    'rgba(255, 255, 0, 1)', // สีเหลือง (ใกล้หมดอายุ)
+                    'rgba(26, 168, 88, 1)', // สีเขียว (ทั้งหมด)
+                    'rgba(235, 179, 8, 1)', // สีเหลือง (ใกล้หมดอายุ)
                     'rgba(254, 2, 2, 1)' // สีแดง (หมดอายุ)
                 ],
                 hoverOffset: 4

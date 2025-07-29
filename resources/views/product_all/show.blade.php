@@ -324,7 +324,7 @@
         function fillProductData(product) {
             productSearchInput.value = product.chemical_name_th || "";
             hazardousNameThInput.value = product.chemical_name_th || ""; // เติมค่าใน hidden field
-            formulationRatioInput.value = product.formula || "";
+            // formulationRatioInput.value = product.formula || "";
             chemicalImportsId.value = product.id || "";
             // ถ้ามีการนำ expiry_date กลับมาใช้ ให้ uncomment บรรทัดนี้
             // expiryDateInput.value = product.expiry_date || "";
