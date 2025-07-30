@@ -135,7 +135,7 @@
                                 <th class="py-4 px-4 rounded-tl-2xl">ลำดับ</th>
                                 <th class="py-4 px-4">ชื่อวัตถุอันตราย (ไทย)</th>
                                 <th class="py-4 px-4">ชื่อวัตถุอันตราย (อังกฤษ)</th>
-                                <th class="py-4 px-4 text-center">ชื่อบริษัท</th>
+                                <th class="py-4 px-4 text-center">ผู้นำเข้า</th>
                                 <th class="py-4 px-4 text-center">ตัวย่อ</th>
                                 <th class="py-4 px-8">เลขที่ทะเบียน</th>
                                 <th class="py-4 px-8">วันหมดอายุ</th>
