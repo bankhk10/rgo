@@ -70,16 +70,16 @@
                         ], // 5/8 * 100
                         6 => [
                             'label' => 'ยื่น Phase3 (ผลการทดลอง Eff, PHI (ถ้ามี) อนุมัติ + ผลวิเคราะห์อนุมัติ)',
-                            'progress_threshold' => 76
+                            'progress_threshold' => 76,
                         ], // 6/8 * 100
                         7 => [
                             'label' => 'Phase3 อนุมัติ (ยื่นเอกสารเข้าประชุมพิจารณา <br> ขึ้นทะเบียน)',
-                            'progress_threshold' => 87.6
+                            'progress_threshold' => 87.6,
                         ], // 7/8 * 100
                         8 => [
                             'label' => 'ยื่นขอออกทะเบียน <span class="text-white"><br>.</span>',
-                            'progress_threshold' => 91
-                        ]
+                            'progress_threshold' => 91,
+                        ],
                     ];
 
                     $currentStep = 0;
@@ -284,14 +284,16 @@
                                         ],
                                         'จัดซื้อต่างประเทศ' => [
                                             'ประสานขอเอกสารจากผู้ผลิตเพิ่มเติมในกรณีที่ผลพิจารณา Tox Phase III ไม่ผ่าน',
-                                        ]
-                                    ]
+                                        ],
+                                    ],
                                 ],
                                 7 => [
                                     'title' => 'Phase III อนุมัติ (ยื่นเอกสารเข้าประชุมพิจารณาขึ้นทะเบียน)',
                                     'items' => [
                                         'แผนกทะเบียน' => [
-                                            'แผนกทะเบียนได้รับผล Tox Phase III ที่อนุมัติ ทำการรวบรวมข้อมูลเอกสารยื่นขอเข้าประชุมพิจารณาขึ้นทะเบียนใหม่'
+                                            'แผนกทะเบียนได้รับผล Tox Phase III ที่อนุมัติ ทำการรวบรวมข้อมูลเอกสารยื่นขอเข้าประชุมพิจารณาขึ้นทะเบียนใหม่',
+                                        ],
+                                    ],
                                 ],
                                 8 => [
                                     'title' => 'ยื่นขอออกทะเบียน',
@@ -435,13 +437,14 @@
                                                                 @endphp
                                                                 <div class="flex flex-col gap-1">
                                                                     <div class="flex items-center space-x-3">
-                                                                        <input disabled type="checkbox" name="sub_steps[]"
+                                                                        <input disabled type="checkbox"
+                                                                            name="sub_steps[]"
                                                                             id="substep_{{ $stepNumber }}_{{ $checkboxIndex }}"
                                                                             value="{{ $checkboxIndex }}"
                                                                             {{ $isChecked ? 'checked' : '' }}
                                                                             {{ !$isEditable || (!auth()->user()->hasRole('admin') && !auth()->user()->hasRole('manager') && $dept !== $mappedUserDept) }}
                                                                             class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-                                                                            onchange="toggleInput({{ $stepNumber }}, {{ $checkboxIndex }})" >
+                                                                            onchange="toggleInput({{ $stepNumber }}, {{ $checkboxIndex }})">
                                                                         <label
                                                                             for="substep_{{ $stepNumber }}_{{ $checkboxIndex }}"
                                                                             class="text-sm text-gray-800">{{ $label }}</label>
