@@ -177,7 +177,7 @@
                         @enderror
                     </div>
 
-                    <div>
+                    {{-- <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันที่ยื่นคำขอ</label>
                         <input type="date" name="date_submit_request"
                             value="{{ $registration->date_submit_request ?? '-' }}" disabled
@@ -194,7 +194,39 @@
                         @error('request_number_1')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
+                    </div> --}}
+
+
+
+                    <div class="md:col-span-2">
+                        <div class="flex flex-col md:flex-row gap-6">
+                            <div class="w-full md:w-1/3">
+                                <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันที่ยื่นคำขอ</label>
+                                <input type="date" name="date_submit_request"
+                                    value="{{ $registration->date_submit_request ?? '-' }}" disabled
+                                    class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 disabled-field bg-gray-100 text-gray-700" />
+                                @error('date_submit_request')
+                                    <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            <div class="w-full md:w-1/3">
+                                <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลขที่รับคำขอ</label>
+                                <input type="text" name="request_number_1"
+                                    value="{{ $registration->request_number_1 ?? '-' }}" disabled
+                                    class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 disabled-field bg-gray-100 text-gray-700" />
+                                @error('request_number_1')
+                                    <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div class="w-full md:w-1/3">
+                            </div>
+                        </div>
                     </div>
+
+
+
+
                     <div class="md:col-span-2">
                         <div class="flex flex-col md:flex-row gap-6">
                             <div class="w-full md:w-1/3">

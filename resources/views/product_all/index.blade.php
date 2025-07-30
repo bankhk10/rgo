@@ -162,7 +162,7 @@
                                     <td class="py-4 px-8">{{ $product->importer ?? '' }}</td>
                                     <td class="py-4 px-8">{{ $product->registration_number ?? '' }}</td>
                                     <td class="py-4 px-8">
-                                        {{ \Carbon\Carbon::parse($product->date_submit_request)->addYears(543)->format('d/m/Y') }}
+                                        {{ \Carbon\Carbon::parse($product->expired_license_number)->addYears(543)->format('d/m/Y') }}
                                     </td>
                                     <td class="py-4 px-8">
                                         @php
