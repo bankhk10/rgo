@@ -18,7 +18,7 @@
                     </div>
                     <div>
                         <p class="font-semibold text-indigo-600">ชื่อสามัญ:</p>
-                        <p>{{ $drug->chemicalImport->chemical_name_th ?? '-' }}</p>
+                        <p>{{ $drug->chemical_name_th ?? '-' }}</p>
                     </div>
                     <div>
                         <p class="font-semibold text-indigo-600">ชื่อทางการค้า:</p>

@@ -184,11 +184,11 @@ class ChemicalRegistrationController extends Controller
     {
         // dd($request->all());
         $validatedData = $request->validate([
-            'chemical_imports_id' => 'required|integer', // Changed from string to integer based on schema
+            'chemical_imports_id' => 'nullable|integer', // Changed from string to integer based on schema
             'registration_number' => 'nullable|string',
             'registration_number_pass' => 'nullable|string',
             'registration_expiry_date' => 'nullable|date',
-            'chemical_name_th' => 'nullable|string',
+            'chemical_name_th' => 'required|string',
             'chemical_name_en' => 'nullable|string',
             'composition' => 'nullable|string', // text field can be validated as string
             'manufacturer' => 'required|string',

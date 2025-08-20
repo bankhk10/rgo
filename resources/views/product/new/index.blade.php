@@ -166,7 +166,7 @@
                                         {{ ($paginatedProducts->currentPage() - 1) * $paginatedProducts->perPage() + $index + 1 }}
                                     </td>
                                     <td class="py-4 px-8">{{ $product->trade_name ?? '' }}</td>
-                                    <td class="py-4 px-8">{{ $product->chemicalImport->chemical_name_th ?? '' }}</td>
+                                    <td class="py-4 px-8">{{ $product->chemical_name_th ?? '' }}</td>
                                     <td class="py-4 px-8">{{ $product->registration_number ?? '' }}</td>
                                     <td class="py-4 px-8">
                                         {{ \Carbon\Carbon::parse($product->date_submit_request)->addYears(543)->format('d/m/Y') }}
