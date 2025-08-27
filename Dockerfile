@@ -8,8 +8,9 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 WORKDIR /app
 COPY composer.json composer.lock ./
 
-# ข้ามเช็ก ext ที่ยังไม่มีใน vendor stage (runtime stage ติดตั้งจริงแล้ว)
+# ✅ ไม่รัน scripts (หลบ package:discover) และข้ามเช็ก ext ที่ยังไม่มีใน stage นี้
 RUN composer install --no-dev --prefer-dist --no-progress --no-interaction \
+    --no-scripts \
     --ignore-platform-req=ext-gd \
     --ignore-platform-req=ext-zip
 
