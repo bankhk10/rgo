@@ -95,6 +95,16 @@ class AdminSeeder extends Seeder
             'Company create',
             'Company update',
             'Company delete',
+            // import
+            'import_data_manufacture read',
+            'import_data_manufacture create',
+            'import_data_manufacture update',
+            'import_data_manufacture delete',
+            // import
+            'import_data_staple read',
+            'import_data_staple create',
+            'import_data_staple update',
+            'import_data_staple delete',
         ];
 
         foreach ($permissions as $perm) {
