@@ -1,51 +1,30 @@
-# Base Image (เลือกเวอร์ชัน PHP ที่โปรเจกต์คุณใช้)
-FROM php:7.4-fpm-alpine
+# --- Stage 1: Composer vendor ---
+FROM composer:2 AS vendor
+WORKDIR /app
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --prefer-dist --no-progress --no-interaction
 
-# ตั้งค่า Working Directory ภายใน Container
+# --- Stage 2: PHP-FPM runtime ---
+FROM php:8.2-fpm-alpine
+
+RUN apk add --no-cache \
+      icu-dev libzip-dev libpng-dev freetype-dev libjpeg-turbo-dev oniguruma-dev \
+      git curl bash tzdata \
+  && docker-php-ext-configure gd --with-freetype --with-jpeg \
+  && docker-php-ext-install -j$(nproc) gd pdo_mysql zip bcmath intl opcache
+
+ENV TZ=Asia/Bangkok
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 WORKDIR /var/www/html
 
-# ติดตั้ง Dependencies ที่จำเป็นสำหรับ Laravel
-RUN apk update && apk add --no-cache \
-    nginx \
-    supervisor \
-    nodejs \
-    npm \
-    libzip-dev \
-    zip \
-    unzip \
-    libpng-dev \
-    libjpeg-turbo-dev \
-    freetype-dev \
-    libxml2-dev \
-    icu-dev \
-    curl \
-    git \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd \
-    && docker-php-ext-install pdo pdo_mysql zip bcmath intl opcache
-
-# ติดตั้ง Composer (PHP Dependency Manager)
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-# คัดลอกไฟล์ Composer และติดตั้ง Dependencies
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --no-interaction --no-plugins --no-scripts --prefer-dist
-
-# คัดลอกไฟล์โปรเจกต์ทั้งหมด
+# คัดลอกโค้ด + vendor
 COPY . .
+COPY --from=vendor /app/vendor ./vendor
 
-# ตั้งค่า Permissions
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+# สิทธิ์ที่ Laravel ต้องใช้
+RUN chown -R www-data:www-data storage bootstrap/cache \
+ && chmod -R 775 storage bootstrap/cache
 
-# สร้างไฟล์ Config สำหรับ Nginx (ตัวอย่าง)
-# COPY .docker/nginx/default.conf /etc/nginx/conf.d/default.conf
-COPY .docker/nginx/default.conf /etc/nginx/http.d/default.conf
-# สร้างไฟล์ Config สำหรับ Supervisor (ตัวอย่าง)
-COPY .docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
-# Expose port
-EXPOSE 80
-
-# คำสั่งที่จะรันเมื่อ Container เริ่มทำงาน
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+EXPOSE 9000
+CMD ["php-fpm", "-F"]
