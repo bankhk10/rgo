@@ -1,5 +1,5 @@
 # Base Image (เลือกเวอร์ชัน PHP ที่โปรเจกต์คุณใช้)
-FROM php:7.4-fpm-alpine
+FROM php:8.2-fpm-alpine
 
 # ตั้งค่า Working Directory ภายใน Container
 WORKDIR /var/www/html
