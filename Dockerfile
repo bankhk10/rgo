@@ -1,37 +1,45 @@
-# --- Stage 1: Composer vendor (ใช้ PHP 8.2 CLI) ---
-FROM php:8.2-cli-alpine AS vendor
+# --- Stage 1: Composer vendor ---
+FROM php:8.2-cli-bookworm AS vendor
 ENV COMPOSER_ALLOW_SUPERUSER=1
-
-RUN apk add --no-cache git zip unzip
+RUN apt-get update && apt-get install -y --no-install-recommends git unzip && rm -rf /var/lib/apt/lists/*
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-
 WORKDIR /app
 COPY composer.json composer.lock ./
-
-# ✅ ไม่รัน scripts (หลบ package:discover) และข้ามเช็ก ext ที่ยังไม่มีใน stage นี้
 RUN composer install --no-dev --prefer-dist --no-progress --no-interaction \
     --no-scripts \
     --ignore-platform-req=ext-gd \
     --ignore-platform-req=ext-zip
 
-# --- Stage 2: PHP-FPM runtime (8.2) ---
-FROM php:8.2-fpm-alpine
+# --- Stage 2: PHP-FPM runtime ---
+FROM php:8.2-fpm-bookworm
 
-RUN apk add --no-cache \
-      icu-dev libzip-dev libpng-dev freetype-dev libjpeg-turbo-dev oniguruma-dev \
-      git curl bash tzdata \
-  && docker-php-ext-configure gd --with-freetype --with-jpeg \
-  && docker-php-ext-install -j$(nproc) gd pdo_mysql zip bcmath intl opcache
+# ใช้ mlocati เพื่อติดตั้ง ext เร็ว ๆ
+COPY --from=mlocati/php-extension-installer:latest /usr/bin/install-php-extensions /usr/local/bin/
+RUN install-php-extensions gd intl zip bcmath pdo_mysql opcache
 
 ENV TZ=Asia/Bangkok
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN { \
+  echo 'opcache.enable=1'; \
+  echo 'opcache.enable_cli=0'; \
+  echo 'opcache.jit_buffer_size=64M'; \
+  echo 'opcache.memory_consumption=192'; \
+  echo 'opcache.interned_strings_buffer=16'; \
+  echo 'opcache.max_accelerated_files=100000'; \
+} > /usr/local/etc/php/conf.d/opcache-prod.ini
 
-WORKDIR /var/www/html
+# เก็บโค้ดไว้ที่ /app-src (อย่าเขียนทับ /var/www/html ตอน build)
+WORKDIR /app-src
 COPY . .
 COPY --from=vendor /app/vendor ./vendor
 
-RUN chown -R www-data:www-data storage bootstrap/cache \
- && chmod -R 775 storage bootstrap/cache
+# entrypoint จะคัดลอกโค้ดจาก /app-src -> /var/www/html (ซึ่งเป็น named volume)
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# โฟลเดอร์จริงที่รันแอป (เป็น volume ตอน runtime)
+WORKDIR /var/www/html
 
 EXPOSE 9000
-CMD ["php-fpm", "-F"]
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+CMD ["php-fpm","-F"]
