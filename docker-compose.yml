@@ -25,24 +25,6 @@ services:
     networks:
       - laravel_network
 
-  # Database Service (เช่น MySQL)
-  db:
-    image: mysql:8.0 # เลือกเวอร์ชัน MySQL ที่ต้องการ
-    container_name: my_laravel_db
-    restart: unless-stopped
-    tty: true
-    ports:
-      - "33061:3306" # Map port 33061 ของเครื่องคุณไปยัง port 3306 ของ Container (ระวัง port ชนกับ MySQL ที่ติดตั้งในเครื่อง)
-    environment:
-      MYSQL_DATABASE: your_database_name # ชื่อ Database
-      MYSQL_USER: your_database_user # User สำหรับ Database
-      MYSQL_PASSWORD: your_database_password # Password สำหรับ Database
-      MYSQL_ROOT_PASSWORD: your_root_password # Password ของ Root User MySQL
-    volumes:
-      - dbdata:/var/lib/mysql # Persist Database Data
-    networks:
-      - laravel_network
-
 # Networks
 networks:
   laravel_network:
@@ -50,8 +32,6 @@ networks:
 
 # Named Volumes
 volumes:
-  dbdata: # ถ้าคุณใช้สำหรับ database
-    driver: local
   app_storage: # ประกาศ Named Volume สำหรับ storage
     driver: local
   app_bootstrap_cache: # ประกาศ Named Volume สำหรับ bootstrap/cache
