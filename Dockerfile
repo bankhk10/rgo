@@ -1,10 +1,20 @@
-# --- Stage 1: Composer vendor ---
-FROM composer:2 AS vendor
+# --- Stage 1: Composer vendor (ใช้ PHP 8.2 CLI) ---
+FROM php:8.2-cli-alpine AS vendor
+
+# ติดตั้งเครื่องมือที่ composer ต้องใช้
+RUN apk add --no-cache git zip unzip
+
+# เอา composer จากอิมเมจทางการ
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
 WORKDIR /app
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --prefer-dist --no-progress --no-interaction
 
-# --- Stage 2: PHP-FPM runtime ---
+# ตรงนี้ข้ามเช็ก ext-gd เพราะ runtime stage จะมี gd อยู่แล้ว
+RUN composer install --no-dev --prefer-dist --no-progress --no-interaction \
+    --ignore-platform-req=ext-gd
+
+# --- Stage 2: PHP-FPM runtime (8.2) ---
 FROM php:8.2-fpm-alpine
 
 RUN apk add --no-cache \
@@ -18,11 +28,11 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 WORKDIR /var/www/html
 
-# คัดลอกโค้ด + vendor
+# คัดลอกซอร์ส + vendor ที่ build จาก stage แรก
 COPY . .
 COPY --from=vendor /app/vendor ./vendor
 
-# สิทธิ์ที่ Laravel ต้องใช้
+# Permission ที่ Laravel ต้องใช้
 RUN chown -R www-data:www-data storage bootstrap/cache \
  && chmod -R 775 storage bootstrap/cache
 
