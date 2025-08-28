@@ -112,16 +112,16 @@
             @canany('import_data_manufacture read', 'import_data_manufacture create')
             <li>
                 <a href="{{ route('index.import_data') }}" class="side-menu" id="menu-users">
-                    <div class="side-menu__icon"><i data-lucide="users"></i></div>
-                    <div class="side-menu__title">นำเข้าข้อมูลทะเบียนผลิต</div>
+                    <div class="side-menu__icon"><i data-lucide="import"></i></div>
+                    <div class="side-menu__title">นำเข้าทะเบียนผลิต</div>
                 </a>
             </li>
             @endcanany
                @canany('import_data_staple read', 'import_data_staple create')
             <li>
                 <a href="{{ route('chemical_imports.import.form') }}" class="side-menu" id="menu-users">
-                    <div class="side-menu__icon"><i data-lucide="users"></i></div>
-                    <div class="side-menu__title">ข้อมูลทะเบียนนำเข้าวัตถุดิบ</div>
+                    <div class="side-menu__icon"><i data-lucide="import"></i></div>
+                    <div class="side-menu__title">นำเข้าวัตถุดิบ</div>
                 </a>
             </li>
             @endcanany
