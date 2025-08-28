@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 set -e
-
 echo "[entrypoint] Syncing app code from image to volume..."
 rsync -a --delete \
   --exclude=.env \
@@ -9,8 +8,6 @@ rsync -a --delete \
   --exclude=storage \
   /app-src/ /var/www/html/
 
-# ensure permissions
 chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache || true
 chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache || true
-
 exec "$@"
