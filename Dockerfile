@@ -13,6 +13,7 @@ RUN composer install --no-dev --prefer-dist --no-progress --no-interaction \
 # --- Stage 2: PHP-FPM runtime ---
 FROM php:8.2-fpm-bookworm
 
+RUN apt-get update && apt-get install -y --no-install-recommends rsync && rm -rf /var/lib/apt/lists/*
 # ใช้ mlocati เพื่อติดตั้ง ext เร็ว ๆ
 COPY --from=mlocati/php-extension-installer:latest /usr/bin/install-php-extensions /usr/local/bin/
 RUN install-php-extensions gd intl zip bcmath pdo_mysql opcache
