@@ -1,6 +1,7 @@
 # --- Stage 1: Composer vendor build ---
 FROM php:8.2-cli-bookworm AS vendor
 ENV COMPOSER_ALLOW_SUPERUSER=1
+ENV COMPOSER_MEMORY_LIMIT=-1
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git unzip rsync && \
@@ -20,7 +21,11 @@ RUN composer install --no-dev --prefer-dist --no-progress --no-interaction \
 # --- Stage 2: PHP-FPM runtime ---
 FROM php:8.2-fpm-bookworm
 
-# Install extensions
+# ✅ ติดตั้ง rsync ใน runtime ด้วย (entrypoint ใช้งาน)
+RUN apt-get update && apt-get install -y --no-install-recommends rsync \
+    && rm -rf /var/lib/apt/lists/*
+
+# ติดตั้ง PHP extensions
 COPY --from=mlocati/php-extension-installer:latest /usr/bin/install-php-extensions /usr/local/bin/
 RUN install-php-extensions gd intl zip bcmath pdo_mysql opcache
 
@@ -47,6 +52,7 @@ COPY --from=vendor /app/vendor ./vendor
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
+# โฟลเดอร์รันจริง (จะ sync โค้ดลง volume นี้)
 WORKDIR /var/www/html
 EXPOSE 9000
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
