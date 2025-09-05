@@ -23,14 +23,11 @@ services:
     depends_on:
       - app
     ports:
-      - "80:80"
-      - "443:443"
+      - "80:80"   # ✅ ตอนนี้ใช้แค่ HTTP
     volumes:
       - app_code:/var/www/html:ro
-      - ./docker/nginx/nginx.http.conf:/etc/nginx/nginx.conf:ro
-      - ./docker/letsencrypt:/etc/letsencrypt:ro      # ใบรับรองจริง
-      - ./docker/letsencrypt-var:/var/lib/letsencrypt # ข้อมูล certbot/renew
-      - ./docker/acme:/var/www/acme:ro                # ✅ webroot สำหรับ ACME challenge
+      - ./docker/nginx/nginx.http.conf:/etc/nginx/nginx.conf:ro   # ✅ config HTTP-only
+      - ./docker/acme:/var/www/acme:ro                           # ✅ ไดเรกทอรีสำหรับ ACME
     networks:
       - app_net
 
