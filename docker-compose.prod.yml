@@ -24,9 +24,13 @@ services:
       - app
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - app_code:/var/www/html:ro
-      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./docker/nginx/nginx.http.conf:/etc/nginx/nginx.conf:ro
+      - ./docker/letsencrypt:/etc/letsencrypt:ro      # ใบรับรองจริง
+      - ./docker/letsencrypt-var:/var/lib/letsencrypt # ข้อมูล certbot/renew
+      - ./docker/acme:/var/www/acme:ro                # ✅ webroot สำหรับ ACME challenge
     networks:
       - app_net
 
