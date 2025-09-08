@@ -27,27 +27,27 @@
                         <div class="dropdown" id="companyDropdown">
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="companyBtn">
                                 @php
-                                    $selectedCompanyId = old('company_id', $import->company_id);
-                                    $companyName =
-                                        $companies->firstWhere('id', $selectedCompanyId)->full_name ?? '-- เลือก --';
+                                $selectedCompanyId = old('company_id', $import->company_id);
+                                $companyName =
+                                $companies->firstWhere('id', $selectedCompanyId)->full_name ?? '-- เลือก --';
                                 @endphp
                                 {{ $companyName }}
                             </div>
                             <div class="dropdown-list" id="companyList">
                                 <div class="dropdown-item text-gray-500" data-value="">-- เลือก --</div>
                                 @foreach ($companies as $company)
-                                    @if ($company->type == 1)
-                                        <div class="dropdown-item" data-value="{{ $company->id }}">
-                                            {{ $company->full_name }}
-                                        </div>
-                                    @endif
+                                @if ($company->type == 1)
+                                <div class="dropdown-item" data-value="{{ $company->id }}">
+                                    {{ $company->full_name }}
+                                </div>
+                                @endif
                                 @endforeach
                             </div>
                         </div>
                         <input type="hidden" name="company_id" id="companyInput"
                             value="{{ old('company_id', $import->company_id) }}">
                         @error('company_id')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -57,7 +57,7 @@
                             placeholder="ใส่เลขที่ทะเบียน"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('registration_number')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -66,7 +66,7 @@
                             value="{{ old('expired_license_date', $import->expired_license_date ? $import->expired_license_date->format('Y-m-d') : '-') }}"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('expired_license_date')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -76,7 +76,7 @@
                             placeholder="ใส่ชื่อวัตถุอันตราย (ไทย)"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('chemical_name_th')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -86,7 +86,7 @@
                             placeholder="ใส่ชื่อวัตถุอันตราย (อังกฤษ)"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('chemical_name_en')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -95,7 +95,7 @@
                             placeholder="ใส่ % และสูตร"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('composition')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -105,7 +105,7 @@
                             placeholder="ใส่ผู้ผลิตและแหล่งผลิต"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('manufacturer')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -113,21 +113,22 @@
                         <div class="dropdown" id="registrationTypeDropdown">
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="registrationTypeBtn">
                                 @php
-                                    $registrationTypes = ['T' => 'T', 'I' => 'I', 'R(F)' => 'R(F)'];
-                                    $selectedType = old('registration_type', $import->registration_type);
+                                $registrationTypes = ['T' => 'T', 'I' => 'I', 'R(F)' => 'R(F)'];
+                                $selectedType = old('registration_type', $import->registration_type);
                                 @endphp
                                 {{ $registrationTypes[$selectedType] ?? '-- เลือก --' }}
                             </div>
                             <div class="dropdown-list" id="registrationTypeList">
                                 <div class="dropdown-item text-gray-500" data-value="">-- เลือกประเภททะเบียน --</div>
-                                <div class="dropdown-item" data-value="T">T</div>
-                                <div class="dropdown-item" data-value="I">I</div>
+                                <div class="dropdown-item" data-value="F">F</div>
+                                <div class="dropdown-item" data-value="R">R</div>
+                                <div class="dropdown-item" data-value="R(F)">R(F)</div>
                             </div>
                         </div>
                         <input type="hidden" name="registration_type" id="registrationTypeInput"
                             value="{{ old('registration_type', $import->registration_type) }}">
                         @error('registration_type')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -135,27 +136,27 @@
                         <div class="dropdown" id="importerDropdown">
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="importerBtn">
                                 @php
-                                    $selectedImporterId = old('importer', $import->importer);
-                                    $importerName =
-                                        $companies->firstWhere('id', $selectedImporterId)->full_name ?? '-- เลือก --';
+                                $selectedImporterId = old('importer', $import->importer);
+                                $importerName =
+                                $companies->firstWhere('id', $selectedImporterId)->full_name ?? '-- เลือก --';
                                 @endphp
                                 {{ $importerName }}
                             </div>
                             <div class="dropdown-list" id="importerList">
                                 <div class="dropdown-item text-gray-500" data-value="">-- เลือก --</div>
                                 @foreach ($companies as $company)
-                                    {{-- @if ($company->type == 1) --}}
-                                    <div class="dropdown-item" data-value="{{ $company->id }}">
-                                        {{ $company->full_name }}
-                                    </div>
-                                    {{-- @endif --}}
+                                {{-- @if ($company->type == 1) --}}
+                                <div class="dropdown-item" data-value="{{ $company->id }}">
+                                    {{ $company->full_name }}
+                                </div>
+                                {{-- @endif --}}
                                 @endforeach
                             </div>
                         </div>
                         <input type="hidden" name="importer" id="importerInput"
                             value="{{ old('importer', $import->importer) }}">
                         @error('importer')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -163,26 +164,26 @@
                         <div class="dropdown" id="distributorDropdown">
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="distributorBtn">
                                 @php
-                                    $selectedDistributorId = old('distributor', $import->distributor);
-                                    $distributorName =
-                                        $companies->firstWhere('id', $selectedDistributorId)->full_name ??
-                                        '-- เลือก --';
+                                $selectedDistributorId = old('distributor', $import->distributor);
+                                $distributorName =
+                                $companies->firstWhere('id', $selectedDistributorId)->full_name ??
+                                '-- เลือก --';
                                 @endphp
                                 {{ $distributorName }}
                             </div>
                             <div class="dropdown-list" id="distributorList">
                                 <div class="dropdown-item text-gray-500" data-value="">-- เลือก --</div>
                                 @foreach ($companies as $company)
-                                    <div class="dropdown-item" data-value="{{ $company->id }}">
-                                        {{ $company->full_name }}
-                                    </div>
+                                <div class="dropdown-item" data-value="{{ $company->id }}">
+                                    {{ $company->full_name }}
+                                </div>
                                 @endforeach
                             </div>
                         </div>
                         <input type="hidden" name="distributor" id="distributorInput"
                             value="{{ old('distributor', $import->distributor) }}">
                         @error('distributor')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -191,7 +192,7 @@
                             placeholder="ใส่ชื่อการค้า"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('trade_name')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -200,29 +201,78 @@
                             value="{{ old('trade_name_at', $import->trade_name_at) }}" placeholder="ใส่ชื่อการค้าที่"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('trade_name_at')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
+                    @php
+                    // ค่าปัจจุบันของชนิดในหน้าแก้ไข: ใช้ old มาก่อน ถ้าไม่มีให้ใช้ค่าจากโมเดล
+                    $currentType = old('type_production_registration', $import->type_production_registration ?? '');
+                    @endphp
+
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชนิด</label>
-                        <input type="text" name="type_production_registration"
-                            value="{{ old('type_production_registration', $import->type_production_registration) }}"
-                            placeholder="ใส่ชื่อชนิด"
-                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+
+                        <div class="dropdown" id="typeDropdown">
+                            <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="typeBtn">
+                                @if ($currentType !== '')
+                                {{ $currentType }}
+                                @else
+                                -- เลือก --
+                                @endif
+                            </div>
+                            <div class="dropdown-list" id="typeList">
+                                <div class="dropdown-item text-gray-500" data-value="">-- เลือก --</div>
+                                <div class="dropdown-item" data-value="1">1</div>
+                                <div class="dropdown-item" data-value="2">2</div>
+                                <div class="dropdown-item" data-value="3">3</div>
+                                <div class="dropdown-item" data-value="4">4</div>
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="type_production_registration" id="typeInput" value="{{ $currentType }}">
                         @error('type_production_registration')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
+
+
+                    @php
+                    $currentUsage = old('usage_production_registration', $import->usage_production_registration ?? '');
+                    @endphp
+
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">การใช้</label>
-                        <input type="text" name="usage_production_registration"
-                            value="{{ old('usage_production_registration', $import->usage_production_registration) }}"
-                            placeholder="ใส่ชื่อการใช้"
-                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">
+                            ประเภทของการใช้ <span class="text-red-500"> *</span>
+                        </label>
+
+                        <div class="dropdown" id="typeOfUseDropdown">
+                            <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="usage_production_registration_btn">
+                                @if ($currentUsage)
+                                {{ $currentUsage }}
+                                @else
+                                -- เลือกประเภทของการใช้ --
+                                @endif
+                            </div>
+                            <div class="dropdown-list" id="usage_production_registration_list">
+                                <div class="dropdown-item text-gray-500" data-value="">-- เลือกประเภทของการใช้ --</div>
+                                <div class="dropdown-item" data-value="A : Acaricide (สารกำจัดไรศัตรูพืช)">A : Acaricide (สารกำจัดไรศัตรูพืช)</div>
+                                <div class="dropdown-item" data-value="F : Fungicide (สารป้องกันกำจัดโรคพืช)">F : Fungicide (สารป้องกันกำจัดโรคพืช)</div>
+                                <div class="dropdown-item" data-value="H : Herbicide (สารกำจัดวัชพืช)">H : Herbicide (สารกำจัดวัชพืช)</div>
+                                <div class="dropdown-item" data-value="I : Insecticide (สารกำจัดแมลง)">I : Insecticide (สารกำจัดแมลง)</div>
+                                <div class="dropdown-item" data-value="M : Molluscicide (สารกำจัดหอย)">M : Molluscicide (สารกำจัดหอย)</div>
+                                <div class="dropdown-item" data-value="N : Nematicide (สารกำจัดไส้เดือนฝอย)">N : Nematicide (สารกำจัดไส้เดือนฝอย)</div>
+                                <div class="dropdown-item" data-value="P : PlantGrowthRegulators (สารควบคุมการเจริญเติบโตของพืช)">P : PlantGrowthRegulators (สารควบคุมการเจริญเติบโตของพืช)</div>
+                                <div class="dropdown-item" data-value="R : Rodenticide (สารกำจัดหนู)">R : Rodenticide (สารกำจัดหนู)</div>
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="usage_production_registration" id="usage_production_registration_input" value="{{ $currentUsage }}">
                         @error('usage_production_registration')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
+
+
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">กลุ่มสาร</label>
                         <input type="text" name="group_of_substances"
@@ -230,7 +280,7 @@
                             placeholder="ใส่กลุ่มสาร"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('group_of_substances')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -239,7 +289,7 @@
                             placeholder="ใส่พืช"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('plant')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -248,7 +298,7 @@
                             placeholder="ใส่ศัตรูพืช"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('pests')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -258,7 +308,7 @@
                             placeholder="ใส่เลขที่ใบอนุญาต"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('production_license_number')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -267,7 +317,7 @@
                             value="{{ old('production_license_expiry', $import->production_license_expiry ? $import->production_license_expiry->format('Y-m-d') : '-') }}"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('production_license_expiry')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -278,7 +328,7 @@
                             placeholder="ใส่ปริมาณผลิต"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('production_license_quantity')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -288,7 +338,7 @@
                             placeholder="ใส่เลขที่ใบอนุญาต"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('possession_form_wo2')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -298,7 +348,7 @@
                             value="{{ old('possession_form_expiry', $import->possession_form_expiry ? $import->possession_form_expiry->format('Y-m-d') : '-') }}"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('possession_form_expiry')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -309,7 +359,7 @@
                             placeholder="ใส่เลขที่ใบอนุญาตหมดอายุ"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('registration_number_pass')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -318,7 +368,7 @@
                             value="{{ old('expired_at', $import->expired_at ? $import->expired_at->format('Y-m-d') : '-') }}"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('expired_at')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                 </div>
@@ -334,7 +384,7 @@
                         <textarea name="packaging_size_details" placeholder="ใส่รายละเอียดขนาดบรรจุ"
                             class="w-full p-3 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500" rows="2">{{ old('packaging_size_details', $import->packaging_size_details) }}</textarea>
                         @error('packaging_size_details')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
 
@@ -375,28 +425,29 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @if ($errors->has('registration_number'))
-        <script>
-            Swal.fire({
-                icon: 'error',
-                title: 'เลขทะเบียนซ้ำ',
-                text: '{{ $errors->first('registration_number') }}'
-            });
-        </script>
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'เลขทะเบียนซ้ำ',
+            text: '{{ $errors->first('
+            registration_number ') }}'
+        });
+    </script>
     @endif
 
     @if (session('success'))
-        <script>
-            Swal.fire({
-                icon: 'success',
-                title: 'อัปเดตสำเร็จ!',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'ตกลง'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = "{{ route('import.index') }}";
-                }
-            });
-        </script>
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'อัปเดตสำเร็จ!',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'ตกลง'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "{{ route('import.index') }}";
+            }
+        });
+    </script>
     @endif
 
     <script>
@@ -470,6 +521,14 @@
                 "{{ old('distributor', $import->distributor) }}");
             setupDropdown('registrationTypeBtn', 'registrationTypeList', 'registrationTypeInput',
                 "{{ old('registration_type', $import->registration_type) }}");
+            setupDropdown('typeBtn', 'typeList', 'typeInput', "{{ old('type_production_registration', $import->type_production_registration ?? '') }}");
+            setupDropdown(
+                'usage_production_registration_btn',
+                'usage_production_registration_list',
+                'usage_production_registration_input',
+                "{{ old('usage_production_registration', $import->usage_production_registration ?? '') }}"
+            );
+
         });
     </script>
 
