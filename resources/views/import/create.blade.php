@@ -52,8 +52,8 @@
                     </div>
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันหมดอายุ</label>
-                        <input type="date" name="expired_license_date" value="{{ old('expired_license_date') }}"
-                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        <input type="text" name="expired_license_date" class="date-th w-full p-3 border rounded-full" placeholder="dd/mm/yyyy" value="{{ old('expired_license_date') }}">
+
                         @error('expired_license_date')
                         <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
@@ -548,6 +548,34 @@
                 }
             });
 
+
+            // ===== 5) จำกัดการพิมพ์ ชื่อวัตถุอันตราย =====
+            const chemThInput = document.querySelector('input[name="chemical_name_th"]');
+            const chemEnInput = document.querySelector('input[name="chemical_name_en"]');
+
+            // ไทย: อักษรไทย, ตัวเลข, - , space, comma, dot
+            chemThInput?.addEventListener('input', () => {
+                const cleaned = chemThInput.value.replace(/[^ก-๙0-9\-,. ]/g, '');
+                if (cleaned !== chemThInput.value) chemThInput.value = cleaned;
+            });
+
+            // อังกฤษ: อักษรอังกฤษ, ตัวเลข, - , space, comma, dot
+            chemEnInput?.addEventListener('input', () => {
+                const cleaned = chemEnInput.value.replace(/[^A-Za-z0-9\-,. ]/g, '');
+                if (cleaned !== chemEnInput.value) chemEnInput.value = cleaned;
+            });
+
+
+
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        flatpickr("#expired_license_date", {
+            dateFormat: "d/m/Y", // dd/mm/yyyy
+            allowInput: true,
+            locale: "th" // ใช้ภาษาไทยด้วยถ้าต้องการ
         });
     </script>
 
