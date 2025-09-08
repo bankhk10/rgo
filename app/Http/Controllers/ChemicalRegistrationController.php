@@ -85,7 +85,6 @@ class ChemicalRegistrationController extends Controller
                     'ตรวจสอบเอกสารขึ้นทะเบียน',
                     'ตรวจชื่อการค้า',
                     'ขอใบอนุญาตนำเข้าตัวอย่าง',
-                    'อื่นๆ',
                 ],
             ],
         ];
@@ -253,7 +252,6 @@ class ChemicalRegistrationController extends Controller
                         'ตรวจสอบเอกสารขึ้นทะเบียน',
                         'ตรวจชื่อการค้า',
                         'ขอใบอนุญาตนำเข้าตัวอย่าง',
-                        'อื่นๆ',
                     ],
                 ],
             ];
@@ -550,7 +548,6 @@ class ChemicalRegistrationController extends Controller
                     'ตรวจสอบเอกสารขึ้นทะเบียน',
                     'ตรวจชื่อการค้า',
                     'ขอใบอนุญาตนำเข้าตัวอย่าง',
-                    'อื่นๆ',
                 ],
             ],
             2 => [
