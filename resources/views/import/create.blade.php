@@ -4,7 +4,7 @@
             แบบฟอร์มข้อมูลทะเบียนนำเข้าวัตถุดิบ
         </h2>
 
-        <form method="POST" action="{{ route('import.store') }}" class="space-y-10">
+        <form id="importForm" method="POST" action="{{ route('import.store') }}" class="space-y-10">
             @csrf
             <div>
                 <h3
@@ -12,49 +12,50 @@
                     ข้อมูลการนำเข้าทั่วไป
                 </h3>
                 <div class="grid grid-cols-2 md:grid-cols-2 gap-6 mt-4">
+
+                    {{-- บริษัทที่ขึ้นทะเบียน --}}
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">บริษัทที่ขึ้นทะเบียน
-                            <span class="text-red-500"> *</span>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">
+                            บริษัทที่ขึ้นทะเบียน <span class="text-red-500">*</span>
                         </label>
-                        <div class="dropdown" id="companyDropdown">
+                        <div class="dropdown focus:outline-none focus:ring-2 focus:ring-blue-500" id="companyDropdown">
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="companyBtn">
                                 @if (old('company_id'))
-                                    {{ $companies->firstWhere('id', old('company_id'))->full_name ?? '-- เลือก --' }}
+                                {{ $companies->firstWhere('id', old('company_id'))->full_name ?? '-- เลือก --' }}
                                 @else
-                                    -- เลือก --
+                                -- เลือก --
                                 @endif
                             </div>
                             <div class="dropdown-list" id="companyList">
                                 <div class="dropdown-item text-gray-500" data-value="">-- เลือก --</div>
                                 @foreach ($companies as $company)
-                                    @if ($company->type == 1)
-                                        <div class="dropdown-item" data-value="{{ $company->id }}">
-                                            {{ $company->full_name }}
-                                        </div>
-                                    @endif
+                                @if ($company->type == 1)
+                                <div class="dropdown-item" data-value="{{ $company->id }}">{{ $company->full_name }}</div>
+                                @endif
                                 @endforeach
                             </div>
                         </div>
                         <input type="hidden" name="company_id" id="companyInput" value="{{ old('company_id') }}">
-                        @error('company_id')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
-                        @enderror
+                        <p id="company_error" class="text-red-500 text-xs italic mt-1 hidden"></p>
                     </div>
+                    {{-- เลขที่ทะเบียน --}}
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลขที่ทะเบียน</label>
-                        <input type="text" name="registration_number" value="{{ old('registration_number') }}"
-                            placeholder="ใส่เลขที่ทะเบียน"
+                        <input
+                            type="text"
+                            id="registration_number"
+                            name="registration_number"
+                            value="{{ old('registration_number') }}"
+                            placeholder="เช่น 123-2568 หรือ 123456-2568"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                        @error('registration_number')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
-                        @enderror
+                        <p id="registration_error" class="text-red-500 text-xs italic mt-1 hidden"></p>
                     </div>
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันหมดอายุ</label>
                         <input type="date" name="expired_license_date" value="{{ old('expired_license_date') }}"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('expired_license_date')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -63,7 +64,7 @@
                             placeholder="ใส่ชื่อวัตถุอันตราย (ไทย)"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('chemical_name_th')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -72,7 +73,7 @@
                             placeholder="ใส่ชื่อวัตถุอันตราย (อังกฤษ)"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('chemical_name_en')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -81,7 +82,7 @@
                             placeholder="ใส่ % และสูตร"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('composition')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -90,7 +91,7 @@
                             placeholder="ใส่ผู้ผลิตและแหล่งผลิต"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('manufacturer')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -98,16 +99,16 @@
                         <div class="dropdown" id="registrationTypeDropdown">
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="registrationTypeBtn">
                                 @if (old('registration_type'))
-                                    @php
-                                        $registrationTypes = [
-                                            'T' => 'T',
-                                            'I' => 'I',
-                                            // 'R(F)' => 'R(F)',
-                                        ];
-                                    @endphp
-                                    {{ $registrationTypes[old('registration_type')] ?? '-- เลือก --' }}
+                                @php
+                                $registrationTypes = [
+                                'T' => 'T',
+                                'I' => 'I',
+                                // 'R(F)' => 'R(F)',
+                                ];
+                                @endphp
+                                {{ $registrationTypes[old('registration_type')] ?? '-- เลือก --' }}
                                 @else
-                                    -- เลือก --
+                                -- เลือก --
                                 @endif
                             </div>
                             <div class="dropdown-list" id="registrationTypeList">
@@ -119,7 +120,7 @@
                         <input type="hidden" name="registration_type" id="registrationTypeInput"
                             value="{{ old('registration_type') }}">
                         @error('registration_type')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -127,25 +128,25 @@
                         <div class="dropdown" id="importerDropdown">
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="importerBtn">
                                 @if (old('importer'))
-                                    {{ $companies->firstWhere('id', old('importer'))->full_name ?? '-- เลือก --' }}
+                                {{ $companies->firstWhere('id', old('importer'))->full_name ?? '-- เลือก --' }}
                                 @else
-                                    -- เลือก --
+                                -- เลือก --
                                 @endif
                             </div>
                             <div class="dropdown-list" id="importerList">
                                 <div class="dropdown-item text-gray-500" data-value="">-- เลือก --</div>
                                 @foreach ($companies as $company)
-                                    {{-- @if ($company->type == 1) --}}
-                                        <div class="dropdown-item" data-value="{{ $company->id }}">
-                                            {{ $company->full_name }}
-                                        </div>
-                                    {{-- @endif --}}
+                                {{-- @if ($company->type == 1) --}}
+                                <div class="dropdown-item" data-value="{{ $company->id }}">
+                                    {{ $company->full_name }}
+                                </div>
+                                {{-- @endif --}}
                                 @endforeach
                             </div>
                         </div>
                         <input type="hidden" name="importer" id="importerInput" value="{{ old('importer') }}">
                         @error('importer')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -153,24 +154,24 @@
                         <div class="dropdown" id="distributorDropdown">
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="distributorBtn">
                                 @if (old('distributor'))
-                                    {{ $companies->firstWhere('id', old('distributor'))->full_name ?? '-- เลือก --' }}
+                                {{ $companies->firstWhere('id', old('distributor'))->full_name ?? '-- เลือก --' }}
                                 @else
-                                    -- เลือก --
+                                -- เลือก --
                                 @endif
                             </div>
                             <div class="dropdown-list" id="distributorList">
                                 <div class="dropdown-item text-gray-500" data-value="">-- เลือก --</div>
                                 @foreach ($companies as $company)
-                                    <div class="dropdown-item" data-value="{{ $company->id }}">
-                                        {{ $company->full_name }}
-                                    </div>
+                                <div class="dropdown-item" data-value="{{ $company->id }}">
+                                    {{ $company->full_name }}
+                                </div>
                                 @endforeach
                             </div>
                         </div>
                         <input type="hidden" name="distributor" id="distributorInput"
                             value="{{ old('distributor') }}">
                         @error('distributor')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -179,7 +180,7 @@
                             placeholder="ใส่ชื่อการค้า"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('trade_name')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -188,7 +189,7 @@
                             placeholder="ใส่ชื่อการค้าที่"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('trade_name_at')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -197,7 +198,7 @@
                             value="{{ old('type_production_registration') }}" placeholder="ใส่ชื่อชนิด"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('type_production_registration')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -206,7 +207,7 @@
                             value="{{ old('usage_production_registration') }}" placeholder="ใส่ชื่อการใช้"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('usage_production_registration')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -215,7 +216,7 @@
                             placeholder="ใส่กลุ่มสาร"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('group_of_substances')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -223,7 +224,7 @@
                         <input type="text" name="plant" value="{{ old('plant') }}" placeholder="ใส่พืช"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('plant')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -231,7 +232,7 @@
                         <input type="text" name="pests" value="{{ old('pests') }}" placeholder="ใส่ศัตรูพืช"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('pests')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -240,7 +241,7 @@
                             value="{{ old('production_license_number') }}" placeholder="ใส่เลขที่ใบอนุญาต"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('production_license_number')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -249,7 +250,7 @@
                             value="{{ old('production_license_expiry') }}"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('production_license_expiry')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -259,7 +260,7 @@
                             value="{{ old('production_license_quantity') }}" placeholder="ใส่ปริมาณผลิต"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('production_license_quantity')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -268,7 +269,7 @@
                             placeholder="ใส่เลขที่ใบอนุญาต"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('possession_form_wo2')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -278,7 +279,7 @@
                             value="{{ old('possession_form_expiry') }}"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('possession_form_expiry')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -288,7 +289,7 @@
                             value="{{ old('registration_number_pass') }}" placeholder="ใส่เลขที่ใบอนุญาตหมดอายุ"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('registration_number_pass')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
@@ -296,7 +297,7 @@
                         <input type="date" name="expired_at" value="{{ old('expired_at') }}"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('expired_at')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                 </div>
@@ -312,7 +313,7 @@
                         <textarea name="packaging_size_details" placeholder="ใส่รายละเอียดขนาดบรรจุ"
                             class="w-full p-3 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500" rows="2">{{ old('packaging_size_details') }}</textarea>
                         @error('packaging_size_details')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <input type="hidden" name="new_or_old" value="{{ old('new_or_old', true) }}">
@@ -359,84 +360,92 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @if ($errors->has('registration_number'))
-        <script>
-            Swal.fire({
-                icon: 'error',
-                title: 'เลขทะเบียนซ้ำ',
-                text: '{{ $errors->first('registration_number') }}'
-            });
-        </script>
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'เลขทะเบียนซ้ำ',
+            text: '{{ $errors->first('
+            registration_number ') }}'
+        });
+    </script>
     @endif
 
     @if (session('success'))
-        <script>
-            Swal.fire({
-                icon: 'success',
-                title: 'บันทึกสำเร็จ!',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'ตกลง'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = "{{ route('import.index') }}";
-                }
-            });
-        </script>
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'บันทึกสำเร็จ!',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'ตกลง'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "{{ route('import.index') }}";
+            }
+        });
+    </script>
     @endif
 
     <script>
-        document.getElementById('menu-inregister')?.classList.add('side-menu--active');
         document.addEventListener('DOMContentLoaded', () => {
+            // ===== 0) ตั้ง active menu =====
+            document.getElementById('menu-inregister')?.classList.add('side-menu--active');
+
+            // ===== 1) Utility: Dropdown =====
             function setupDropdown(btnId, listId, inputId, oldValue = null) {
                 const btn = document.getElementById(btnId);
                 const list = document.getElementById(listId);
                 const input = document.getElementById(inputId);
+                if (!btn || !list || !input) return;
+
                 const items = list.querySelectorAll('.dropdown-item');
 
                 function updateBtn(label, value) {
                     btn.textContent = label;
-                    if (value === "" || label.includes('--')) {
+                    if (value === "" || (label ?? '').includes('--')) {
                         btn.classList.add('text-gray-500');
                     } else {
                         btn.classList.remove('text-gray-500');
                     }
                     input.value = value;
+                    // สำคัญ: แจ้ง validation realtime ว่ามีการเปลี่ยนค่า
+                    input.dispatchEvent(new Event('change'));
                 }
-                // Correctly set initial value based on old data
+
+                // เซ็ตค่าเริ่มต้นจาก old()
                 if (oldValue) {
-                    const match = [...items].find(i => i.dataset.value == oldValue);
+                    const match = Array.from(items).find(i => i.dataset.value == oldValue);
                     if (match) updateBtn(match.textContent, match.dataset.value);
                 } else {
-                    const initial = [...items].find(item => item.dataset.value === "");
+                    const initial = Array.from(items).find(item => item.dataset.value === "");
                     if (initial) updateBtn(initial.textContent, "");
                 }
 
-
+                // toggle dropdown
                 btn.addEventListener('click', (e) => {
-                    e.stopPropagation(); // Prevent document click from closing immediately
+                    e.stopPropagation();
                     list.classList.toggle('open');
                     btn.classList.toggle('open');
-                    // Close other dropdowns
+                    // ปิดตัวอื่น
                     document.querySelectorAll('.dropdown-list.open').forEach(openlist => {
                         if (openlist.id !== listId) {
                             openlist.classList.remove('open');
-                            document.getElementById(openlist.id.replace('List', 'Btn')).classList
-                                .remove('open');
+                            const otherBtn = document.getElementById(openlist.id.replace('List', 'Btn'));
+                            otherBtn?.classList.remove('open');
                         }
                     });
                 });
 
+                // เลือกรายการ
                 items.forEach(item => {
                     item.addEventListener('click', (e) => {
                         e.stopPropagation();
-                        const selectedValue = item.dataset.value;
-                        const selectedLabel = item.textContent;
-
-                        updateBtn(selectedLabel, selectedValue);
+                        updateBtn(item.textContent, item.dataset.value);
                         list.classList.remove('open');
                         btn.classList.remove('open');
                     });
                 });
 
+                // คลิกนอก → ปิด
                 document.addEventListener('click', (e) => {
                     if (!e.target.closest('.dropdown')) {
                         list.classList.remove('open');
@@ -444,34 +453,101 @@
                     }
                 });
             }
-            const messageBox = document.getElementById('customMessageBox');
-            const messageBoxContent = document.getElementById('messageBoxContent');
-            const closeMessageBox = document.getElementById('closeMessageBox');
 
-            function showMessageBox(message) {
-                messageBoxContent.textContent = message;
-                messageBox.classList.remove('hidden');
-            }
-
-            function hideMessageBox() {
-                messageBox.classList.add('hidden');
-            }
-
-            closeMessageBox.addEventListener('click', hideMessageBox);
-
-            // Setup for all dropdowns
+            // ===== 2) ติดตั้ง dropdown ทั้งหมด =====
             setupDropdown('companyBtn', 'companyList', 'companyInput', "{{ old('company_id') }}");
             setupDropdown('importerBtn', 'importerList', 'importerInput', "{{ old('importer') }}");
             setupDropdown('distributorBtn', 'distributorList', 'distributorInput', "{{ old('distributor') }}");
-            // There were no typeProductionBtn/List/Input and usageProductionBtn/List/Input in the provided HTML.
-            // If you intend to have them, you'll need to add the corresponding HTML structure.
-            // setupDropdown('typeProductionBtn', 'typeProductionList', 'typeProductionInput',
-            //     "{{ old('type_production_registration') }}");
-            // setupDropdown('usageProductionBtn', 'usageProductionList', 'usageProductionInput',
-            //     "{{ old('usage_production_registration') }}");
+            setupDropdown('registrationTypeBtn', 'registrationTypeList', 'registrationTypeInput', "{{ old('registration_type') }}");
 
-            setupDropdown('registrationTypeBtn', 'registrationTypeList', 'registrationTypeInput',
-                "{{ old('registration_type') }}");
+            // ===== 3) Validation แบบเรียลไทม์ =====
+            const form = document.getElementById('importForm');
+            if (!form) return; // กันเผื่อ
+
+            // --- 3.1 เลขที่ทะเบียน ---
+            const regInput = document.getElementById('registration_number');
+            const regError = document.getElementById('registration_error');
+            const regRegex = /^\d+-\d{4}$/;
+
+            function showRegError(msg) {
+                regError.textContent = msg;
+                regError.classList.remove('hidden');
+                regInput.classList.add('border-red-500');
+            }
+
+            function hideRegError() {
+                regError.textContent = '';
+                regError.classList.add('hidden');
+                regInput.classList.remove('border-red-500');
+            }
+
+            function validateReg() {
+                if (!regInput) return true;
+                const val = (regInput.value || '').trim();
+                if (!val) {
+                    showRegError('กรุณากรอกเลขที่ทะเบียน');
+                    return false;
+                }
+                if (!regRegex.test(val)) {
+                    showRegError('รูปแบบต้องเป็น ตัวเลข-เลข 4 หลัก (เช่น 123-2568 หรือ 123456-2568)');
+                    return false;
+                }
+                hideRegError();
+                return true;
+            }
+            regInput?.addEventListener('input', () => {
+                const cleaned = regInput.value.replace(/[^0-9-]/g, '');
+                if (cleaned !== regInput.value) regInput.value = cleaned;
+                validateReg();
+            });
+            regInput?.addEventListener('blur', validateReg);
+
+            // --- 3.2 บริษัทที่ขึ้นทะเบียน ---
+            const companyInput = document.getElementById('companyInput');
+            const companyBtn = document.getElementById('companyBtn');
+            const companyError = document.getElementById('company_error');
+
+            function validateCompany() {
+                if (!companyInput) return true;
+                const ok = !!(companyInput.value && String(companyInput.value).trim() !== '');
+                if (!ok) {
+                    companyError.textContent = 'กรุณาเลือกบริษัทที่ขึ้นทะเบียน';
+                    companyError.classList.remove('hidden');
+                    companyBtn?.classList.add('border-red-500');
+                } else {
+                    companyError.textContent = '';
+                    companyError.classList.add('hidden');
+                    companyBtn?.classList.remove('border-red-500');
+                }
+                return ok;
+            }
+            companyInput?.addEventListener('change', validateCompany);
+
+            // ===== 4) ตรวจตอน submit =====
+            form.addEventListener('submit', (e) => {
+                let firstErrorEl = null;
+
+                // ตรวจเลขที่ทะเบียน
+                const ok1 = validateReg();
+                if (!ok1 && !firstErrorEl) firstErrorEl = regInput;
+
+                // ตรวจบริษัทที่ขึ้นทะเบียน
+                const ok2 = validateCompany();
+                if (!ok2 && !firstErrorEl) firstErrorEl = companyBtn; // ใช้ปุ่ม dropdown เป็นจุดโฟกัส
+
+                if (!ok1 || !ok2) {
+                    e.preventDefault();
+                    // ถ้ามี error → โฟกัสช่องแรกที่ผิด
+                    if (firstErrorEl) {
+                        firstErrorEl.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'center'
+                        });
+                        firstErrorEl.focus();
+                    }
+                }
+            });
+
         });
     </script>
 
