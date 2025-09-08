@@ -81,6 +81,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/chemical-imports/import', [ChemicalImportController::class, 'import'])->name('chemical_imports.import');
 
     // import ผลิต
-    Route::get('/test-import', [ProductionRegistrationImportController::class, 'showForm']);
+    Route::get('/test-import', [ProductionRegistrationImportController::class, 'showForm'])->name('index.import_data');;
     Route::post('/import/production-registration', [ProductionRegistrationImportController::class, 'import'])->name('import.production-registration');
 });

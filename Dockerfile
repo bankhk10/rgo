@@ -1,51 +1,64 @@
+<<<<<<< HEAD
 # Base Image (เลือกเวอร์ชัน PHP ที่โปรเจกต์คุณใช้)
 FROM php:8.2-fpm-alpine
+=======
+# --- Stage 1: Composer vendor build ---
+FROM php:8.2-cli-bookworm AS vendor
+ENV COMPOSER_ALLOW_SUPERUSER=1
+ENV COMPOSER_MEMORY_LIMIT=-1
+>>>>>>> prod
 
-# ตั้งค่า Working Directory ภายใน Container
-WORKDIR /var/www/html
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git unzip rsync && \
+    rm -rf /var/lib/apt/lists/*
 
-# ติดตั้ง Dependencies ที่จำเป็นสำหรับ Laravel
-RUN apk update && apk add --no-cache \
-    nginx \
-    supervisor \
-    nodejs \
-    npm \
-    libzip-dev \
-    zip \
-    unzip \
-    libpng-dev \
-    libjpeg-turbo-dev \
-    freetype-dev \
-    libxml2-dev \
-    icu-dev \
-    curl \
-    git \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd \
-    && docker-php-ext-install pdo pdo_mysql zip bcmath intl opcache
+# ติดตั้ง composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# ติดตั้ง Composer (PHP Dependency Manager)
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-# คัดลอกไฟล์ Composer และติดตั้ง Dependencies
+WORKDIR /app
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --no-interaction --no-plugins --no-scripts --prefer-dist
 
-# คัดลอกไฟล์โปรเจกต์ทั้งหมด
+RUN composer install --no-dev --prefer-dist --no-progress --no-interaction \
+    --no-scripts \
+    --ignore-platform-req=ext-gd \
+    --ignore-platform-req=ext-zip
+
+# --- Stage 2: PHP-FPM runtime ---
+FROM php:8.2-fpm-bookworm
+
+# ✅ ติดตั้ง rsync ใน runtime ด้วย (entrypoint ใช้งาน)
+RUN apt-get update && apt-get install -y --no-install-recommends rsync \
+    && rm -rf /var/lib/apt/lists/*
+
+# ติดตั้ง PHP extensions
+COPY --from=mlocati/php-extension-installer:latest /usr/bin/install-php-extensions /usr/local/bin/
+RUN install-php-extensions gd intl zip bcmath pdo_mysql opcache
+
+# Timezone
+ENV TZ=Asia/Bangkok
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# PHP Opcache config
+RUN { \
+  echo 'opcache.enable=1'; \
+  echo 'opcache.enable_cli=0'; \
+  echo 'opcache.jit_buffer_size=64M'; \
+  echo 'opcache.memory_consumption=192'; \
+  echo 'opcache.interned_strings_buffer=16'; \
+  echo 'opcache.max_accelerated_files=100000'; \
+} > /usr/local/etc/php/conf.d/opcache.ini
+
+# โค้ด Laravel จะอยู่ใน /app-src (ต้นฉบับ)
+WORKDIR /app-src
 COPY . .
+COPY --from=vendor /app/vendor ./vendor
 
-# ตั้งค่า Permissions
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+# Entrypoint
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
-# สร้างไฟล์ Config สำหรับ Nginx (ตัวอย่าง)
-# COPY .docker/nginx/default.conf /etc/nginx/conf.d/default.conf
-COPY .docker/nginx/default.conf /etc/nginx/http.d/default.conf
-# สร้างไฟล์ Config สำหรับ Supervisor (ตัวอย่าง)
-COPY .docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
-# Expose port
-EXPOSE 80
-
-# คำสั่งที่จะรันเมื่อ Container เริ่มทำงาน
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+# โฟลเดอร์รันจริง (จะ sync โค้ดลง volume นี้)
+WORKDIR /var/www/html
+EXPOSE 9000
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+CMD ["php-fpm", "-F"]
