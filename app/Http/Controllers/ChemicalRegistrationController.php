@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ChemicalRegistration;
-use App\Models\DrugProgressStep; // Assuming this is the model for drug progress steps
-use Illuminate\Support\Facades\Log; // For logging errors
+use App\Models\DrugProgressStep;
+use App\Models\ChemicalImport;
+use App\Models\ProductionRegistration;
+use Illuminate\Support\Facades\Log;
 use App\Models\Company;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -492,6 +494,12 @@ class ChemicalRegistrationController extends Controller
             if (!empty($validatedData['registration_number'])) {
                 $validatedData['new_or_old'] = false;
                 $validatedData['progress'] = 100;
+
+                if ($validatedData['registration_type'] == 'T : นำเข้าสารเข้มข้น' || $validatedData['registration_type'] == 'I : นำเข้าสำเร็จรูป') {
+                    ChemicalImport::create($validatedData);
+                } else {
+                    ProductionRegistration::create($validatedData);
+                }
             }
 
             $drug->fill($validatedData);

@@ -49,7 +49,8 @@
                     </div>
 
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อวัตถุอันตราย (ไทย)</label>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อวัตถุอันตราย (ไทย) <span
+                                class="text-red-500"> *</span></label>
                         <input type="text" name="chemical_name_th" value="{{ old('chemical_name_th') }}"
                             placeholder="ใส่ชื่อวัตถุอันตราย (ไทย)"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
@@ -58,7 +59,8 @@
                         @enderror
                     </div>
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อวัตถุอันตราย (อังกฤษ)</label>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อวัตถุอันตราย (อังกฤษ) <span
+                                class="text-red-500"> *</span></label>
                         <input type="text" name="chemical_name_en" value="{{ old('chemical_name_en') }}"
                             placeholder="ใส่ชื่อวัตถุอันตราย (อังกฤษ)"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
@@ -299,25 +301,9 @@
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
-                    {{-- <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันที่ยื่นคำขอ</label>
-                        <input type="date" name="date_submit_request" value="{{ old('date_submit_request') }}"
-                    class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                    @error('date_submit_request')
-                    <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
-                <div>
-                    <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลขที่รับคำขอ</label>
-                    <input type="text" name="request_number_1" value="{{ old('request_number_1') }}"
-                        class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                    @error('request_number_1')
-                    <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
-                    @enderror
-                </div> --}}
 
                     <div class="md:col-span-2">
-                        <div class="flex flex-col md:flex-row gap-6"> {{-- Increased gap for consistency --}}
+                        <div class="flex flex-col md:flex-row gap-6">
                             <div class="w-full md:w-1/3">
                                 <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันที่ยื่นคำขอ</label>
                                 <input type="date" name="date_submit_request"
@@ -541,6 +527,7 @@
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
     @if (session('success'))
         <script>
             Swal.fire({
