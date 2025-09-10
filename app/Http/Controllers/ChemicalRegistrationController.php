@@ -7,6 +7,8 @@ use App\Models\ChemicalRegistration;
 use App\Models\DrugProgressStep; // Assuming this is the model for drug progress steps
 use Illuminate\Support\Facades\Log; // For logging errors
 use App\Models\Company;
+use App\Models\ChemicalImport;
+use App\Models\ProductionRegistration;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -737,6 +739,22 @@ class ChemicalRegistrationController extends Controller
 
                 $drug->progress = $show_step_number + 12.5;
                 $drug->save();
+            }
+        }
+
+        if ($drug->progress >= 100) {
+            $drug->update(['new_or_old' => false]);
+
+            if (in_array($drug->registration_type, ['T', 'I'])) {
+                ChemicalImport::firstOrCreate(
+                    ['registration_number' => $drug->registration_number],
+                    $drug->only((new ChemicalImport)->getFillable())
+                );
+            } else {
+                ProductionRegistration::firstOrCreate(
+                    ['registration_number' => $drug->registration_number],
+                    $drug->only((new ProductionRegistration)->getFillable())
+                );
             }
         }
 
