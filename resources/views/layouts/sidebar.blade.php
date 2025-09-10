@@ -15,7 +15,7 @@
             <li>
                 <a href="{{ route('import.index') }}" class="side-menu" id="menu-inregister">
                     <div class="side-menu__icon"><i data-lucide="file-text"></i></div>
-                    <div class="side-menu__title">ทะเบียนนำเข้าวัตถุดิบ</div>
+                    <div class="side-menu__title">ทะเบียนนำเข้า</div>
                 </a>
             </li>
             @endcanany
