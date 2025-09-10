@@ -189,7 +189,7 @@ class ChemicalRegistrationController extends Controller
             'registration_number_pass' => 'nullable|string',
             'registration_expiry_date' => 'nullable|date',
             'chemical_name_th' => 'required|string',
-            'chemical_name_en' => 'nullable|string',
+            'chemical_name_en' => 'required|string',
             'composition' => 'nullable|string', // text field can be validated as string
             'manufacturer' => 'required|string',
             'registrant' => 'required|string',
@@ -208,7 +208,7 @@ class ChemicalRegistrationController extends Controller
             'expired_at' => 'nullable|date',
             'old_license_quantity' => 'nullable|string',
             'packaging_size' => 'nullable|string',
-            'formula_of_ratio' => 'required|string',
+            'formula_of_ratio' => 'nullable|string',
             'type_registration' => 'required|string',
             'common_name' => 'nullable|string',
             'packaging_size_details' => 'nullable|string',
