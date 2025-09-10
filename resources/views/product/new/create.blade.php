@@ -4,7 +4,8 @@
             แบบฟอร์มขึ้นทะเบียนใหม่
         </h2>
 
-        <form method="POST" action="{{ route('newregis.store') }}" class="space-y-10">
+        {{-- <form method="POST" action="{{ route('newregis.store') }}" class="space-y-10"> --}}
+        <form id="newRegisForm" method="POST" action="{{ route('newregis.store') }}" class="space-y-10">
             @csrf
 
             {{-- General Information Section --}}
@@ -41,16 +42,18 @@
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เปอร์เซ็นต์และสูตร</label>
                         <input type="text" name="composition" value="{{ old('composition') }}"
-                            placeholder="ใส่ เปอร์เซ็นต์และสูตร"
+                            placeholder="เปอร์เซ็นต์และสูตร"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('composition')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
 
+                    {{-- ชื่อวัตถุอันตราย (ไทย) --}}
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อวัตถุอันตราย (ไทย) <span
-                                class="text-red-500"> *</span></label>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">
+                            ชื่อวัตถุอันตราย (ไทย) <span class="text-red-500">*</span>
+                        </label>
                         <input type="text" name="chemical_name_th" value="{{ old('chemical_name_th') }}"
                             placeholder="ใส่ชื่อวัตถุอันตราย (ไทย)"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
@@ -58,9 +61,11 @@
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
+                    {{-- ชื่อวัตถุอันตราย (อังกฤษ) --}}
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อวัตถุอันตราย (อังกฤษ) <span
-                                class="text-red-500"> *</span></label>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">
+                            ชื่อวัตถุอันตราย (อังกฤษ) <span class="text-red-500">*</span>
+                        </label>
                         <input type="text" name="chemical_name_en" value="{{ old('chemical_name_en') }}"
                             placeholder="ใส่ชื่อวัตถุอันตราย (อังกฤษ)"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
@@ -74,7 +79,7 @@
                                 class="text-red-500"> *</span></label>
                         <input type="text"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            name="manufacturer" value="{{ old('manufacturer') }}" />
+                            name="manufacturer" value="{{ old('manufacturer') }}"  placeholder="ผู้ผลิตและแหล่งผลิต" />
                         @error('manufacturer')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
@@ -156,7 +161,7 @@
                                 class="text-red-500"> *</span></label>
                         <input type="text"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            name="trade_name" value="{{ old('trade_name') }}" />
+                            name="trade_name" value="{{ old('trade_name') }}"  placeholder="ชื่อการค้า"/>
                         @error('trade_name')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
@@ -184,20 +189,6 @@
                         @enderror
                     </div>
 
-
-                    {{-- <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">สูตรอัตรส่วนผสมของสารสำคัญและลักษณะ
-                            <span class="text-red-500"> *</span></label>
-                        <input type="text"
-                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            name="formula_of_ratio" value="{{ old('formula_of_ratio') }}" />
-                        @error('formula_of_ratio')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
-                        @enderror
-                    </div> --}}
-
-
-
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชนิดทะเบียน <span
                                 class="text-red-500"> *</span></label>
@@ -206,8 +197,10 @@
                                 เลือกชนิดทะเบียน --</div>
                             <div class="dropdown-list" id="typeRegistrationList">
                                 <div class="dropdown-item text-gray-500" data-value="">-- เลือกชนิดทะเบียน --</div>
+                                <div class="dropdown-item" data-value="ชนิดที่ 1">ชนิดที่ 1</div>
                                 <div class="dropdown-item" data-value="ชนิดที่ 2">ชนิดที่ 2</div>
                                 <div class="dropdown-item" data-value="ชนิดที่ 3">ชนิดที่ 3</div>
+                                <div class="dropdown-item" data-value="ชนิดที่ 4">ชนิดที่ 4</div>
                             </div>
                         </div>
                         <input type="hidden" name="type_registration" id="typeRegistrationInput"
@@ -304,11 +297,12 @@
 
                     <div class="md:col-span-2">
                         <div class="flex flex-col md:flex-row gap-6">
+                            {{-- วันที่ยื่นคำขอ --}}
                             <div class="w-full md:w-1/3">
                                 <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันที่ยื่นคำขอ</label>
-                                <input type="date" name="date_submit_request"
-                                    value="{{ old('date_submit_request') }}"
-                                    class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                <input type="text" id="date_submit_request" name="date_submit_request"
+                                    class="date-th w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="วว/ดด/ปปปป" value="{{ old('date_submit_request') }}">
                                 @error('date_submit_request')
                                     <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                                 @enderror
@@ -322,29 +316,26 @@
                                 @enderror
                             </div>
                             <div class="w-full md:w-1/3">
-                                {{-- <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลข # Phase III</label> --}}
-                                {{-- <input type="text" value="{{ old('request_number_phase_3') }}"
-                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            name="request_number_phase_3" /> --}}
-
                             </div>
                         </div>
                     </div>
 
                     <div class="md:col-span-2">
-                        <div class="flex flex-col md:flex-row gap-6"> {{-- Increased gap for consistency --}}
+                        <div class="flex flex-col md:flex-row gap-6">
                             <div class="w-full md:w-1/3">
                                 <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันที่ยื่น Phase
                                     III</label>
-                                <input type="date" name="date_request_phase_3"
-                                    value="{{ old('date_request_phase_3') }}"
-                                    class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                <input type="text" id="date_request_phase_3" name="date_request_phase_3"
+                                    class="date-th w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="วว/ดด/ปปปป" value="{{ old('date_request_phase_3') }}">
                                 @error('date_request_phase_3')
                                     <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                                 @enderror
+
+
                             </div>
                             <div class="w-full md:w-1/3">
-                                <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลข # Phase III</label>
+                                <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลข Phase III</label>
                                 <input type="text" value="{{ old('request_number_phase_3') }}"
                                     class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     name="request_number_phase_3" />
@@ -354,7 +345,7 @@
                             </div>
 
                             <div class="w-full md:w-1/3">
-                                <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลข # Phase I</label>
+                                <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลข Phase I</label>
                                 <input type="text" name="request_number_phase_1"
                                     value="{{ old('request_number_phase_1') }}"
                                     class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
@@ -388,6 +379,85 @@
             </div>
         </form>
     </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/th.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // ===== 1) flatpickr dd/mm/yyyy =====
+            flatpickr(".date-th", {
+                allowInput: true,
+                locale: "th",
+                dateFormat: "d/m/Y",
+
+                // ตรวจ input manual
+                parseDate: (datestr, format) => {
+                    if (!datestr) return null;
+                    const parts = datestr.split('/');
+                    if (parts.length === 3) {
+                        let [dd, mm, yyyy] = parts.map(n => parseInt(n, 10));
+                        // ถ้ากรอกเป็น พ.ศ. (>2400) → แปลงเป็น ค.ศ.
+                        if (yyyy > 2400) yyyy = yyyy - 543;
+                        return new Date(yyyy, mm - 1, dd);
+                    }
+                    return flatpickr.parseDate(datestr, format);
+                },
+
+                // เวลาเลือกหรือโหลด ให้โชว์เป็น พ.ศ.
+                onReady: (selectedDates, dateStr, instance) => {
+                    showBE(instance);
+                },
+                onChange: (selectedDates, dateStr, instance) => {
+                    showBE(instance);
+                },
+                onOpen: (selectedDates, dateStr, instance) => {
+                    showBE(instance);
+                }
+            });
+
+            function showBE(instance) {
+                const selDate = instance.selectedDates[0];
+                if (!selDate) return;
+                const dd = String(selDate.getDate()).padStart(2, "0");
+                const mm = String(selDate.getMonth() + 1).padStart(2, "0");
+                const yyyyBE = selDate.getFullYear() + 543; // แสดงเฉพาะ พ.ศ.
+                instance.input.value = `${dd}/${mm}/${yyyyBE}`;
+            }
+
+            // ก่อน submit → แปลงกลับเป็น ค.ศ. ISO
+            const form = document.getElementById("newRegisForm");
+            if (form) {
+                form.addEventListener("submit", () => {
+                    document.querySelectorAll(".date-th").forEach(input => {
+                        if (input.value.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
+                            let [dd, mm, yyyyBE] = input.value.split("/");
+                            let yyyyAD = parseInt(yyyyBE, 10);
+                            if (yyyyAD > 2400) yyyyAD -= 543; // พ.ศ. → ค.ศ.
+                            input.value = `${yyyyAD}-${mm}-${dd}`;
+                        }
+                    });
+                });
+            }
+
+            // ===== 2) จำกัดการพิมพ์ชื่อวัตถุอันตราย =====
+            const chemThInput = document.querySelector('input[name="chemical_name_th"]');
+            const chemEnInput = document.querySelector('input[name="chemical_name_en"]');
+
+            // ไทย: อักษรไทย, ตัวเลข, - , , . , เว้นวรรค
+            chemThInput?.addEventListener('input', () => {
+                const cleaned = chemThInput.value.replace(/[^ก-๙0-9\-,. ]/g, '');
+                if (cleaned !== chemThInput.value) chemThInput.value = cleaned;
+            });
+
+            // อังกฤษ: A-Z a-z, ตัวเลข, - , , . , เว้นวรรค
+            chemEnInput?.addEventListener('input', () => {
+                const cleaned = chemEnInput.value.replace(/[^A-Za-z0-9\-,. ]/g, '');
+                if (cleaned !== chemEnInput.value) chemEnInput.value = cleaned;
+            });
+        });
+    </script>
+
 
     <script>
         document.getElementById('menu-newregis')?.classList.add('side-menu--active');
@@ -527,7 +597,7 @@
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+
     @if (session('success'))
         <script>
             Swal.fire({

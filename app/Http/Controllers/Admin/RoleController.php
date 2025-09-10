@@ -55,7 +55,7 @@ class RoleController extends Controller
             'Inregister' => 'ทะเบียนนำเข้าวัตถุดิบ',
             'RegisterManufacture' => 'ทะเบียนผลิตทั้งหมด',
             'RegisterAll' => 'ทะเบียนสินค้าทั้งหมด',
-            'RegisterNew' => 'ขึ้นทะเบียนสินค้าใหม่',
+            'RegisterNew' => 'ขึ้นทะเบียนใหม่',
              'Company' => 'บริษัท',
             'import_data_manufacture' => 'นำเข้าทะเบียนผลิต',
             'import_data_staple' => 'นำเข้าวัตถุอันตราย',

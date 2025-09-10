@@ -46,17 +46,38 @@
                                 class="text-2xl font-semibold text-white bg-gradient-to-r from-blue-400 to-indigo-400 px-4 py-3 rounded-t-md">
                                 ข้อมูลทั่วไป
                             </h3>
-                        <div class="grid grid-cols-2 md:grid-cols-2 gap-6 mt-4">
+
+                            <div class="grid grid-cols-2 md:grid-cols-2 gap-6 mt-4">
                                 <div>
                                     <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลขที่ทะเบียน</label>
-                                    <input type="text" name="registration_number"
+                                    <input type="text" id="registration_number" name="registration_number"
                                         value="{{ old('registration_number', $drug->registration_number) }}"
-                                        placeholder="ใส่เลขที่ทะเบียน"
-                                        class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                        placeholder="เช่น xxxx-xxxx"
+                                        class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        inputmode="numeric" maxlength="9" pattern="^\d{3,4}-\d{4}$"
+                                        title="กรอกเป็นรูปแบบ xxxx-xxxx เท่านั้น" oninput="filterRegisNo(this)" />
+                                    @error('registration_number')
+                                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
+
+                                <div class="w-full md:w-1/3">
+                                    <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันหมดอายุ</label>
+                                    <input type="text" name="production_license_expiry"
+                                        id="production_license_expiry"
+                                        class="date-th w-full p-3 pl-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        value="{{ old('production_license_expiry', $drug->production_license_expiry ? \Carbon\Carbon::parse($drug->production_license_expiry)->addYears(543)->format('d/m/Y') : '') }}"
+                                        placeholder="dd/mm/yyyy">
+                                    @error('production_license_expiry')
+                                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
                                 <div>
-                                    <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เปอร์เซ็นต์และสูตร</label>
-                                    <input type="text" name="composition" value="{{ old('composition', $drug->composition) }}"
+                                    <label
+                                        class="mx-3 text-base block text-gray-700 mb-1 mt-3">เปอร์เซ็นต์และสูตร</label>
+                                    <input type="text" name="composition"
+                                        value="{{ old('composition', $drug->composition) }}"
                                         placeholder="ใส่ เปอร์เซ็นต์และสูตร"
                                         class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                     @error('composition')
@@ -64,7 +85,8 @@
                                     @enderror
                                 </div>
                                 <div>
-                                    <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อวัตถุอันตราย (ไทย)</label>
+                                    <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อวัตถุอันตราย
+                                        (ไทย)</label>
                                     <input type="text" name="chemical_name_th"
                                         value="{{ old('chemical_name_th', $drug->chemical_name_th) }}"
                                         placeholder="ใส่ชื่อวัตถุอันตราย (ไทย)"
@@ -74,7 +96,8 @@
                                     @enderror
                                 </div>
                                 <div>
-                                    <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อวัตถุอันตราย (อังกฤษ)</label>
+                                    <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อวัตถุอันตราย
+                                        (อังกฤษ)</label>
                                     <input type="text" name="chemical_name_en"
                                         value="{{ old('chemical_name_en', $drug->chemical_name_en) }}"
                                         placeholder="ใส่ชื่อวัตถุอันตราย (อังกฤษ)"
@@ -84,8 +107,8 @@
                                     @enderror
                                 </div>
                                 <div>
-                                    <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ผู้ผลิตและแหล่งผลิต <span
-                                            class="text-red-500"> *</span></label>
+                                    <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ผู้ผลิตและแหล่งผลิต
+                                        <span class="text-red-500"> *</span></label>
                                     <input type="text"
                                         class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         name="manufacturer" value="{{ old('manufacturer', $drug->manufacturer) }}" />
@@ -97,16 +120,25 @@
                                     <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ประเภททะเบียน <span
                                             class="text-red-500"> *</span></label>
                                     <div class="dropdown" id="registrationTypeDropdown">
-                                        <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="registrationTypeBtn">--
+                                        <div style="height: 50px;" class="text-gray-500 dropdown-btn"
+                                            id="registrationTypeBtn">--
                                             เลือกประเภททะเบียน --</div>
                                         <div class="dropdown-list" id="registrationTypeList">
-                                            <div class="dropdown-item text-gray-500" data-value="">-- เลือกประเภททะเบียน --</div>
-                                            <div class="dropdown-item" data-value="T : นำเข้าสารเข้มข้น">T : นำเข้าสารเข้มข้น</div>
-                                            <div class="dropdown-item" data-value="I : นำเข้าสำเร็จรูป">I : นำเข้าสำเร็จรูป</div>
-                                            <div class="dropdown-item" data-value="F : ผลิตผสมปรุงแต่ง">F : ผลิตผสมปรุงแต่ง</div>
-                                            <div class="dropdown-item" data-value="R : ผลิตแบ่งบรรจุ (จากนำเข้า)">R : ผลิตแบ่งบรรจุ (จากนำเข้า)</div>
-                                            <div class="dropdown-item" data-value="R(F) : ผลิตแบ่งบรรจุ (จากผสมปรุงแต่ง)">R(F) : ผลิตแบ่งบรรจุ (จากผสมปรุงแต่ง)</div>
-                                            <div class="dropdown-item" data-value="F(E) : ผลิตเพื่อส่งออก">F(E) : ผลิตเพื่อส่งออก</div>
+                                            <div class="dropdown-item text-gray-500" data-value="">--
+                                                เลือกประเภททะเบียน --</div>
+                                            <div class="dropdown-item" data-value="T : นำเข้าสารเข้มข้น">T :
+                                                นำเข้าสารเข้มข้น</div>
+                                            <div class="dropdown-item" data-value="I : นำเข้าสำเร็จรูป">I :
+                                                นำเข้าสำเร็จรูป</div>
+                                            <div class="dropdown-item" data-value="F : ผลิตผสมปรุงแต่ง">F :
+                                                ผลิตผสมปรุงแต่ง</div>
+                                            <div class="dropdown-item" data-value="R : ผลิตแบ่งบรรจุ (จากนำเข้า)">R :
+                                                ผลิตแบ่งบรรจุ (จากนำเข้า)</div>
+                                            <div class="dropdown-item"
+                                                data-value="R(F) : ผลิตแบ่งบรรจุ (จากผสมปรุงแต่ง)">R(F) : ผลิตแบ่งบรรจุ
+                                                (จากผสมปรุงแต่ง)</div>
+                                            <div class="dropdown-item" data-value="F(E) : ผลิตเพื่อส่งออก">F(E) :
+                                                ผลิตเพื่อส่งออก</div>
                                         </div>
                                     </div>
                                     <input type="hidden" name="registration_type" id="registrationTypeInput"
@@ -116,16 +148,20 @@
                                     @enderror
                                 </div>
                                 <div>
-                                    <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">บริษัทที่ขึ้นทะเบียน<span
+                                    <label
+                                        class="mx-3 text-base block text-gray-700 mb-1 mt-3">บริษัทที่ขึ้นทะเบียน<span
                                             class="text-red-500"> *</span></label>
                                     <div class="dropdown" id="registrantDropdown">
-                                        <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="registrantBtn">--
+                                        <div style="height: 50px;" class="text-gray-500 dropdown-btn"
+                                            id="registrantBtn">--
                                             เลือกบริษัทที่ขึ้นทะเบียน --</div>
                                         <div class="dropdown-list" id="registrantList">
-                                            <div class="dropdown-item text-gray-500" data-value="">-- เลือกบริษัทที่ขึ้นทะเบียน --</div>
+                                            <div class="dropdown-item text-gray-500" data-value="">--
+                                                เลือกบริษัทที่ขึ้นทะเบียน --</div>
                                             @foreach ($companies as $company)
                                                 @if ($company->id != 4)
-                                                    <div class="dropdown-item" data-value="{{ $company->full_name }}">
+                                                    <div class="dropdown-item"
+                                                        data-value="{{ $company->full_name }}">
                                                         {{ $company->full_name }}
                                                     </div>
                                                 @endif
@@ -142,13 +178,16 @@
                                     <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อผู้นำเข้า <span
                                             class="text-red-500"> *</span></label>
                                     <div class="dropdown" id="importerDropdown">
-                                        <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="importerBtn">--
+                                        <div style="height: 50px;" class="text-gray-500 dropdown-btn"
+                                            id="importerBtn">--
                                             เลือกผู้นำเข้า --</div>
                                         <div class="dropdown-list" id="importerList">
-                                            <div class="dropdown-item text-gray-500" data-value="">-- เลือกผู้นำเข้า --</div>
+                                            <div class="dropdown-item text-gray-500" data-value="">-- เลือกผู้นำเข้า
+                                                --</div>
                                             @foreach ($companies as $company)
                                                 @if ($company->id != 4)
-                                                    <div class="dropdown-item" data-value="{{ $company->full_name }}">
+                                                    <div class="dropdown-item"
+                                                        data-value="{{ $company->full_name }}">
                                                         {{ $company->full_name }}
                                                     </div>
                                                 @endif
@@ -165,9 +204,11 @@
                                     <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อผู้จำหน่าย <span
                                             class="text-red-500"> *</span></label>
                                     <div class="dropdown" id="distributorDropdown">
-                                        <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="distributorBtn">-- เลือกผู้จำหน่าย --</div>
+                                        <div style="height: 50px;" class="text-gray-500 dropdown-btn"
+                                            id="distributorBtn">-- เลือกผู้จำหน่าย --</div>
                                         <div class="dropdown-list" id="distributorList">
-                                            <div class="dropdown-item text-gray-500" data-value="">-- เลือกผู้จำหน่าย --</div>
+                                            <div class="dropdown-item text-gray-500" data-value="">-- เลือกผู้จำหน่าย
+                                                --</div>
                                             @foreach ($companies as $company)
                                                 <div class="dropdown-item" data-value="{{ $company->full_name }}">
                                                     {{ $company->full_name }}
@@ -195,9 +236,11 @@
                                     <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อการค้าที่ <span
                                             class="text-red-500"> *</span></label>
                                     <div class="dropdown" id="namePositionDropdown">
-                                        <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="namePositionBtn">-- เลือกชื่อการที่ --</div>
+                                        <div style="height: 50px;" class="text-gray-500 dropdown-btn"
+                                            id="namePositionBtn">-- เลือกชื่อการที่ --</div>
                                         <div class="dropdown-list" id="namePositionList">
-                                            <div class="dropdown-item text-gray-500" data-value="">-- เลือกชื่การที่ --</div>
+                                            <div class="dropdown-item text-gray-500" data-value="">-- เลือกชื่การที่
+                                                --</div>
                                             <div class="dropdown-item" data-value="T">T</div>
                                             <div class="dropdown-item" data-value="-">-</div>
                                             <div class="dropdown-item" data-value="1">1</div>
@@ -215,12 +258,16 @@
                                     <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชนิดทะเบียน <span
                                             class="text-red-500"> *</span></label>
                                     <div class="dropdown" id="typeRegistrationDropdown">
-                                        <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="typeRegistrationBtn">--
+                                        <div style="height: 50px;" class="text-gray-500 dropdown-btn"
+                                            id="typeRegistrationBtn">--
                                             เลือกชนิดทะเบียน --</div>
                                         <div class="dropdown-list" id="typeRegistrationList">
-                                            <div class="dropdown-item text-gray-500" data-value="">-- เลือกชนิดทะเบียน --</div>
+                                            <div class="dropdown-item text-gray-500" data-value="">--
+                                                เลือกชนิดทะเบียน --</div>
+                                            <div class="dropdown-item" data-value="ชนิดที่ 1">ชนิดที่ 1</div>
                                             <div class="dropdown-item" data-value="ชนิดที่ 2">ชนิดที่ 2</div>
                                             <div class="dropdown-item" data-value="ชนิดที่ 3">ชนิดที่ 3</div>
+                                            <div class="dropdown-item" data-value="ชนิดที่ 4">ชนิดที่ 4</div>
                                         </div>
                                     </div>
                                     <input type="hidden" name="type_registration" id="typeRegistrationInput"
@@ -233,13 +280,17 @@
                                     <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ประเภทของการใช้ <span
                                             class="text-red-500"> *</span></label>
                                     <div class="dropdown" id="typeOfUseDropdown">
-                                        <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="typeOfUseBtn">--
+                                        <div style="height: 50px;" class="text-gray-500 dropdown-btn"
+                                            id="typeOfUseBtn">--
                                             เลือกประเภทของการใช้ --</div>
                                         <div class="dropdown-list" id="typeOfUseList">
-                                            <div class="dropdown-item text-gray-500" data-value="">-- เลือกประเภทของการใช้ --</div>
-                                            <div class="dropdown-item" data-value="A : Acaricide (สารกำจัดไรศัตรูพืช)">A :
+                                            <div class="dropdown-item text-gray-500" data-value="">--
+                                                เลือกประเภทของการใช้ --</div>
+                                            <div class="dropdown-item"
+                                                data-value="A : Acaricide (สารกำจัดไรศัตรูพืช)">A :
                                                 Acaricide (สารกำจัดไรศัตรูพืช)</div>
-                                            <div class="dropdown-item" data-value="F : Fungicide (สารป้องกันกำจัดโรคพืช)">F :
+                                            <div class="dropdown-item"
+                                                data-value="F : Fungicide (สารป้องกันกำจัดโรคพืช)">F :
                                                 Fungicide (สารป้องกันกำจัดโรคพืช)</div>
                                             <div class="dropdown-item" data-value="H : Herbicide (สารกำจัดวัชพืช)">H :
                                                 Herbicide (สารกำจัดวัชพืช)</div>
@@ -247,10 +298,12 @@
                                                 Insecticide (สารกำจัดแมลง)</div>
                                             <div class="dropdown-item" data-value="M : Molluscicide (สารกำจัดหอย)">M :
                                                 Molluscicide (สารกำจัดหอย)</div>
-                                            <div class="dropdown-item" data-value="N : Nematicide (สารกำจัดไส้เดือนฝอย)">N :
+                                            <div class="dropdown-item"
+                                                data-value="N : Nematicide (สารกำจัดไส้เดือนฝอย)">N :
                                                 Nematicide (สารกำจัดไส้เดือนฝอย)</div>
                                             <div class="dropdown-item"
-                                                data-value="P : PlantGrowthRegulators (สารควบคุมการเจริญเติบโตของพืช)">P :
+                                                data-value="P : PlantGrowthRegulators (สารควบคุมการเจริญเติบโตของพืช)">
+                                                P :
                                                 PlantGrowthRegulators (สารควบคุมการเจริญเติบโตของพืช)</div>
                                             <div class="dropdown-item" data-value="R : Rodenticide (สารกำจัดหนู)">R :
                                                 Rodenticide (สารกำจัดหนู)</div>
@@ -263,7 +316,8 @@
                                     @enderror
                                 </div>
                                 <div class="md:col-span-2">
-                                    <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">รายละเอียดขนาดบรรจุ</label>
+                                    <label
+                                        class="mx-3 text-base block text-gray-700 mb-1 mt-3">รายละเอียดขนาดบรรจุ</label>
                                     <textarea name="packaging_size_details"
                                         class="w-full p-3 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500" rows="2">{{ old('packaging_size_details', $drug->packaging_size_details) }}</textarea>
                                     @error('packaging_size_details')
@@ -272,17 +326,22 @@
                                 </div>
                                 <div class="md:col-span-2">
                                     <div class="flex flex-col md:flex-row gap-6">
+
+                                        {{-- วันที่ยื่นคำขอ --}}
                                         <div class="w-full md:w-1/3">
-                                            <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันที่ยื่นคำขอ</label>
-                                            <input type="date" name="date_submit_request"
-                                                value="{{ old('date_submit_request', $drug->date_submit_request) }}"
-                                                class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                            <label
+                                                class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันที่ยื่นคำขอ</label>
+                                            <input type="text" name="date_submit_request" id="date_submit_request"
+                                                class="date-th w-full p-3 pl-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                value="{{ old('date_submit_request', $drug->date_submit_request ? \Carbon\Carbon::parse($drug->date_submit_request)->addYears(543)->format('d/m/Y') : '') }}"
+                                                placeholder="dd/mm/yyyy">
                                             @error('date_submit_request')
                                                 <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                                             @enderror
                                         </div>
                                         <div class="w-full md:w-1/3">
-                                            <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลขที่รับคำขอ</label>
+                                            <label
+                                                class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลขที่รับคำขอ</label>
                                             <input type="text" name="request_number_1"
                                                 value="{{ old('request_number_1', $drug->request_number_1) }}"
                                                 class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
@@ -290,23 +349,30 @@
                                                 <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                                             @enderror
                                         </div>
+
                                         <div class="w-full md:w-1/3"></div>
                                     </div>
                                 </div>
                                 <div class="md:col-span-2">
                                     <div class="flex flex-col md:flex-row gap-6">
                                         <div class="w-full md:w-1/3">
-                                            <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันที่ยื่น Phase
+                                            <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันที่ยื่น
+                                                Phase
                                                 III</label>
-                                            <input type="date" name="date_request_phase_3"
-                                                value="{{ old('date_request_phase_3', $drug->date_request_phase_3) }}"
-                                                class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                            <input type="text" name="date_request_phase_3"
+                                                id="date_request_phase_3"
+                                                class="date-th w-full p-3 pl-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                value="{{ old('date_request_phase_3', $drug->date_request_phase_3 ? \Carbon\Carbon::parse($drug->date_request_phase_3)->addYears(543)->format('d/m/Y') : '') }}"
+                                                placeholder="dd/mm/yyyy">
                                             @error('date_request_phase_3')
                                                 <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                                             @enderror
                                         </div>
+
+
                                         <div class="w-full md:w-1/3">
-                                            <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลข # Phase III</label>
+                                            <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลข Phase
+                                                III</label>
                                             <input type="text" name="request_number_phase_3"
                                                 value="{{ old('request_number_phase_3', $drug->request_number_phase_3) }}"
                                                 class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
@@ -315,7 +381,8 @@
                                             @enderror
                                         </div>
                                         <div class="w-full md:w-1/3">
-                                            <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลข # Phase I</label>
+                                            <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลข Phase
+                                                I</label>
                                             <input type="text" name="request_number_phase_1"
                                                 value="{{ old('request_number_phase_1', $drug->request_number_phase_1) }}"
                                                 class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
@@ -327,7 +394,8 @@
                                 </div>
                                 <div class="md:col-span-2">
                                     <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">อื่นๆ (ระบุ)</label>
-                                    <textarea name="remarks" class="w-full p-3 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500" rows="2">{{ old('remarks', $drug->remarks) }}</textarea>
+                                    <textarea name="remarks" class="w-full p-3 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        rows="2">{{ old('remarks', $drug->remarks) }}</textarea>
                                     @error('remarks')
                                         <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                                     @enderror
@@ -346,6 +414,37 @@
                             </button>
                         </div>
                     </form>
+
+
+                    <script>
+                        function filterRegisNo(el) {
+                            // แปลง en-dash/em-dash เป็น hyphen ปกติ และคงไว้เฉพาะตัวเลขกับ '-'
+                            let v = el.value.replace(/[–—]/g, '-').replace(/[^\d-]/g, '');
+
+                            // ให้มี '-' ได้ตัวเดียว
+                            const firstDash = v.indexOf('-');
+                            if (firstDash !== -1) {
+                                v = v.slice(0, firstDash + 1) + v.slice(firstDash + 1).replace(/-/g, '');
+                            }
+
+                            // ตัดความยาวส่วนหน้าไม่เกิน 4 และส่วนหลังไม่เกิน 4
+                            const parts = v.split('-');
+                            if (parts.length === 1) {
+                                // ยังไม่มี '-', จำกัดหน้าสุด 4 หลัก
+                                parts[0] = parts[0].slice(0, 4);
+                                v = parts[0];
+                            } else {
+                                parts[0] = parts[0].slice(0, 4); // 3–4 หลักจะตรวจจริงด้วย pattern/regex อีกชั้น
+                                parts[1] = parts[1].slice(0, 4);
+                                v = parts[0] + '-' + parts[1];
+                            }
+
+                            // จำกัดความยาวรวมไม่เกิน 9 (เช่น 1234-2568)
+                            el.value = v.slice(0, 9);
+                        }
+                    </script>
+
+
 
                     <script>
                         document.getElementById('menu-newregis')?.classList.add('side-menu--active');
@@ -397,13 +496,20 @@
                                 });
                             }
 
-                            setupDropdown('registrantBtn', 'registrantList', 'registrantInput', "{{ old('registrant', $drug->registrant) }}");
-                            setupDropdown('typeRegistrationBtn', 'typeRegistrationList', 'typeRegistrationInput', "{{ old('type_registration', $drug->type_registration) }}");
-                            setupDropdown('registrationTypeBtn', 'registrationTypeList', 'registrationTypeInput', "{{ old('registration_type', $drug->registration_type) }}");
-                            setupDropdown('namePositionBtn', 'namePositionList', 'namePositionInput', "{{ old('name_position', $drug->name_position) }}");
-                            setupDropdown('importerBtn', 'importerList', 'importerInput', "{{ old('importer', $drug->importer) }}");
-                            setupDropdown('distributorBtn', 'distributorList', 'distributorInput', "{{ old('distributor', $drug->distributor) }}");
-                            setupDropdown('typeOfUseBtn', 'typeOfUseList', 'typeOfUseInput', "{{ old('type_of_use', $drug->type_of_use) }}");
+                            setupDropdown('registrantBtn', 'registrantList', 'registrantInput',
+                                "{{ old('registrant', $drug->registrant) }}");
+                            setupDropdown('typeRegistrationBtn', 'typeRegistrationList', 'typeRegistrationInput',
+                                "{{ old('type_registration', $drug->type_registration) }}");
+                            setupDropdown('registrationTypeBtn', 'registrationTypeList', 'registrationTypeInput',
+                                "{{ old('registration_type', $drug->registration_type) }}");
+                            setupDropdown('namePositionBtn', 'namePositionList', 'namePositionInput',
+                                "{{ old('name_position', $drug->name_position) }}");
+                            setupDropdown('importerBtn', 'importerList', 'importerInput',
+                                "{{ old('importer', $drug->importer) }}");
+                            setupDropdown('distributorBtn', 'distributorList', 'distributorInput',
+                                "{{ old('distributor', $drug->distributor) }}");
+                            setupDropdown('typeOfUseBtn', 'typeOfUseList', 'typeOfUseInput',
+                                "{{ old('type_of_use', $drug->type_of_use) }}");
                         });
                     </script>
 
@@ -847,6 +953,57 @@
         </div>
     </main>
 
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/th.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            flatpickr(".date-th", {
+                allowInput: true,
+                locale: "th",
+                dateFormat: "d/m/Y",
+                parseDate: (datestr, format) => {
+                    if (!datestr) return null;
+                    const parts = datestr.split('/');
+                    if (parts.length === 3) {
+                        let [dd, mm, yyyy] = parts.map(n => parseInt(n, 10));
+                        if (yyyy > 2400) yyyy -= 543; // ถ้าเป็น พ.ศ. → ค.ศ.
+                        return new Date(yyyy, mm - 1, dd);
+                    }
+                    return flatpickr.parseDate(datestr, format);
+                },
+                onReady: (selectedDates, dateStr, instance) => showBE(instance),
+                onChange: (selectedDates, dateStr, instance) => showBE(instance),
+                onOpen: (selectedDates, dateStr, instance) => showBE(instance)
+            });
+
+            function showBE(instance) {
+                const selDate = instance.selectedDates[0];
+                if (!selDate) return;
+                const dd = String(selDate.getDate()).padStart(2, "0");
+                const mm = String(selDate.getMonth() + 1).padStart(2, "0");
+                const yyyyBE = selDate.getFullYear() + 543;
+                instance.input.value = `${dd}/${mm}/${yyyyBE}`;
+            }
+
+            // ก่อน submit → แปลงเป็น ค.ศ. yyyy-mm-dd
+            const form = document.getElementById("editRegisForm");
+            if (form) {
+                form.addEventListener("submit", () => {
+                    document.querySelectorAll(".date-th").forEach(input => {
+                        if (input.value.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
+                            let [dd, mm, yyyyBE] = input.value.split("/");
+                            let yyyyAD = parseInt(yyyyBE, 10);
+                            if (yyyyAD > 2400) yyyyAD -= 543;
+                            input.value = `${yyyyAD}-${mm}-${dd}`;
+                        }
+                    });
+                });
+            }
+        });
+    </script>
 
 
 

@@ -22,6 +22,7 @@ class ChemicalRegistrationController extends Controller
      * @return \Illuminate\Http\Response
      */
 
+
     public function index(Request $request)
     {
         $query = ChemicalRegistration::query();
@@ -184,6 +185,7 @@ class ChemicalRegistrationController extends Controller
 
     public function store(Request $request)
     {
+
         // dd($request->all());
         $validatedData = $request->validate([
             'chemical_imports_id' => 'nullable|integer', // Changed from string to integer based on schema
@@ -280,7 +282,7 @@ class ChemicalRegistrationController extends Controller
 
             return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จ');
         } catch (\Exception $e) {
-            // \Log::error("Error creating product: " . $e->getMessage());
+            \Log::error("Error creating product: " . $e->getMessage());
             return redirect()->back()->withInput()->withErrors(['error' => 'เกิดข้อผิดพลาดในการบันทึกข้อมูล: ' . $e->getMessage()]);
         }
     }
@@ -436,6 +438,18 @@ class ChemicalRegistrationController extends Controller
     {
         try {
             $drug = ChemicalRegistration::findOrFail($id);
+
+            $request->merge([
+                'registration_expiry_date'  => $this->convertDate($request->input('registration_expiry_date')),
+                'production_license_expiry' => $this->convertDate($request->input('production_license_expiry')),
+                'possession_form_expiry'    => $this->convertDate($request->input('possession_form_expiry')),
+                'application_received_date' => $this->convertDate($request->input('application_received_date')),
+                'expired_at'                => $this->convertDate($request->input('expired_at')),
+                'date_submit_request'       => $this->convertDate($request->input('date_submit_request')),
+                'date_request_phase_3'      => $this->convertDate($request->input('date_request_phase_3')),
+            ]);
+
+
             $validatedData = $request->validate([
                 'chemical_imports_id' => 'nullable|integer', // ตัวอย่าง: ฟิลด์นี้ถูกกำหนดให้ required
                 'registration_number' => 'nullable|string',
@@ -507,6 +521,7 @@ class ChemicalRegistrationController extends Controller
 
             return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จ');
         } catch (\Exception $e) {
+            \Log::error("Error update product: " . $e->getMessage());
             // ในกรณีที่เกิดข้อผิดพลาดอื่นๆ ที่ไม่ใช่ validation error
             return redirect()->back()->withInput()->withErrors(['error' => 'เกิดข้อผิดพลาดในการบันทึกข้อมูล: ' . $e->getMessage()]);
         }
@@ -941,5 +956,16 @@ class ChemicalRegistrationController extends Controller
         }
 
         return view('product_all.show', compact('registration', 'companies', 'checkplan'));
+    }
+
+    private function convertDate($value)
+    {
+        if (!$value) return null;
+        if (preg_match('#^\d{2}/\d{2}/\d{4}$#', $value)) {
+            [$dd, $mm, $yyyy] = explode('/', $value);
+            if ((int)$yyyy > 2400) $yyyy -= 543;
+            return sprintf('%04d-%02d-%02d', $yyyy, $mm, $dd);
+        }
+        return $value; // ปล่อยผ่านถ้าเป็น yyyy-mm-dd อยู่แล้ว
     }
 }
