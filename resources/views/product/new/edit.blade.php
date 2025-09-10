@@ -38,253 +38,429 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('newregis.update', $drug->id) }}">
-                        <div class="grid grid-cols-3 gap-6 text-lg text-gray-700 ml-16">
-                            <div>
-                                <p class="font-semibold text-indigo-600 mb-1">เลขที่ทะเบียน</p>
-                                @csrf
-                                @method('PUT')
-                                <input type="text" name="registration_number"
-                                    class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1"
-                                    placeholder="กรอกเลขที่ทะเบียน" value="{{ $drug->registration_number }}">
-                            </div>
-                            <div>
-                                <p class="font-semibold text-indigo-600 mb-1">ชื่อวัตถุอันตราย (ไทย)</p>
-                                <input type="text" name="chemical_name_th"
-                                    class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1"
-                                    placeholder="กรอกชื่อวัตถุอันตราย (ไทย)"
-                                    value="{{ $drug->chemical_name_th ?? '' }}">
-                            </div>
-                            <div>
-                                <p class="font-semibold text-indigo-600 mb-1">ชื่อวัตถุอันตราย (อังกฤษ)</p>
-                                <input type="text" name="chemical_name_th"
-                                    class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1"
-                                    placeholder="กรอกชื่อวัตถุอันตราย (อังกฤษ)"
-                                    value="{{ $drug->chemical_name_en ?? '' }}">
-                            </div>
-                            <div>
-                                <p class="font-semibold text-indigo-600 mb-1">เปอร์เซ็นต์และสูตร</p>
-                                <input type="text" name="composition"
-                                    class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1"
-                                    placeholder="กรอกเปอร์เซ็นต์และสูตร" value="{{ $drug->composition }}">
-                                @error('composition')
-                                    <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <div>
-                                <p class="font-semibold text-indigo-600 mb-1">ผู้ขอขึ้นทะเบียน</p>
-                                <select
-                                    class="w-5/6 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    name="registrant">
-                                    <option value="">-- เลือก --</option>
-                                    @foreach ($companies as $company)
-                                        <option value="{{ $company->full_name }}"
-                                            {{ $drug->registrant == $company->full_name ? 'selected' : '' }}>
-                                            {{ $company->full_name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('registrant')
-                                    <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <div>
-                                <p class="font-semibold text-indigo-600 mb-1">ชนิดทะเบียน</p>
-                                <select
-                                    class="w-5/6 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    name="type_registration">
-                                    <option value="">-- เลือก --</option>
-                                    <option value="ชนิดที่ 2"
-                                        {{ $drug->type_registration == 'ชนิดที่ 2' ? 'selected' : '' }}>
-                                        ชนิดที่ 2</option>
-                                    <option value="ชนิดที่ 3"
-                                        {{ $drug->type_registration == 'ชนิดที่ 3' ? 'selected' : '' }}>
-                                        ชนิดที่ 3</option>
-                                </select>
-                            </div>
-                            <div>
-                                <p class="font-semibold text-indigo-600 mb-1">ประเภททะเบียน</p>
-                                <select
-                                    class="w-5/6 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    name="registration_type">
-                                    <option value="">-- เลือก --</option>
-                                    <option value="T : นำเข้าสารเข้มข้น"
-                                        {{ $drug->registration_type == 'T : นำเข้าสารเข้มข้น' ? 'selected' : '' }}>
-                                        T : นำเข้าสารเข้มข้น</option>
-                                    <option value="I : นำเข้าสำเร็จรูป"
-                                        {{ $drug->registration_type == 'I : นำเข้าสำเร็จรูป' ? 'selected' : '' }}>
-                                        I : นำเข้าสำเร็จรูป</option>
-                                    <option value="F : ผลิตผสมปรุงแต่ง"
-                                        {{ $drug->registration_type == 'F : ผลิตผสมปรุงแต่ง' ? 'selected' : '' }}>
-                                        F : ผลิตผสมปรุงแต่ง</option>
-                                    <option value="R : ผลิตแบ่งบรรจุ (จากนำเข้า)"
-                                        {{ $drug->registration_type == 'R : ผลิตแบ่งบรรจุ (จากนำเข้า)' ? 'selected' : '' }}>
-                                        R : ผลิตแบ่งบรรจุ (จากนำเข้า)</option>
-                                    <option value="R(F) : ผลิตแบ่งบรรจุ (จากผสมปรุงแต่ง)"
-                                        {{ $drug->registration_type == 'R(F) : ผลิตแบ่งบรรจุ (จากผสมปรุงแต่ง)' ? 'selected' : '' }}>
-                                        R(F) : ผลิตแบ่งบรรจุ (จากผสมปรุงแต่ง)</option>
-                                    <option value="F(E) : ผลิตเพื่อส่งออก"
-                                        {{ $drug->registration_type == 'F(E) : ผลิตเพื่อส่งออก' ? 'selected' : '' }}>
-                                        F(E) : ผลิตเพื่อส่งออก</option>
-                                </select>
-                            </div>
-                            <div>
-                                <p class="font-semibold text-indigo-600 mb-1">ชื่อการค้า</p>
-                                <input type="text" name="trade_name"
-                                    class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1" placeholder="กรอกชื่อการค้า"
-                                    value="{{ $drug->trade_name }}">
-                                @error('trade_name')
-                                    <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <div>
-                                <p class="font-semibold text-indigo-600 mb-1">ชื่อการที่</p>
-                                <select
-                                    class="w-5/6 p-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    name="name_position">
-                                    <option value="">-- เลือก --</option>
-                                    <option value="T" {{ $drug->name_position == 'T' ? 'selected' : '' }}>T
-                                    </option>
-                                    <option value="-" {{ $drug->name_position == '-' ? 'selected' : '' }}>-
-                                    </option>
-                                    <option value="1" {{ $drug->name_position == '1' ? 'selected' : '' }}>1
-                                    </option>
-                                    <option value="2" {{ $drug->name_position == '2' ? 'selected' : '' }}>2
-                                    </option>
-                                    <option value="3" {{ $drug->name_position == '3' ? 'selected' : '' }}>3
-                                    </option>
-                                </select>
-                            </div>
-                            <div>
-                                <p class="font-semibold text-indigo-600 mb-1">ชื่อผู้นำเข้า</p>
-                                <select
-                                    class="w-5/6 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    name="importer">
-                                    <option value="">-- เลือก --</option>
-                                    @foreach ($companies as $company)
-                                        <option value="{{ $company->full_name }}"
-                                            {{ $drug->importer == $company->full_name ? 'selected' : '' }}>
-                                            {{ $company->full_name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div>
-                                <p class="font-semibold text-indigo-600 mb-1">ชื่อผู้ผลิตและแหล่งผลิต</p>
-                                <input type="text" name="manufacturer"
-                                    class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1"
-                                    placeholder="กรอกชื่อผู้ผลิตและแหล่งผลิต" value="{{ $drug->manufacturer }}">
-                            </div>
-                            <div>
-                                <p class="font-semibold text-indigo-600 mb-1">ชื่อผู้จำหน่าย</p>
-                                <select
-                                    class="w-5/6 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    name="distributor">
-                                    <option value="">-- เลือก --</option>
-                                    @foreach ($companies as $company)
-                                        <option value="{{ $company->full_name }}"
-                                            {{ $drug->distributor == $company->full_name ? 'selected' : '' }}>
-                                            {{ $company->full_name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div>
-                                <p class="font-semibold text-indigo-600 mb-1">ประเภทของการใช้</p>
-                                <select
-                                    class="w-5/6 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    name="type_of_use">
-                                    <option value="">-- เลือก --</option>
-                                    <option value="A : Acaricide (สารกำจัดไรศัตรูพืช)"
-                                        {{ $drug->type_of_use == 'A : Acaricide (สารกำจัดไรศัตรูพืช)' ? 'selected' : '' }}>
-                                        A :
-                                        Acaricide (สารกำจัดไรศัตรูพืช)</option>
-                                    <option value="F : Fungicide (สารป้องกันกำจัดโรคพืช)"
-                                        {{ $drug->type_of_use == 'F : Fungicide (สารป้องกันกำจัดโรคพืช)' ? 'selected' : '' }}>
-                                        F
-                                        : Fungicide (สารป้องกันกำจัดโรคพืช)</option>
-                                    <option value="H : Herbicide (สารกำจัดวัชพืช)"
-                                        {{ $drug->type_of_use == 'H : Herbicide (สารกำจัดวัชพืช)' ? 'selected' : '' }}>
-                                        H :
-                                        Herbicide (สารกำจัดวัชพืช)</option>
-                                    <option value="I : Insecticide (สารกำจัดแมลง)"
-                                        {{ $drug->type_of_use == 'I : Insecticide (สารกำจัดแมลง)' ? 'selected' : '' }}>
-                                        I :
-                                        Insecticide (สารกำจัดแมลง)</option>
-                                    <option value="M : Molluscicide (สารกำจัดหอย)"
-                                        {{ $drug->type_of_use == 'M : Molluscicide (สารกำจัดหอย)' ? 'selected' : '' }}>
-                                        M :
-                                        Molluscicide (สารกำจัดหอย)</option>
-                                    <option value="N : Nematicide (สารกำจัดไส้เดือนฝอย)"
-                                        {{ $drug->type_of_use == 'N : Nematicide (สารกำจัดไส้เดือนฝอย)' ? 'selected' : '' }}>
-                                        N
-                                        : Nematicide (สารกำจัดไส้เดือนฝอย)</option>
-                                    <option value="P : PlantGrowthRegulators (สารควบคุมการเจริญเติบโตของพืช)"
-                                        {{ $drug->type_of_use == 'P : PlantGrowthRegulators (สารควบคุมการเจริญเติบโตของพืช)' ? 'selected' : '' }}>
-                                        P : PlantGrowthRegulators (สารควบคุมการเจริญเติบโตของพืช)</option>
-                                    <option value="R : Rodenticide (สารกำจัดหนู)"
-                                        {{ $drug->type_of_use == 'R : Rodenticide (สารกำจัดหนู)' ? 'selected' : '' }}>R
-                                        :
-                                        Rodenticide (สารกำจัดหนู)</option>
-                                </select>
-                            </div>
-                            <div class="md:col-span-3">
-                                <p class="font-semibold text-indigo-600 mb-1">รายละเอียดขนาดบรรจุ</p>
-                                <textarea name="packaging_size_details"
-                                    class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" rows="2">{{ $drug->packaging_size_details }}</textarea>
-                            </div>
-                            <div>
-                                <p class="font-semibold text-indigo-600 mb-1">วันที่ยื่นคำขอ</p>
-                                <input type="date" name="date_submit_request"
-                                    class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1"
-                                    value="{{ $drug->date_submit_request }}">
-                            </div>
-                            <div>
-                                <p class="font-semibold text-indigo-600 mb-1">เลขที่รับคำขอ</p>
-                                <input type="text" name="request_number_1"
-                                    class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1"
-                                    placeholder="กรอกเลขที่รับคำขอ" value="{{ $drug->request_number_1 }}">
-                            </div>
-                            <div>
-                                <p class="font-semibold text-indigo-600 mb-1">วันที่ยื่น Phase III</p>
-                                <input type="date" name="date_request_phase_3"
-                                    class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1"
-                                    value="{{ $drug->date_request_phase_3 }}">
-                            </div>
-                            <div>
-                                <p class="font-semibold text-indigo-600 mb-1">เลข # Phase III</p>
-                                <input type="text" name="request_number_phase_3"
-                                    class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1"
-                                    placeholder="กรอกเลข # Phase III" value="{{ $drug->request_number_phase_3 }}">
-                            </div>
-                            <div>
-                                <p class="font-semibold text-indigo-600 mb-1">เลข # Phase I</p>
-                                <input type="text" name="request_number_phase_1"
-                                    class="border-gray-300 rounded-lg shadow-sm w-5/6 mt-1"
-                                    placeholder="กรอกเลข # Phase I" value="{{ $drug->request_number_phase_1 }}">
-                            </div>
-
-                            <div class="md:col-span-3">
-                                <p class="font-semibold text-indigo-600 mb-1">อื่นๆ (ระบุ)</p>
-                                <textarea name="remarks" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    rows="2">{{ $drug->remarks }}</textarea>
+                    <form method="POST" action="{{ route('newregis.update', $drug->id) }}" class="space-y-10">
+                        @csrf
+                        @method('PUT')
+                        <div>
+                            <h3
+                                class="text-2xl font-semibold text-white bg-gradient-to-r from-blue-400 to-indigo-400 px-4 py-3 rounded-t-md">
+                                ข้อมูลทั่วไป
+                            </h3>
+                        <div class="grid grid-cols-2 md:grid-cols-2 gap-6 mt-4">
+                                <div>
+                                    <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลขที่ทะเบียน</label>
+                                    <input type="text" name="registration_number"
+                                        value="{{ old('registration_number', $drug->registration_number) }}"
+                                        placeholder="ใส่เลขที่ทะเบียน"
+                                        class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                </div>
+                                <div>
+                                    <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เปอร์เซ็นต์และสูตร</label>
+                                    <input type="text" name="composition" value="{{ old('composition', $drug->composition) }}"
+                                        placeholder="ใส่ เปอร์เซ็นต์และสูตร"
+                                        class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                    @error('composition')
+                                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div>
+                                    <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อวัตถุอันตราย (ไทย)</label>
+                                    <input type="text" name="chemical_name_th"
+                                        value="{{ old('chemical_name_th', $drug->chemical_name_th) }}"
+                                        placeholder="ใส่ชื่อวัตถุอันตราย (ไทย)"
+                                        class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                    @error('chemical_name_th')
+                                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div>
+                                    <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อวัตถุอันตราย (อังกฤษ)</label>
+                                    <input type="text" name="chemical_name_en"
+                                        value="{{ old('chemical_name_en', $drug->chemical_name_en) }}"
+                                        placeholder="ใส่ชื่อวัตถุอันตราย (อังกฤษ)"
+                                        class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                    @error('chemical_name_en')
+                                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div>
+                                    <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ผู้ผลิตและแหล่งผลิต <span
+                                            class="text-red-500"> *</span></label>
+                                    <input type="text"
+                                        class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        name="manufacturer" value="{{ old('manufacturer', $drug->manufacturer) }}" />
+                                    @error('manufacturer')
+                                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div>
+                                    <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ประเภททะเบียน <span
+                                            class="text-red-500"> *</span></label>
+                                    <div class="dropdown" id="registrationTypeDropdown">
+                                        <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="registrationTypeBtn">--
+                                            เลือกประเภททะเบียน --</div>
+                                        <div class="dropdown-list" id="registrationTypeList">
+                                            <div class="dropdown-item text-gray-500" data-value="">-- เลือกประเภททะเบียน --</div>
+                                            <div class="dropdown-item" data-value="T : นำเข้าสารเข้มข้น">T : นำเข้าสารเข้มข้น</div>
+                                            <div class="dropdown-item" data-value="I : นำเข้าสำเร็จรูป">I : นำเข้าสำเร็จรูป</div>
+                                            <div class="dropdown-item" data-value="F : ผลิตผสมปรุงแต่ง">F : ผลิตผสมปรุงแต่ง</div>
+                                            <div class="dropdown-item" data-value="R : ผลิตแบ่งบรรจุ (จากนำเข้า)">R : ผลิตแบ่งบรรจุ (จากนำเข้า)</div>
+                                            <div class="dropdown-item" data-value="R(F) : ผลิตแบ่งบรรจุ (จากผสมปรุงแต่ง)">R(F) : ผลิตแบ่งบรรจุ (จากผสมปรุงแต่ง)</div>
+                                            <div class="dropdown-item" data-value="F(E) : ผลิตเพื่อส่งออก">F(E) : ผลิตเพื่อส่งออก</div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="registration_type" id="registrationTypeInput"
+                                        value="{{ old('registration_type', $drug->registration_type) }}">
+                                    @error('registration_type')
+                                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div>
+                                    <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">บริษัทที่ขึ้นทะเบียน<span
+                                            class="text-red-500"> *</span></label>
+                                    <div class="dropdown" id="registrantDropdown">
+                                        <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="registrantBtn">--
+                                            เลือกบริษัทที่ขึ้นทะเบียน --</div>
+                                        <div class="dropdown-list" id="registrantList">
+                                            <div class="dropdown-item text-gray-500" data-value="">-- เลือกบริษัทที่ขึ้นทะเบียน --</div>
+                                            @foreach ($companies as $company)
+                                                @if ($company->id != 4)
+                                                    <div class="dropdown-item" data-value="{{ $company->full_name }}">
+                                                        {{ $company->full_name }}
+                                                    </div>
+                                                @endif
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="registrant" id="registrantInput"
+                                        value="{{ old('registrant', $drug->registrant) }}">
+                                    @error('registrant')
+                                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div>
+                                    <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อผู้นำเข้า <span
+                                            class="text-red-500"> *</span></label>
+                                    <div class="dropdown" id="importerDropdown">
+                                        <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="importerBtn">--
+                                            เลือกผู้นำเข้า --</div>
+                                        <div class="dropdown-list" id="importerList">
+                                            <div class="dropdown-item text-gray-500" data-value="">-- เลือกผู้นำเข้า --</div>
+                                            @foreach ($companies as $company)
+                                                @if ($company->id != 4)
+                                                    <div class="dropdown-item" data-value="{{ $company->full_name }}">
+                                                        {{ $company->full_name }}
+                                                    </div>
+                                                @endif
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="importer" id="importerInput"
+                                        value="{{ old('importer', $drug->importer) }}">
+                                    @error('importer')
+                                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div>
+                                    <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อผู้จำหน่าย <span
+                                            class="text-red-500"> *</span></label>
+                                    <div class="dropdown" id="distributorDropdown">
+                                        <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="distributorBtn">-- เลือกผู้จำหน่าย --</div>
+                                        <div class="dropdown-list" id="distributorList">
+                                            <div class="dropdown-item text-gray-500" data-value="">-- เลือกผู้จำหน่าย --</div>
+                                            @foreach ($companies as $company)
+                                                <div class="dropdown-item" data-value="{{ $company->full_name }}">
+                                                    {{ $company->full_name }}
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="distributor" id="distributorInput"
+                                        value="{{ old('distributor', $drug->distributor) }}">
+                                    @error('distributor')
+                                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div>
+                                    <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อการค้า <span
+                                            class="text-red-500"> *</span></label>
+                                    <input type="text"
+                                        class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        name="trade_name" value="{{ old('trade_name', $drug->trade_name) }}" />
+                                    @error('trade_name')
+                                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div>
+                                    <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อการค้าที่ <span
+                                            class="text-red-500"> *</span></label>
+                                    <div class="dropdown" id="namePositionDropdown">
+                                        <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="namePositionBtn">-- เลือกชื่อการที่ --</div>
+                                        <div class="dropdown-list" id="namePositionList">
+                                            <div class="dropdown-item text-gray-500" data-value="">-- เลือกชื่การที่ --</div>
+                                            <div class="dropdown-item" data-value="T">T</div>
+                                            <div class="dropdown-item" data-value="-">-</div>
+                                            <div class="dropdown-item" data-value="1">1</div>
+                                            <div class="dropdown-item" data-value="2">2</div>
+                                            <div class="dropdown-item" data-value="3">3</div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="name_position" id="namePositionInput"
+                                        value="{{ old('name_position', $drug->name_position) }}">
+                                    @error('name_position')
+                                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div>
+                                    <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชนิดทะเบียน <span
+                                            class="text-red-500"> *</span></label>
+                                    <div class="dropdown" id="typeRegistrationDropdown">
+                                        <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="typeRegistrationBtn">--
+                                            เลือกชนิดทะเบียน --</div>
+                                        <div class="dropdown-list" id="typeRegistrationList">
+                                            <div class="dropdown-item text-gray-500" data-value="">-- เลือกชนิดทะเบียน --</div>
+                                            <div class="dropdown-item" data-value="ชนิดที่ 2">ชนิดที่ 2</div>
+                                            <div class="dropdown-item" data-value="ชนิดที่ 3">ชนิดที่ 3</div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="type_registration" id="typeRegistrationInput"
+                                        value="{{ old('type_registration', $drug->type_registration) }}">
+                                    @error('type_registration')
+                                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div>
+                                    <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ประเภทของการใช้ <span
+                                            class="text-red-500"> *</span></label>
+                                    <div class="dropdown" id="typeOfUseDropdown">
+                                        <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="typeOfUseBtn">--
+                                            เลือกประเภทของการใช้ --</div>
+                                        <div class="dropdown-list" id="typeOfUseList">
+                                            <div class="dropdown-item text-gray-500" data-value="">-- เลือกประเภทของการใช้ --</div>
+                                            <div class="dropdown-item" data-value="A : Acaricide (สารกำจัดไรศัตรูพืช)">A :
+                                                Acaricide (สารกำจัดไรศัตรูพืช)</div>
+                                            <div class="dropdown-item" data-value="F : Fungicide (สารป้องกันกำจัดโรคพืช)">F :
+                                                Fungicide (สารป้องกันกำจัดโรคพืช)</div>
+                                            <div class="dropdown-item" data-value="H : Herbicide (สารกำจัดวัชพืช)">H :
+                                                Herbicide (สารกำจัดวัชพืช)</div>
+                                            <div class="dropdown-item" data-value="I : Insecticide (สารกำจัดแมลง)">I :
+                                                Insecticide (สารกำจัดแมลง)</div>
+                                            <div class="dropdown-item" data-value="M : Molluscicide (สารกำจัดหอย)">M :
+                                                Molluscicide (สารกำจัดหอย)</div>
+                                            <div class="dropdown-item" data-value="N : Nematicide (สารกำจัดไส้เดือนฝอย)">N :
+                                                Nematicide (สารกำจัดไส้เดือนฝอย)</div>
+                                            <div class="dropdown-item"
+                                                data-value="P : PlantGrowthRegulators (สารควบคุมการเจริญเติบโตของพืช)">P :
+                                                PlantGrowthRegulators (สารควบคุมการเจริญเติบโตของพืช)</div>
+                                            <div class="dropdown-item" data-value="R : Rodenticide (สารกำจัดหนู)">R :
+                                                Rodenticide (สารกำจัดหนู)</div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="type_of_use" id="typeOfUseInput"
+                                        value="{{ old('type_of_use', $drug->type_of_use) }}">
+                                    @error('type_of_use')
+                                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">รายละเอียดขนาดบรรจุ</label>
+                                    <textarea name="packaging_size_details"
+                                        class="w-full p-3 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500" rows="2">{{ old('packaging_size_details', $drug->packaging_size_details) }}</textarea>
+                                    @error('packaging_size_details')
+                                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div class="md:col-span-2">
+                                    <div class="flex flex-col md:flex-row gap-6">
+                                        <div class="w-full md:w-1/3">
+                                            <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันที่ยื่นคำขอ</label>
+                                            <input type="date" name="date_submit_request"
+                                                value="{{ old('date_submit_request', $drug->date_submit_request) }}"
+                                                class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                            @error('date_submit_request')
+                                                <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                            @enderror
+                                        </div>
+                                        <div class="w-full md:w-1/3">
+                                            <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลขที่รับคำขอ</label>
+                                            <input type="text" name="request_number_1"
+                                                value="{{ old('request_number_1', $drug->request_number_1) }}"
+                                                class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                            @error('request_number_1')
+                                                <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                            @enderror
+                                        </div>
+                                        <div class="w-full md:w-1/3"></div>
+                                    </div>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <div class="flex flex-col md:flex-row gap-6">
+                                        <div class="w-full md:w-1/3">
+                                            <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันที่ยื่น Phase
+                                                III</label>
+                                            <input type="date" name="date_request_phase_3"
+                                                value="{{ old('date_request_phase_3', $drug->date_request_phase_3) }}"
+                                                class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                            @error('date_request_phase_3')
+                                                <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                            @enderror
+                                        </div>
+                                        <div class="w-full md:w-1/3">
+                                            <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลข # Phase III</label>
+                                            <input type="text" name="request_number_phase_3"
+                                                value="{{ old('request_number_phase_3', $drug->request_number_phase_3) }}"
+                                                class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                            @error('request_number_phase_3')
+                                                <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                            @enderror
+                                        </div>
+                                        <div class="w-full md:w-1/3">
+                                            <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลข # Phase I</label>
+                                            <input type="text" name="request_number_phase_1"
+                                                value="{{ old('request_number_phase_1', $drug->request_number_phase_1) }}"
+                                                class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                            @error('request_number_phase_1')
+                                                <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">อื่นๆ (ระบุ)</label>
+                                    <textarea name="remarks" class="w-full p-3 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500" rows="2">{{ old('remarks', $drug->remarks) }}</textarea>
+                                    @error('remarks')
+                                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
 
-
-                        
-                        <div class="text-center mt-4">
+                        <div class="flex justify-center gap-4 pt-4">
                             <a href="{{ route('newregis.index') }}"
-                                class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg shadow transition duration-300 mr-2">
-                                <i class="fa-solid fa-arrow-left mr-2"></i> ย้อนกลับ
+                                class="bg-gray-500 hover:bg-gray-500 text-white font-bold py-2 px-6 rounded-lg shadow-md flex items-center justify-center">
+                                ยกเลิก
                             </a>
                             <button type="submit"
-                                class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg shadow transition">
-                                <i class="fa-solid fa-floppy-disk mr-1"></i> บันทึก
+                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg shadow-md">
+                                บันทึก
                             </button>
                         </div>
                     </form>
+
+                    <script>
+                        document.getElementById('menu-newregis')?.classList.add('side-menu--active');
+
+                        document.addEventListener('DOMContentLoaded', () => {
+                            function setupDropdown(btnId, listId, inputId, oldValue = null) {
+                                const btn = document.getElementById(btnId);
+                                const list = document.getElementById(listId);
+                                const input = document.getElementById(inputId);
+                                const items = list.querySelectorAll('.dropdown-item');
+
+                                function updateBtn(label, value) {
+                                    btn.textContent = label;
+                                    if (value === "" || label.includes('--')) {
+                                        btn.classList.add('text-gray-500');
+                                    } else {
+                                        btn.classList.remove('text-gray-500');
+                                    }
+                                    input.value = value;
+                                }
+
+                                const initial = [...items].find(item => item.dataset.value === "");
+                                if (initial) updateBtn(initial.textContent, "");
+
+                                if (oldValue) {
+                                    const match = [...items].find(i => i.dataset.value == oldValue);
+                                    if (match) updateBtn(match.textContent, match.dataset.value);
+                                }
+
+                                btn.addEventListener('click', (event) => {
+                                    event.stopPropagation();
+                                    list.classList.toggle('open');
+                                    btn.classList.toggle('open');
+                                });
+
+                                items.forEach(item => {
+                                    item.addEventListener('click', () => {
+                                        updateBtn(item.textContent, item.dataset.value);
+                                        list.classList.remove('open');
+                                        btn.classList.remove('open');
+                                    });
+                                });
+
+                                document.addEventListener('click', (e) => {
+                                    if (!btn.contains(e.target)) {
+                                        list.classList.remove('open');
+                                        btn.classList.remove('open');
+                                    }
+                                });
+                            }
+
+                            setupDropdown('registrantBtn', 'registrantList', 'registrantInput', "{{ old('registrant', $drug->registrant) }}");
+                            setupDropdown('typeRegistrationBtn', 'typeRegistrationList', 'typeRegistrationInput', "{{ old('type_registration', $drug->type_registration) }}");
+                            setupDropdown('registrationTypeBtn', 'registrationTypeList', 'registrationTypeInput', "{{ old('registration_type', $drug->registration_type) }}");
+                            setupDropdown('namePositionBtn', 'namePositionList', 'namePositionInput', "{{ old('name_position', $drug->name_position) }}");
+                            setupDropdown('importerBtn', 'importerList', 'importerInput', "{{ old('importer', $drug->importer) }}");
+                            setupDropdown('distributorBtn', 'distributorList', 'distributorInput', "{{ old('distributor', $drug->distributor) }}");
+                            setupDropdown('typeOfUseBtn', 'typeOfUseList', 'typeOfUseInput', "{{ old('type_of_use', $drug->type_of_use) }}");
+                        });
+                    </script>
+
+                    <style>
+                        .dropdown {
+                            position: relative;
+                        }
+
+                        .dropdown-btn {
+                            width: 100%;
+                            padding: 12px 16px;
+                            border: 1px solid #edeff3;
+                            border-radius: 9999px;
+                            background-color: #fff;
+                            cursor: pointer;
+                            font-size: 16px;
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                        }
+
+                        .dropdown-btn:after {
+                            content: "▾";
+                            font-size: 26px;
+                            color: #7f838a;
+                            margin-left: 8px;
+                        }
+
+                        .dropdown-list {
+                            position: absolute;
+                            top: 105%;
+                            left: 0;
+                            width: 100%;
+                            background-color: #fff;
+                            border: 1px solid #edeff3;
+                            border-radius: 20px;
+                            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                            z-index: 10;
+                            display: none;
+                            max-height: 230px;
+                            overflow-y: auto;
+                        }
+
+                        .dropdown-list.open {
+                            display: block;
+                        }
+
+                        .dropdown-item {
+                            padding: 12px 16px;
+                            cursor: pointer;
+                            border-radius: 20px;
+                        }
+
+                        .dropdown-item:hover {
+                            background-color: #e0f2fe;
+                        }
+                    </style>
                 @endif
 
 
