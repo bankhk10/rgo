@@ -6,7 +6,7 @@
 <x-app-layout>
     <div class="max-w-5xl mx-auto p-8 bg-white shadow-lg rounded-2xl space-y-10 mt-6">
         <h2 class="text-4xl font-extrabold text-gray-700 mb-8 pb-4 text-center border-b border-gray-300">
-            แก้ไขข้อมูลทะเบียนนำเข้าวัตถุดิบ
+            แก้ไขข้อมูลทะเบียนนำเข้า
         </h2>
 
         {{-- The form action now points to the 'update' route and passes the import ID --}}
