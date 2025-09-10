@@ -1,8 +1,3 @@
-{{--
-    This is now an EDIT form.
-    It assumes a variable `$import` is passed from the controller,
-    containing the data for the record being edited.
---}}
 <x-app-layout>
     <div class="max-w-5xl mx-auto p-8 bg-white shadow-lg rounded-2xl space-y-10 mt-6">
         <h2 class="text-4xl font-extrabold text-gray-700 mb-8 pb-4 text-center border-b border-gray-300">
@@ -21,7 +16,30 @@
                 </h3>
                 <div class="grid grid-cols-2 md:grid-cols-2 gap-6 mt-4">
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">บริษัทที่ขึ้นทะเบียนผลิต
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลขที่ทะเบียน</label>
+                        <input type="text" name="registration_number"
+                            value="{{ old('registration_number', $import->registration_number) }}"
+                            placeholder="ใส่เลขที่ทะเบียน"
+                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        @error('registration_number')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันหมดอายุ</label>
+                        <input type="date" name="expired_license_date"
+                            value="{{ old('expired_license_date', $import->expired_license_date ? $import->expired_license_date->format('Y-m-d') : '-') }}"
+                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        @error('expired_license_date')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+
+
+                    <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">บริษัทที่ขึ้นทะเบียน
                             <span class="text-red-500"> *</span>
                         </label>
                         <div class="dropdown" id="companyDropdown">
@@ -50,25 +68,17 @@
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
+
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลขที่ทะเบียน</label>
-                        <input type="text" name="registration_number"
-                            value="{{ old('registration_number', $import->registration_number) }}"
-                            placeholder="ใส่เลขที่ทะเบียน"
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เปอร์เซ็นต์และสูตร</label>
+                        <input type="text" name="composition" value="{{ old('composition', $import->composition) }}"
+                            placeholder="ใส่เปอร์เซ็นต์และสูตร"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                        @error('registration_number')
+                        @error('composition')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
-                    <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันหมดอายุ</label>
-                        <input type="date" name="expired_license_date"
-                            value="{{ old('expired_license_date', $import->expired_license_date ? $import->expired_license_date->format('Y-m-d') : '-') }}"
-                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                        @error('expired_license_date')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
+
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อวัตถุอันตราย (ไทย)</label>
                         <input type="text" name="chemical_name_th"
@@ -89,15 +99,7 @@
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
-                    <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">% และสูตร</label>
-                        <input type="text" name="composition" value="{{ old('composition', $import->composition) }}"
-                            placeholder="ใส่ % และสูตร"
-                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                        @error('composition')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
+
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ผู้ผลิตและแหล่งผลิต</label>
                         <input type="text" name="manufacturer"
@@ -120,8 +122,19 @@
                             </div>
                             <div class="dropdown-list" id="registrationTypeList">
                                 <div class="dropdown-item text-gray-500" data-value="">-- เลือกประเภททะเบียน --</div>
-                                <div class="dropdown-item" data-value="T">T</div>
-                                <div class="dropdown-item" data-value="I">I</div>
+                                <div class="dropdown-item" data-value="T : นำเข้าสารเข้มข้น">T :
+                                    นำเข้าสารเข้มข้น</div>
+                                <div class="dropdown-item" data-value="I : นำเข้าสำเร็จรูป">I :
+                                    นำเข้าสำเร็จรูป</div>
+                                <div class="dropdown-item" data-value="F : ผลิตผสมปรุงแต่ง">F :
+                                    ผลิตผสมปรุงแต่ง</div>
+                                <div class="dropdown-item" data-value="R : ผลิตแบ่งบรรจุ (จากนำเข้า)">R :
+                                    ผลิตแบ่งบรรจุ (จากนำเข้า)</div>
+                                <div class="dropdown-item" data-value="R(F) : ผลิตแบ่งบรรจุ (จากผสมปรุงแต่ง)">R(F) :
+                                    ผลิตแบ่งบรรจุ
+                                    (จากผสมปรุงแต่ง)</div>
+                                <div class="dropdown-item" data-value="F(E) : ผลิตเพื่อส่งออก">F(E) :
+                                    ผลิตเพื่อส่งออก</div>
                             </div>
                         </div>
                         <input type="hidden" name="registration_type" id="registrationTypeInput"
@@ -195,14 +208,28 @@
                         @enderror
                     </div>
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อการค้าที่</label>
-                        <input type="text" name="trade_name_at"
-                            value="{{ old('trade_name_at', $import->trade_name_at) }}" placeholder="ใส่ชื่อการค้าที่"
-                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อการค้าที่ <span
+                                class="text-red-500"> *</span></label>
+                        <div class="dropdown" id="namePositionDropdown">
+                            <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="namePositionBtn">--
+                                เลือกชื่อการที่ --</div>
+                            <div class="dropdown-list" id="namePositionList">
+                                <div class="dropdown-item text-gray-500" data-value="">-- เลือกชื่การที่
+                                    --</div>
+                                <div class="dropdown-item" data-value="T">T</div>
+                                <div class="dropdown-item" data-value="-">-</div>
+                                <div class="dropdown-item" data-value="1">1</div>
+                                <div class="dropdown-item" data-value="2">2</div>
+                                <div class="dropdown-item" data-value="3">3</div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="trade_name_at" id="namePositionInput"
+                            value="{{ old('trade_name_at', $import->trade_name_at) }}">
                         @error('trade_name_at')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
+                    {{-- 
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชนิด</label>
                         <input type="text" name="type_production_registration"
@@ -212,13 +239,62 @@
                         @error('type_production_registration')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
-                    </div>
+                    </div> --}}
+
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">การใช้</label>
-                        <input type="text" name="usage_production_registration"
-                            value="{{ old('usage_production_registration', $import->usage_production_registration) }}"
-                            placeholder="ใส่ชื่อการใช้"
-                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชนิดทะเบียน <span
+                                class="text-red-500"> *</span></label>
+                        <div class="dropdown" id="typeRegistrationDropdown">
+                            <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="typeRegistrationBtn">--
+                                เลือกชนิดทะเบียน --</div>
+                            <div class="dropdown-list" id="typeRegistrationList">
+                                <div class="dropdown-item text-gray-500" data-value="">--
+                                    เลือกชนิดทะเบียน --</div>
+                                <div class="dropdown-item" data-value="ชนิดที่ 1">ชนิดที่ 1</div>
+                                <div class="dropdown-item" data-value="ชนิดที่ 2">ชนิดที่ 2</div>
+                                <div class="dropdown-item" data-value="ชนิดที่ 3">ชนิดที่ 3</div>
+                                <div class="dropdown-item" data-value="ชนิดที่ 4">ชนิดที่ 4</div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="type_production_registration" id="typeRegistrationInput"
+                            value="{{ old('type_production_registration', $import->type_production_registration) }}">
+                        @error('type_production_registration')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+
+                    <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ประเภทของการใช้ <span
+                                class="text-red-500"> *</span></label>
+                        <div class="dropdown" id="typeOfUseDropdown">
+                            <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="typeOfUseBtn">--
+                                เลือกประเภทของการใช้ --</div>
+                            <div class="dropdown-list" id="typeOfUseList">
+                                <div class="dropdown-item text-gray-500" data-value="">--
+                                    เลือกประเภทของการใช้ --</div>
+                                <div class="dropdown-item" data-value="A : Acaricide (สารกำจัดไรศัตรูพืช)">A :
+                                    Acaricide (สารกำจัดไรศัตรูพืช)</div>
+                                <div class="dropdown-item" data-value="F : Fungicide (สารป้องกันกำจัดโรคพืช)">F :
+                                    Fungicide (สารป้องกันกำจัดโรคพืช)</div>
+                                <div class="dropdown-item" data-value="H : Herbicide (สารกำจัดวัชพืช)">H :
+                                    Herbicide (สารกำจัดวัชพืช)</div>
+                                <div class="dropdown-item" data-value="I : Insecticide (สารกำจัดแมลง)">I :
+                                    Insecticide (สารกำจัดแมลง)</div>
+                                <div class="dropdown-item" data-value="M : Molluscicide (สารกำจัดหอย)">M :
+                                    Molluscicide (สารกำจัดหอย)</div>
+                                <div class="dropdown-item" data-value="N : Nematicide (สารกำจัดไส้เดือนฝอย)">N :
+                                    Nematicide (สารกำจัดไส้เดือนฝอย)</div>
+                                <div class="dropdown-item"
+                                    data-value="P : PlantGrowthRegulators (สารควบคุมการเจริญเติบโตของพืช)">
+                                    P :
+                                    PlantGrowthRegulators (สารควบคุมการเจริญเติบโตของพืช)</div>
+                                <div class="dropdown-item" data-value="R : Rodenticide (สารกำจัดหนู)">R :
+                                    Rodenticide (สารกำจัดหนู)</div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="usage_production_registration" id="typeOfUseInput"
+                            value="{{ old('usage_production_registration', $import->usage_production_registration) }}">
                         @error('usage_production_registration')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
@@ -470,6 +546,12 @@
                 "{{ old('distributor', $import->distributor) }}");
             setupDropdown('registrationTypeBtn', 'registrationTypeList', 'registrationTypeInput',
                 "{{ old('registration_type', $import->registration_type) }}");
+            setupDropdown('namePositionBtn', 'namePositionList', 'namePositionInput',
+                "{{ old('trade_name_at', $import->trade_name_at) }}");
+            setupDropdown('typeRegistrationBtn', 'typeRegistrationList', 'typeRegistrationInput',
+                "{{ old('type_production_registration', $import->type_production_registration) }}");
+            setupDropdown('typeOfUseBtn', 'typeOfUseList', 'typeOfUseInput',
+                "{{ old('usage_production_registration', $import->usage_production_registration) }}");
         });
     </script>
 

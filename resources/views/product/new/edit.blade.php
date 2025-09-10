@@ -52,10 +52,10 @@
                                     <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลขที่ทะเบียน</label>
                                     <input type="text" id="registration_number" name="registration_number"
                                         value="{{ old('registration_number', $drug->registration_number) }}"
-                                        placeholder="เช่น xxxx-xxxx"
+                                        placeholder="เช่น 1234-2568"
                                         class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         inputmode="numeric" maxlength="9" pattern="^\d{3,4}-\d{4}$"
-                                        title="กรอกเป็นรูปแบบ xxxx-xxxx เท่านั้น" oninput="filterRegisNo(this)" />
+                                        title="กรอกเป็นรูปแบบ 1234-2568 เท่านั้น" oninput="filterRegisNo(this)" />
                                     @error('registration_number')
                                         <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                                     @enderror
@@ -69,6 +69,33 @@
                                         value="{{ old('production_license_expiry', $drug->production_license_expiry ? \Carbon\Carbon::parse($drug->production_license_expiry)->addYears(543)->format('d/m/Y') : '') }}"
                                         placeholder="dd/mm/yyyy">
                                     @error('production_license_expiry')
+                                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div>
+                                    <label
+                                        class="mx-3 text-base block text-gray-700 mb-1 mt-3">บริษัทที่ขึ้นทะเบียน<span
+                                            class="text-red-500"> *</span></label>
+                                    <div class="dropdown" id="registrantDropdown">
+                                        <div style="height: 50px;" class="text-gray-500 dropdown-btn"
+                                            id="registrantBtn">--
+                                            เลือกบริษัทที่ขึ้นทะเบียน --</div>
+                                        <div class="dropdown-list" id="registrantList">
+                                            <div class="dropdown-item text-gray-500" data-value="">--
+                                                เลือกบริษัทที่ขึ้นทะเบียน --</div>
+                                            @foreach ($companies as $company)
+                                                @if ($company->id != 4)
+                                                    <div class="dropdown-item" data-value="{{ $company->full_name }}">
+                                                        {{ $company->full_name }}
+                                                    </div>
+                                                @endif
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="registrant" id="registrantInput"
+                                        value="{{ old('registrant', $drug->registrant) }}">
+                                    @error('registrant')
                                         <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
@@ -147,33 +174,7 @@
                                         <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
-                                <div>
-                                    <label
-                                        class="mx-3 text-base block text-gray-700 mb-1 mt-3">บริษัทที่ขึ้นทะเบียน<span
-                                            class="text-red-500"> *</span></label>
-                                    <div class="dropdown" id="registrantDropdown">
-                                        <div style="height: 50px;" class="text-gray-500 dropdown-btn"
-                                            id="registrantBtn">--
-                                            เลือกบริษัทที่ขึ้นทะเบียน --</div>
-                                        <div class="dropdown-list" id="registrantList">
-                                            <div class="dropdown-item text-gray-500" data-value="">--
-                                                เลือกบริษัทที่ขึ้นทะเบียน --</div>
-                                            @foreach ($companies as $company)
-                                                @if ($company->id != 4)
-                                                    <div class="dropdown-item"
-                                                        data-value="{{ $company->full_name }}">
-                                                        {{ $company->full_name }}
-                                                    </div>
-                                                @endif
-                                            @endforeach
-                                        </div>
-                                    </div>
-                                    <input type="hidden" name="registrant" id="registrantInput"
-                                        value="{{ old('registrant', $drug->registrant) }}">
-                                    @error('registrant')
-                                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
+
                                 <div>
                                     <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อผู้นำเข้า <span
                                             class="text-red-500"> *</span></label>
@@ -312,6 +313,43 @@
                                     <input type="hidden" name="type_of_use" id="typeOfUseInput"
                                         value="{{ old('type_of_use', $drug->type_of_use) }}">
                                     @error('type_of_use')
+                                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div>
+                                    <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">กลุ่มสาร</label>
+                                    <input type="text" name="group_of_substances"
+                                        value="{{ old('group_of_substances', $drug->group_of_substances) }}"
+                                        placeholder="ใส่กลุ่มสาร"
+                                        class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                    @error('group_of_substances')
+                                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div>
+                                    <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">พืช</label>
+                                    <input type="text" name="plant" value="{{ old('plant', $drug->plant) }}"
+                                        placeholder="ใส่พืช"
+                                        class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                    @error('plant')
+                                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div>
+                                    <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ศัตรูพืช</label>
+                                    <input type="text" name="pests" value="{{ old('pests', $drug->pests) }}"
+                                        placeholder="ใส่ศัตรูพืช"
+                                        class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                    @error('pests')
+                                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div>
+                                    <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ปริมาณ</label>
+                                    <input type="text" name="quantity" value="{{ old('quantity', $drug->quantity) }}"
+                                        placeholder="ใส่ปริมาณ"
+                                        class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                    @error('quantity')
                                         <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>

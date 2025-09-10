@@ -274,12 +274,12 @@
                     </div>
 
                     <div>
-                        <label for="production_license_quantity"
+                        <label for="quantity"
                             class="mx-3 text-base block text-gray-700 mb-1 mt-3">ปริมาณ</label>
-                        <input type="number" name="production_license_quantity" id="production_license_quantity"
-                            value="{{ old('production_license_quantity') }}" placeholder="ใส่ปริมาณผลิต"
+                        <input type="text" name="quantity" id="quantity"
+                            value="{{ old('quantity') }}" placeholder="ใส่ปริมาณ"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                        @error('production_license_quantity')
+                        @error('quantity')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>

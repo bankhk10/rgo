@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Company;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth; // This line is crucial
 
 
 class ChemicalRegistrationController extends Controller
@@ -185,7 +186,7 @@ class ChemicalRegistrationController extends Controller
 
     public function store(Request $request)
     {
-
+   try {
         // dd($request->all());
         $validatedData = $request->validate([
             'chemical_imports_id' => 'nullable|integer', // Changed from string to integer based on schema
@@ -239,11 +240,15 @@ class ChemicalRegistrationController extends Controller
             'sub_progress' => 'nullable|numeric', // decimal field
             'created_by' => 'nullable|string',
             'updated_by' => 'nullable|string',
+            'group_of_substances' => 'nullable|string',
+            'plant' => 'nullable|string',
+            'pests' => 'nullable|string',
+            'quantity' => 'nullable|string',
         ]);
 
         // 2. กำหนดค่า progress เริ่มต้น 0 (หรือจะเป็น 12.5% ถ้าต้องการ)
         $validatedData['progress'] = 0;
-        try {
+     
             $chemical_registration = ChemicalRegistration::create($validatedData);
             // 4. สร้างหัวข้อย่อยเริ่มต้นให้กับขั้นตอนที่ 1 โดยไม่มีการเลือก (checked_at = null)
             // กำหนดหัวข้อย่อยขั้นตอน 1 จำนวน 3 หัวข้อ (ตาม requirement ล่าสุด)
@@ -281,8 +286,8 @@ class ChemicalRegistrationController extends Controller
             }
 
             return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จ');
-        } catch (\Exception $e) {
-            \Log::error("Error creating product: " . $e->getMessage());
+        } catch (\Illuminate\Validation\ValidationException $e) {
+             \Log::error('Validation errors: ', $e->errors());
             return redirect()->back()->withInput()->withErrors(['error' => 'เกิดข้อผิดพลาดในการบันทึกข้อมูล: ' . $e->getMessage()]);
         }
     }
@@ -502,6 +507,10 @@ class ChemicalRegistrationController extends Controller
                 'sub_progress' => 'nullable|numeric',
                 'created_by' => 'nullable|string',
                 'updated_by' => 'nullable|string',
+                'group_of_substances' => 'nullable|string',
+                'plant' => 'nullable|string',
+                'pests' => 'nullable|string',
+                'quantity' => 'nullable|string',
             ]);
 
             // ตั้งค่าเพิ่มเติม (หากมีเลขทะเบียนให้ถือว่าเป็นของเก่า)
@@ -510,7 +519,25 @@ class ChemicalRegistrationController extends Controller
                 $validatedData['progress'] = 100;
 
                 if ($validatedData['registration_type'] == 'T : นำเข้าสารเข้มข้น' || $validatedData['registration_type'] == 'I : นำเข้าสำเร็จรูป') {
-                    ChemicalImport::create($validatedData);
+                    // 2. Map ข้อมูลและกำหนดค่าเริ่มต้น/เพิ่มเติม
+                    $companyId = Company::where('full_name', $validatedData['registrant'])->firstOrFail()->id;
+                    $distributorId = Company::where('full_name', $validatedData['distributor'])->firstOrFail()->id;
+                    $importerId = Company::where('full_name', $validatedData['importer'])->firstOrFail()->id;
+                    $dataToSave = $validatedData;
+                    $dataToSave['expired_license_date'] = $request->input('production_license_expiry', null); // ใช้ค่าจากฟอร์ม ถ้าไม่มี ให้ 'pending'
+                    $dataToSave['company_id'] = $companyId;
+                    $dataToSave['distributor'] = $distributorId;
+                    $dataToSave['company_id'] = $companyId;
+                    $dataToSave['importer'] = $importerId;
+                    // $dataToSave['trade_name_at'] = $importerId;
+
+                    if (Auth::check()) {
+                        $dataToSave['created_by'] = Auth::id(); // หรือ Auth::user()->name หากต้องการชื่อ
+                    } else {
+                        $dataToSave['created_by'] = null; // หรือกำหนดเป็นค่าอื่นหากผู้ใช้ไม่ได้ล็อกอิน
+                    }
+
+                    ChemicalImport::create($dataToSave);
                 } else {
                     ProductionRegistration::create($validatedData);
                 }

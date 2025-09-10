@@ -62,6 +62,10 @@ class ChemicalRegistration extends Model
         'sub_progress',
         'created_by',
         'updated_by',
+        'group_of_substances',  // กลุ่มสาร
+        'plant',                // พืช
+        'pests',                // ศัตรูพืช
+        'quantity',             // ปริมาณ
     ];
 
     // Optional: สำหรับวันที่ที่เป็น Carbon instance เช่น soft delete, timestamps
