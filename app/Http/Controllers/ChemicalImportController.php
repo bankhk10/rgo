@@ -136,7 +136,7 @@ class ChemicalImportController extends Controller
                 'plant' => 'nullable|string|max:255',
                 'pests' => 'nullable|string|max:255',
                 'production_license_number' => 'nullable|string|max:255',
-                'production_license_expiry' => 'nullable|date',
+                'production_license_expiry' => 'nullable|string',
                 'production_license_quantity' => 'nullable|string|max:255',
                 'possession_form_wo2' => 'nullable|string|max:255',
                 'possession_form_expiry' => 'nullable|date',
@@ -252,14 +252,14 @@ class ChemicalImportController extends Controller
                 'plant' => 'nullable|string|max:255',
                 'pests' => 'nullable|string|max:255',
                 'production_license_number' => 'nullable|string|max:255',
-                'production_license_expiry' => 'nullable|date',
+                'production_license_expiry' => 'nullable|string',
                 'production_license_quantity' => 'nullable|string|max:255',
                 'possession_form_wo2' => 'nullable|string|max:255',
-                'possession_form_expiry' => 'nullable|date',
+                'possession_form_expiry' => 'nullable|string',
                 'packaging_size_details' => 'nullable|string|max:1000',
                 'registration_number_pass' => 'nullable|string|max:255',
                 'registration_expiry_date' => 'nullable|date',
-                'expired_at' => 'nullable|date',
+                'expired_at' => 'nullable|string',
                 'status_date' => 'nullable|string|max:255',
                 'remarks' => 'nullable|string|max:1000',
                 'image' => 'nullable|image|max:2048', // optional: 'image' if you want to allow changing image
@@ -312,9 +312,12 @@ class ChemicalImportController extends Controller
             // 4. ส่งกลับ Response หรือ Redirect ไปยังหน้าอื่น
             // return redirect()->route('production-registrations.index')->with('success', 'แก้ไขข้อมูลการขึ้นทะเบียนผลิตเรียบร้อยแล้ว!');
             return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จ');
-        } catch (ValidationException $e) {
-            return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
+            \Log::error("Error update product: " . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+                'request' => $request->all(), // ข้อมูลฟอร์มที่ส่งมา
+            ]);
+
             return redirect()->back()->with('error', 'เกิดข้อผิดพลาดในการแก้ไขข้อมูล: ' . $e->getMessage())->withInput();
         }
     }

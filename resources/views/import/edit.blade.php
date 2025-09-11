@@ -36,8 +36,6 @@
                         @enderror
                     </div>
 
-
-
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">บริษัทที่ขึ้นทะเบียน
                             <span class="text-red-500"> *</span>
@@ -328,7 +326,18 @@
                         @enderror
                     </div>
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ใบอนุญาตเลขที่</label>
+                        <label for="production_license_quantity"
+                            class="mx-3 text-base block text-gray-700 mb-1 mt-3">ปริมาณ</label>
+                        <input type="text" name="production_license_quantity" id="production_license_quantity"
+                            value="{{ old('production_license_quantity', $import->production_license_quantity) }}"
+                            placeholder="ใส่ปริมาณ"
+                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        @error('production_license_quantity')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลขที่ใบอนุญาตเดิม</label>
                         <input type="text" name="production_license_number"
                             value="{{ old('production_license_number', $import->production_license_number) }}"
                             placeholder="ใส่เลขที่ใบอนุญาต"
@@ -339,24 +348,14 @@
                     </div>
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันหมดอายุ</label>
-                        <input type="date" name="production_license_expiry"
-                            value="{{ old('production_license_expiry', $import->production_license_expiry ? $import->production_license_expiry->format('Y-m-d') : '-') }}"
+                        <input type="text" name="production_license_expiry"
+                            value="{{ old('production_license_expiry', $import->production_license_expiry) }}"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('production_license_expiry')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
-                    <div>
-                        <label for="production_license_quantity"
-                            class="mx-3 text-base block text-gray-700 mb-1 mt-3">ปริมาณนำเข้า</label>
-                        <input type="number" name="production_license_quantity" id="production_license_quantity"
-                            value="{{ old('production_license_quantity', $import->production_license_quantity) }}"
-                            placeholder="ใส่ปริมาณผลิต"
-                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                        @error('production_license_quantity')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
+
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ใบแจ้งครอบครอง วอ.2</label>
                         <input type="text" name="possession_form_wo2"
@@ -370,8 +369,9 @@
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันหมดอายุใบแจ้งครอบครอง
                             วอ.2</label>
-                        <input type="date" name="possession_form_expiry"
-                            value="{{ old('possession_form_expiry', $import->possession_form_expiry ? $import->possession_form_expiry->format('Y-m-d') : '-') }}"
+                        <input type="text" name="possession_form_expiry"
+                            {{-- value="{{ old('possession_form_expiry', $import->possession_form_expiry ? $import->possession_form_expiry->format('Y-m-d') : '-') }}" --}}
+                             value="{{ old('possession_form_expiry', $import->possession_form_expiry ?? '') }}"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('possession_form_expiry')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
@@ -390,8 +390,9 @@
                     </div>
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">หมดอายุเมื่อ</label>
-                        <input type="date" name="expired_at"
-                            value="{{ old('expired_at', $import->expired_at ? $import->expired_at->format('Y-m-d') : '-') }}"
+                        <input type="text" name="expired_at"
+                            {{-- value="{{ old('expired_at', $import->expired_at ? $import->expired_at->format('Y-m-d') : '-') }}" --}}
+                            value="{{ old('expired_at', $import->expired_at) }}"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('expired_at')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>

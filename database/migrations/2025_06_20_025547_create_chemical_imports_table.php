@@ -41,11 +41,11 @@ class CreateChemicalImportsTable extends Migration
             $table->date('production_license_expiry')->nullable(); // วันหมดอายุ
             $table->string('production_license_quantity')->nullable(); // ปริมาณนำเข้า
             $table->string('possession_form_wo2')->nullable(); // ใบแจ้งครอบครอง วอ.2
-            $table->date('possession_form_expiry')->nullable(); // วันหมดอายุใบแจ้งครอบครอง วอ.2
+            $table->text('possession_form_expiry')->nullable(); // วันหมดอายุใบแจ้งครอบครอง วอ.2
             $table->text('packaging_size_details')->nullable(); // รายละเอียดขนาดบรรจุ
             $table->string('registration_number_pass')->nullable(); // เลขที่ทะเบียนผลิตที่ผ่าน
-            $table->date('registration_expiry_date')->nullable(); // เลขที่ใบอนุญาตหมดอายุ
-            $table->date('expired_at')->nullable(); // หมดอายุเมื่อ
+            $table->text('registration_expiry_date')->nullable(); // เลขที่ใบอนุญาตหมดอายุ
+            $table->text('expired_at')->nullable(); // หมดอายุเมื่อ
             $table->string('status_date')->nullable(); // สถานะวัน
             $table->text('remarks')->nullable(); // อื่นๆ (ระบุ)
             $table->boolean('new_or_old')->default(true); // สถานะของข้อมูล (true = ใหม่, false = เก่า)

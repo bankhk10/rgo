@@ -186,69 +186,69 @@ class ChemicalRegistrationController extends Controller
 
     public function store(Request $request)
     {
-   try {
-        // dd($request->all());
-        $validatedData = $request->validate([
-            'chemical_imports_id' => 'nullable|integer', // Changed from string to integer based on schema
-            'registration_number' => 'nullable|string',
-            'registration_number_pass' => 'nullable|string',
-            'registration_expiry_date' => 'nullable|date',
-            'chemical_name_th' => 'required|string',
-            'chemical_name_en' => 'required|string',
-            'composition' => 'nullable|string', // text field can be validated as string
-            'manufacturer' => 'required|string',
-            'registrant' => 'required|string',
-            'registration_type' => 'required|string',
-            'importer' => 'required|string',
-            'distributor' => 'required|string',
-            'trade_name' => 'required|string',
-            'trade_name_at' => 'nullable|string',
-            'production_license_number' => 'nullable|string',
-            'production_license_expiry' => 'nullable|date',
-            'production_license_quantity' => 'nullable|string',
-            'possession_form_wo2' => 'nullable|string',
-            'possession_form_expiry' => 'nullable|date',
-            'application_received_date' => 'nullable|date',
-            'expired_license_number' => 'nullable|string',
-            'expired_at' => 'nullable|date',
-            'old_license_quantity' => 'nullable|string',
-            'packaging_size' => 'nullable|string',
-            'formula_of_ratio' => 'nullable|string',
-            'type_registration' => 'required|string',
-            'common_name' => 'nullable|string',
-            'packaging_size_details' => 'nullable|string',
-            'type_of_use' => 'required|string',
-            'date_submit_request' => 'nullable|date',
-            'request_number_1' => 'nullable|string',
-            'request_number_phase_1' => 'nullable|string',
-            'date_request_phase_3' => 'nullable|date',
-            'request_number_phase_3' => 'nullable|string',
-            'name_position' => 'required|string',
-            'remarks' => 'nullable|string', // text field can be validated as string
-            'new_or_old' => 'nullable|boolean', // boolean field
-            'step' => 'nullable|string',
-            'chemical_type' => 'nullable|string',
-            'company' => 'nullable|string',
-            'store_company_1' => 'nullable|string',
-            'store_company_2' => 'nullable|string',
-            'status' => 'nullable|string',
-            'is_active' => 'nullable|boolean', // boolean field
-            'is_deleted' => 'nullable|boolean', // boolean field
-            'image' => 'nullable|string',
-            'document' => 'nullable|string',
-            'progress' => 'nullable|numeric', // decimal field
-            'sub_progress' => 'nullable|numeric', // decimal field
-            'created_by' => 'nullable|string',
-            'updated_by' => 'nullable|string',
-            'group_of_substances' => 'nullable|string',
-            'plant' => 'nullable|string',
-            'pests' => 'nullable|string',
-            'quantity' => 'nullable|string',
-        ]);
+        try {
+            // dd($request->all());
+            $validatedData = $request->validate([
+                'chemical_imports_id' => 'nullable|integer', // Changed from string to integer based on schema
+                'registration_number' => 'nullable|string',
+                'registration_number_pass' => 'nullable|string',
+                'registration_expiry_date' => 'nullable|date',
+                'chemical_name_th' => 'required|string',
+                'chemical_name_en' => 'required|string',
+                'composition' => 'nullable|string', // text field can be validated as string
+                'manufacturer' => 'required|string',
+                'registrant' => 'required|string',
+                'registration_type' => 'required|string',
+                'importer' => 'required|string',
+                'distributor' => 'required|string',
+                'trade_name' => 'required|string',
+                'trade_name_at' => 'nullable|string',
+                'production_license_number' => 'nullable|string',
+                'production_license_expiry' => 'nullable|date',
+                'production_license_quantity' => 'nullable|string',
+                'possession_form_wo2' => 'nullable|string',
+                'possession_form_expiry' => 'nullable|date',
+                'application_received_date' => 'nullable|date',
+                'expired_license_number' => 'nullable|string',
+                'expired_at' => 'nullable|date',
+                'old_license_quantity' => 'nullable|string',
+                'packaging_size' => 'nullable|string',
+                'formula_of_ratio' => 'nullable|string',
+                'type_registration' => 'required|string',
+                'common_name' => 'nullable|string',
+                'packaging_size_details' => 'nullable|string',
+                'type_of_use' => 'required|string',
+                'date_submit_request' => 'nullable|date',
+                'request_number_1' => 'nullable|string',
+                'request_number_phase_1' => 'nullable|string',
+                'date_request_phase_3' => 'nullable|date',
+                'request_number_phase_3' => 'nullable|string',
+                'name_position' => 'required|string',
+                'remarks' => 'nullable|string', // text field can be validated as string
+                'new_or_old' => 'nullable|boolean', // boolean field
+                'step' => 'nullable|string',
+                'chemical_type' => 'nullable|string',
+                'company' => 'nullable|string',
+                'store_company_1' => 'nullable|string',
+                'store_company_2' => 'nullable|string',
+                'status' => 'nullable|string',
+                'is_active' => 'nullable|boolean', // boolean field
+                'is_deleted' => 'nullable|boolean', // boolean field
+                'image' => 'nullable|string',
+                'document' => 'nullable|string',
+                'progress' => 'nullable|numeric', // decimal field
+                'sub_progress' => 'nullable|numeric', // decimal field
+                'created_by' => 'nullable|string',
+                'updated_by' => 'nullable|string',
+                'group_of_substances' => 'nullable|string',
+                'plant' => 'nullable|string',
+                'pests' => 'nullable|string',
+                'quantity' => 'nullable|string',
+            ]);
 
-        // 2. กำหนดค่า progress เริ่มต้น 0 (หรือจะเป็น 12.5% ถ้าต้องการ)
-        $validatedData['progress'] = 0;
-     
+            // 2. กำหนดค่า progress เริ่มต้น 0 (หรือจะเป็น 12.5% ถ้าต้องการ)
+            $validatedData['progress'] = 0;
+
             $chemical_registration = ChemicalRegistration::create($validatedData);
             // 4. สร้างหัวข้อย่อยเริ่มต้นให้กับขั้นตอนที่ 1 โดยไม่มีการเลือก (checked_at = null)
             // กำหนดหัวข้อย่อยขั้นตอน 1 จำนวน 3 หัวข้อ (ตาม requirement ล่าสุด)
@@ -287,7 +287,7 @@ class ChemicalRegistrationController extends Controller
 
             return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จ');
         } catch (\Illuminate\Validation\ValidationException $e) {
-             \Log::error('Validation errors: ', $e->errors());
+            \Log::error('Validation errors: ', $e->errors());
             return redirect()->back()->withInput()->withErrors(['error' => 'เกิดข้อผิดพลาดในการบันทึกข้อมูล: ' . $e->getMessage()]);
         }
     }
@@ -474,10 +474,10 @@ class ChemicalRegistrationController extends Controller
                 'production_license_expiry' => 'nullable|date',
                 'production_license_quantity' => 'nullable|string',
                 'possession_form_wo2' => 'nullable|string',
-                'possession_form_expiry' => 'nullable|date',
+                'possession_form_expiry' => 'nullable|string',
                 'application_received_date' => 'nullable|date',
                 'expired_license_number' => 'nullable|string',
-                'expired_at' => 'nullable|date',
+                'expired_at' => 'nullable|string',
                 'old_license_quantity' => 'nullable|string',
                 'packaging_size' => 'nullable|string',
                 'formula_of_ratio' => 'nullable|string', // ตัวอย่าง: ฟิลด์นี้ถูกกำหนดให้ nullable
@@ -524,12 +524,15 @@ class ChemicalRegistrationController extends Controller
                     $distributorId = Company::where('full_name', $validatedData['distributor'])->firstOrFail()->id;
                     $importerId = Company::where('full_name', $validatedData['importer'])->firstOrFail()->id;
                     $dataToSave = $validatedData;
-                    $dataToSave['expired_license_date'] = $request->input('production_license_expiry', null); // ใช้ค่าจากฟอร์ม ถ้าไม่มี ให้ 'pending'
+                    // $dataToSave['expired_license_date'] = $request->input('production_license_expiry', null); // ใช้ค่าจากฟอร์ม ถ้าไม่มี ให้ 'pending'
                     $dataToSave['company_id'] = $companyId;
                     $dataToSave['distributor'] = $distributorId;
                     $dataToSave['company_id'] = $companyId;
                     $dataToSave['importer'] = $importerId;
-                    // $dataToSave['trade_name_at'] = $importerId;
+                    $dataToSave['trade_name_at'] = $request->input('name_position', null);
+                    $dataToSave['type_production_registration'] = $request->input('type_registration', null);
+                    $dataToSave['usage_production_registration'] = $request->input('type_of_use', null);
+                    $dataToSave['production_license_quantity'] = $request->input('quantity', null);
 
                     if (Auth::check()) {
                         $dataToSave['created_by'] = Auth::id(); // หรือ Auth::user()->name หากต้องการชื่อ
@@ -548,8 +551,11 @@ class ChemicalRegistrationController extends Controller
 
             return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จ');
         } catch (\Exception $e) {
-            \Log::error("Error update product: " . $e->getMessage());
-            // ในกรณีที่เกิดข้อผิดพลาดอื่นๆ ที่ไม่ใช่ validation error
+            \Log::error("Error update product: " . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+                'request' => $request->all(), // ข้อมูลฟอร์มที่ส่งมา
+            ]);
+
             return redirect()->back()->withInput()->withErrors(['error' => 'เกิดข้อผิดพลาดในการบันทึกข้อมูล: ' . $e->getMessage()]);
         }
     }

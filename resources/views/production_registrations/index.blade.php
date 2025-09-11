@@ -121,12 +121,12 @@
                         @endif
                     </div>
                 </form>
-                @can('Inregister create')
+                {{-- @can('Inregister create')
                     <a href="{{ route('createproduct.create') }}"
                         class="mt-8 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold px-6 py-2 rounded-lg shadow-md transform hover:scale-105 transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
                         + เพิ่มข้อมูล
                     </a>
-                @endcan
+                @endcan --}}
             </div>
 
             <div class="bg-white rounded-2xl overflow-hidden border border-gray-200">
