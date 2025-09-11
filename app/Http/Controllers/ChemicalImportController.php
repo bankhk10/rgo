@@ -136,7 +136,7 @@ class ChemicalImportController extends Controller
                 'plant' => 'nullable|string|max:255',
                 'pests' => 'nullable|string|max:255',
                 'production_license_number' => 'nullable|string|max:255',
-                'production_license_expiry' => 'nullable|string',
+                'production_license_expiry' => 'nullable|date',
                 'production_license_quantity' => 'nullable|string|max:255',
                 'possession_form_wo2' => 'nullable|string|max:255',
                 'possession_form_expiry' => 'nullable|date',
@@ -231,6 +231,16 @@ class ChemicalImportController extends Controller
     public function update(Request $request, ChemicalImport $import)
     {
         try {
+            $request->merge([
+                'expired_license_date'     => $this->convertDate($request->input('expired_license_date')), // <<== เพิ่มตรงนี้
+                'registration_expiry_date'  => $this->convertDate($request->input('registration_expiry_date')),
+                'production_license_expiry' => $this->convertDate($request->input('production_license_expiry')),
+                'possession_form_expiry'    => $this->convertDate($request->input('possession_form_expiry')),
+                'application_received_date' => $this->convertDate($request->input('application_received_date')),
+                'expired_at'                => $this->convertDate($request->input('expired_at')),
+                'date_submit_request'       => $this->convertDate($request->input('date_submit_request')),
+                'date_request_phase_3'      => $this->convertDate($request->input('date_request_phase_3')),
+            ]);
             // 1. Validation ข้อมูลจากฟอร์ม
             $validatedData = $request->validate([
                 'company_id' => 'nullable|exists:companies,id',
@@ -252,7 +262,7 @@ class ChemicalImportController extends Controller
                 'plant' => 'nullable|string|max:255',
                 'pests' => 'nullable|string|max:255',
                 'production_license_number' => 'nullable|string|max:255',
-                'production_license_expiry' => 'nullable|string',
+                'production_license_expiry' => 'nullable',
                 'production_license_quantity' => 'nullable|string|max:255',
                 'possession_form_wo2' => 'nullable|string|max:255',
                 'possession_form_expiry' => 'nullable|string',
@@ -375,5 +385,16 @@ class ChemicalImportController extends Controller
 
 
         return back()->with('success', 'นำเข้าข้อมูลวัตถุอันตรายเรียบร้อยแล้ว!');
+    }
+
+    private function convertDate($value)
+    {
+        if (!$value) return null;
+        if (preg_match('#^\d{2}/\d{2}/\d{4}$#', $value)) {
+            [$dd, $mm, $yyyy] = explode('/', $value);
+            if ((int)$yyyy > 2400) $yyyy -= 543;
+            return sprintf('%04d-%02d-%02d', $yyyy, $mm, $dd);
+        }
+        return $value; // ปล่อยผ่านถ้าเป็น yyyy-mm-dd อยู่แล้ว
     }
 }

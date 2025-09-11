@@ -52,10 +52,11 @@
                                     <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลขที่ทะเบียน</label>
                                     <input type="text" id="registration_number" name="registration_number"
                                         value="{{ old('registration_number', $drug->registration_number) }}"
-                                        placeholder="เช่น 1234-2568"
+                                        placeholder="เช่น 123-2568"
                                         class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        inputmode="numeric" maxlength="9" pattern="^\d{3,4}-\d{4}$"
-                                        title="กรอกเป็นรูปแบบ 1234-2568 เท่านั้น" oninput="filterRegisNo(this)" />
+                                        inputmode="numeric" pattern="^\d+-\d{4}$"
+                                        title="รูปแบบต้องเป็น ตัวเลขใดๆ ตามด้วย - และเลขท้าย 4 หลัก เช่น 123-2568"
+                                        oninput="filterRegisNo(this)" required />
                                     @error('registration_number')
                                         <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                                     @enderror
@@ -67,7 +68,7 @@
                                         id="production_license_expiry"
                                         class="date-th w-full p-3 pl-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         value="{{ old('production_license_expiry', $drug->production_license_expiry ? \Carbon\Carbon::parse($drug->production_license_expiry)->addYears(543)->format('d/m/Y') : '') }}"
-                                        placeholder="dd/mm/yyyy">
+                                        placeholder="วว/ดด/ปปปป">
                                     @error('production_license_expiry')
                                         <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                                     @enderror
@@ -346,8 +347,8 @@
                                 </div>
                                 <div>
                                     <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ปริมาณ</label>
-                                    <input type="text" name="quantity" value="{{ old('quantity', $drug->quantity) }}"
-                                        placeholder="ใส่ปริมาณ"
+                                    <input type="text" name="quantity"
+                                        value="{{ old('quantity', $drug->quantity) }}" placeholder="ใส่ปริมาณ"
                                         class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                     @error('quantity')
                                         <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
@@ -372,7 +373,7 @@
                                             <input type="text" name="date_submit_request" id="date_submit_request"
                                                 class="date-th w-full p-3 pl-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                 value="{{ old('date_submit_request', $drug->date_submit_request ? \Carbon\Carbon::parse($drug->date_submit_request)->addYears(543)->format('d/m/Y') : '') }}"
-                                                placeholder="dd/mm/yyyy">
+                                                placeholder="วว/ดด/ปปปป">
                                             @error('date_submit_request')
                                                 <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                                             @enderror
@@ -401,7 +402,7 @@
                                                 id="date_request_phase_3"
                                                 class="date-th w-full p-3 pl-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                 value="{{ old('date_request_phase_3', $drug->date_request_phase_3 ? \Carbon\Carbon::parse($drug->date_request_phase_3)->addYears(543)->format('d/m/Y') : '') }}"
-                                                placeholder="dd/mm/yyyy">
+                                                placeholder="วว/ดด/ปปปป">
                                             @error('date_request_phase_3')
                                                 <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                                             @enderror

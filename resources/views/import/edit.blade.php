@@ -15,22 +15,27 @@
                     ข้อมูลการนำเข้าทั่วไป
                 </h3>
                 <div class="grid grid-cols-2 md:grid-cols-2 gap-6 mt-4">
+
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลขที่ทะเบียน</label>
-                        <input type="text" name="registration_number"
+                        <input type="text" id="registration_number" name="registration_number"
                             value="{{ old('registration_number', $import->registration_number) }}"
-                            placeholder="ใส่เลขที่ทะเบียน"
-                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                            placeholder="เช่น 123-2568"
+                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            inputmode="numeric" pattern="^\d+-\d{4}$"
+                            title="รูปแบบต้องเป็น ตัวเลขใดๆ ตามด้วย - และเลขท้าย 4 หลัก เช่น 123-2568"
+                            oninput="filterRegisNo(this)" required />
                         @error('registration_number')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
 
-                    <div>
+                    <div class="w-full md:w-1/3">
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันหมดอายุ</label>
-                        <input type="date" name="expired_license_date"
-                            value="{{ old('expired_license_date', $import->expired_license_date ? $import->expired_license_date->format('Y-m-d') : '-') }}"
-                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        <input type="text" name="expired_license_date" id="expired_license_date"
+                            class="date-th w-full p-3 pl-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value="{{ old('expired_license_date', $import->expired_license_date ? \Carbon\Carbon::parse($import->expired_license_date)->addYears(543)->format('d/m/Y') : '') }}"
+                            placeholder="วว/ดด/ปปปป">
                         @error('expired_license_date')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
@@ -142,7 +147,7 @@
                         @enderror
                     </div>
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ผู้นำเข้า</label>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อผู้นำเข้า</label>
                         <div class="dropdown" id="importerDropdown">
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="importerBtn">
                                 @php
@@ -170,7 +175,7 @@
                         @enderror
                     </div>
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ผู้จำหน่าย</label>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อผู้จำหน่าย</label>
                         <div class="dropdown" id="distributorDropdown">
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="distributorBtn">
                                 @php
@@ -337,7 +342,30 @@
                         @enderror
                     </div>
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลขที่ใบอนุญาตเดิม</label>
+                        <label for="registration_number_pass"
+                            class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลขที่ใบอนุญาต</label>
+                        <input type="text" name="registration_number_pass" id="registration_number_pass"
+                            value="{{ old('registration_number_pass', $import->registration_number_pass) }}"
+                            placeholder="ใส่เลขที่ใบอนุญาต"
+                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        @error('registration_number_pass')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันหมดอายุใบอนุญาต</label>
+                        <input type="text" name="production_license_expiry" id="production_license_expiry"
+                            class="date-th w-full p-3 pl-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value="{{ old('production_license_expiry', $import->production_license_expiry ? \Carbon\Carbon::parse($import->production_license_expiry)->addYears(543)->format('d/m/Y') : '') }}"
+                            placeholder="วว/ดด/ปปปป">
+                        @error('production_license_expiry')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ใบอนุญาตเลขที่เดิม</label>
                         <input type="text" name="production_license_number"
                             value="{{ old('production_license_number', $import->production_license_number) }}"
                             placeholder="ใส่เลขที่ใบอนุญาต"
@@ -347,11 +375,11 @@
                         @enderror
                     </div>
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันหมดอายุ</label>
-                        <input type="text" name="production_license_expiry"
-                            value="{{ old('production_license_expiry', $import->production_license_expiry) }}"
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันหมดอายุใบอนุญาตเดิม</label>
+                        <input type="text" name="expired_at" value="{{ old('expired_at', $import->expired_at) }}"
+                            placeholder="ใส่วันหมดอายุใบอนุญาตเดิม"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                        @error('production_license_expiry')
+                        @error('expired_at')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
@@ -360,7 +388,7 @@
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ใบแจ้งครอบครอง วอ.2</label>
                         <input type="text" name="possession_form_wo2"
                             value="{{ old('possession_form_wo2', $import->possession_form_wo2 ?? '') }}"
-                            placeholder="ใส่เลขที่ใบอนุญาต"
+                            placeholder="ใส่ใบแจ้งครอบครอง วอ.2"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('possession_form_wo2')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
@@ -369,35 +397,15 @@
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันหมดอายุใบแจ้งครอบครอง
                             วอ.2</label>
-                        <input type="text" name="possession_form_expiry"
-                            {{-- value="{{ old('possession_form_expiry', $import->possession_form_expiry ? $import->possession_form_expiry->format('Y-m-d') : '-') }}" --}}
-                             value="{{ old('possession_form_expiry', $import->possession_form_expiry ?? '') }}"
+                        <input type="text" name="possession_form_expiry" {{-- value="{{ old('possession_form_expiry', $import->possession_form_expiry ? $import->possession_form_expiry->format('Y-m-d') : '-') }}" --}}
+                            value="{{ old('possession_form_expiry', $import->possession_form_expiry ?? '') }}"
+                            placeholder="ใส่วันหมดอายุใบแจ้งครอบครองวอ.2"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('possession_form_expiry')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
-                    <div>
-                        <label for="registration_number_pass"
-                            class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลขที่ใบอนุญาตหมดอายุ</label>
-                        <input type="text" name="registration_number_pass" id="registration_number_pass"
-                            value="{{ old('registration_number_pass', $import->registration_number_pass) }}"
-                            placeholder="ใส่เลขที่ใบอนุญาตหมดอายุ"
-                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                        @error('registration_number_pass')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-                    <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">หมดอายุเมื่อ</label>
-                        <input type="text" name="expired_at"
-                            {{-- value="{{ old('expired_at', $import->expired_at ? $import->expired_at->format('Y-m-d') : '-') }}" --}}
-                            value="{{ old('expired_at', $import->expired_at) }}"
-                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                        @error('expired_at')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
+
                 </div>
             </div>
             <div>
@@ -450,6 +458,90 @@
         class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
         {{-- ... content of message box ... --}}
     </div>
+
+
+    <script>
+        function filterRegisNo(el) {
+            // แปลง en-dash/em-dash เป็น hyphen ปกติ และคงไว้เฉพาะตัวเลขกับ '-'
+            let v = el.value.replace(/[–—]/g, '-').replace(/[^\d-]/g, '');
+
+            // ให้มี '-' ได้ตัวเดียว
+            const firstDash = v.indexOf('-');
+            if (firstDash !== -1) {
+                v = v.slice(0, firstDash + 1) + v.slice(firstDash + 1).replace(/-/g, '');
+            }
+
+            // ตัดความยาวส่วนหน้าไม่เกิน 4 และส่วนหลังไม่เกิน 4
+            const parts = v.split('-');
+            if (parts.length === 1) {
+                // ยังไม่มี '-', จำกัดหน้าสุด 4 หลัก
+                parts[0] = parts[0].slice(0, 4);
+                v = parts[0];
+            } else {
+                parts[0] = parts[0].slice(0, 4); // 3–4 หลักจะตรวจจริงด้วย pattern/regex อีกชั้น
+                parts[1] = parts[1].slice(0, 4);
+                v = parts[0] + '-' + parts[1];
+            }
+
+            // จำกัดความยาวรวมไม่เกิน 9 (เช่น 1234-2568)
+            el.value = v.slice(0, 9);
+        }
+    </script>
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/th.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            flatpickr(".date-th", {
+                allowInput: true,
+                locale: "th",
+                dateFormat: "d/m/Y",
+                parseDate: (datestr, format) => {
+                    if (!datestr) return null;
+                    const parts = datestr.split('/');
+                    if (parts.length === 3) {
+                        let [dd, mm, yyyy] = parts.map(n => parseInt(n, 10));
+                        if (yyyy > 2400) yyyy -= 543; // ถ้าเป็น พ.ศ. → ค.ศ.
+                        return new Date(yyyy, mm - 1, dd);
+                    }
+                    return flatpickr.parseDate(datestr, format);
+                },
+                onReady: (selectedDates, dateStr, instance) => showBE(instance),
+                onChange: (selectedDates, dateStr, instance) => showBE(instance),
+                onOpen: (selectedDates, dateStr, instance) => showBE(instance)
+            });
+
+            function showBE(instance) {
+                const selDate = instance.selectedDates[0];
+                if (!selDate) return;
+                const dd = String(selDate.getDate()).padStart(2, "0");
+                const mm = String(selDate.getMonth() + 1).padStart(2, "0");
+                const yyyyBE = selDate.getFullYear() + 543;
+                instance.input.value = `${dd}/${mm}/${yyyyBE}`;
+            }
+
+            // ก่อน submit → แปลงเป็น ค.ศ. yyyy-mm-dd
+            const form = document.getElementById("editRegisForm");
+            if (form) {
+                form.addEventListener("submit", () => {
+                    document.querySelectorAll(".date-th").forEach(input => {
+                        if (input.value.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
+                            let [dd, mm, yyyyBE] = input.value.split("/");
+                            let yyyyAD = parseInt(yyyyBE, 10);
+                            if (yyyyAD > 2400) yyyyAD -= 543;
+                            input.value = `${yyyyAD}-${mm}-${dd}`;
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @if ($errors->has('registration_number'))
         <script>
