@@ -7,23 +7,31 @@
 
             <div class="bg-white rounded-2xl overflow-hidden shadow-lg p-8 border border-gray-200">
                 {{-- รายละเอียดข้อมูลยา --}}
-                <div class="grid grid-cols-2 md:grid-cols-2 gap-6 text-lg text-gray-700">
-                    <div>
+                <div class="grid grid-cols-3 md:grid-cols-2 gap-6 text-lg text-gray-700">
+                    {{-- <div>
                         <p class="font-semibold text-indigo-600">เลขที่ทะเบียน:</p>
                         <p>{{ $drug->registration_number ?? '-' }}</p>
+                    </div> --}}
+                    <div>
+                        <p class="font-semibold text-indigo-600 mb-2">วันที่ขึ้นทะเบียน</p>
+                        <p>{{ $drug->created_at->addYears(+543)->format('d/m/Y') }}</p>
                     </div>
                     <div>
-                        <p class="font-semibold text-indigo-600">วันที่ขึ้นทะเบียน:</p>
-                        <p>{{ $drug->created_at->format('d/m/Y') }}</p>
+                        <p class="font-semibold text-indigo-600 mb-2">บริษัทที่ขึ้นทะเบียน</p>
+                        <p>{{ $drug->registrant ?? '-' }}</p>
                     </div>
                     <div>
-                        <p class="font-semibold text-indigo-600">ชื่อสามัญ:</p>
+                        <p class="font-semibold text-indigo-600 mb-2">ชื่อทางการค้า</p>
+                        <p>{{ $drug->trade_name ?? '-' }}</p>
+                    </div>
+                    {{-- <div>
+                        <p class="font-semibold text-indigo-600">ชื่อวัตถุอันตราย (ไทย)</p>
                         <p>{{ $drug->chemical_name_th ?? '-' }}</p>
                     </div>
                     <div>
-                        <p class="font-semibold text-indigo-600">ชื่อทางการค้า:</p>
-                        <p>{{ $drug->trade_name ?? '-' }}</p>
-                    </div>
+                        <p class="font-semibold text-indigo-600 mb-2">ชื่อวัตถุอันตราย (อังกฤษ)</p>
+                        <p>{{ $drug->chemical_name_en ?? '-' }}</p>
+                    </div> --}}
                     {{-- <div>
                         <p class="font-semibold text-indigo-600">ชื่อผู้ผลิตและแหล่งผลิต:</p>
                         <p>{{ $drug->manufacturer_origin ?? '-' }}</p>
