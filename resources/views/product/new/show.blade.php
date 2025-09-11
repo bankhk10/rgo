@@ -522,9 +522,6 @@
                     </div>
                 @endif
 
-
-
-
                 <div class="text-center mt-12">
                     <a href="{{ route('newregis.index') }}"
                         class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg shadow transition duration-300 ">

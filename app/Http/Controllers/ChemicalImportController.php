@@ -24,15 +24,13 @@ class ChemicalImportController extends Controller
         $query = ChemicalImport::query();
         $query->with('company');
 
-
-
         // ส่วนของการค้นหา (search) ยังคงเดิม
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
                 $q->where('chemical_name_th', 'like', "%$search%")
                     ->orWhere('chemical_name_en', 'like', "%$search%")
-                    ->orWhere('production_license_number', 'like', "%$search%")
+                    ->orWhere('registration_number', 'like', "%$search%")
                     ->orWhereHas('company', function ($q2) use ($search) {
                         $q2->where('full_name', 'like', "%$search%");
                     });
