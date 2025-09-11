@@ -533,7 +533,7 @@ class ChemicalRegistrationController extends Controller
                     $dataToSave['type_production_registration'] = $request->input('type_registration', null);
                     $dataToSave['usage_production_registration'] = $request->input('type_of_use', null);
                     $dataToSave['production_license_quantity'] = $request->input('quantity', null);
-                    $dataToSave['production_license_expiry'] =null;
+                    $dataToSave['production_license_expiry'] = null;
 
                     if (Auth::check()) {
                         $dataToSave['created_by'] = Auth::id(); // หรือ Auth::user()->name หากต้องการชื่อ
@@ -543,7 +543,30 @@ class ChemicalRegistrationController extends Controller
 
                     ChemicalImport::create($dataToSave);
                 } else {
-                    ProductionRegistration::create($validatedData);
+                    // 2. Map ข้อมูลและกำหนดค่าเริ่มต้น/เพิ่มเติม
+                    $companyId = Company::where('full_name', $validatedData['registrant'])->firstOrFail()->id;
+                    $distributorId = Company::where('full_name', $validatedData['distributor'])->firstOrFail()->id;
+                    $importerId = Company::where('full_name', $validatedData['importer'])->firstOrFail()->id;
+                    $dataToSave = $validatedData;
+                    $dataToSave['expired_license_date'] = $request->input('production_license_expiry', null); // ใช้ค่าจากฟอร์ม ถ้าไม่มี ให้ 'pending'
+                    $dataToSave['company_id'] = $companyId;
+                    $dataToSave['distributor'] = $distributorId;
+                    $dataToSave['company_id'] = $companyId;
+                    $dataToSave['importer'] = $importerId;
+                    $dataToSave['trade_name_at'] = $request->input('name_position', null);
+                    $dataToSave['type_production_registration'] = $request->input('type_registration', null);
+                    $dataToSave['usage_production_registration'] = $request->input('type_of_use', null);
+                    $dataToSave['production_license_quantity'] = $request->input('quantity', null);
+                    $dataToSave['production_license_expiry'] = null;
+
+                    if (Auth::check()) {
+                        $dataToSave['created_by'] = Auth::id(); // หรือ Auth::user()->name หากต้องการชื่อ
+                    } else {
+                        $dataToSave['created_by'] = null; // หรือกำหนดเป็นค่าอื่นหากผู้ใช้ไม่ได้ล็อกอิน
+                    }
+
+
+                    ProductionRegistration::create($dataToSave);
                 }
             }
 

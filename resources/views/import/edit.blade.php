@@ -232,17 +232,6 @@
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
-                    {{-- 
-                    <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชนิด</label>
-                        <input type="text" name="type_production_registration"
-                            value="{{ old('type_production_registration', $import->type_production_registration) }}"
-                            placeholder="ใส่ชื่อชนิด"
-                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                        @error('type_production_registration')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
-                        @enderror
-                    </div> --}}
 
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชนิดทะเบียน <span
