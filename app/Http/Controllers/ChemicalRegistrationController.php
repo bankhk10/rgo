@@ -524,7 +524,7 @@ class ChemicalRegistrationController extends Controller
                     $distributorId = Company::where('full_name', $validatedData['distributor'])->firstOrFail()->id;
                     $importerId = Company::where('full_name', $validatedData['importer'])->firstOrFail()->id;
                     $dataToSave = $validatedData;
-                    // $dataToSave['expired_license_date'] = $request->input('production_license_expiry', null); // ใช้ค่าจากฟอร์ม ถ้าไม่มี ให้ 'pending'
+                    $dataToSave['expired_license_date'] = $request->input('production_license_expiry', null); // ใช้ค่าจากฟอร์ม ถ้าไม่มี ให้ 'pending'
                     $dataToSave['company_id'] = $companyId;
                     $dataToSave['distributor'] = $distributorId;
                     $dataToSave['company_id'] = $companyId;
@@ -533,6 +533,7 @@ class ChemicalRegistrationController extends Controller
                     $dataToSave['type_production_registration'] = $request->input('type_registration', null);
                     $dataToSave['usage_production_registration'] = $request->input('type_of_use', null);
                     $dataToSave['production_license_quantity'] = $request->input('quantity', null);
+                    $dataToSave['production_license_expiry'] =null;
 
                     if (Auth::check()) {
                         $dataToSave['created_by'] = Auth::id(); // หรือ Auth::user()->name หากต้องการชื่อ

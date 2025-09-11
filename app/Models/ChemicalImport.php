@@ -54,6 +54,7 @@ class ChemicalImport extends Model
 
     protected $casts = [
         'expired_license_date' => 'date',
+        // 'production_license_expiry' => 'date',
         'new_or_old' => 'boolean',
         'is_active' => 'boolean',
         'is_deleted' => 'boolean',

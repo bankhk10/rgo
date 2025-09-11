@@ -52,7 +52,7 @@
                     </div>
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันหมดอายุ</label>
-                        <input type="text" name="expired_license_date" class="date-th w-full p-3 border rounded-full" placeholder="dd/mm/yyyy" value="{{ old('expired_license_date') }}">
+                        <input type="text" name="expired_license_date" class="date-th w-full p-3 border rounded-full" placeholder="วว/ดด/ปปปป" value="{{ old('expired_license_date') }}">
 
                         @error('expired_license_date')
                         <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
