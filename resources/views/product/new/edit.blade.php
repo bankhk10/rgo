@@ -14,7 +14,6 @@
                             <strong class="font-bold">เกิดข้อผิดพลาด!</strong>
                             <span class="block sm:inline">โปรดตรวจสอบข้อมูลที่คุณกรอกอีกครั้ง</span>
                             <ul class="mt-2 list-disc list-inside">
-                                {{-- วนลูปแสดงข้อความผิดพลาดทั้งหมดจาก Laravel Validator --}}
                                 @foreach ($errors->all() as $error)
                                     <li>{{ $error }}</li>
                                 @endforeach
@@ -56,7 +55,7 @@
                                         class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         inputmode="numeric" pattern="^\d+-\d{4}$"
                                         title="รูปแบบต้องเป็น ตัวเลขใดๆ ตามด้วย - และเลขท้าย 4 หลัก เช่น 123-2568"
-                                        oninput="filterRegisNo(this)" required />
+                                        oninput="filterRegisNo(this)" />
                                     @error('registration_number')
                                         <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                                     @enderror

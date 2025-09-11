@@ -135,8 +135,9 @@
                         <thead>
                             <tr class="bg-indigo-600 text-white text-left">
                                 <th class="py-4 px-8 rounded-tl-2xl">ลำดับ</th>
-                                <th class="py-4 px-6">ชื่อการค้า</th>
+                                {{-- <th class="py-4 px-6">ชื่อการค้า</th> --}}
                                 <th class="py-4 px-6">ชื่อวัตถุอันตราย (ไทย)</th>
+                                <th class="py-4 px-6">ชื่อวัตถุอันตราย (อังกฤษ)	</th>
                                 {{-- <th class="py-4 px-6">ชื่อวัตถุอันตราย (อังกฤษ)</th> --}}
                                 <th class="py-4 px-6 text-center">ผู้ขึ้นทะเบียน</th>
                                 {{-- <th class="py-4 px-6 text-center">ตัวย่อ</th> --}}
@@ -153,8 +154,9 @@
                                         <td class="py-4 px-6 font-semibold text-gray-700">
                                             {{ $loop->iteration + ($imports->currentPage() - 1) * $imports->perPage() }}
                                         </td>
-                                        <td class="py-4 px-6">{{ $import->trade_name ?? '' }}</td>
+                                        {{-- <td class="py-4 px-6">{{ $import->trade_name ?? '' }}</td> --}}
                                         <td class="py-4 px-6">{{ $import->chemical_name_th ?? '' }}</td>
+                                        <td class="py-4 px-6">{{ $import->chemical_name_en ?? '' }}</td>
                                         {{-- <td class="py-4 px-6 text-center">{{ $import->Companes->full_name ?? '' }}</td> --}}
                                         <td class="py-4 px-4">{{ $import->company->full_name ?? '' }}</td>
                                         <td class="py-4 px-6 text-center">{{ $import->registration_number ?? '' }}</td>
