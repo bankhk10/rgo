@@ -555,7 +555,7 @@
 
     <script>
         // document.getElementById('menu-inregister')?.classList.add('side-menu--active');
-         document.getElementById('menu-manufacture')?.classList.add('side-menu--active');
+        document.getElementById('menu-manufacture')?.classList.add('side-menu--active');
         document.addEventListener('DOMContentLoaded', () => {
             function setupDropdown(btnId, listId, inputId, currentValue = null) {
                 const btn = document.getElementById(btnId);
