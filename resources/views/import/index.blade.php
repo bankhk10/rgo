@@ -79,7 +79,7 @@
                         <input type="text" id="search_query" name="search"
                             placeholder="ชื่อวัตถุอันตราย /บริษัท /เลขที่ทะเบียน" value="{{ request('search') }}"
                             class="pl-10 pr-4 py-2 w-[500px] rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-600 transition duration-200 ease-in-out text-gray-700 shadow-sm" />
-                            {{-- class="pl-10 pr-4 py-2 w-96 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-600 transition duration-200 ease-in-out text-gray-700 shadow-sm" /> --}}
+                        {{-- class="pl-10 pr-4 py-2 w-96 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-600 transition duration-200 ease-in-out text-gray-700 shadow-sm" /> --}}
                     </div>
                     <div class="flex-grow min-w-[180px]">
                         <label for="expiry_date_from"
@@ -156,28 +156,32 @@
                                         <td class="py-4 px-4 text-center">{{ $import->importerCompany->name ?? '' }}</td>
                                         <td class="py-4 px-8">{{ $import->registration_number }}</td>
                                         <td class="py-4 px-8">
-                                            {{ \Carbon\Carbon::parse($import->expired_license_date)->addYears(543)->format('d/m/Y') }}
+                                            @if ($import->expired_license_date)
+                                                {{ \Carbon\Carbon::parse($import->expired_license_date)->addYears(543)->format('d/m/Y') }}
+                                            @endif
                                         </td>
                                         {{-- การตกแต่งสีสถานะ --}}
                                         <td class="py-4 px-8">
-                                            @php
-                                                $statusClass = '';
-                                                $statusText = $import->status; // ใช้ค่าสถานะที่ถูกส่งมาจาก Controller
+                                            @if ($import->expired_license_date)
+                                                @php
+                                                    $statusClass = '';
+                                                    $statusText = $import->status; // ใช้ค่าสถานะที่ถูกส่งมาจาก Controller
 
-                                                if ($statusText == 'หมดอายุ') {
-                                                    $statusClass =
-                                                        'inline-block rounded-full px-3 py-1 font-semibold text-white bg-red-500';
-                                                } elseif ($statusText == 'ใกล้หมดอายุ') {
-                                                    $statusClass =
-                                                        'inline-block rounded-full px-3 py-1 font-semibold text-gray-600 bg-yellow-300';
-                                                } else {
-                                                    $statusClass =
-                                                        'inline-block rounded-full px-3 py-1 font-semibold text-white bg-green-500'; // สถานะปกติ เช่น 'ใช้งานอยู่'
-                                                }
-                                            @endphp
-                                            <span class="{{ $statusClass }}">
-                                                {{ $statusText }}
-                                            </span>
+                                                    if ($statusText == 'หมดอายุ') {
+                                                        $statusClass =
+                                                            'inline-block rounded-full px-3 py-1 font-semibold text-white bg-red-500';
+                                                    } elseif ($statusText == 'ใกล้หมดอายุ') {
+                                                        $statusClass =
+                                                            'inline-block rounded-full px-3 py-1 font-semibold text-gray-600 bg-yellow-300';
+                                                    } else {
+                                                        $statusClass =
+                                                            'inline-block rounded-full px-3 py-1 font-semibold text-white bg-green-500'; // สถานะปกติ เช่น 'ใช้งานอยู่'
+                                                    }
+                                                @endphp
+                                                <span class="{{ $statusClass }}">
+                                                    {{ $statusText }}
+                                                </span>
+                                            @endif
                                         </td>
                                         {{-- สิ้นสุดการตกแต่งสีสถานะ --}}
                                         <td class="py-4 px-8 text-center">
