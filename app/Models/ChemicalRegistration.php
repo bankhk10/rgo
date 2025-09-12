@@ -104,6 +104,6 @@ class ChemicalRegistration extends Model
     public function checkPlan($id)
     {
         return DrugProgressStep::where('chemical_registrations_id', $id)
-            ->where('created_by', 'yes')->exists();
+            ->where('created_by', 'มี')->exists();
     }
 }

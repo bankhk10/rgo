@@ -622,12 +622,11 @@
                                     'จัดซื้อต่างประเทศ' => ['ทะเบียน', 'ใบอนุญาตในประเทศผู้ผลิต', 'เอกสารอนุญาตอื่นๆ'],
                                     'ฝ่ายขาย' => ['รายชื่อผู้ขอขึ้นทะเบียน', 'ชื่อการค้า', 'Packing'],
                                     'วิจัยและพัฒนา' => ['เตรียมข้อมูลผลิตตัวอย่าง'],
-                                    'แผนกวิชาการ' => ['แผนการทดลอง'],
+                                    'แผนกวิชาการ' => ['แผนการทดลอง', 'หนังสือขอยกเว้น PHI', 'แผน PHI'],
                                     'แผนกทะเบียน' => [
                                         'ตรวจสอบเอกสารขึ้นทะเบียน',
                                         'ตรวจชื่อการค้า',
                                         'ขอใบอนุญาตนำเข้าตัวอย่าง',
-                                        'อื่นๆ',
                                     ],
                                 ],
                             ],
@@ -721,10 +720,8 @@
                             ],
                         ];
 
-                        // ดึงค่าจาก "แผนการทดลอง" ในขั้นตอนที่ 1
-                        $planIndex = collect($subStepsAll[1]['items'])->flatten()->search('แผนการทดลอง');
-                        $planNote = $checkplan;
-                        $hideAcademicSteps = $planNote == 'ไม่มี';
+                        // ไม่ต้องซ่อนขั้นตอนแผนกวิชาการตาม "แผนการทดลอง" อีกต่อไป
+                        $hideAcademicSteps = false;
 
                         // เก็บ flag ว่าขั้นตอนใดทำครบแล้วบ้าง
                         $completedStepFlags = [];
@@ -897,7 +894,7 @@
                                                             @php
                                                                 $record = $savedSubSteps[$checkboxIndex] ?? null;
                                                                 $isChecked = $record && $record->checked_at;
-                                                                // $checkplan = $record->note ?? '';
+                                                                $note = $record->created_by ?? '';
                                                             @endphp
                                                             <div class="flex flex-col gap-1">
                                                                 <div class="flex items-center space-x-3">
@@ -913,7 +910,7 @@
                                                                         class="text-sm text-gray-800">{{ $label }}</label>
                                                                 </div>
 
-                                                                @if ($label === 'แผนการทดลอง')
+                                                                @if (in_array($label, ['หนังสือขอยกเว้น PHI', 'แผน PHI']))
                                                                     <div id="radio_container_{{ $stepNumber }}_{{ $checkboxIndex }}"
                                                                         class="ml-6 mt-2 space-x-4"
                                                                         style="{{ $isChecked ? '' : 'display: none;' }}">
@@ -921,18 +918,17 @@
                                                                             <input type="radio"
                                                                                 class="form-radio text-green-500 w-5 h-5"
                                                                                 name="sub_step_notes[{{ $checkboxIndex }}]"
-                                                                                value="no"
-                                                                                {{ $checkplan == 'ไม่มี' ? 'checked' : '' }}
+                                                                                value="ไม่มี"
+                                                                                {{ $note == 'ไม่มี' ? 'checked' : '' }}
                                                                                 {{ !$isEditable ? 'disabled' : '' }}>
-                                                                            <span
-                                                                                class="ml-2 text-gray-800">ไม่มี</span>
+                                                                            <span class="ml-2 text-gray-800">ไม่มี</span>
                                                                         </label>
                                                                         <label class="inline-flex items-center">
                                                                             <input type="radio"
                                                                                 class="form-radio text-yellow-500 w-5 h-5"
                                                                                 name="sub_step_notes[{{ $checkboxIndex }}]"
-                                                                                value="yes"
-                                                                                {{ $checkplan == 'มี' ? 'checked' : '' }}
+                                                                                value="มี"
+                                                                                {{ $note == 'มี' ? 'checked' : '' }}
                                                                                 {{ !$isEditable ? 'disabled' : '' }}>
                                                                             <span class="ml-2 text-gray-800">มี</span>
                                                                         </label>
@@ -1048,7 +1044,7 @@
     <script>
         document.getElementById('menu-newregis')?.classList.add('side-menu--active');
 
-        // Store the last selected radio value for each "แผนการทดลอง" checkbox
+        // Store the last selected radio value for each checkbox with radio options
         const lastSelectedRadioValue = {};
 
         function toggleInput(stepNumber, checkboxIndex) {
@@ -1059,8 +1055,8 @@
                 if (checkbox.checked) {
                     radioContainer.style.display = ''; // Show the div
 
-                    // Restore the last selected value, or default to 'no' (ไม่มี)
-                    const savedValue = lastSelectedRadioValue[`${stepNumber}_${checkboxIndex}`] || 'no';
+                    // Restore the last selected value, or default to 'ไม่มี'
+                    const savedValue = lastSelectedRadioValue[`${stepNumber}_${checkboxIndex}`] || 'ไม่มี';
 
                     const radios = radioContainer.querySelectorAll('input[type="radio"]');
                     radios.forEach(radio => {
