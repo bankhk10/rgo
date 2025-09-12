@@ -66,7 +66,9 @@
                 </a>
             </div>
             <div class="flex flex-col sm:flex-row justify-between items-center mx-3 mb-2">
-                <form action="{{ route('import.index') }}" method="GET" class="flex items-center gap-2 mb-2">
+                {{-- <form action="{{ route('import.index') }}" method="GET" class="flex items-center gap-2 mb-2"> --}}
+                <form id="filterForm" action="{{ route('import.index') }}" method="GET"
+                    class="flex items-center gap-2 mb-2">
                     <div class="relative flex-grow min-w-[280px]">
                         <label for="search_query" class="mx-3 text-base block text-gray-700 mb-1 mt-3">ค้นหาชื่อ</label>
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none mt-9">
@@ -81,20 +83,28 @@
                             class="pl-10 pr-4 py-2 w-[500px] rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-600 transition duration-200 ease-in-out text-gray-700 shadow-sm" />
                         {{-- class="pl-10 pr-4 py-2 w-96 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-600 transition duration-200 ease-in-out text-gray-700 shadow-sm" /> --}}
                     </div>
+                    {{-- วันที่เริ่ม --}}
                     <div class="flex-grow min-w-[180px]">
                         <label for="expiry_date_from"
                             class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันที่เริ่ม</label>
                         <input id="expiry_date_from"
-                            class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200 ease-in-out text-gray-500 text-base shadow-sm w-full"
-                            type="date" name="expiry_date_from" value="{{ request('expiry_date_from') }}" />
+                            class="date-th px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200 ease-in-out text-gray-500 text-base shadow-sm w-full"
+                            type="text" name="expiry_date_from" value="{{ request('expiry_date_from') }}"
+                            placeholder="วว/ดด/ปปปป" autocomplete="off" autocorrect="off" autocapitalize="off"
+                            spellcheck="false" />
                     </div>
+
+                    {{-- วันที่สิ้นสุด --}}
                     <div class="flex-grow min-w-[180px]">
                         <label for="expiry_date_to"
                             class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันที่สิ้นสุด</label>
                         <input id="expiry_date_to"
-                            class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200 ease-in-out text-gray-500 text-base shadow-sm w-full"
-                            type="date" name="expiry_date_to" value="{{ request('expiry_date_to') }}" />
+                            class="date-th px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200 ease-in-out text-gray-500 text-base shadow-sm w-full"
+                            type="text" name="expiry_date_to" value="{{ request('expiry_date_to') }}"
+                            placeholder="วว/ดด/ปปปป" autocomplete="off" autocorrect="off" autocapitalize="off"
+                            spellcheck="false" />
                     </div>
+
                     <div class="flex gap-3 mt-10">
                         <button type="submit"
                             class="bg-gradient-to-r from-blue-500 to-blue-500 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold px-6 py-2 rounded-lg shadow-md transform hover:scale-105 transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
@@ -136,7 +146,7 @@
                                 <th class="py-4 px-4">ชื่อวัตถุอันตราย (ไทย)</th>
                                 <th class="py-4 px-4">ชื่อวัตถุอันตราย (อังกฤษ)</th>
                                 <th class="py-4 px-4 text-center">ผู้นำเข้า</th>
-                                <th class="py-4 px-4 text-center">ตัวย่อ</th>
+                                {{-- <th class="py-4 px-4 text-center">ตัวย่อ</th> --}}
                                 <th class="py-4 px-8">เลขที่ทะเบียน</th>
                                 <th class="py-4 px-8">วันหมดอายุ</th>
                                 <th class="py-4 px-4 text-center">สถานะ</th>
@@ -153,7 +163,7 @@
                                         <td class="py-4 px-4">{{ $import->chemical_name_th }}</td>
                                         <td class="py-4 px-4">{{ $import->chemical_name_en }}</td>
                                         <td class="py-4 px-4">{{ $import->importerCompany->full_name ?? '' }}</td>
-                                        <td class="py-4 px-4 text-center">{{ $import->importerCompany->name ?? '' }}</td>
+                                        {{-- <td class="py-4 px-4 text-center">{{ $import->importerCompany->name ?? '' }}</td> --}}
                                         <td class="py-4 px-8">{{ $import->registration_number }}</td>
                                         <td class="py-4 px-8">
                                             @if ($import->expired_license_date)
@@ -271,4 +281,93 @@
         }
         document.getElementById('menu-inregister')?.classList.add('side-menu--active');
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/th.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Helper: แปลง yyyy-mm-dd -> dd/mm/yyyy (พ.ศ.) เพื่อแสดงผลเริ่มต้น ---
+            function adToBeDisplay(isoStr) {
+                // รับค่าเป็น 'YYYY-MM-DD' -> คืน 'dd/mm/yyyy(พ.ศ.)'
+                if (!isoStr || !/^\d{4}-\d{2}-\d{2}$/.test(isoStr)) return null;
+                const [y, m, d] = isoStr.split('-').map(n => parseInt(n, 10));
+                if (!y || !m || !d) return null;
+                const be = y + 543;
+                return String(d).padStart(2, '0') + '/' + String(m).padStart(2, '0') + '/' + be;
+            }
+
+            // --- ถ้าค่าที่มากับ request เป็น ค.ศ. iso -> เปลี่ยนเป็น พ.ศ. แสดงผล ---
+            ['expiry_date_from', 'expiry_date_to'].forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                const v = (el.value || '').trim();
+
+                // case: yyyy-mm-dd จาก query string เดิม
+                const beDisplay = adToBeDisplay(v);
+                if (beDisplay) {
+                    el.value = beDisplay;
+                } else if (/^\d{4}\/\d{2}\/\d{2}$/.test(v)) {
+                    // ถ้าติดมาผิดรูปแบบ (yyyy/mm/dd) ก็ปล่อยไว้ หรือปรับเพิ่มตามต้องการ
+                }
+                // ถ้าเป็น dd/mm/yyyy อยู่แล้วก็ไม่เปลี่ยน
+            });
+
+            // --- ติดตั้ง flatpickr แบบหน้าแก้ไข ---
+            flatpickr(".date-th", {
+                allowInput: true,
+                locale: "th",
+                dateFormat: "d/m/Y", // ใช้ dd/mm/yyyy
+                parseDate: (datestr, format) => {
+                    if (!datestr) return null;
+                    // รองรับ dd/mm/yyyy ทั้ง ค.ศ./พ.ศ.
+                    const m = datestr.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+                    if (m) {
+                        let dd = parseInt(m[1], 10);
+                        let mm = parseInt(m[2], 10);
+                        let yyyy = parseInt(m[3], 10);
+                        if (yyyy > 2400) yyyy -= 543; // ถ้าเป็น พ.ศ. -> แปลง ค.ศ.
+                        return new Date(yyyy, mm - 1, dd);
+                    }
+                    // เผื่อกรณีผู้ใช้วางเป็น 'yyyy-mm-dd'
+                    const n = datestr.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+                    if (n) {
+                        return new Date(parseInt(n[1], 10), parseInt(n[2], 10) - 1, parseInt(n[3], 10));
+                    }
+                    return flatpickr.parseDate(datestr, format);
+                },
+                onReady: (selectedDates, dateStr, instance) => showBE(instance),
+                onChange: (selectedDates, dateStr, instance) => showBE(instance),
+                onOpen: (selectedDates, dateStr, instance) => showBE(instance)
+            });
+
+            function showBE(instance) {
+                const sel = instance.selectedDates[0];
+                if (!sel) return;
+                const dd = String(sel.getDate()).padStart(2, "0");
+                const mm = String(sel.getMonth() + 1).padStart(2, "0");
+                const yyyyBE = sel.getFullYear() + 543;
+                instance.input.value = `${dd}/${mm}/${yyyyBE}`;
+            }
+
+            // --- ก่อน submit: แปลง dd/mm/yyyy(พ.ศ.) -> yyyy-mm-dd(ค.ศ.) ---
+            const form = document.getElementById("filterForm");
+            if (form) {
+                form.addEventListener("submit", () => {
+                    document.querySelectorAll("#filterForm .date-th").forEach(input => {
+                        const v = (input.value || '').trim();
+                        const m = v.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+                        if (m) {
+                            let dd = m[1],
+                                mm = m[2],
+                                y = parseInt(m[3], 10);
+                            if (y > 2400) y -= 543; // พ.ศ. -> ค.ศ.
+                            input.value = `${y}-${mm}-${dd}`; // ส่งรูปแบบที่ backend/Query ถนัด
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+
+
 </x-app-layout>

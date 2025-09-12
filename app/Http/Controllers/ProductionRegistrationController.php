@@ -98,6 +98,7 @@ class ProductionRegistrationController extends Controller
      * Store a newly created resource in storage.
      */
 
+
     public function store(Request $request)
     {
         try {
@@ -136,13 +137,7 @@ class ProductionRegistrationController extends Controller
                 'document' => 'nullable|file|mimes:pdf,doc,docx|max:5120', // ตัวอย่าง: อนุญาตเฉพาะ PDF, DOC, DOCX ขนาดไม่เกิน 5MB
                 'progress' => 'nullable|numeric|min:0|max:100',
                 'sub_progress' => 'nullable|numeric|min:0|max:100',
-                // 'new_or_old'
-                // 'step'
-                // 'status'
-                // 'is_active'
-                // 'is_deleted'
-                // 'created_by'
-                // 'updated_by'
+
             ]);
 
             // 2. Map ข้อมูลและกำหนดค่าเริ่มต้น/เพิ่มเติม
@@ -173,17 +168,11 @@ class ProductionRegistrationController extends Controller
                 $dataToSave['document'] = $documentPath;
             }
 
-            // 3. สร้าง Record ใหม่ในฐานข้อมูล
-            $productionRegistration = ProductionRegistration::create($dataToSave);
-
-            // 4. ส่งกลับ Response หรือ Redirect ไปยังหน้าอื่น
-            // return redirect()->route('createproduct.index')->with('success', 'บันทึกข้อมูลการขึ้นทะเบียนผลิตเรียบร้อยแล้ว!');
+            ProductionRegistration::create($dataToSave);
             return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จ');
         } catch (ValidationException $e) {
-            // หากเกิดข้อผิดพลาดในการ Validation
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
-            // หากเกิดข้อผิดพลาดอื่นๆ
             return redirect()
                 ->back()
                 ->with('error', 'เกิดข้อผิดพลาดในการบันทึกข้อมูล: ' . $e->getMessage())
@@ -207,19 +196,31 @@ class ProductionRegistrationController extends Controller
      */
     public function edit(ProductionRegistration $productionRegistration)
     {
-        // โหลดข้อมูลบริษัททั้งหมดเพื่อใช้ใน dropdown (ถ้ามี)
         $companies = Company::all();
-        $product = $productionRegistration;
-        return view('production_registrations.edit', compact('product', 'companies'));
-        // return view('production_registrations.edit', compact('productionRegistration'));
+        // ถ้าต้องการใช้ชื่อ $import ใน Blade ก็ map เพิ่ม
+        $import = $productionRegistration;
+        return view('production_registrations.edit', compact('import', 'companies'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ProductionRegistration $productionRegistration)
+    public function update(Request $request, ProductionRegistration $import)
     {
+
+        // dd( $request->all());
         try {
+            $request->merge([
+                'expired_license_date'  => $this->convertDate($request->input('expired_license_date')),
+                'registration_expiry_date'  => $this->convertDate($request->input('registration_expiry_date')),
+                'production_license_expiry' => $this->convertDate($request->input('production_license_expiry')),
+                'possession_form_expiry'    => $this->convertDate($request->input('possession_form_expiry')),
+                'application_received_date' => $this->convertDate($request->input('application_received_date')),
+                'expired_at'                => $this->convertDate($request->input('expired_at')),
+                'date_submit_request'       => $this->convertDate($request->input('date_submit_request')),
+                'date_request_phase_3'      => $this->convertDate($request->input('date_request_phase_3')),
+            ]);
+
             // 1. Validation ข้อมูลจากฟอร์ม
             $validatedData = $request->validate([
                 'company_id' => 'nullable|exists:companies,id',
@@ -241,14 +242,14 @@ class ProductionRegistrationController extends Controller
                 'plant' => 'nullable|string|max:255',
                 'pests' => 'nullable|string|max:255',
                 'production_license_number' => 'nullable|string|max:255',
-                'production_license_expiry' => 'nullable|date',
+                'production_license_expiry' => 'nullable',
                 'production_license_quantity' => 'nullable|string|max:255',
                 'possession_form_wo2' => 'nullable|string|max:255',
-                'possession_form_expiry' => 'nullable|date',
+                'possession_form_expiry' => 'nullable|string',
                 'packaging_size_details' => 'nullable|string|max:1000',
                 'registration_number_pass' => 'nullable|string|max:255',
                 'registration_expiry_date' => 'nullable|date',
-                'expired_at' => 'nullable|date',
+                'expired_at' => 'nullable|string',
                 'status_date' => 'nullable|string|max:255',
                 'remarks' => 'nullable|string|max:1000',
                 'image' => 'nullable|image|max:2048', // optional: 'image' if you want to allow changing image
@@ -260,14 +261,9 @@ class ProductionRegistrationController extends Controller
 
             // 2. Map ข้อมูลและกำหนดค่าเพิ่มเติม (คล้ายกับ Store แต่ไม่มี created_by)
             $dataToUpdate = $validatedData;
-
             // กำหนดค่าสำหรับ Checkbox หรือค่า default
             $dataToUpdate['new_or_old'] = $request->has('new_or_old') ? true : false;
             $dataToUpdate['is_active'] = $request->has('is_active') ? true : false;
-            // ไม่ต้อง update 'status', 'step' ถ้าฟอร์มไม่ได้ส่งมา หรือถ้ามี logic เฉพาะ
-            // $dataToUpdate['step'] = $request->input('step', $productionRegistration->step);
-            // $dataToUpdate['status'] = $request->input('status', $productionRegistration->status);
-
             // กำหนด updated_by โดยใช้ ID ของผู้ใช้งานที่ล็อกอินอยู่
             if (Auth::check()) {
                 $dataToUpdate['updated_by'] = Auth::id(); // หรือ Auth::user()->name หากต้องการชื่อ
@@ -275,12 +271,11 @@ class ProductionRegistrationController extends Controller
                 $dataToUpdate['updated_by'] = null;
             }
 
-            // การจัดการไฟล์ (Image และ Document)
             // ถ้ามีการอัปโหลดไฟล์ใหม่ ให้ลบไฟล์เก่าก่อน (ถ้ามี)
             if ($request->hasFile('image')) {
                 // ลบรูปเก่า (ถ้ามีและไม่ใช่ default image)
-                if ($productionRegistration->image && \Storage::disk('public')->exists($productionRegistration->image)) {
-                    \Storage::disk('public')->delete($productionRegistration->image);
+                if ($import->image && \Storage::disk('public')->exists($import->image)) {
+                    \Storage::disk('public')->delete($import->image);
                 }
                 $imagePath = $request->file('image')->store('production_images', 'public');
                 $dataToUpdate['image'] = $imagePath;
@@ -288,22 +283,25 @@ class ProductionRegistrationController extends Controller
 
             if ($request->hasFile('document')) {
                 // ลบเอกสารเก่า (ถ้ามี)
-                if ($productionRegistration->document && \Storage::disk('public')->exists($productionRegistration->document)) {
-                    \Storage::disk('public')->delete($productionRegistration->document);
+                if ($import->document && \Storage::disk('public')->exists($import->document)) {
+                    \Storage::disk('public')->delete($import->document);
                 }
                 $documentPath = $request->file('document')->store('production_documents', 'public');
                 $dataToUpdate['document'] = $documentPath;
             }
 
             // 3. อัปเดต Record ในฐานข้อมูล
-            $productionRegistration->update($dataToUpdate);
+            $import->update($dataToUpdate);
 
             // 4. ส่งกลับ Response หรือ Redirect ไปยังหน้าอื่น
             // return redirect()->route('production-registrations.index')->with('success', 'แก้ไขข้อมูลการขึ้นทะเบียนผลิตเรียบร้อยแล้ว!');
             return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จ');
-        } catch (ValidationException $e) {
-            return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
+            \Log::error("Error update product: " . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+                'request' => $request->all(), // ข้อมูลฟอร์มที่ส่งมา
+            ]);
+
             return redirect()->back()->with('error', 'เกิดข้อผิดพลาดในการแก้ไขข้อมูล: ' . $e->getMessage())->withInput();
         }
     }
@@ -347,5 +345,16 @@ class ProductionRegistrationController extends Controller
         }
 
         return back()->with('success', 'นำเข้าข้อมูลวัตถุอันตรายเรียบร้อยแล้ว!');
+    }
+
+    private function convertDate($value)
+    {
+        if (!$value) return null;
+        if (preg_match('#^\d{2}/\d{2}/\d{4}$#', $value)) {
+            [$dd, $mm, $yyyy] = explode('/', $value);
+            if ((int)$yyyy > 2400) $yyyy -= 543;
+            return sprintf('%04d-%02d-%02d', $yyyy, $mm, $dd);
+        }
+        return $value; // ปล่อยผ่านถ้าเป็น yyyy-mm-dd อยู่แล้ว
     }
 }

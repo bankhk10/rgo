@@ -10,7 +10,7 @@ class CreateChemicalRegistrationsTable extends Migration
     {
         Schema::create('chemical_registrations', function (Blueprint $table) {
             $table->id();
-            $table->integer('chemical_imports_id')->nullable(); // Foreign key to chemical_imports table
+            $table->integer('chemical_imports_id')->nullable(); // Foreign key to chemical_imports table not
             $table->string('registration_number')->nullable(); // เลขที่ทะเบียนผลิต
             $table->string('registration_number_pass')->nullable(); // เลขที่ทะเบียนผลิตที่ผ่าน
             $table->date('registration_expiry_date')->nullable(); // วันหมดอายุทะเบียน

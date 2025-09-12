@@ -60,14 +60,12 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/new/productall/{newregi}', [ChemicalRegistrationController::class, 'updateAll'])->name('newregis.updateall');
     Route::get('/new/productall/{newregi}/show', [ChemicalRegistrationController::class, 'showAll'])->name('newregis.showall');
 
-
-
-
     Route::get('/create/product', [ProductionRegistrationController::class, 'index'])->name('createproduct.index');
     Route::get('/insert/product', [ProductionRegistrationController::class, 'create'])->name('createproduct.create');
     Route::post('/store/product', [ProductionRegistrationController::class, 'store'])->name('createproduct.store');
     Route::get('/edit/product/{productionRegistration}', [ProductionRegistrationController::class, 'edit'])->name('createproduct.edit');
-    Route::put('/update/product/{productionRegistration}', [ProductionRegistrationController::class, 'update'])->name('createproduct.update');
+    // Route::put('/import/{import}', [ProductionRegistrationController::class, 'update'])->name('createproduct.update');
+    Route::put('/import2/{import}', [ProductionRegistrationController::class, 'update'])->name('createproduct.update');
     Route::get('/show/product/{productionRegistration}', [ProductionRegistrationController::class, 'show'])->name('createproduct.show');
     Route::delete('/createproducts/{id}', [ProductionRegistrationController::class, 'destroy'])->name('createproduct.destroy');
 

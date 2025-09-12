@@ -67,7 +67,7 @@
             </div>
 
             <div class="flex flex-col sm:flex-row justify-between items-center mx-3 mb-2">
-                <form action="{{ route('createproduct.index') }}" method="GET"
+                <form id="filterForm" action="{{ route('createproduct.index') }}" method="GET"
                     class="flex flex-wrap items-end gap-2 mb-2">
                     <div class="relative flex-grow min-w-[280px]">
                         <label for="search_query" class="mx-3 text-base block text-gray-700 mb-1 mt-3">ค้นหาชื่อ</label>
@@ -82,21 +82,27 @@
                             placeholder="ชื่อวัตถุอันตราย /ผู้ขึ้นทะเบียน /เลขที่ทะเบียน"
                             value="{{ request('search') }}"
                             class="pl-10 pr-4 py-2 w-[500px] rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-600 transition duration-200 ease-in-out text-gray-700 shadow-sm" />
-                        {{-- class="pl-10 pr-4 py-2 w-96 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-600 transition duration-200 ease-in-out text-gray-700 shadow-sm" /> --}}
                     </div>
+                    {{-- วันที่เริ่ม --}}
                     <div class="flex-grow min-w-[180px]">
                         <label for="expiry_date_from"
                             class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันที่เริ่ม</label>
                         <input id="expiry_date_from"
-                            class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200 ease-in-out text-gray-500 text-base shadow-sm w-full"
-                            type="date" name="expiry_date_from" value="{{ request('expiry_date_from') }}" />
+                            class="date-th px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200 ease-in-out text-gray-500 text-base shadow-sm w-full"
+                            type="text" name="expiry_date_from" value="{{ request('expiry_date_from') }}"
+                            placeholder="วว/ดด/ปปปป" autocomplete="off" autocorrect="off" autocapitalize="off"
+                            spellcheck="false" />
                     </div>
+
+                    {{-- วันที่สิ้นสุด --}}
                     <div class="flex-grow min-w-[180px]">
                         <label for="expiry_date_to"
                             class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันที่สิ้นสุด</label>
                         <input id="expiry_date_to"
-                            class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200 ease-in-out text-gray-500 text-base shadow-sm w-full"
-                            type="date" name="expiry_date_to" value="{{ request('expiry_date_to') }}" />
+                            class="date-th px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200 ease-in-out text-gray-500 text-base shadow-sm w-full"
+                            type="text" name="expiry_date_to" value="{{ request('expiry_date_to') }}"
+                            placeholder="วว/ดด/ปปปป" autocomplete="off" autocorrect="off" autocapitalize="off"
+                            spellcheck="false" />
                     </div>
                     <div class="flex gap-3">
                         <button type="submit"
@@ -137,7 +143,7 @@
                                 <th class="py-4 px-8 rounded-tl-2xl">ลำดับ</th>
                                 {{-- <th class="py-4 px-6">ชื่อการค้า</th> --}}
                                 <th class="py-4 px-6">ชื่อวัตถุอันตราย (ไทย)</th>
-                                <th class="py-4 px-6">ชื่อวัตถุอันตราย (อังกฤษ)	</th>
+                                <th class="py-4 px-6">ชื่อวัตถุอันตราย (อังกฤษ) </th>
                                 {{-- <th class="py-4 px-6">ชื่อวัตถุอันตราย (อังกฤษ)</th> --}}
                                 <th class="py-4 px-6 text-center">ผู้ขึ้นทะเบียน</th>
                                 {{-- <th class="py-4 px-6 text-center">ตัวย่อ</th> --}}
@@ -270,4 +276,82 @@
         }
         document.getElementById('menu-manufacture')?.classList.add('side-menu--active');
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/th.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- helper แปลงค่าเริ่มต้น (yyyy-mm-dd -> dd/mm/yyyy(พ.ศ.)) ---
+            function adIsoToBeDisplay(isoStr) {
+                if (!isoStr || !/^\d{4}-\d{2}-\d{2}$/.test(isoStr)) return null;
+                const [y, m, d] = isoStr.split('-').map(n => parseInt(n, 10));
+                const be = y + 543;
+                return String(d).padStart(2, '0') + '/' + String(m).padStart(2, '0') + '/' + be;
+            }
+
+            // --- ถ้า request ส่งมาเป็น ค.ศ. iso ให้แปลงมาแสดงเป็น พ.ศ. ---
+            ['expiry_date_from', 'expiry_date_to'].forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                const v = (el.value || '').trim();
+                const beDisplay = adIsoToBeDisplay(v);
+                if (beDisplay) el.value = beDisplay; // แสดงเป็น พ.ศ. dd/mm/yyyy
+            });
+
+            // --- ติดตั้ง flatpickr (ไทย + รับพิมพ์/แปะได้) ---
+            flatpickr(".date-th", {
+                allowInput: true,
+                locale: "th",
+                dateFormat: "d/m/Y",
+                parseDate: (datestr, format) => {
+                    if (!datestr) return null;
+                    // รับ dd/mm/yyyy (พ.ศ./ค.ศ.)
+                    const m = datestr.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+                    if (m) {
+                        let dd = parseInt(m[1], 10);
+                        let mm = parseInt(m[2], 10);
+                        let yyyy = parseInt(m[3], 10);
+                        if (yyyy > 2400) yyyy -= 543; // พ.ศ. -> ค.ศ.
+                        return new Date(yyyy, mm - 1, dd);
+                    }
+                    // เผื่อวางเป็น yyyy-mm-dd
+                    const n = datestr.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+                    if (n) return new Date(parseInt(n[1], 10), parseInt(n[2], 10) - 1, parseInt(n[3],
+                        10));
+                    return flatpickr.parseDate(datestr, format);
+                },
+                onReady: (selectedDates, dateStr, instance) => showBE(instance),
+                onChange: (selectedDates, dateStr, instance) => showBE(instance),
+                onOpen: (selectedDates, dateStr, instance) => showBE(instance)
+            });
+
+            function showBE(instance) {
+                const sel = instance.selectedDates[0];
+                if (!sel) return;
+                const dd = String(sel.getDate()).padStart(2, "0");
+                const mm = String(sel.getMonth() + 1).padStart(2, "0");
+                const yyyyBE = sel.getFullYear() + 543;
+                instance.input.value = `${dd}/${mm}/${yyyyBE}`;
+            }
+
+            // --- ก่อน submit ฟอร์ม: แปลง dd/mm/yyyy(พ.ศ.) -> yyyy-mm-dd(ค.ศ.)
+            const form = document.getElementById("filterForm");
+            if (form) {
+                form.addEventListener("submit", () => {
+                    form.querySelectorAll(".date-th").forEach(input => {
+                        const v = (input.value || '').trim();
+                        const m = v.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+                        if (m) {
+                            let dd = m[1],
+                                mm = m[2],
+                                y = parseInt(m[3], 10);
+                            if (y > 2400) y -= 543; // พ.ศ. -> ค.ศ.
+                            input.value = `${y}-${mm}-${dd}`;
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+
 </x-app-layout>
