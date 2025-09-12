@@ -1055,6 +1055,7 @@
         function toggleInput(stepNumber, checkboxIndex) {
             const checkbox = document.getElementById(`substep_${stepNumber}_${checkboxIndex}`);
             const radioContainer = document.getElementById(`radio_container_${stepNumber}_${checkboxIndex}`);
+            const remarkContainer = document.getElementById(`remark_container_${stepNumber}_${checkboxIndex}`);
 
             if (!checkbox) return;
 
