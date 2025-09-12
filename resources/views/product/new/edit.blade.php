@@ -891,11 +891,12 @@
                                                     </h5>
                                                     <div class="space-y-2 pl-4">
                                                         @foreach ($subItems as $label)
-                                                            @php
-                                                                $record = $savedSubSteps[$checkboxIndex] ?? null;
-                                                                $isChecked = $record && $record->checked_at;
-                                                                $note = $record->created_by ?? '';
-                                                            @endphp
+                                                                @php
+                                                                    $record = $savedSubSteps[$checkboxIndex] ?? null;
+                                                                    $isChecked = $record && $record->checked_at;
+                                                                    $note = $record->created_by ?? '';
+                                                                    $remark = $record->remark ?? '';
+                                                                @endphp
                                                             <div class="flex flex-col gap-1">
                                                                 <div class="flex items-center space-x-3">
                                                                     <input type="checkbox" name="sub_steps[]"
@@ -934,6 +935,17 @@
                                                                         </label>
                                                                     </div>
                                                                 @endif
+
+                                                                <div id="remark_container_{{ $stepNumber }}_{{ $checkboxIndex }}"
+                                                                    class="ml-6 mt-2"
+                                                                    style="{{ $isChecked ? '' : 'display: none;' }}">
+                                                                    <input type="text"
+                                                                        name="sub_step_remarks[{{ $checkboxIndex }}]"
+                                                                        value="{{ $remark }}"
+                                                                        placeholder="หมายเหตุ"
+                                                                        class="w-full p-2 border rounded-md"
+                                                                        {{ !$isEditable ? 'disabled' : '' }}>
+                                                                </div>
                                                             </div>
                                                             @php $checkboxIndex++; @endphp
                                                         @endforeach
@@ -1050,20 +1062,25 @@
         function toggleInput(stepNumber, checkboxIndex) {
             const checkbox = document.getElementById(`substep_${stepNumber}_${checkboxIndex}`);
             const radioContainer = document.getElementById(`radio_container_${stepNumber}_${checkboxIndex}`);
+            const remarkContainer = document.getElementById(`remark_container_${stepNumber}_${checkboxIndex}`);
 
-            if (checkbox && radioContainer) {
-                if (checkbox.checked) {
-                    radioContainer.style.display = ''; // Show the div
+            if (!checkbox) return;
 
-                    // Restore the last selected value, or default to 'ไม่มี'
+            if (checkbox.checked) {
+                if (radioContainer) {
+                    radioContainer.style.display = '';
+
                     const savedValue = lastSelectedRadioValue[`${stepNumber}_${checkboxIndex}`] || 'ไม่มี';
-
                     const radios = radioContainer.querySelectorAll('input[type="radio"]');
                     radios.forEach(radio => {
                         radio.checked = (radio.value === savedValue);
                     });
-                } else {
-                    // When unchecked, save the currently selected radio button value
+                }
+                if (remarkContainer) {
+                    remarkContainer.style.display = '';
+                }
+            } else {
+                if (radioContainer) {
                     const currentRadios = radioContainer.querySelectorAll('input[type="radio"]');
                     currentRadios.forEach(radio => {
                         if (radio.checked) {
@@ -1071,9 +1088,13 @@
                         }
                     });
 
-                    radioContainer.style.display = 'none'; // Hide the div
-                    // Optionally, uncheck all radio buttons when the checkbox is unchecked to clear its state
-                    currentRadios.forEach(radio => radio.checked = false);
+                    radioContainer.style.display = 'none';
+                    currentRadios.forEach(radio => (radio.checked = false));
+                }
+                if (remarkContainer) {
+                    const input = remarkContainer.querySelector('input');
+                    if (input) input.value = '';
+                    remarkContainer.style.display = 'none';
                 }
             }
         }

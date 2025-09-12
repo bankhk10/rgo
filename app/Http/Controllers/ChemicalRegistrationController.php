@@ -613,6 +613,7 @@ class ChemicalRegistrationController extends Controller
         $stepNumber = (int) $request->input('step_number');
         $selectedIndexes = $request->input('sub_steps', []);
         $notes = $request->input('sub_step_notes', []);
+        $remarks = $request->input('sub_step_remarks', []);
         $show_step_number = $request->input('progress');
         $drug->progress = $show_step_number;
         $drug->save();
@@ -743,6 +744,7 @@ class ChemicalRegistrationController extends Controller
                             'department' => $department,
                             'checked_at' => in_array($index, $selectedIndexes) ? now() : null,
                             'created_by' => $notes[$index] ?? null,
+                            'remark' => $remarks[$index] ?? null,
                         ]
                     );
                 }

@@ -441,6 +441,7 @@
                                                                     $record = $savedSubSteps[$checkboxIndex] ?? null;
                                                                     $isChecked = $record && $record->checked_at;
                                                                     $note = $record->created_by ?? '';
+                                                                    $remark = $record->remark ?? '';
                                                                 @endphp
                                                                 <div class="flex flex-col gap-1">
                                                                     <div class="flex items-center space-x-3">
@@ -481,6 +482,13 @@
                                                                             </label>
                                                                         </div>
                                                                     @endif
+
+                                                                    <div id="remark_container_{{ $stepNumber }}_{{ $checkboxIndex }}"
+                                                                        class="ml-6 mt-2"
+                                                                        style="{{ $isChecked ? '' : 'display: none;' }}">
+                                                                        <input type="text" value="{{ $remark }}" placeholder="หมายเหตุ"
+                                                                            class="w-full p-2 border rounded-md" disabled>
+                                                                    </div>
                                                                 </div>
                                                                 @php $checkboxIndex++; @endphp
                                                             @endforeach
