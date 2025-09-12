@@ -216,12 +216,11 @@
                                         ],
                                         'ฝ่ายขาย' => ['รายชื่อผู้ขอขึ้นทะเบียน', 'ชื่อการค้า', 'Packing'],
                                         'วิจัยและพัฒนา' => ['เตรียมข้อมูลผลิตตัวอย่าง'],
-                                        'แผนกวิชาการ' => ['แผนการทดลอง'],
+                                        'แผนกวิชาการ' => ['แผนการทดลอง', 'หนังสือขอยกเว้น PHI', 'แผน PHI'],
                                         'แผนกทะเบียน' => [
                                             'ตรวจสอบเอกสารขึ้นทะเบียน',
                                             'ตรวจชื่อการค้า',
                                             'ขอใบอนุญาตนำเข้าตัวอย่าง',
-                                            'อื่นๆ',
                                         ],
                                     ],
                                 ],
@@ -441,49 +440,47 @@
                                                                 @php
                                                                     $record = $savedSubSteps[$checkboxIndex] ?? null;
                                                                     $isChecked = $record && $record->checked_at;
-                                                                    // $checkplan = $record->note ?? '';
+                                                                    $note = $record->created_by ?? '';
+                                                                    $remark = $record->remark ?? '';
                                                                 @endphp
-                                                                <div class="flex flex-col gap-1">
-                                                                    <div class="flex items-center space-x-3">
-                                                                        <input disabled type="checkbox"
-                                                                            name="sub_steps[]"
-                                                                            id="substep_{{ $stepNumber }}_{{ $checkboxIndex }}"
-                                                                            value="{{ $checkboxIndex }}"
-                                                                            {{ $isChecked ? 'checked' : '' }}
-                                                                            {{ !$isEditable || (!auth()->user()->hasRole('admin') && !auth()->user()->hasRole('manager') && $dept !== $mappedUserDept) }}
-                                                                            class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-                                                                            onchange="toggleInput({{ $stepNumber }}, {{ $checkboxIndex }})">
-                                                                        <label
-                                                                            for="substep_{{ $stepNumber }}_{{ $checkboxIndex }}"
-                                                                            class="text-sm text-gray-800">{{ $label }}</label>
-                                                                    </div>
+                                                                <div class="flex flex-wrap items-center gap-3">
+                                                                    <input disabled type="checkbox"
+                                                                        name="sub_steps[]"
+                                                                        id="substep_{{ $stepNumber }}_{{ $checkboxIndex }}"
+                                                                        value="{{ $checkboxIndex }}"
+                                                                        {{ $isChecked ? 'checked' : '' }}
+                                                                        {{ !$isEditable || (!auth()->user()->hasRole('admin') && !auth()->user()->hasRole('manager') && $dept !== $mappedUserDept) }}
+                                                                        class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                                                                    <label for="substep_{{ $stepNumber }}_{{ $checkboxIndex }}"
+                                                                        class="text-sm text-gray-800">{{ $label }}</label>
 
-                                                                    @if ($label === 'แผนการทดลอง')
+                                                                    @if (in_array($label, ['แผนการทดลอง', 'หนังสือขอยกเว้น PHI', 'แผน PHI']))
                                                                         <div id="radio_container_{{ $stepNumber }}_{{ $checkboxIndex }}"
-                                                                            class="ml-6 mt-2 space-x-4"
+                                                                            class="flex items-center space-x-4"
                                                                             style="{{ $isChecked ? '' : 'display: none;' }}">
                                                                             <label class="inline-flex items-center">
                                                                                 <input disabled type="radio"
                                                                                     class="form-radio text-green-500 w-5 h-5"
                                                                                     name="sub_step_notes[{{ $checkboxIndex }}]"
-                                                                                    value="no"
-                                                                                    {{ $checkplan == 'ไม่มี' ? 'checked' : '' }}
+                                                                                    value="ไม่มี"
+                                                                                    {{ $note == 'ไม่มี' ? 'checked' : '' }}
                                                                                     {{ !$isEditable ? 'disabled' : '' }}>
-                                                                                <span
-                                                                                    class="ml-2 text-gray-800">ไม่มี</span>
+                                                                                <span class="ml-2 text-gray-800">ไม่มี</span>
                                                                             </label>
                                                                             <label class="inline-flex items-center">
-                                                                                <input type="radio"
+                                                                                <input disabled type="radio"
                                                                                     class="form-radio text-yellow-500 w-5 h-5"
                                                                                     name="sub_step_notes[{{ $checkboxIndex }}]"
-                                                                                    value="yes"
-                                                                                    {{ $checkplan == 'มี' ? 'checked' : '' }}
+                                                                                    value="มี"
+                                                                                    {{ $note == 'มี' ? 'checked' : '' }}
                                                                                     {{ !$isEditable ? 'disabled' : '' }}>
-                                                                                <span
-                                                                                    class="ml-2 text-gray-800">มี</span>
+                                                                                <span class="ml-2 text-gray-800">มี</span>
                                                                             </label>
                                                                         </div>
                                                                     @endif
+
+                                                                    <input type="text" value="{{ $remark }}" placeholder="หมายเหตุ"
+                                                                        class="p-2 border rounded-md flex-1 w-48" disabled>
                                                                 </div>
                                                                 @php $checkboxIndex++; @endphp
                                                             @endforeach
