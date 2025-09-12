@@ -17,7 +17,7 @@
                 <div class="grid grid-cols-2 md:grid-cols-2 gap-6 mt-4">
 
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลขที่ทะเบียน</label>
+                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลขที่ทะเบียนผลิต</label>
                         <input type="text" id="registration_number" name="registration_number"
                             value="{{ old('registration_number', $import->registration_number) }}"
                             placeholder="เช่น 123-2568"
