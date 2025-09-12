@@ -84,12 +84,11 @@ class ChemicalRegistrationController extends Controller
                 'จัดซื้อต่างประเทศ' => ['ทะเบียน', 'ใบอนุญาตในประเทศผู้ผลิต', 'เอกสารอนุญาตอื่นๆ'],
                 'ฝ่ายขาย' => ['รายชื่อผู้ขอขึ้นทะเบียน', 'ชื่อการค้า', 'Packing'],
                 'วิจัยและพัฒนา' => ['เตรียมข้อมูลผลิตตัวอย่าง'],
-                'แผนกวิชาการ' => ['แผนการทดลอง'],
+                'แผนกวิชาการ' => ['แผนการทดลอง', 'หนังสือขอยกเว้น PHI', 'แผน PHI'],
                 'แผนกทะเบียน' => [
                     'ตรวจสอบเอกสารขึ้นทะเบียน',
                     'ตรวจชื่อการค้า',
                     'ขอใบอนุญาตนำเข้าตัวอย่าง',
-                    'อื่นๆ',
                 ],
             ],
         ];
@@ -149,7 +148,7 @@ class ChemicalRegistrationController extends Controller
                 ->where('step_number', 1)
                 ->where('sub_step_index', $planIndex)
                 ->first();
-            $isPlanNone = $planNoteRecord && $planNoteRecord->created_by === 'no';
+            $isPlanNone = $planNoteRecord && $planNoteRecord->created_by === 'ไม่มี';
             $product->isPlanNone = $isPlanNone;
         }
 
@@ -257,12 +256,11 @@ class ChemicalRegistrationController extends Controller
                     'จัดซื้อต่างประเทศ' => ['ทะเบียน', 'ใบอนุญาตในประเทศผู้ผลิต', 'เอกสารอนุญาตอื่นๆ'],
                     'ฝ่ายขาย' => ['รายชื่อผู้ขอขึ้นทะเบียน', 'ชื่อการค้า', 'Packing'],
                     'วิจัยและพัฒนา' => ['เตรียมข้อมูลผลิตตัวอย่าง'],
-                    'แผนกวิชาการ' => ['แผนการทดลอง'],
+                    'แผนกวิชาการ' => ['แผนการทดลอง', 'หนังสือขอยกเว้น PHI', 'แผน PHI'],
                     'แผนกทะเบียน' => [
                         'ตรวจสอบเอกสารขึ้นทะเบียน',
                         'ตรวจชื่อการค้า',
                         'ขอใบอนุญาตนำเข้าตัวอย่าง',
-                        'อื่นๆ',
                     ],
                 ],
             ];
@@ -615,6 +613,7 @@ class ChemicalRegistrationController extends Controller
         $stepNumber = (int) $request->input('step_number');
         $selectedIndexes = $request->input('sub_steps', []);
         $notes = $request->input('sub_step_notes', []);
+        $remarks = $request->input('sub_step_remarks', []);
         $show_step_number = $request->input('progress');
         $drug->progress = $show_step_number;
         $drug->save();
@@ -625,12 +624,11 @@ class ChemicalRegistrationController extends Controller
                 'จัดซื้อต่างประเทศ' => ['ทะเบียน', 'ใบอนุญาตในประเทศผู้ผลิต', 'เอกสารอนุญาตอื่นๆ'],
                 'ฝ่ายขาย' => ['รายชื่อผู้ขอขึ้นทะเบียน', 'ชื่อการค้า', 'Packing'],
                 'วิจัยและพัฒนา' => ['เตรียมข้อมูลผลิตตัวอย่าง'],
-                'แผนกวิชาการ' => ['แผนการทดลอง'],
+                'แผนกวิชาการ' => ['แผนการทดลอง', 'หนังสือขอยกเว้น PHI', 'แผน PHI'],
                 'แผนกทะเบียน' => [
                     'ตรวจสอบเอกสารขึ้นทะเบียน',
                     'ตรวจชื่อการค้า',
                     'ขอใบอนุญาตนำเข้าตัวอย่าง',
-                    'อื่นๆ',
                 ],
             ],
             2 => [
@@ -720,7 +718,7 @@ class ChemicalRegistrationController extends Controller
             ->where('step_number', 1)
             ->where('sub_step_index', $planIndex)
             ->first();
-        $isPlanNone = $planNoteRecord && $planNoteRecord->created_by === 'no';
+        $isPlanNone = $planNoteRecord && $planNoteRecord->created_by === 'ไม่มี';
 
         $stepStructure = $rawStructure[$stepNumber] ?? [];
         $flatItems = [];
@@ -746,6 +744,7 @@ class ChemicalRegistrationController extends Controller
                             'department' => $department,
                             'checked_at' => in_array($index, $selectedIndexes) ? now() : null,
                             'created_by' => $notes[$index] ?? null,
+                            'remark' => $remarks[$index] ?? null,
                         ]
                     );
                 }
