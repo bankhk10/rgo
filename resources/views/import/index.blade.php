@@ -146,7 +146,7 @@
                                 <th class="py-4 px-4">ชื่อวัตถุอันตราย (ไทย)</th>
                                 <th class="py-4 px-4">ชื่อวัตถุอันตราย (อังกฤษ)</th>
                                 <th class="py-4 px-4 text-center">ผู้นำเข้า</th>
-                                <th class="py-4 px-4 text-center">ตัวย่อ</th>
+                                {{-- <th class="py-4 px-4 text-center">ตัวย่อ</th> --}}
                                 <th class="py-4 px-8">เลขที่ทะเบียน</th>
                                 <th class="py-4 px-8">วันหมดอายุ</th>
                                 <th class="py-4 px-4 text-center">สถานะ</th>
@@ -163,7 +163,7 @@
                                         <td class="py-4 px-4">{{ $import->chemical_name_th }}</td>
                                         <td class="py-4 px-4">{{ $import->chemical_name_en }}</td>
                                         <td class="py-4 px-4">{{ $import->importerCompany->full_name ?? '' }}</td>
-                                        <td class="py-4 px-4 text-center">{{ $import->importerCompany->name ?? '' }}</td>
+                                        {{-- <td class="py-4 px-4 text-center">{{ $import->importerCompany->name ?? '' }}</td> --}}
                                         <td class="py-4 px-8">{{ $import->registration_number }}</td>
                                         <td class="py-4 px-8">
                                             @if ($import->expired_license_date)
