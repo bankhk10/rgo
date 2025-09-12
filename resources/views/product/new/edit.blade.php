@@ -894,7 +894,7 @@
                                                             @php
                                                                 $record = $savedSubSteps[$checkboxIndex] ?? null;
                                                                 $isChecked = $record && $record->checked_at;
-                                                                $note = $record->note ?? '';
+                                                                $note = $record->created_by ?? '';
                                                             @endphp
                                                             <div class="flex flex-col gap-1">
                                                                 <div class="flex items-center space-x-3">
@@ -918,7 +918,7 @@
                                                                             <input type="radio"
                                                                                 class="form-radio text-green-500 w-5 h-5"
                                                                                 name="sub_step_notes[{{ $checkboxIndex }}]"
-                                                                                value="no"
+                                                                                value="ไม่มี"
                                                                                 {{ $note == 'ไม่มี' ? 'checked' : '' }}
                                                                                 {{ !$isEditable ? 'disabled' : '' }}>
                                                                             <span class="ml-2 text-gray-800">ไม่มี</span>
@@ -927,7 +927,7 @@
                                                                             <input type="radio"
                                                                                 class="form-radio text-yellow-500 w-5 h-5"
                                                                                 name="sub_step_notes[{{ $checkboxIndex }}]"
-                                                                                value="yes"
+                                                                                value="มี"
                                                                                 {{ $note == 'มี' ? 'checked' : '' }}
                                                                                 {{ !$isEditable ? 'disabled' : '' }}>
                                                                             <span class="ml-2 text-gray-800">มี</span>
@@ -1055,8 +1055,8 @@
                 if (checkbox.checked) {
                     radioContainer.style.display = ''; // Show the div
 
-                    // Restore the last selected value, or default to 'no' (ไม่มี)
-                    const savedValue = lastSelectedRadioValue[`${stepNumber}_${checkboxIndex}`] || 'no';
+                    // Restore the last selected value, or default to 'ไม่มี'
+                    const savedValue = lastSelectedRadioValue[`${stepNumber}_${checkboxIndex}`] || 'ไม่มี';
 
                     const radios = radioContainer.querySelectorAll('input[type="radio"]');
                     radios.forEach(radio => {
