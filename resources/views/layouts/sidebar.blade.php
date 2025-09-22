@@ -113,7 +113,7 @@
                 <li>
                     <a href="{{ route('index.import_data') }}" class="side-menu" id="menu-users">
                         <div class="side-menu__icon"><i data-lucide="import"></i></div>
-                        <div class="side-menu__title">นำเข้าทะเบียนผลิต</div>
+                        <div class="side-menu__title">อัพโหลดทะเบียนผลิต</div>
                     </a>
                 </li>
             @endcanany
@@ -121,7 +121,7 @@
                 <li>
                     <a href="{{ route('chemical_imports.import.form') }}" class="side-menu" id="menu-users">
                         <div class="side-menu__icon"><i data-lucide="import"></i></div>
-                        <div class="side-menu__title">นำเข้าวัตถุดิบ</div>
+                        <div class="side-menu__title">อัพโหลดทะเบียนนำเข้า</div>
                     </a>
                 </li>
             @endcanany

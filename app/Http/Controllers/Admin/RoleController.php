@@ -57,8 +57,8 @@ class RoleController extends Controller
             'RegisterAll' => 'ทะเบียนสินค้าทั้งหมด',
             'RegisterNew' => 'ขึ้นทะเบียนใหม่',
              'Company' => 'บริษัท',
-            'import_data_manufacture' => 'นำเข้าทะเบียนผลิต',
-            'import_data_staple' => 'นำเข้าวัตถุอันตราย',
+            'import_data_manufacture' => 'อัพโหลดทะเบียนผลิต',
+            'import_data_staple' => 'อัพโหลดทะเบียนนำเข้า',
         ];
 
         $menus = [];
