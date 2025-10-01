@@ -217,7 +217,7 @@
                 {{-- วันหมดอายุใบอนุญาตเดิม --}}
                 <div>
                     <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันหมดอายุใบอนุญาตเดิม</label>
-                    <p class="w-full p-3 border rounded-full bg-gray-100 text-gray-700">{{ $product->expired_at }}</p>
+                    <p class="w-full p-3 border rounded-full bg-gray-100 text-gray-700">{{ $product->expired_at ?? '-' }}</p>
                 </div>
 
                 {{-- ใบแจ้งครอบครอง วอ.2 --}}
@@ -229,7 +229,7 @@
                 {{-- วันหมดอายุใบแจ้งครอบครอง วอ.2 --}}
                 <div>
                     <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันหมดอายุใบแจ้งครอบครอง วอ.2</label>
-                    <p class="w-full p-3 border rounded-full bg-gray-100 text-gray-700">{{ $product->possession_form_expiry }}</p>
+                    <p class="w-full p-3 border rounded-full bg-gray-100 text-gray-700">{{ $product->possession_form_expiry ?? '-' }}</p>
                 </div>
 
                 {{-- รายละเอียดขนาดบรรจุ --}}

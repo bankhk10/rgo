@@ -46,7 +46,7 @@
                             <span class="text-red-500"> *</span>
                         </label>
                         <div class="dropdown" id="companyDropdown">
-                            <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="companyBtn">
+                            <div style="height: 50px;" class="text-gray-700 dropdown-btn" id="companyBtn">
                                 @php
                                     $selectedCompanyId = old('company_id', $import->company_id);
                                     $companyName =
@@ -55,7 +55,7 @@
                                 {{ $companyName }}
                             </div>
                             <div class="dropdown-list" id="companyList">
-                                <div class="dropdown-item text-gray-500" data-value="">-- เลือก --</div>
+                                <div class="dropdown-item text-gray-700" data-value="">-- เลือก --</div>
                                 @foreach ($companies as $company)
                                     @if ($company->type == 1)
                                         <div class="dropdown-item" data-value="{{ $company->id }}">
