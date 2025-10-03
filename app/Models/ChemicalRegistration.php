@@ -66,6 +66,7 @@ class ChemicalRegistration extends Model
         'plant',                // พืช
         'pests',                // ศัตรูพืช
         'quantity',             // ปริมาณ
+        'created_at',             
     ];
 
     // Optional: สำหรับวันที่ที่เป็น Carbon instance เช่น soft delete, timestamps

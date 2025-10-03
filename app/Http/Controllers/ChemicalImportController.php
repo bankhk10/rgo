@@ -21,6 +21,7 @@ class ChemicalImportController extends Controller
      */
     public function index(Request $request)
     {
+
         $query = ChemicalImport::query();
         $query->with('company');
 

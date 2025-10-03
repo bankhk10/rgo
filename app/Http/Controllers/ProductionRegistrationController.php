@@ -19,6 +19,7 @@ class ProductionRegistrationController extends Controller
 
     public function index(Request $request)
     {
+
         $query = ProductionRegistration::query();
         $query->with('company');
 

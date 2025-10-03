@@ -50,6 +50,7 @@ class ChemicalImport extends Model
         'sub_progress',
         'created_by',
         'updated_by',
+        'created_at',      
     ];
 
     protected $casts = [

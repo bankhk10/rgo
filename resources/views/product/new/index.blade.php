@@ -105,8 +105,10 @@
                         <input id="expiry_date_from"
                             class="date-th px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200 ease-in-out text-gray-500 text-base shadow-sm w-full"
                             type="text" name="expiry_date_from" value="{{ request('expiry_date_from') }}"
-                            placeholder="วว/ดด/ปปปป" autocomplete="off" />
+                            placeholder="วว/ดด/ปปปป" autocomplete="off" autocorrect="off" autocapitalize="off"
+                            spellcheck="false" />
                     </div>
+
                     {{-- วันที่สิ้นสุด --}}
                     <div class="flex-grow min-w-[180px]">
                         <label for="expiry_date_to"
@@ -114,8 +116,10 @@
                         <input id="expiry_date_to"
                             class="date-th px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200 ease-in-out text-gray-500 text-base shadow-sm w-full"
                             type="text" name="expiry_date_to" value="{{ request('expiry_date_to') }}"
-                            placeholder="วว/ดด/ปปปป" autocomplete="off" />
+                            placeholder="วว/ดด/ปปปป" autocomplete="off" autocorrect="off" autocapitalize="off"
+                            spellcheck="false" />
                     </div>
+
                     <div class="flex gap-3 mt-10">
                         <button type="submit"
                             class="bg-gradient-to-r from-blue-500 to-blue-500 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold px-6 py-2 rounded-lg shadow-md transform hover:scale-105 transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
@@ -426,43 +430,58 @@
     <script src="https://npmcdn.com/flatpickr/dist/l10n/th.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // --- Helper: แปลง yyyy-mm-dd -> dd/mm/yyyy (พ.ศ.) เพื่อแสดงผลเริ่มต้น ---
             function adToBeDisplay(isoStr) {
+                // รับค่าเป็น 'YYYY-MM-DD' -> คืน 'dd/mm/yyyy(พ.ศ.)'
                 if (!isoStr || !/^\d{4}-\d{2}-\d{2}$/.test(isoStr)) return null;
                 const [y, m, d] = isoStr.split('-').map(n => parseInt(n, 10));
-                return `${String(d).padStart(2, '0')}/${String(m).padStart(2, '0')}/${y + 543}`;
+                if (!y || !m || !d) return null;
+                const be = y + 543;
+                return String(d).padStart(2, '0') + '/' + String(m).padStart(2, '0') + '/' + be;
             }
 
+            // --- ถ้าค่าที่มากับ request เป็น ค.ศ. iso -> เปลี่ยนเป็น พ.ศ. แสดงผล ---
             ['expiry_date_from', 'expiry_date_to'].forEach(id => {
                 const el = document.getElementById(id);
                 if (!el) return;
                 const v = (el.value || '').trim();
+
+                // case: yyyy-mm-dd จาก query string เดิม
                 const beDisplay = adToBeDisplay(v);
-                if (beDisplay) el.value = beDisplay;
+                if (beDisplay) {
+                    el.value = beDisplay;
+                } else if (/^\d{4}\/\d{2}\/\d{2}$/.test(v)) {
+                    // ถ้าติดมาผิดรูปแบบ (yyyy/mm/dd) ก็ปล่อยไว้ หรือปรับเพิ่มตามต้องการ
+                }
+                // ถ้าเป็น dd/mm/yyyy อยู่แล้วก็ไม่เปลี่ยน
             });
 
+            // --- ติดตั้ง flatpickr แบบหน้าแก้ไข ---
             flatpickr(".date-th", {
                 allowInput: true,
                 locale: "th",
-                dateFormat: "d/m/Y",
+                dateFormat: "d/m/Y", // ใช้ dd/mm/yyyy
                 parseDate: (datestr, format) => {
                     if (!datestr) return null;
+                    // รองรับ dd/mm/yyyy ทั้ง ค.ศ./พ.ศ.
                     const m = datestr.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
                     if (m) {
-                        let dd = parseInt(m[1], 10),
-                            mm = parseInt(m[2], 10),
-                            yyyy = parseInt(m[3], 10);
-                        if (yyyy > 2400) yyyy -= 543; // พ.ศ. → ค.ศ.
+                        let dd = parseInt(m[1], 10);
+                        let mm = parseInt(m[2], 10);
+                        let yyyy = parseInt(m[3], 10);
+                        if (yyyy > 2400) yyyy -= 543; // ถ้าเป็น พ.ศ. -> แปลง ค.ศ.
                         return new Date(yyyy, mm - 1, dd);
                     }
+                    // เผื่อกรณีผู้ใช้วางเป็น 'yyyy-mm-dd'
                     const n = datestr.match(/^(\d{4})-(\d{2})-(\d{2})$/);
                     if (n) {
                         return new Date(parseInt(n[1], 10), parseInt(n[2], 10) - 1, parseInt(n[3], 10));
                     }
                     return flatpickr.parseDate(datestr, format);
                 },
-                onReady: (sel, str, inst) => showBE(inst),
-                onChange: (sel, str, inst) => showBE(inst),
-                onOpen: (sel, str, inst) => showBE(inst)
+                onReady: (selectedDates, dateStr, instance) => showBE(instance),
+                onChange: (selectedDates, dateStr, instance) => showBE(instance),
+                onOpen: (selectedDates, dateStr, instance) => showBE(instance)
             });
 
             function showBE(instance) {
@@ -474,17 +493,19 @@
                 instance.input.value = `${dd}/${mm}/${yyyyBE}`;
             }
 
-            const form = document.querySelector("form[action*='newregis.index']");
+            // --- ก่อน submit: แปลง dd/mm/yyyy(พ.ศ.) -> yyyy-mm-dd(ค.ศ.) ---
+            const form = document.getElementById("filterForm");
             if (form) {
                 form.addEventListener("submit", () => {
-                    form.querySelectorAll(".date-th").forEach(input => {
+                    document.querySelectorAll("#filterForm .date-th").forEach(input => {
                         const v = (input.value || '').trim();
                         const m = v.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
                         if (m) {
-                            let [_, dd, mm, y] = m;
-                            y = parseInt(y, 10);
-                            if (y > 2400) y -= 543;
-                            input.value = `${y}-${mm}-${dd}`;
+                            let dd = m[1],
+                                mm = m[2],
+                                y = parseInt(m[3], 10);
+                            if (y > 2400) y -= 543; // พ.ศ. -> ค.ศ.
+                            input.value = `${y}-${mm}-${dd}`; // ส่งรูปแบบที่ backend/Query ถนัด
                         }
                     });
                 });

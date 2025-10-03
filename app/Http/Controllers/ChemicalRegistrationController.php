@@ -26,6 +26,8 @@ class ChemicalRegistrationController extends Controller
 
     public function index(Request $request)
     {
+        //  dd($request->all());
+
         $query = ChemicalRegistration::query();
         $query->where('new_or_old', true);
 
@@ -41,11 +43,12 @@ class ChemicalRegistrationController extends Controller
 
         // ค้นหาตามวันที่
         if ($request->filled('expiry_date_from') && $request->filled('expiry_date_to')) {
-            $query->whereBetween('date_submit_request', [
-                $request->input('expiry_date_from'),
-                $request->input('expiry_date_to'),
-            ]);
+            $from = $this->convertThaiDateToCarbon($request->input('expiry_date_from'));
+            $to   = $this->convertThaiDateToCarbon($request->input('expiry_date_to'))->endOfDay();
+
+            $query->whereBetween('created_at', [$from, $to]);
         }
+
 
         // ฟิลเตอร์ตามสถานะ
         $statusFilter = $request->input('status_filter');
@@ -1023,5 +1026,18 @@ class ChemicalRegistrationController extends Controller
             return sprintf('%04d-%02d-%02d', $yyyy, $mm, $dd);
         }
         return $value; // ปล่อยผ่านถ้าเป็น yyyy-mm-dd อยู่แล้ว
+    }
+
+    private function convertThaiDateToCarbon($dateString)
+    {
+        // ถ้าเป็น format dd/mm/yyyy (เช่น 01/10/2568)
+        if (preg_match('/\d{2}\/\d{2}\/\d{4}/', $dateString)) {
+            [$day, $month, $year] = explode('/', $dateString);
+            $year = (int)$year - 543; // แปลงจาก พ.ศ. → ค.ศ.
+            return Carbon::createFromDate($year, $month, $day)->startOfDay();
+        }
+
+        // ถ้าเป็น yyyy-mm-dd (เช่น 2025-10-01)
+        return Carbon::parse($dateString)->startOfDay();
     }
 }
