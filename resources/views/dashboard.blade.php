@@ -73,8 +73,7 @@
                             <p class="text-4xl text-yellow-600 font-extrabold mb-1">{{ $soonImport }}</p>
                         </div>
                         <div class="bg-red-100 border border-red-200 rounded-xl p-2 shadow-sm">
-                            <p class="text-xl font-bold text-red-600 mb-2 mt-2 tracking-wide">หมดอายุ</p>
-
+                            <p class="text-2xl font-bold text-red-600 mb-2 mt-2 tracking-wide">หมดอายุ</p>
                             {{-- <p class="md:text-xl font-bold text-red-600 mt-2">{{ $expiredImport }}</p> --}}
                             <p class="text-4xl text-red-600 font-extrabold mb-1">{{ $expiredImport }}</p>
 
