@@ -98,19 +98,23 @@
                             class="pl-10 pr-4 py-2 w-[500px] rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-600 transition duration-200 ease-in-out text-gray-700 shadow-sm" />
                         {{-- class="pl-10 pr-4 py-2 w-96 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-600 transition duration-200 ease-in-out text-gray-700 shadow-sm" /> --}}
                     </div>
+                    {{-- วันที่เริ่ม --}}
                     <div class="flex-grow min-w-[180px]">
                         <label for="expiry_date_from"
                             class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันที่เริ่ม</label>
                         <input id="expiry_date_from"
-                            class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200 ease-in-out text-gray-500 text-base shadow-sm w-full"
-                            type="date" name="expiry_date_from" value="{{ request('expiry_date_from') }}" />
+                            class="date-th px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200 ease-in-out text-gray-500 text-base shadow-sm w-full"
+                            type="text" name="expiry_date_from" value="{{ request('expiry_date_from') }}"
+                            placeholder="วว/ดด/ปปปป" autocomplete="off" />
                     </div>
+                    {{-- วันที่สิ้นสุด --}}
                     <div class="flex-grow min-w-[180px]">
                         <label for="expiry_date_to"
                             class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันที่สิ้นสุด</label>
                         <input id="expiry_date_to"
-                            class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200 ease-in-out text-gray-500 text-base shadow-sm w-full"
-                            type="date" name="expiry_date_to" value="{{ request('expiry_date_to') }}" />
+                            class="date-th px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-200 ease-in-out text-gray-500 text-base shadow-sm w-full"
+                            type="text" name="expiry_date_to" value="{{ request('expiry_date_to') }}"
+                            placeholder="วว/ดด/ปปปป" autocomplete="off" />
                     </div>
                     <div class="flex gap-3 mt-10">
                         <button type="submit"
@@ -417,6 +421,77 @@
 
         </div>
     </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/th.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            function adToBeDisplay(isoStr) {
+                if (!isoStr || !/^\d{4}-\d{2}-\d{2}$/.test(isoStr)) return null;
+                const [y, m, d] = isoStr.split('-').map(n => parseInt(n, 10));
+                return `${String(d).padStart(2, '0')}/${String(m).padStart(2, '0')}/${y + 543}`;
+            }
+
+            ['expiry_date_from', 'expiry_date_to'].forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                const v = (el.value || '').trim();
+                const beDisplay = adToBeDisplay(v);
+                if (beDisplay) el.value = beDisplay;
+            });
+
+            flatpickr(".date-th", {
+                allowInput: true,
+                locale: "th",
+                dateFormat: "d/m/Y",
+                parseDate: (datestr, format) => {
+                    if (!datestr) return null;
+                    const m = datestr.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+                    if (m) {
+                        let dd = parseInt(m[1], 10),
+                            mm = parseInt(m[2], 10),
+                            yyyy = parseInt(m[3], 10);
+                        if (yyyy > 2400) yyyy -= 543; // พ.ศ. → ค.ศ.
+                        return new Date(yyyy, mm - 1, dd);
+                    }
+                    const n = datestr.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+                    if (n) {
+                        return new Date(parseInt(n[1], 10), parseInt(n[2], 10) - 1, parseInt(n[3], 10));
+                    }
+                    return flatpickr.parseDate(datestr, format);
+                },
+                onReady: (sel, str, inst) => showBE(inst),
+                onChange: (sel, str, inst) => showBE(inst),
+                onOpen: (sel, str, inst) => showBE(inst)
+            });
+
+            function showBE(instance) {
+                const sel = instance.selectedDates[0];
+                if (!sel) return;
+                const dd = String(sel.getDate()).padStart(2, "0");
+                const mm = String(sel.getMonth() + 1).padStart(2, "0");
+                const yyyyBE = sel.getFullYear() + 543;
+                instance.input.value = `${dd}/${mm}/${yyyyBE}`;
+            }
+
+            const form = document.querySelector("form[action*='newregis.index']");
+            if (form) {
+                form.addEventListener("submit", () => {
+                    form.querySelectorAll(".date-th").forEach(input => {
+                        const v = (input.value || '').trim();
+                        const m = v.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+                        if (m) {
+                            let [_, dd, mm, y] = m;
+                            y = parseInt(y, 10);
+                            if (y > 2400) y -= 543;
+                            input.value = `${y}-${mm}-${dd}`;
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
