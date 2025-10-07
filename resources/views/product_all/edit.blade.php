@@ -286,6 +286,7 @@
                                 <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันที่ยื่นคำขอ</label>
                                 <input type="date" name="date_submit_request"
                                     value="{{ old('date_submit_request', $registration->date_submit_request) }}"
+                                    autocomplete="off"
                                     class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                 @error('date_submit_request')
                                     <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
@@ -317,6 +318,7 @@
                                     III</label>
                                 <input type="date" name="date_request_phase_3"
                                     value="{{ old('date_request_phase_3', $registration->date_request_phase_3) }}"
+                                    autocomplete="off"
                                     class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                 @error('date_request_phase_3')
                                     <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>

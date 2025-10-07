@@ -35,7 +35,7 @@
                         <input type="text" name="expired_license_date" id="expired_license_date"
                             class="date-th w-full p-3 pl-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                             value="{{ old('expired_license_date', $import->expired_license_date ? \Carbon\Carbon::parse($import->expired_license_date)->addYears(543)->format('d/m/Y') : '') }}"
-                            placeholder="วว/ดด/ปปปป">
+                            placeholder="วว/ดด/ปปปป" autocomplete="off">
                         @error('expired_license_date')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
@@ -347,7 +347,7 @@
                         <input type="text" name="production_license_expiry" id="production_license_expiry"
                             class="date-th w-full p-3 pl-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                             value="{{ old('production_license_expiry', $import->production_license_expiry ? \Carbon\Carbon::parse($import->production_license_expiry)->addYears(543)->format('d/m/Y') : '') }}"
-                            placeholder="วว/ดด/ปปปป">
+                            placeholder="วว/ดด/ปปปป" autocomplete="off">
                         @error('production_license_expiry')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror

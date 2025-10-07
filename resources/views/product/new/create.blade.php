@@ -79,7 +79,7 @@
                                 class="text-red-500"> *</span></label>
                         <input type="text"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            name="manufacturer" value="{{ old('manufacturer') }}"  placeholder="ผู้ผลิตและแหล่งผลิต" />
+                            name="manufacturer" value="{{ old('manufacturer') }}" placeholder="ผู้ผลิตและแหล่งผลิต" />
                         @error('manufacturer')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
@@ -161,7 +161,7 @@
                                 class="text-red-500"> *</span></label>
                         <input type="text"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            name="trade_name" value="{{ old('trade_name') }}"  placeholder="ชื่อการค้า"/>
+                            name="trade_name" value="{{ old('trade_name') }}" placeholder="ชื่อการค้า" />
                         @error('trade_name')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
@@ -274,10 +274,9 @@
                     </div>
 
                     <div>
-                        <label for="quantity"
-                            class="mx-3 text-base block text-gray-700 mb-1 mt-3">ปริมาณ</label>
-                        <input type="text" name="quantity" id="quantity"
-                            value="{{ old('quantity') }}" placeholder="ใส่ปริมาณ"
+                        <label for="quantity" class="mx-3 text-base block text-gray-700 mb-1 mt-3">ปริมาณ</label>
+                        <input type="text" name="quantity" id="quantity" value="{{ old('quantity') }}"
+                            placeholder="ใส่ปริมาณ"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('quantity')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
@@ -302,7 +301,8 @@
                                 <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันที่ยื่นคำขอ</label>
                                 <input type="text" id="date_submit_request" name="date_submit_request"
                                     class="date-th w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    placeholder="วว/ดด/ปปปป" value="{{ old('date_submit_request') }}">
+                                    placeholder="วว/ดด/ปปปป" value="{{ old('date_submit_request') }}"
+                                    autocomplete="off">
                                 @error('date_submit_request')
                                     <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                                 @enderror
@@ -326,6 +326,7 @@
                                 <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันที่ยื่น Phase
                                     III</label>
                                 <input type="text" id="date_request_phase_3" name="date_request_phase_3"
+                                    autocomplete="off"
                                     class="date-th w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     placeholder="วว/ดด/ปปปป" value="{{ old('date_request_phase_3') }}">
                                 @error('date_request_phase_3')

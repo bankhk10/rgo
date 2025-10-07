@@ -372,7 +372,7 @@
                                             <input type="text" name="date_submit_request" id="date_submit_request"
                                                 class="date-th w-full p-3 pl-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                 value="{{ old('date_submit_request', $drug->date_submit_request ? \Carbon\Carbon::parse($drug->date_submit_request)->addYears(543)->format('d/m/Y') : '') }}"
-                                                placeholder="วว/ดด/ปปปป">
+                                                placeholder="วว/ดด/ปปปป" autocomplete="off">
                                             @error('date_submit_request')
                                                 <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                                             @enderror
@@ -891,12 +891,12 @@
                                                     </h5>
                                                     <div class="space-y-2 pl-4">
                                                         @foreach ($subItems as $label)
-                                                                @php
-                                                                    $record = $savedSubSteps[$checkboxIndex] ?? null;
-                                                                    $isChecked = $record && $record->checked_at;
-                                                                    $note = $record->created_by ?? '';
-                                                                    $remark = $record->remark ?? '';
-                                                                @endphp
+                                                            @php
+                                                                $record = $savedSubSteps[$checkboxIndex] ?? null;
+                                                                $isChecked = $record && $record->checked_at;
+                                                                $note = $record->created_by ?? '';
+                                                                $remark = $record->remark ?? '';
+                                                            @endphp
                                                             <div class="flex flex-wrap items-center gap-3">
                                                                 <input type="checkbox" name="sub_steps[]"
                                                                     id="substep_{{ $stepNumber }}_{{ $checkboxIndex }}"
@@ -905,7 +905,8 @@
                                                                     {{ !$isEditable || (!auth()->user()->hasRole('admin') && !auth()->user()->hasRole('manager') && $dept !== $mappedUserDept) }}
                                                                     class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
                                                                     onchange="toggleInput({{ $stepNumber }}, {{ $checkboxIndex }})">
-                                                                <label for="substep_{{ $stepNumber }}_{{ $checkboxIndex }}"
+                                                                <label
+                                                                    for="substep_{{ $stepNumber }}_{{ $checkboxIndex }}"
                                                                     class="text-sm text-gray-800">{{ $label }}</label>
 
                                                                 @if (in_array($label, ['หนังสือขอยกเว้น PHI', 'แผน PHI']))
@@ -919,7 +920,8 @@
                                                                                 value="ไม่มี"
                                                                                 {{ $note == 'ไม่มี' ? 'checked' : '' }}
                                                                                 {{ !$isEditable ? 'disabled' : '' }}>
-                                                                            <span class="ml-2 text-gray-800">ไม่มี</span>
+                                                                            <span
+                                                                                class="ml-2 text-gray-800">ไม่มี</span>
                                                                         </label>
                                                                         <label class="inline-flex items-center">
                                                                             <input type="radio"
