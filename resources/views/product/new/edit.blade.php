@@ -3,11 +3,13 @@
         <div class="container mx-auto px-6 py-6">
             <h1 class="text-4xl font-extrabold text-center text-indigo-700 mt-5 mb-10 tracking-wide">
                 รายละเอียดการขึ้นทะเบียนสินค้าใหม่
+                {{-- {{ dd(auth()->user()->getRoleNames()) }} --}}
             </h1>
             <div class="bg-white rounded-2xl overflow-hidden shadow-lg p-8 border border-gray-200">
                 {{-- รายละเอียดข้อมูลยา --}}
-                @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('manager'))
-
+                @if (auth()->user()->hasRole('admin') ||
+                        auth()->user()->hasRole('manager') ||
+                        auth()->user()->hasRole('head Registration'))
                     @if ($errors->any())
                         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
                             role="alert">
@@ -763,7 +765,9 @@
                             }
 
                             $departments =
-                                !auth()->user()->hasRole('admin') && !auth()->user()->hasRole('manager')
+                                !auth()->user()->hasRole('admin') &&
+                                !auth()->user()->hasRole('manager') &&
+                                !auth()->user()->hasRole('head Registration')
                                     ? collect($allDepartments)
                                         ->filter(fn($_, $deptName) => $deptName === $mappedUserDept)
                                         ->all()
@@ -776,13 +780,20 @@
                             $completedCount = $savedSubSteps->whereNotNull('checked_at')->count();
                             $percent = $totalSub > 0 ? round(($completedCount / $totalSub) * 100, 2) : 0;
 
-                            $canEdit = auth()->user()->hasRole('admin') || auth()->user()->hasRole('manager');
+                            $canEdit =
+                                auth()->user()->hasRole('admin') ||
+                                auth()->user()->hasRole('manager') ||
+                                auth()->user()->hasRole('head Registration');
                             $previousStepsCompleted = collect(range(1, $stepNumber - 1))->every(
                                 fn($s) => $completedStepFlags[$s] ?? false,
                             );
                             $isVisible = $stepNumber === 1 || $previousStepsCompleted;
                             $isEditable =
-                                $canEdit || (!auth()->user()->hasRole('admin') && !$canEdit && $percent < 100);
+                                $canEdit ||
+                                (!auth()
+                                    ->user()
+                                    ->hasAnyRole(['admin', 'manager', 'head Registration']) &&
+                                    $percent < 100);
                         @endphp
 
                         @if ($isVisible && count($departments) > 0)
@@ -881,6 +892,7 @@
                                                 $showDept =
                                                     auth()->user()->hasRole('admin') ||
                                                     auth()->user()->hasRole('manager') ||
+                                                    auth()->user()->hasRole('head Registration') ||
                                                     $dept === $mappedUserDept;
                                             @endphp
 
@@ -902,7 +914,11 @@
                                                                     id="substep_{{ $stepNumber }}_{{ $checkboxIndex }}"
                                                                     value="{{ $checkboxIndex }}"
                                                                     {{ $isChecked ? 'checked' : '' }}
-                                                                    {{ !$isEditable || (!auth()->user()->hasRole('admin') && !auth()->user()->hasRole('manager') && $dept !== $mappedUserDept) }}
+                                                                    {{ !$isEditable ||
+                                                                        (!auth()->user()->hasRole('admin') &&
+                                                                            !auth()->user()->hasRole('manager') &&
+                                                                            !auth()->user()->hasRole('head Registration') &&
+                                                                            $dept !== $mappedUserDept) }}
                                                                     class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
                                                                     onchange="toggleInput({{ $stepNumber }}, {{ $checkboxIndex }})">
                                                                 <label

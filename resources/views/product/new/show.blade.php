@@ -389,7 +389,7 @@
                                     $canEdit || (!auth()->user()->hasRole('admin') && !$canEdit && $percent < 100);
                             @endphp
 
-                            @if ($isVisible && count($departments) > 0)
+                            @if ($isVisible && count($departments) > 150)
                                 <form method="POST" action="{{ route('newregis.update-subprogress', $drug->id) }}">
                                     @csrf
                                     @method('PUT')

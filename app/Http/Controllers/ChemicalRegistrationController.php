@@ -735,7 +735,13 @@ class ChemicalRegistrationController extends Controller
                     continue;
                 }
 
-                if ($department === $mappedDept || auth()->user()->hasRole('admin') || auth()->user()->hasRole('manager')) {
+                if (
+                    $department === $mappedDept ||
+                    auth()->user()->hasRole('admin') ||
+                    auth()->user()->hasRole('manager') ||
+                    auth()->user()->hasRole('head Registration')
+                ) {
+
                     DrugProgressStep::updateOrCreate(
                         [
                             'chemical_registrations_id' => $drug->id,
