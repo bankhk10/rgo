@@ -275,7 +275,7 @@
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันหมดอายุใบแจ้งครอบครอง
                             วอ.2</label>
-                        <input type="date" name="possession_form_expiry"
+                        <input type="text" name="possession_form_expiry"
                             value="{{ old('possession_form_expiry') }}"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('possession_form_expiry')
@@ -294,7 +294,7 @@
                     </div>
                     <div>
                         <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">หมดอายุเมื่อ</label>
-                        <input type="date" name="expired_at" value="{{ old('expired_at') }}"
+                        <input type="text" name="expired_at" value="{{ old('expired_at') }}"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('expired_at')
                         <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>

@@ -138,11 +138,11 @@ class ChemicalImportController extends Controller
                 'production_license_expiry' => 'nullable|date',
                 'production_license_quantity' => 'nullable|string|max:255',
                 'possession_form_wo2' => 'nullable|string|max:255',
-                'possession_form_expiry' => 'nullable|date',
+                'possession_form_expiry' => 'nullable|string',
                 'packaging_size_details' => 'nullable|string|max:1000',
                 'registration_number_pass' => 'nullable|string|max:255',
                 'registration_expiry_date' => 'nullable|date',
-                'expired_at' => 'nullable|date',
+                'expired_at' => 'nullable|string',
                 'status_date' => 'nullable|string|max:255',
                 'remarks' => 'nullable|string|max:1000',
                 'image' => 'nullable|image|max:2048', // ตัวอย่าง: อนุญาตเฉพาะไฟล์ภาพ ขนาดไม่เกิน 2MB
@@ -234,9 +234,9 @@ class ChemicalImportController extends Controller
                 'expired_license_date'     => $this->convertDate($request->input('expired_license_date')), // <<== เพิ่มตรงนี้
                 'registration_expiry_date'  => $this->convertDate($request->input('registration_expiry_date')),
                 'production_license_expiry' => $this->convertDate($request->input('production_license_expiry')),
-                'possession_form_expiry'    => $this->convertDate($request->input('possession_form_expiry')),
+                // 'possession_form_expiry'    => $this->convertDate($request->input('possession_form_expiry')),
                 'application_received_date' => $this->convertDate($request->input('application_received_date')),
-                'expired_at'                => $this->convertDate($request->input('expired_at')),
+                // 'expired_at'                => $this->convertDate($request->input('expired_at')),
                 'date_submit_request'       => $this->convertDate($request->input('date_submit_request')),
                 'date_request_phase_3'      => $this->convertDate($request->input('date_request_phase_3')),
             ]);

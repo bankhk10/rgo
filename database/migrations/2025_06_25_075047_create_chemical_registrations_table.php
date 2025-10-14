@@ -28,10 +28,10 @@ class CreateChemicalRegistrationsTable extends Migration
             $table->date('production_license_expiry')->nullable(); // วันหมดอายุใบอนุญาต
             $table->string('production_license_quantity')->nullable(); // ปริมาณผลิตใบอนุญาต
             $table->string('possession_form_wo2')->nullable(); // ใบแจ้งครอบครอง วอ.2
-            $table->date('possession_form_expiry')->nullable(); // วันหมดอายุใบแจ้งครอบครอง วอ.2
+            $table->text('possession_form_expiry')->nullable(); // วันหมดอายุใบแจ้งครอบครอง วอ.2
             $table->date('application_received_date')->nullable(); // วันที่รับคำขอ
             $table->string('expired_license_number')->nullable(); // เลขที่ใบอนุญาตหมดอายุ
-            $table->date('expired_at')->nullable(); // หมดอายุเมื่อ
+            $table->text('expired_at')->nullable(); // หมดอายุเมื่อ
             $table->string('old_license_quantity')->nullable(); // ปริมาณผลิตใบอนุญาตเดิม
             $table->string('packaging_size')->nullable(); // รายละเอียดขนาดบรรจุ
             $table->string('formula_of_ratio')->nullable(); // สูตรอัตรส่วนผสมของสารสำคัญและลักษณะ
