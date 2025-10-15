@@ -352,7 +352,23 @@
                                                         ->exists();
                                                 @endphp
 
-                                                @if ($incomplete || auth()->user()->hasRole('admin') || auth()->user()->hasRole('manager'))
+                                                {{-- @php
+                                                    Log::info('Checking edit button visibility:', [
+                                                        'product_id' => $product->id,
+                                                        'user_id' => auth()->id(),
+                                                        'user_department' => auth()->user()->department,
+                                                        'is_incomplete' => $incomplete,
+                                                        'has_admin_role' => auth()->user()->hasRole('admin'),
+                                                        'has_manager_role' => auth()->user()->hasRole('manager'),
+                                                    ]);
+                                                @endphp --}}
+
+                                                @if (
+                                                    $incomplete ||
+                                                        auth()->user()->hasRole('admin') ||
+                                                        auth()->user()->hasRole('manager') ||
+                                                        auth()->id() == 44 ||
+                                                        auth()->id() == 8)
                                                     <a href="{{ route('newregis.edit', $product->id) }}"
                                                         class="inline-flex items-center justify-center p-2 rounded-full text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
                                                         title="แก้ไข">
