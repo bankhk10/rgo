@@ -367,8 +367,9 @@
                                                     $incomplete ||
                                                         auth()->user()->hasRole('admin') ||
                                                         auth()->user()->hasRole('manager') ||
-                                                        auth()->id() == 44 ||
-                                                        auth()->id() == 8)
+                                                        auth()->user()->department == 'Registration')
+                                                    {{-- auth()->id() == 44 ||
+                                                        auth()->id() == 8) --}}
                                                     <a href="{{ route('newregis.edit', $product->id) }}"
                                                         class="inline-flex items-center justify-center p-2 rounded-full text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
                                                         title="แก้ไข">

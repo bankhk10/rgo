@@ -989,7 +989,7 @@
                                             $userTotalCount > 0 && $userCheckedCount === $userTotalCount;
                                     @endphp
 
-                                    @if ($isEditable && !$userDeptComplete)
+                                    @if (!$userDeptComplete)
                                         <div class="text-center mt-4">
                                             <a href="{{ route('newregis.index') }}"
                                                 class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg shadow transition duration-300 mr-2">
