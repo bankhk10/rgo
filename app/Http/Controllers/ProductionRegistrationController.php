@@ -230,7 +230,7 @@ class ProductionRegistrationController extends Controller
                 'chemical_name_th' => 'nullable|string|max:255',
                 'chemical_name_en' => 'nullable|string|max:255',
                 'composition' => 'nullable|string|max:1000',
-                'manufacturer' => 'nullable|string|max:255',
+                'manufacturer' => 'nullable|string|max:1000',
                 'registrant' => 'nullable|string|max:255',
                 'registration_type' => 'nullable|string|max:255',
                 'importer' => 'nullable|string|max:255',
