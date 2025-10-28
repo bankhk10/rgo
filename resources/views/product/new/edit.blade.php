@@ -9,7 +9,9 @@
                 {{-- รายละเอียดข้อมูลยา --}}
                 @if (auth()->user()->hasRole('admin') ||
                         auth()->user()->hasRole('manager') ||
-                        auth()->user()->hasRole('head Registration'))
+                        auth()->user()->hasRole('head Registration') ||
+                        auth()->user()->department == 'Registration'
+                        )
                     @if ($errors->any())
                         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
                             role="alert">
@@ -893,6 +895,7 @@
                                                     auth()->user()->hasRole('admin') ||
                                                     auth()->user()->hasRole('manager') ||
                                                     auth()->user()->hasRole('head Registration') ||
+                                                    auth()->user()->department == 'Registration' ||
                                                     $dept === $mappedUserDept;
                                             @endphp
 
