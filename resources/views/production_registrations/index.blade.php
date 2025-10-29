@@ -146,6 +146,7 @@
                                 <th class="py-4 px-6">ชื่อวัตถุอันตราย (อังกฤษ) </th>
                                 {{-- <th class="py-4 px-6">ชื่อวัตถุอันตราย (อังกฤษ)</th> --}}
                                 <th class="py-4 px-6 text-center">ผู้ขึ้นทะเบียน</th>
+                                <th class="py-4 px-6 text-center">ผู้จำหน่าย</th>
                                 {{-- <th class="py-4 px-6 text-center">ตัวย่อ</th> --}}
                                 <th class="py-4 px-8">เลขที่ทะเบียน</th>
                                 <th class="py-4 px-8">วันหมดอายุ</th>
@@ -165,6 +166,7 @@
                                         <td class="py-4 px-6">{{ $import->chemical_name_en ?? '' }}</td>
                                         {{-- <td class="py-4 px-6 text-center">{{ $import->Companes->full_name ?? '' }}</td> --}}
                                         <td class="py-4 px-4">{{ $import->company->full_name ?? '' }}</td>
+                                        <td class="py-4 px-4">{{ $import->distributorCompany->full_name ?? '' }}</td>
                                         <td class="py-4 px-6 text-center">{{ $import->registration_number ?? '' }}</td>
                                         <td class="py-4 px-8">
                                             {{ \Carbon\Carbon::parse($import->expired_license_date)->addYears(543)->format('d/m/Y') }}
