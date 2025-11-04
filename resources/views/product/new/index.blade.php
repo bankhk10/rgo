@@ -157,11 +157,13 @@
                     <table class="min-w-full bg-white">
                         <thead>
                             <tr class="bg-indigo-600 text-white text-left">
-                                <th class="py-4 px-8 rounded-tl-2xl">ลำดับ</th>
+                                <th class="py-4 px-4 rounded-tl-2xl">ลำดับ</th>
                                 <th class="py-4 px-8">ชื่อการค้า</th>
-                                <th class="py-4 px-8">ชื่อสามัญ</th>
-                                <th class="py-4 px-8">เลขที่ทะเบียน</th>
-                                <th class="py-4 px-8">วันที่ขอขึ้นทะเบียน</th>
+                                <th class="py-4 px-8">ชื่อวัตถุอันตราย (EN)</th>
+                                <th class="py-4 px-8">% และสูตร</th>
+                                <th class="py-4 px-8">บริษัทขึ้นทะเบียน</th>
+                                <th class="py-4 px-8">ผู้จำหน่าย</th>
+                                <th class="py-4 px-8">วันที่ยื่นคำขอ</th>
                                 <th class="py-4 px-8">สถานะความคืบหน้า</th>
                                 <th class="py-4 px-4 text-center">สถานะ</th>
                                 <th class="py-4 px-8 rounded-tr-2xl text-center">รายละเอียด</th>
@@ -170,14 +172,16 @@
                         <tbody>
                             @forelse ($paginatedProducts as $index => $product)
                                 <tr class="border-b hover:bg-indigo-50 transition">
-                                    <td class="py-4 px-8 font-semibold text-gray-700">
+                                    <td class="py-4 px-4 font-semibold text-gray-700">
                                         {{ ($paginatedProducts->currentPage() - 1) * $paginatedProducts->perPage() + $index + 1 }}
                                     </td>
                                     <td class="py-4 px-8">{{ $product->trade_name ?? '' }}</td>
-                                    <td class="py-4 px-8">{{ $product->chemical_name_th ?? '' }}</td>
-                                    <td class="py-4 px-8">{{ $product->registration_number ?? '' }}</td>
+                                    <td class="py-4 px-8">{{ $product->chemical_name_en ?? '' }}</td>
+                                    <td class="py-4 px-8">{{ $product->composition ?? '' }}</td>
+                                    <td class="py-4 px-8">{{ $product->registrant ?? '' }}</td>
+                                    <td class="py-4 px-8">{{ $product->distributor ?? '' }}</td>
                                     <td class="py-4 px-8">
-                                        {{ \Carbon\Carbon::parse($product->date_submit_request)->addYears(543)->format('d/m/Y') }}
+                                        {{ $product->date_submit_request ? \Carbon\Carbon::parse($product->date_submit_request)->addYears(543)->format('d/m/Y') : '' }}
                                     </td>
                                     <td class="py-4 px-8">
                                         @php
@@ -311,7 +315,7 @@
                                             </span>
                                         @endif
                                     </td>
-                                    <td class="py-4 px-12 mx-auto">
+                                    <td class="py-4 px-10 mx-auto">
                                         {{-- ปุ่มดูรายละเอียด --}}
                                         <div class="flex items-center gap-3 justify-center">
                                             @can('RegisterNew read')

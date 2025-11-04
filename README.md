@@ -45,3 +45,10 @@
 - #### Writer
 - email: writer@writer.com
 - password: password
+
+
+
+
+chemical_registrations ขึ้นทะเบียนใหม่
+chemical_imports ข้อมูลทะเบียนนำเข้า
+production_registration ข้อมูลทะเบียนผลิต
