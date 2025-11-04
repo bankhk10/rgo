@@ -159,10 +159,10 @@
                             <tr class="bg-indigo-600 text-white text-left">
                                 <th class="py-4 px-4 rounded-tl-2xl">ลำดับ</th>
                                 <th class="py-4 px-8">ชื่อการค้า</th>
-                                <th class="py-4 px-8">ชื่อวัตถุอันตราย (EN)</th>
-                                <th class="py-4 px-8">% และสูตร</th>
-                                <th class="py-4 px-8">บริษัทขึ้นทะเบียน</th>
-                                <th class="py-4 px-8">ผู้จำหน่าย</th>
+                                <th class="py-4 px-8">ชื่อวัตถุอันตราย (อังกฤษ)</th>
+                                <th class="py-4 px-8">เปอร์เซ็นต์และสูตร</th>
+                                <th class="py-4 px-8">บริษัทที่ขึ้นทะเบียน</th>
+                                <th class="py-4 px-8">ชื่อผู้จำหน่าย</th>
                                 <th class="py-4 px-8">วันที่ยื่นคำขอ</th>
                                 <th class="py-4 px-8">สถานะความคืบหน้า</th>
                                 <th class="py-4 px-4 text-center">สถานะ</th>
