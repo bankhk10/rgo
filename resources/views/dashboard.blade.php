@@ -36,7 +36,7 @@
                         </div>
                     </div>
                     {{-- <h2 class="text-lg font-bold text-green-700 mb-1 tracking-wide">ขึ้นทะเบียนสินค้าใหม่</h2> --}}
-                    <h2 class="text-2xl font-bold text-green-700 mb-4 tracking-wide">ขึ้นทะเบียนสินค้าใหม่</h2>
+                    <h2 class="text-2xl font-bold text-green-700 mb-4 tracking-wide">ขึ้นทะเบียนใหม่</h2>
 
                     {{-- <p class="text-4xl text-green-600 font-extrabold mb-1">{{ $totalNewRegistrations }}</p> --}}
                     <p class="text-4xl text-green-600 font-extrabold mb-1">{{ $totalNewRegistrations }}</p>
