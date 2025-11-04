@@ -25,11 +25,11 @@
                                 <div class="dropdown-item text-gray-500" data-value="">-- เลือกบริษัทที่ขึ้นทะเบียน --
                                 </div>
                                 @foreach ($companies as $company)
-                                    @if ($company->id != 4)
+                                    {{-- @if ($company->id != 4) --}}
                                         <div class="dropdown-item" data-value="{{ $company->full_name }}">
                                             {{ $company->full_name }}
                                         </div>
-                                    @endif
+                                    {{-- @endif --}}
                                 @endforeach
                             </div>
                         </div>
