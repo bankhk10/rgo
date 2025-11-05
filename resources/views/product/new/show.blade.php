@@ -13,8 +13,13 @@
                         <p>{{ $drug->registration_number ?? '-' }}</p>
                     </div> --}}
                     <div>
-                        <p class="font-semibold text-indigo-600 mb-2">วันที่ขึ้นทะเบียน</p>
-                        <p>{{ $drug->created_at->addYears(+543)->format('d/m/Y') }}</p>
+                        <p class="font-semibold text-indigo-600 mb-2">วันที่ยื่นคำขอ</p>
+                        @if ($drug->date_submit_request)
+                            <p>{{ \Carbon\Carbon::parse($drug->date_submit_request)->addYears(+543)->format('d/m/Y') }}
+                            </p>
+                        @else
+                            <p>-</p>
+                        @endif
                     </div>
                     <div>
                         <p class="font-semibold text-indigo-600 mb-2">บริษัทที่ขึ้นทะเบียน</p>
@@ -444,14 +449,14 @@
                                                                     $remark = $record->remark ?? '';
                                                                 @endphp
                                                                 <div class="flex flex-wrap items-center gap-3">
-                                                                    <input disabled type="checkbox"
-                                                                        name="sub_steps[]"
+                                                                    <input disabled type="checkbox" name="sub_steps[]"
                                                                         id="substep_{{ $stepNumber }}_{{ $checkboxIndex }}"
                                                                         value="{{ $checkboxIndex }}"
                                                                         {{ $isChecked ? 'checked' : '' }}
                                                                         {{ !$isEditable || (!auth()->user()->hasRole('admin') && !auth()->user()->hasRole('manager') && $dept !== $mappedUserDept) }}
                                                                         class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                                                                    <label for="substep_{{ $stepNumber }}_{{ $checkboxIndex }}"
+                                                                    <label
+                                                                        for="substep_{{ $stepNumber }}_{{ $checkboxIndex }}"
                                                                         class="text-sm text-gray-800">{{ $label }}</label>
 
                                                                     @if (in_array($label, ['แผนการทดลอง', 'หนังสือขอยกเว้น PHI', 'แผน PHI']))
@@ -465,7 +470,8 @@
                                                                                     value="ไม่มี"
                                                                                     {{ $note == 'ไม่มี' ? 'checked' : '' }}
                                                                                     {{ !$isEditable ? 'disabled' : '' }}>
-                                                                                <span class="ml-2 text-gray-800">ไม่มี</span>
+                                                                                <span
+                                                                                    class="ml-2 text-gray-800">ไม่มี</span>
                                                                             </label>
                                                                             <label class="inline-flex items-center">
                                                                                 <input disabled type="radio"
@@ -474,13 +480,16 @@
                                                                                     value="มี"
                                                                                     {{ $note == 'มี' ? 'checked' : '' }}
                                                                                     {{ !$isEditable ? 'disabled' : '' }}>
-                                                                                <span class="ml-2 text-gray-800">มี</span>
+                                                                                <span
+                                                                                    class="ml-2 text-gray-800">มี</span>
                                                                             </label>
                                                                         </div>
                                                                     @endif
 
-                                                                    <input type="text" value="{{ $remark }}" placeholder="หมายเหตุ"
-                                                                        class="p-2 border rounded-md flex-1 w-48" disabled>
+                                                                    <input type="text" value="{{ $remark }}"
+                                                                        placeholder="หมายเหตุ"
+                                                                        class="p-2 border rounded-md flex-1 w-48"
+                                                                        disabled>
                                                                 </div>
                                                                 @php $checkboxIndex++; @endphp
                                                             @endforeach
