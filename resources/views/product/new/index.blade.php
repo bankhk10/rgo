@@ -196,59 +196,117 @@
                                                 8 => 'ยื่นขอออกทะเบียน',
                                             ];
 
+                                            // New logic per requirement:
+                                            // 1) Prefer the latest step that has at least one checked item.
+                                            // 2) If no steps have any checked items but some steps are fully completed, show the latest fully-completed step.
+                                            // 3) Otherwise default to step 1.
+
                                             $show_step_number = 0;
-                                            $number_step_number = 0;
-                                            // $isPlanNone = 0;
-                                            if (isset($product->step_summary[$product->current_step_number])) {
-                                                $summary = $product->step_summary[$product->current_step_number];
-                                                if ($summary->step_number == 1) {
-                                                    $number_step_number = 1;
-                                                    if ($summary->unchecked_count >= 12) {
+                                            $number_step_number = 1;
+
+                                            // prepare arrays with computed counts per step
+                                            $stepsInfo = [];
+                                            for ($i = 1; $i <= 8; $i++) {
+                                                $summary = $product->step_summary[$i] ?? null;
+                                                $totalInStep = 0;
+                                                $unchecked = 0;
+                                                if ($summary) {
+                                                    $totalInStep = is_numeric($summary->last_index) ? ($summary->last_index + 1) : 0;
+                                                    $unchecked = (int) $summary->unchecked_count;
+                                                }
+                                                $checked = $totalInStep - $unchecked;
+                                                $stepsInfo[$i] = [
+                                                    'summary' => $summary,
+                                                    'total' => $totalInStep,
+                                                    'unchecked' => $unchecked,
+                                                    'checked' => $checked,
+                                                ];
+                                            }
+
+                                            // find latest step that has any checked items
+                                            $lastCheckedStep = 0;
+                                            for ($i = 1; $i <= 8; $i++) {
+                                                if ($stepsInfo[$i]['checked'] > 0) {
+                                                    $lastCheckedStep = $i;
+                                                }
+                                            }
+
+                                            if ($lastCheckedStep > 0) {
+                                                $displayStep = $lastCheckedStep;
+                                            } else {
+                                                // no step has any checked items -> check for latest fully-completed step
+                                                $lastFullyCompleted = 0;
+                                                for ($i = 1; $i <= 8; $i++) {
+                                                    if ($stepsInfo[$i]['total'] > 0 && $stepsInfo[$i]['unchecked'] == 0) {
+                                                        $lastFullyCompleted = $i;
+                                                    }
+                                                }
+                                                if ($lastFullyCompleted > 0) {
+                                                    $displayStep = $lastFullyCompleted;
+                                                } else {
+                                                    $displayStep = 1;
+                                                }
+                                            }
+
+                                            $number_step_number = $displayStep;
+
+                                            // Map displayStep to percentage using the same rules as elsewhere
+                                            $summaryForDisplay = $product->step_summary[$displayStep] ?? null;
+                                            $uncheckedForDisplay = $summaryForDisplay->unchecked_count ?? null;
+
+                                            // helper to detect isPlanNone (keeps original behavior)
+                                            $isPlanNone = $product->isPlanNone ?? 0;
+
+                                            switch ($displayStep) {
+                                                case 1:
+                                                    if ($summaryForDisplay && $uncheckedForDisplay >= 12) {
                                                         $show_step_number = 0;
                                                     } else {
                                                         $show_step_number = 12.5;
                                                     }
-                                                } elseif ($summary->step_number == 2) {
-                                                    $number_step_number = 2;
+                                                    break;
+                                                case 2:
                                                     $show_step_number = 25;
-                                                } elseif ($summary->step_number == 3) {
-                                                    $number_step_number = 3;
+                                                    break;
+                                                case 3:
                                                     $show_step_number = 37.5;
-                                                } elseif ($summary->step_number == 4) {
-                                                    if ($summary->unchecked_count == 1 && $product->isPlanNone == 1) {
+                                                    break;
+                                                case 4:
+                                                    if ($summaryForDisplay && $uncheckedForDisplay == 1 && $isPlanNone == 1) {
                                                         $number_step_number = 5;
                                                         $show_step_number = 62.5;
                                                     } else {
-                                                        $number_step_number = 4;
                                                         $show_step_number = 50;
                                                     }
-                                                } elseif ($summary->step_number == 5) {
-                                                    if ($summary->unchecked_count == 2 && $product->isPlanNone == 1) {
+                                                    break;
+                                                case 5:
+                                                    if ($summaryForDisplay && $uncheckedForDisplay == 2 && $isPlanNone == 1) {
                                                         $number_step_number = 6;
                                                         $show_step_number = 75;
                                                     } else {
-                                                        $number_step_number = 5;
                                                         $show_step_number = 62.5;
                                                     }
-                                                } elseif ($summary->step_number == 6) {
-                                                    if ($summary->unchecked_count == 2 && $product->isPlanNone == 1) {
+                                                    break;
+                                                case 6:
+                                                    if ($summaryForDisplay && $uncheckedForDisplay == 2 && $isPlanNone == 1) {
                                                         $number_step_number = 7;
                                                         $show_step_number = 87.5;
                                                     } else {
-                                                        $number_step_number = 6;
                                                         $show_step_number = 75;
                                                     }
-                                                } elseif ($summary->step_number == 7) {
-                                                    $number_step_number = 7;
+                                                    break;
+                                                case 7:
                                                     $show_step_number = 87.5;
-                                                } else {
-                                                    $number_step_number = 8;
-                                                    if ($summary->unchecked_count == 0) {
+                                                    break;
+                                                case 8:
+                                                    if ($summaryForDisplay && $summaryForDisplay->unchecked_count == 0) {
                                                         $show_step_number = 100;
                                                     } else {
                                                         $show_step_number = 90;
                                                     }
-                                                }
+                                                    break;
+                                                default:
+                                                    $show_step_number = 0;
                                             }
 
                                         @endphp
