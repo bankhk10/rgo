@@ -1053,7 +1053,7 @@
                                                     <i class="fa-solid fa-arrow-left mr-2"></i> ย้อนกลับ
                                                 </a> --}}
                                             @endif
-                                            @if ($isEditable)
+                                            @if ($isEditable && !(auth()->user()->hasRole('admin') || auth()->user()->department == 'Registration'))
                                                 <button type="submit"
                                                     class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg shadow transition">
                                                     <i class="fa-solid fa-floppy-disk mr-1"></i> บันทึกความคืบหน้า
