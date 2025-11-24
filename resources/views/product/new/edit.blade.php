@@ -843,7 +843,15 @@
                             $previousStepsCompleted = collect(range(1, $stepNumber - 1))->every(
                                 fn($s) => $completedStepFlags[$s] ?? false,
                             );
-                            $isVisible = $stepNumber === 1 || $previousStepsCompleted;
+
+                            // Visibility: admins/managers/heads see steps as before;
+                            // other users only see the current step.
+                            if ($canEdit) {
+                                $isVisible = $stepNumber === 1 || $previousStepsCompleted;
+                            } else {
+                                $isVisible = $stepNumber === ($drug->current_step_number ?? 1);
+                            }
+
                             $isEditable =
                                 $canEdit ||
                                 (!auth()
@@ -972,11 +980,13 @@
                                                                     id="substep_{{ $stepNumber }}_{{ $checkboxIndex }}"
                                                                     value="{{ $checkboxIndex }}"
                                                                     {{ $isChecked ? 'checked' : '' }}
-                                                                    {{ !$isEditable ||
+                                                                    @if(
+                                                                        !$isEditable ||
                                                                         (!auth()->user()->hasRole('admin') &&
                                                                             !auth()->user()->hasRole('manager') &&
                                                                             !auth()->user()->hasRole('head Registration') &&
-                                                                            $dept !== $mappedUserDept) }}
+                                                                            $dept !== $mappedUserDept)
+                                                                    ) disabled @endif
                                                                     class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
                                                                     onchange="toggleInput({{ $stepNumber }}, {{ $checkboxIndex }})">
                                                                 <label
@@ -1055,12 +1065,12 @@
                                                     <i class="fa-solid fa-arrow-left mr-2"></i> ย้อนกลับ
                                                 </a> --}}
                                             @endif
-                                            @unless ($isAdminRole)
+                                            @if ($isEditable)
                                                 <button type="submit"
                                                     class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg shadow transition">
                                                     <i class="fa-solid fa-floppy-disk mr-1"></i> บันทึกความคืบหน้า
                                                 </button>
-                                            @endunless
+                                            @endif
                                         </div>
                                     @endif
                                 </div>
