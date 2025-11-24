@@ -323,7 +323,7 @@
 
                             // ดึงค่าจาก "แผนการทดลอง" ในขั้นตอนที่ 1
                             $planIndex = collect($subStepsAll[1]['items'])->flatten()->search('แผนการทดลอง');
-                            $planNote = $checkplan;
+                            $planNote = $checkplan ?? null;
                             $hideAcademicSteps = $planNote == 'ไม่มี';
 
                             // เก็บ flag ว่าขั้นตอนใดทำครบแล้วบ้าง
@@ -352,16 +352,10 @@
 
                             $mappedUserDept = mapDepartment(auth()->user()->department);
                         @endphp
-                        @php
-                            // คำนวณ step ปัจจุบัน: หา step ที่ยังไม่ครบ จาก $completedStepFlags
-                            $currentStepNumber =
-                                collect($completedStepFlags)->filter(fn($completed) => !$completed)->keys()->first() ??
-                                1; // ถ้าครบหมดให้ default เป็นขั้นตอนที่ 1
-                        @endphp
-                        @if (isset($subStepsAll[$currentStepNumber]))
+
+                        {{-- แสดงรายการทุกขั้นตอนเป็น readonly เพื่อให้เห็นการติ๊กของแต่ละขั้นตอน --}}
+                        @foreach ($subStepsAll as $stepNumber => $stepData)
                             @php
-                                $stepNumber = $currentStepNumber;
-                                $stepData = $subStepsAll[$stepNumber];
                                 $stepTitle = $stepData['title'];
                                 $allDepartments = $stepData['items'];
 
@@ -371,160 +365,93 @@
                                         ->all();
                                 }
 
-                                $departments =
-                                    !auth()->user()->hasRole('admin') && !auth()->user()->hasRole('manager')
-                                        ? collect($allDepartments)
-                                            ->filter(fn($_, $deptName) => $deptName === $mappedUserDept)
-                                            ->all()
-                                        : $allDepartments;
-
+                                // แสดงทุกแผนกในโหมดดูอย่างเดียว
+                                $departments = $allDepartments;
                                 $savedSubSteps = $drug->stepSubSteps($stepNumber)->get()->keyBy('sub_step_index');
 
-                                $allSubLabels = collect($departments)->flatten()->values()->all();
-                                $totalSub = count($allSubLabels);
-                                $completedCount = $savedSubSteps->whereNotNull('checked_at')->count();
-                                $percent = $totalSub > 0 ? round(($completedCount / $totalSub) * 100, 2) : 0;
-
-                                $canEdit = auth()->user()->hasRole('admin') || auth()->user()->hasRole('manager');
-                                $previousStepsCompleted = collect(range(1, $stepNumber - 1))->every(
-                                    fn($s) => $completedStepFlags[$s] ?? false,
-                                );
-                                $isVisible = $stepNumber === 1 || $previousStepsCompleted;
-                                $isEditable =
-                                    $canEdit || (!auth()->user()->hasRole('admin') && !$canEdit && $percent < 100);
+                                // หากขั้นตอนนี้ยังไม่มีรายการใดถูกติ๊ก ให้ข้ามการแสดงผล (ผู้ใช้ต้องการเห็นเฉพาะขั้นตอนที่มีการติ๊ก)
+                                $checkedInStep = $savedSubSteps->whereNotNull('checked_at')->count() ?? 0;
+                                if ($checkedInStep == 0) {
+                                    continue;
+                                }
                             @endphp
 
-                            @if ($isVisible && count($departments) > 150)
-                                <form method="POST" action="{{ route('newregis.update-subprogress', $drug->id) }}">
-                                    @csrf
-                                    @method('PUT')
-                                    <input type="hidden" name="step_number" value="{{ $stepNumber }}">
+                            @if (count($departments) > 0)
+                                <div class="mt-8 bg-gray-50 border border-gray-200 rounded-xl p-4">
+                                    <h4 class="text-lg font-semibold text-indigo-600 mb-3">
+                                        ขั้นตอนที่ {{ $stepNumber }}: {{ $stepTitle }}
+                                    </h4>
 
-                                    <div class="mt-8 bg-gray-50 border border-gray-200 rounded-xl p-4">
-                                        <h4 class="text-lg font-semibold text-indigo-600 mb-3">
-                                            ขั้นตอนที่ {{ $stepNumber }}: {{ $stepTitle }}
-                                        </h4>
+                                    <div class="space-y-6">
+                                        @php $checkboxIndex = 0; @endphp
+                                        @foreach ($stepData['items'] as $dept => $subItems)
+                                            @php
+                                                $skipThisDept =
+                                                    $hideAcademicSteps &&
+                                                    in_array($stepNumber, [4, 5, 6]) &&
+                                                    $dept === 'แผนกวิชาการ';
+                                                if ($skipThisDept) {
+                                                    $checkboxIndex += count($subItems);
+                                                    continue;
+                                                }
+                                            @endphp
 
-                                        {{-- แถบเปอร์เซ็นต์ --}}
-                                        {{-- <div class="mb-4">
-                                            <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                                <div class="h-2.5 rounded-full @if ($percent < 25) bg-red-500 @elseif ($percent < 75) bg-yellow-500 @else bg-green-500 @endif"
-                                                    style="width: {{ $percent }}%">
+                                            <div>
+                                                <h5 class="text-sm font-bold text-gray-700 mb-2">{{ $dept }}</h5>
+                                                <div class="space-y-2 pl-4">
+                                                    @foreach ($subItems as $label)
+                                                        @php
+                                                            $record = $savedSubSteps[$checkboxIndex] ?? null;
+                                                            $isChecked = $record && $record->checked_at;
+                                                            $note = $record->created_by ?? '';
+                                                            $remark = $record->remark ?? '';
+                                                        @endphp
+                                                        <div class="flex flex-wrap items-center gap-3">
+                                                            <input disabled type="checkbox" name="sub_steps[]"
+                                                                id="substep_{{ $stepNumber }}_{{ $checkboxIndex }}"
+                                                                value="{{ $checkboxIndex }}"
+                                                                {{ $isChecked ? 'checked' : '' }}
+                                                                class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                                                            <label for="substep_{{ $stepNumber }}_{{ $checkboxIndex }}"
+                                                                class="text-sm text-gray-800">{{ $label }}</label>
+
+                                                            @if (in_array($label, ['แผนการทดลอง', 'หนังสือขอยกเว้น PHI', 'แผน PHI']))
+                                                                <div id="radio_container_{{ $stepNumber }}_{{ $checkboxIndex }}"
+                                                                    class="flex items-center space-x-4"
+                                                                    style="{{ $isChecked ? '' : 'display: none;' }}">
+                                                                    <label class="inline-flex items-center">
+                                                                        <input disabled type="radio"
+                                                                            class="form-radio text-green-500 w-5 h-5"
+                                                                            name="sub_step_notes[{{ $checkboxIndex }}]"
+                                                                            value="ไม่มี"
+                                                                            {{ $note == 'ไม่มี' ? 'checked' : '' }}>
+                                                                        <span class="ml-2 text-gray-800">ไม่มี</span>
+                                                                    </label>
+                                                                    <label class="inline-flex items-center">
+                                                                        <input disabled type="radio"
+                                                                            class="form-radio text-yellow-500 w-5 h-5"
+                                                                            name="sub_step_notes[{{ $checkboxIndex }}]"
+                                                                            value="มี"
+                                                                            {{ $note == 'มี' ? 'checked' : '' }}>
+                                                                        <span class="ml-2 text-gray-800">มี</span>
+                                                                    </label>
+                                                                </div>
+                                                            @endif
+
+                                                            <input type="text" value="{{ $remark }}"
+                                                                placeholder="หมายเหตุ"
+                                                                class="p-2 border rounded-md flex-1 w-48"
+                                                                disabled>
+                                                        </div>
+                                                        @php $checkboxIndex++; @endphp
+                                                    @endforeach
                                                 </div>
                                             </div>
-                                            <div class="text-xs text-gray-500 text-right mt-1">{{ $percent }}%
-                                            </div>
-                                        </div> --}}
-
-                                        {{-- รายการ checkbox --}}
-                                        <div class="space-y-6">
-                                            @php $checkboxIndex = 0; @endphp
-                                            @foreach ($stepData['items'] as $dept => $subItems)
-                                                @php
-                                                    $skipThisDept =
-                                                        $hideAcademicSteps &&
-                                                        in_array($stepNumber, [4, 5, 6]) &&
-                                                        $dept === 'แผนกวิชาการ';
-                                                    if ($skipThisDept) {
-                                                        $checkboxIndex += count($subItems);
-                                                        continue;
-                                                    }
-
-                                                    $showDept =
-                                                        auth()->user()->hasRole('admin') ||
-                                                        auth()->user()->hasRole('manager') ||
-                                                        $dept === $mappedUserDept;
-                                                @endphp
-
-                                                @if ($showDept)
-                                                    <div>
-                                                        <h5 class="text-sm font-bold text-gray-700 mb-2">
-                                                            {{ $dept }}</h5>
-                                                        <div class="space-y-2 pl-4">
-                                                            @foreach ($subItems as $label)
-                                                                @php
-                                                                    $record = $savedSubSteps[$checkboxIndex] ?? null;
-                                                                    $isChecked = $record && $record->checked_at;
-                                                                    $note = $record->created_by ?? '';
-                                                                    $remark = $record->remark ?? '';
-                                                                @endphp
-                                                                <div class="flex flex-wrap items-center gap-3">
-                                                                    <input disabled type="checkbox" name="sub_steps[]"
-                                                                        id="substep_{{ $stepNumber }}_{{ $checkboxIndex }}"
-                                                                        value="{{ $checkboxIndex }}"
-                                                                        {{ $isChecked ? 'checked' : '' }}
-                                                                        {{ !$isEditable || (!auth()->user()->hasRole('admin') && !auth()->user()->hasRole('manager') && $dept !== $mappedUserDept) }}
-                                                                        class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                                                                    <label
-                                                                        for="substep_{{ $stepNumber }}_{{ $checkboxIndex }}"
-                                                                        class="text-sm text-gray-800">{{ $label }}</label>
-
-                                                                    @if (in_array($label, ['แผนการทดลอง', 'หนังสือขอยกเว้น PHI', 'แผน PHI']))
-                                                                        <div id="radio_container_{{ $stepNumber }}_{{ $checkboxIndex }}"
-                                                                            class="flex items-center space-x-4"
-                                                                            style="{{ $isChecked ? '' : 'display: none;' }}">
-                                                                            <label class="inline-flex items-center">
-                                                                                <input disabled type="radio"
-                                                                                    class="form-radio text-green-500 w-5 h-5"
-                                                                                    name="sub_step_notes[{{ $checkboxIndex }}]"
-                                                                                    value="ไม่มี"
-                                                                                    {{ $note == 'ไม่มี' ? 'checked' : '' }}
-                                                                                    {{ !$isEditable ? 'disabled' : '' }}>
-                                                                                <span
-                                                                                    class="ml-2 text-gray-800">ไม่มี</span>
-                                                                            </label>
-                                                                            <label class="inline-flex items-center">
-                                                                                <input disabled type="radio"
-                                                                                    class="form-radio text-yellow-500 w-5 h-5"
-                                                                                    name="sub_step_notes[{{ $checkboxIndex }}]"
-                                                                                    value="มี"
-                                                                                    {{ $note == 'มี' ? 'checked' : '' }}
-                                                                                    {{ !$isEditable ? 'disabled' : '' }}>
-                                                                                <span
-                                                                                    class="ml-2 text-gray-800">มี</span>
-                                                                            </label>
-                                                                        </div>
-                                                                    @endif
-
-                                                                    <input type="text" value="{{ $remark }}"
-                                                                        placeholder="หมายเหตุ"
-                                                                        class="p-2 border rounded-md flex-1 w-48"
-                                                                        disabled>
-                                                                </div>
-                                                                @php $checkboxIndex++; @endphp
-                                                            @endforeach
-                                                        </div>
-                                                    </div>
-                                                @else
-                                                    @php $checkboxIndex += count($subItems); @endphp
-                                                @endif
-                                            @endforeach
-                                        </div>
-
-                                        @php
-                                            // ตรวจสอบว่าแผนกของผู้ใช้งานติ๊กครบแล้วหรือยัง
-                                            $userCheckedCount = 0;
-                                            $userTotalCount = 0;
-                                            foreach ($departments as $dept => $subItems) {
-                                                if ($dept === $mappedUserDept) {
-                                                    foreach ($subItems as $label) {
-                                                        $record = $savedSubSteps[$userTotalCount] ?? null;
-                                                        if ($record && $record->checked_at) {
-                                                            $userCheckedCount++;
-                                                        }
-                                                        $userTotalCount++;
-                                                    }
-                                                } else {
-                                                    $userTotalCount += count($subItems);
-                                                }
-                                            }
-                                            $userDeptComplete =
-                                                $userTotalCount > 0 && $userCheckedCount === $userTotalCount;
-                                        @endphp
+                                        @endforeach
                                     </div>
-                                </form>
+                                </div>
                             @endif
-                        @endif
+                        @endforeach
                     </div>
                 @endif
 
