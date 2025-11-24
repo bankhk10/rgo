@@ -752,59 +752,70 @@
                             auth()->user()->hasRole('manager') ||
                             auth()->user()->hasRole('head Registration');
 
-                        // สรุปสถานะความคืบหน้าปัจจุบัน (เหมือน index)
+                        // สรุปสถานะความคืบหน้าปัจจุบัน (ใช้ logic เดียวกับหน้า index)
                         $overall_show_step_number = 0;
                         $overall_number_step_number = 0;
-                        if (isset($drug->step_summary[$drug->current_step_number])) {
-                            $summary = $drug->step_summary[$drug->current_step_number];
-                            if ($summary->step_number == 1) {
-                                $overall_number_step_number = 1;
-                                if ($summary->unchecked_count >= 12) {
-                                    $overall_show_step_number = 0;
-                                } else {
-                                    $overall_show_step_number = 12.5;
-                                }
-                            } elseif ($summary->step_number == 2) {
-                                $overall_number_step_number = 2;
-                                $overall_show_step_number = 25;
-                            } elseif ($summary->step_number == 3) {
-                                $overall_number_step_number = 3;
-                                $overall_show_step_number = 37.5;
-                            } elseif ($summary->step_number == 4) {
-                                if ($summary->unchecked_count == 1 && $drug->isPlanNone == 1) {
-                                    $overall_number_step_number = 5;
-                                    $overall_show_step_number = 62.5;
-                                } else {
-                                    $overall_number_step_number = 4;
-                                    $overall_show_step_number = 50;
-                                }
-                            } elseif ($summary->step_number == 5) {
-                                if ($summary->unchecked_count == 2 && $drug->isPlanNone == 1) {
-                                    $overall_number_step_number = 6;
-                                    $overall_show_step_number = 75;
-                                } else {
-                                    $overall_number_step_number = 5;
-                                    $overall_show_step_number = 62.5;
-                                }
-                            } elseif ($summary->step_number == 6) {
-                                if ($summary->unchecked_count == 2 && $drug->isPlanNone == 1) {
-                                    $overall_number_step_number = 7;
-                                    $overall_show_step_number = 87.5;
-                                } else {
-                                    $overall_number_step_number = 6;
-                                    $overall_show_step_number = 75;
-                                }
-                            } elseif ($summary->step_number == 7) {
-                                $overall_number_step_number = 7;
-                                $overall_show_step_number = 87.5;
-                            } else {
-                                $overall_number_step_number = 8;
-                                if ($summary->unchecked_count == 0) {
-                                    $overall_show_step_number = 100;
-                                } else {
-                                    $overall_show_step_number = 90;
-                                }
+
+                        // Build per-step info from step_summary
+                        $stepsInfoLocal = [];
+                        for ($i = 1; $i <= 8; $i++) {
+                            $s = $drug->step_summary[$i] ?? null;
+                            $total = 0;
+                            $unchecked = 0;
+                            if ($s) {
+                                $total = is_numeric($s->last_index) ? ($s->last_index + 1) : 0;
+                                $unchecked = (int) $s->unchecked_count;
                             }
+                            $checked = $total - $unchecked;
+                            $stepsInfoLocal[$i] = ['summary' => $s, 'total' => $total, 'unchecked' => $unchecked, 'checked' => $checked];
+                        }
+
+                        // find latest step that has any checked items
+                        $lastCheckedStepLocal = 0;
+                        for ($i = 1; $i <= 8; $i++) {
+                            if ($stepsInfoLocal[$i]['checked'] > 0) $lastCheckedStepLocal = $i;
+                        }
+
+                        if ($lastCheckedStepLocal > 0) {
+                            $displayStep = $lastCheckedStepLocal;
+                        } else {
+                            // find latest fully completed step
+                            $lastFullyCompletedLocal = 0;
+                            for ($i = 1; $i <= 8; $i++) {
+                                if ($stepsInfoLocal[$i]['total'] > 0 && $stepsInfoLocal[$i]['unchecked'] == 0) $lastFullyCompletedLocal = $i;
+                            }
+                            $displayStep = $lastFullyCompletedLocal > 0 ? $lastFullyCompletedLocal : 1;
+                        }
+
+                        $overall_number_step_number = $displayStep;
+
+                        // compute overall percent for displayStep
+                        $sdisp = $drug->step_summary[$displayStep] ?? null;
+                        $uncheckedDisp = $sdisp->unchecked_count ?? null;
+                        $isPlanNoneLocal = $drug->isPlanNone ?? 0;
+                        switch ($displayStep) {
+                            case 1:
+                                if ($sdisp && $uncheckedDisp >= 12) $overall_show_step_number = 0; else $overall_show_step_number = 12.5;
+                                break;
+                            case 2:
+                                $overall_show_step_number = 25; break;
+                            case 3:
+                                $overall_show_step_number = 37.5; break;
+                            case 4:
+                                if ($sdisp && $uncheckedDisp == 1 && $isPlanNoneLocal == 1) { $overall_number_step_number = 5; $overall_show_step_number = 62.5; } else { $overall_show_step_number = 50; }
+                                break;
+                            case 5:
+                                if ($sdisp && $uncheckedDisp == 2 && $isPlanNoneLocal == 1) { $overall_number_step_number = 6; $overall_show_step_number = 75; } else { $overall_show_step_number = 62.5; }
+                                break;
+                            case 6:
+                                if ($sdisp && $uncheckedDisp == 2 && $isPlanNoneLocal == 1) { $overall_number_step_number = 7; $overall_show_step_number = 87.5; } else { $overall_show_step_number = 75; }
+                                break;
+                            case 7:
+                                $overall_show_step_number = 87.5; break;
+                            case 8:
+                                if ($sdisp && $sdisp->unchecked_count == 0) $overall_show_step_number = 100; else $overall_show_step_number = 90; break;
+                            default:
+                                $overall_show_step_number = 0;
                         }
                     @endphp
 
@@ -849,7 +860,7 @@
                             if ($canEdit) {
                                 $isVisible = $stepNumber === 1 || $previousStepsCompleted;
                             } else {
-                                $isVisible = $stepNumber === ($drug->current_step_number ?? 1);
+                                $isVisible = $stepNumber === ($displayStep ?? ($drug->current_step_number ?? 1));
                             }
 
                             $isEditable =
@@ -867,63 +878,40 @@
                                 @method('PUT')
 
                                 @php
-                                    $show_step_number = 0;
-                                    $number_step_number = 0;
-                                    if (isset($drug->step_summary[$drug->current_step_number])) {
-                                        $summary = $drug->step_summary[$drug->current_step_number];
-                                        if ($summary->step_number == 1) {
-                                            $number_step_number = 1;
-                                            if ($summary->unchecked_count >= 12) {
-                                                $show_step_number = 0;
-                                            } else {
-                                                $show_step_number = 12.5;
-                                            }
-                                        } elseif ($summary->step_number == 2) {
-                                            $number_step_number = 2;
-                                            $show_step_number = 25;
-                                        } elseif ($summary->step_number == 3) {
-                                            $number_step_number = 3;
-                                            $show_step_number = 37.5;
-                                        } elseif ($summary->step_number == 4) {
-                                            if ($summary->unchecked_count == 1 && $drug->isPlanNone == 1) {
-                                                $number_step_number = 5;
-                                                $show_step_number = 62.5;
-                                            } else {
-                                                $number_step_number = 4;
-                                                $show_step_number = 50;
-                                            }
-                                        } elseif ($summary->step_number == 5) {
-                                            if ($summary->unchecked_count == 2 && $drug->isPlanNone == 1) {
-                                                $number_step_number = 6;
-                                                $show_step_number = 75;
-                                            } else {
-                                                $number_step_number = 5;
-                                                $show_step_number = 62.5;
-                                            }
-                                        } elseif ($summary->step_number == 6) {
-                                            if ($summary->unchecked_count == 2 && $drug->isPlanNone == 1) {
-                                                $number_step_number = 7;
-                                                $show_step_number = 87.5;
-                                            } else {
-                                                $number_step_number = 6;
-                                                $show_step_number = 75;
-                                            }
-                                        } elseif ($summary->step_number == 7) {
-                                            $number_step_number = 7;
-                                            $show_step_number = 87.5;
-                                        } else {
-                                            $number_step_number = 8;
-                                            if ($summary->unchecked_count == 0) {
-                                                $show_step_number = 100;
-                                            } else {
-                                                $show_step_number = 90;
-                                            }
-                                        }
+                                    // compute progress value for this specific step form
+                                    $form_show_step_number = 0;
+                                    $form_number_step_number = $stepNumber;
+                                    $sfor = $drug->step_summary[$stepNumber] ?? null;
+                                    $uncheckedFor = $sfor->unchecked_count ?? null;
+                                    $isPlanNoneLocal2 = $drug->isPlanNone ?? 0;
+                                    switch ($stepNumber) {
+                                        case 1:
+                                            if ($sfor && $uncheckedFor >= 12) $form_show_step_number = 0; else $form_show_step_number = 12.5;
+                                            break;
+                                        case 2:
+                                            $form_show_step_number = 25; break;
+                                        case 3:
+                                            $form_show_step_number = 37.5; break;
+                                        case 4:
+                                            if ($sfor && $uncheckedFor == 1 && $isPlanNoneLocal2 == 1) { $form_number_step_number = 5; $form_show_step_number = 62.5; } else { $form_show_step_number = 50; }
+                                            break;
+                                        case 5:
+                                            if ($sfor && $uncheckedFor == 2 && $isPlanNoneLocal2 == 1) { $form_number_step_number = 6; $form_show_step_number = 75; } else { $form_show_step_number = 62.5; }
+                                            break;
+                                        case 6:
+                                            if ($sfor && $uncheckedFor == 2 && $isPlanNoneLocal2 == 1) { $form_number_step_number = 7; $form_show_step_number = 87.5; } else { $form_show_step_number = 75; }
+                                            break;
+                                        case 7:
+                                            $form_show_step_number = 87.5; break;
+                                        case 8:
+                                            if ($sfor && $sfor->unchecked_count == 0) $form_show_step_number = 100; else $form_show_step_number = 90; break;
+                                        default:
+                                            $form_show_step_number = 0;
                                     }
                                 @endphp
 
                                 <input type="hidden" name="step_number" value="{{ $stepNumber }}">
-                                <input type="hidden" name="progress" value="{{ $show_step_number }}">
+                                <input type="hidden" name="progress" value="{{ $form_show_step_number }}">
                                 <div class="mt-8 bg-gray-50 border border-gray-200 rounded-xl p-4">
                                     <h4 class="text-lg font-semibold text-indigo-600 mb-3">
                                         ขั้นตอนที่ {{ $stepNumber }}: {{ $stepTitle }}
