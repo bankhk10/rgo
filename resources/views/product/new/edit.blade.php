@@ -609,9 +609,6 @@
                     </style>
                 @endif
 
-
-
-
                 {{-- ไทม์ไลน์การขึ้นทะเบียน --}}
 
                 <div class="mt-8">
@@ -810,28 +807,6 @@
                             }
                         }
                     @endphp
-
-                    {{-- สรุปสถานะความคืบหน้าปัจจุบัน (เหมือนหน้า index) --}}
-                    {{-- <div class="bg-gray-100 rounded-xl p-4 mb-6">
-                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                            <div>
-                                @if ($overall_show_step_number >= 100)
-                                    <p class="text-green-600 font-semibold">สำเร็จ</p>
-                                @else
-                                    <p class="text-indigo-700 font-semibold">ขั้นตอนที่
-                                        {{ $overall_number_step_number }}</p>
-                                @endif
-                            </div>
-                            <div class="flex-1">
-                                <div class="w-full bg-gray-300 rounded-full h-3 overflow-hidden">
-                                    <div class="h-3 bg-green-500" style="width: {{ $overall_show_step_number }}%">
-                                    </div>
-                                </div>
-                                <div class="text-xs text-gray-600 mt-1 text-right">
-                                    {{ number_format($overall_show_step_number, 1) }}%</div>
-                            </div>
-                        </div>
-                    </div> --}}
 
                     @foreach ($subStepsAll as $stepNumber => $stepData)
                         @php
@@ -1108,10 +1083,6 @@
             </div>
         </div>
     </main>
-
-
-
-
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://npmcdn.com/flatpickr/dist/l10n/th.js"></script>
     <script>
@@ -1143,8 +1114,6 @@
                 const yyyyBE = selDate.getFullYear() + 543;
                 instance.input.value = `${dd}/${mm}/${yyyyBE}`;
             }
-
-            // ก่อน submit → แปลงเป็น ค.ศ. yyyy-mm-dd
             const form = document.getElementById("editRegisForm");
             if (form) {
                 form.addEventListener("submit", () => {
@@ -1161,12 +1130,8 @@
         });
     </script>
 
-
-
     <script>
         document.getElementById('menu-newregis')?.classList.add('side-menu--active');
-
-        // Store the last selected radio value for each checkbox with radio options
         const lastSelectedRadioValue = {};
 
         function toggleInput(stepNumber, checkboxIndex) {
@@ -1255,7 +1220,4 @@
             });
         </script>
     @endif
-
-
-
 </x-app-layout>
