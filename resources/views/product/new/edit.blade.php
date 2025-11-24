@@ -10,8 +10,7 @@
                 @if (auth()->user()->hasRole('admin') ||
                         auth()->user()->hasRole('manager') ||
                         auth()->user()->hasRole('head Registration') ||
-                        auth()->user()->department == 'Registration'
-                        )
+                        auth()->user()->department == 'Registration')
                     @if ($errors->any())
                         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
                             role="alert">
@@ -90,9 +89,9 @@
                                                 เลือกบริษัทที่ขึ้นทะเบียน --</div>
                                             @foreach ($companies as $company)
                                                 {{-- @if ($company->id != 4) --}}
-                                                    <div class="dropdown-item" data-value="{{ $company->full_name }}">
-                                                        {{ $company->full_name }}
-                                                    </div>
+                                                <div class="dropdown-item" data-value="{{ $company->full_name }}">
+                                                    {{ $company->full_name }}
+                                                </div>
                                                 {{-- @endif --}}
                                             @endforeach
                                         </div>
@@ -191,10 +190,9 @@
                                                 --</div>
                                             @foreach ($companies as $company)
                                                 {{-- @if ($company->id != 4) --}}
-                                                    <div class="dropdown-item"
-                                                        data-value="{{ $company->full_name }}">
-                                                        {{ $company->full_name }}
-                                                    </div>
+                                                <div class="dropdown-item" data-value="{{ $company->full_name }}">
+                                                    {{ $company->full_name }}
+                                                </div>
                                                 {{-- @endif --}}
                                             @endforeach
                                         </div>
@@ -752,7 +750,88 @@
                         }
 
                         $mappedUserDept = mapDepartment(auth()->user()->department);
+                        $isAdminRole =
+                            auth()->user()->hasRole('admin') ||
+                            auth()->user()->hasRole('manager') ||
+                            auth()->user()->hasRole('head Registration');
+
+                        // สรุปสถานะความคืบหน้าปัจจุบัน (เหมือน index)
+                        $overall_show_step_number = 0;
+                        $overall_number_step_number = 0;
+                        if (isset($drug->step_summary[$drug->current_step_number])) {
+                            $summary = $drug->step_summary[$drug->current_step_number];
+                            if ($summary->step_number == 1) {
+                                $overall_number_step_number = 1;
+                                if ($summary->unchecked_count >= 12) {
+                                    $overall_show_step_number = 0;
+                                } else {
+                                    $overall_show_step_number = 12.5;
+                                }
+                            } elseif ($summary->step_number == 2) {
+                                $overall_number_step_number = 2;
+                                $overall_show_step_number = 25;
+                            } elseif ($summary->step_number == 3) {
+                                $overall_number_step_number = 3;
+                                $overall_show_step_number = 37.5;
+                            } elseif ($summary->step_number == 4) {
+                                if ($summary->unchecked_count == 1 && $drug->isPlanNone == 1) {
+                                    $overall_number_step_number = 5;
+                                    $overall_show_step_number = 62.5;
+                                } else {
+                                    $overall_number_step_number = 4;
+                                    $overall_show_step_number = 50;
+                                }
+                            } elseif ($summary->step_number == 5) {
+                                if ($summary->unchecked_count == 2 && $drug->isPlanNone == 1) {
+                                    $overall_number_step_number = 6;
+                                    $overall_show_step_number = 75;
+                                } else {
+                                    $overall_number_step_number = 5;
+                                    $overall_show_step_number = 62.5;
+                                }
+                            } elseif ($summary->step_number == 6) {
+                                if ($summary->unchecked_count == 2 && $drug->isPlanNone == 1) {
+                                    $overall_number_step_number = 7;
+                                    $overall_show_step_number = 87.5;
+                                } else {
+                                    $overall_number_step_number = 6;
+                                    $overall_show_step_number = 75;
+                                }
+                            } elseif ($summary->step_number == 7) {
+                                $overall_number_step_number = 7;
+                                $overall_show_step_number = 87.5;
+                            } else {
+                                $overall_number_step_number = 8;
+                                if ($summary->unchecked_count == 0) {
+                                    $overall_show_step_number = 100;
+                                } else {
+                                    $overall_show_step_number = 90;
+                                }
+                            }
+                        }
                     @endphp
+
+                    {{-- สรุปสถานะความคืบหน้าปัจจุบัน (เหมือนหน้า index) --}}
+                    {{-- <div class="bg-gray-100 rounded-xl p-4 mb-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                            <div>
+                                @if ($overall_show_step_number >= 100)
+                                    <p class="text-green-600 font-semibold">สำเร็จ</p>
+                                @else
+                                    <p class="text-indigo-700 font-semibold">ขั้นตอนที่
+                                        {{ $overall_number_step_number }}</p>
+                                @endif
+                            </div>
+                            <div class="flex-1">
+                                <div class="w-full bg-gray-300 rounded-full h-3 overflow-hidden">
+                                    <div class="h-3 bg-green-500" style="width: {{ $overall_show_step_number }}%">
+                                    </div>
+                                </div>
+                                <div class="text-xs text-gray-600 mt-1 text-right">
+                                    {{ number_format($overall_show_step_number, 1) }}%</div>
+                            </div>
+                        </div>
+                    </div> --}}
 
                     @foreach ($subStepsAll as $stepNumber => $stepData)
                         @php
@@ -799,7 +878,8 @@
                         @endphp
 
                         @if ($isVisible && count($departments) > 0)
-                            <form method="POST" action="{{ route('newregis.update-subprogress', $drug->id) }}">
+                            <form data-step-form method="POST"
+                                action="{{ route('newregis.update-subprogress', $drug->id) }}">
                                 @csrf
                                 @method('PUT')
 
@@ -822,7 +902,7 @@
                                             $number_step_number = 3;
                                             $show_step_number = 37.5;
                                         } elseif ($summary->step_number == 4) {
-                                            if ($summary->unchecked_count == 1) {
+                                            if ($summary->unchecked_count == 1 && $drug->isPlanNone == 1) {
                                                 $number_step_number = 5;
                                                 $show_step_number = 62.5;
                                             } else {
@@ -830,7 +910,7 @@
                                                 $show_step_number = 50;
                                             }
                                         } elseif ($summary->step_number == 5) {
-                                            if ($summary->unchecked_count == 2) {
+                                            if ($summary->unchecked_count == 2 && $drug->isPlanNone == 1) {
                                                 $number_step_number = 6;
                                                 $show_step_number = 75;
                                             } else {
@@ -838,7 +918,7 @@
                                                 $show_step_number = 62.5;
                                             }
                                         } elseif ($summary->step_number == 6) {
-                                            if ($summary->unchecked_count == 2) {
+                                            if ($summary->unchecked_count == 2 && $drug->isPlanNone == 1) {
                                                 $number_step_number = 7;
                                                 $show_step_number = 87.5;
                                             } else {
@@ -994,20 +1074,36 @@
 
                                     @if (!$userDeptComplete)
                                         <div class="text-center mt-4">
-                                            <a href="{{ route('newregis.index') }}"
-                                                class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg shadow transition duration-300 mr-2">
-                                                <i class="fa-solid fa-arrow-left mr-2"></i> ย้อนกลับ
-                                            </a>
-                                            <button type="submit"
-                                                class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg shadow transition">
-                                                <i class="fa-solid fa-floppy-disk mr-1"></i> บันทึกความคืบหน้า
-                                            </button>
+                                            @if ($stepNumber == 1)
+                                                {{-- <a href="{{ route('newregis.index') }}"
+                                                    class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg shadow transition duration-300 mr-2">
+                                                    <i class="fa-solid fa-arrow-left mr-2"></i> ย้อนกลับ
+                                                </a> --}}
+                                            @endif
+                                            @unless ($isAdminRole)
+                                                <button type="submit"
+                                                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg shadow transition">
+                                                    <i class="fa-solid fa-floppy-disk mr-1"></i> บันทึกความคืบหน้า
+                                                </button>
+                                            @endunless
                                         </div>
                                     @endif
                                 </div>
                             </form>
                         @endif
                     @endforeach
+                    @if ($isAdminRole)
+                        <div class="text-center mt-8">
+                            <a href="{{ route('newregis.index') }}"
+                                class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg shadow transition duration-300 mr-2">
+                                <i class="fa-solid fa-arrow-left mr-2"></i> ย้อนกลับ
+                            </a>
+                            <button type="button" id="save-all-progress"
+                                class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg shadow-md">
+                                <i class="fa-solid fa-floppy-disk mr-1"></i> บันทึกความคืบหน้า
+                            </button>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -1106,6 +1202,44 @@
         }
     </script>
 
+    @if ($isAdminRole)
+        <script>
+            document.getElementById('save-all-progress')?.addEventListener('click', async () => {
+                const forms = document.querySelectorAll('form[data-step-form]');
+                let successCount = 0;
+                for (const f of forms) {
+                    const formData = new FormData(f);
+                    try {
+                        const resp = await fetch(f.action, {
+                            method: 'POST',
+                            headers: {
+                                'Accept': 'application/json'
+                            },
+                            body: formData
+                        });
+                        if (resp.ok) {
+                            successCount++;
+                        }
+                    } catch (e) {
+                        console.error('Save step failed', e);
+                    }
+                }
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: successCount === forms.length ? 'success' : 'info',
+                        title: successCount === forms.length ? 'บันทึกครบทุกขั้นตอนแล้ว' :
+                            'บันทึกบางขั้นตอนสำเร็จ',
+                        text: 'กำลังรีเฟรช...',
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => window.location.reload());
+                } else {
+                    window.location.reload();
+                }
+            });
+        </script>
+    @endif
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @if (session('success'))
         <script>
@@ -1113,7 +1247,7 @@
                 icon: 'success',
                 title: 'บันทึกสำเร็จ!',
                 confirmButtonColor: '#3085d6',
-                confirmButtonText: 'ตกลง'
+                confirmButtonText: 'ตกลง'   
             }).then((result) => {
                 if (result.isConfirmed) {
                     window.location.href = "{{ route('newregis.index') }}";
