@@ -29,42 +29,9 @@
                         <p class="font-semibold text-indigo-600 mb-2">ชื่อทางการค้า</p>
                         <p>{{ $drug->trade_name ?? '-' }}</p>
                     </div>
-                    {{-- <div>
-                        <p class="font-semibold text-indigo-600">ชื่อวัตถุอันตราย (ไทย)</p>
-                        <p>{{ $drug->chemical_name_th ?? '-' }}</p>
-                    </div>
-                    <div>
-                        <p class="font-semibold text-indigo-600 mb-2">ชื่อวัตถุอันตราย (อังกฤษ)</p>
-                        <p>{{ $drug->chemical_name_en ?? '-' }}</p>
-                    </div> --}}
-                    {{-- <div>
-                        <p class="font-semibold text-indigo-600">ชื่อผู้ผลิตและแหล่งผลิต:</p>
-                        <p>{{ $drug->manufacturer_origin ?? '-' }}</p>
-                    </div>
-                    <div>
-                        <p class="font-semibold text-indigo-600">ชื่อผู้นำเข้า:</p>
-                        <p>{{ $drug->importer_name ?? '-' }}</p>
-                    </div>
-                    <div>
-                        <p class="font-semibold text-indigo-600">ชื่อผู้จำหน่าย/ผู้จัดจำหน่าย:</p>
-                        <p>{{ $drug->distributor_name ?? '-' }}</p>
-                    </div>
-                    <div>
-                        <p class="font-semibold text-indigo-600">วัตถุประสงค์และประเภทของการใช้:</p>
-                        <p>{{ $drug->purpose_and_type_of_use ?? '-' }}</p>
-                    </div>
-                    <div>
-                        <p class="font-semibold text-indigo-600">ชนิดและลักษณะหีบห่อหรือภาชนะบรรจุ:</p>
-                        <p>{{ $drug->packaging_type ?? '-' }}</p>
-                    </div> --}}
-                    {{-- <div>
-                        <p class="font-semibold text-indigo-600">อื่นๆ (ระบุ):</p>
-                        <p>{{ $drug->notes ?? '-' }}</p>
-                    </div> --}}
                 </div>
 
                 @php
-                    // สร้าง label ของแต่ละขั้นตอน (ใช้สำหรับแสดงไทม์ไลน์)
                     $labels = [
                         1 => 'คณะ PDC อนุมัติให้ดำเนินการขึ้นทะเบียน',
                         2 => 'นำเข้าตัวอย่าง',
