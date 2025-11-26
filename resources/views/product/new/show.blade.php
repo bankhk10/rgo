@@ -70,7 +70,23 @@
                             @foreach ($chunk as $stepNumber => $label)
                                 @php
                                     $info = $stepsInfo[$stepNumber] ?? ['total'=>0,'checked'=>0,'unchecked'=>0];
-                                    $isCompleted = ($info['total'] > 0 && $info['unchecked'] == 0) || ($stepNumber == 8 && $drug->progress >= 100);
+                                    
+                                    // ตรวจสอบว่าขั้นตอนถัดไปมีการติ๊กหรือไม่
+                                    $nextStepHasChecked = false;
+                                    if ($stepNumber < 8) {
+                                        $nextInfo = $stepsInfo[$stepNumber + 1] ?? ['total'=>0,'checked'=>0,'unchecked'=>0];
+                                        $nextStepHasChecked = $nextInfo['checked'] > 0;
+                                    }
+                                    
+                                    // ขั้นตอนจะถือว่าเสร็จสมบูรณ์ต่อเมื่อขั้นตอนถัดไปมีการติ๊กแล้ว
+                                    // ยกเว้นขั้นตอนสุดท้าย (8) ที่ดูจาก progress
+                                    $isCompleted = false;
+                                    if ($stepNumber == 8) {
+                                        $isCompleted = $drug->progress >= 100;
+                                    } else {
+                                        $isCompleted = $nextStepHasChecked;
+                                    }
+                                    
                                     $isCurrent = false;
                                     if (!$isCompleted) {
                                         // ถ้ามีการติ๊กบางรายการ ให้มองเป็นขั้นตอนกำลังดำเนินการ
