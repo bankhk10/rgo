@@ -272,7 +272,7 @@
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
-
+{{-- 
                     <div>
                         <label for="quantity" class="mx-3 text-base block text-gray-700 mb-1 mt-3">ปริมาณ</label>
                         <input type="text" name="quantity" id="quantity" value="{{ old('quantity') }}"
@@ -281,7 +281,7 @@
                         @error('quantity')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
-                    </div>
+                    </div> --}}
 
 
 
