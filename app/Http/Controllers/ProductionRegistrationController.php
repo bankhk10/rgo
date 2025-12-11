@@ -24,13 +24,17 @@ class ProductionRegistrationController extends Controller
         $query->with('company');
 
         if ($request->filled('search')) {
-            $search = $request->input('search');
-            $query->where(function ($q) use ($search) {
-                $q->where('chemical_name_th', 'like', "%$search%")
-                    ->orWhere('chemical_name_en', 'like', "%$search%")
-                    ->orWhere('registration_number', 'like', "%$search%")
-                    ->orWhereHas('company', function ($q2) use ($search) {
-                        $q2->where('full_name', 'like', "%$search%");
+            // Normalize: remove whitespace and lowercase the search term for flexible matching
+            $rawSearch = (string) $request->input('search');
+            $normalized = mb_strtolower(preg_replace('/\s+/', '', $rawSearch));
+            $like = '%' . $normalized . '%';
+
+            $query->where(function ($q) use ($like) {
+                $q->whereRaw("REPLACE(LOWER(chemical_name_th), ' ', '') LIKE ?", [$like])
+                    ->orWhereRaw("REPLACE(LOWER(chemical_name_en), ' ', '') LIKE ?", [$like])
+                    ->orWhereRaw("REPLACE(LOWER(registration_number), ' ', '') LIKE ?", [$like])
+                    ->orWhereHas('company', function ($q2) use ($like) {
+                        $q2->whereRaw("REPLACE(LOWER(full_name), ' ', '') LIKE ?", [$like]);
                     });
             });
         }
