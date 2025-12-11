@@ -32,13 +32,18 @@ class ChemicalRegistrationController extends Controller
         $query->where('new_or_old', true);
 
         // ค้นหาตามคำค้น
-        if ($request->has('search') && $request->search != '') {
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('trade_name', 'like', '%' . $search . '%')
-                    ->orWhere('chemical_name_th', 'like', '%' . $search . '%')
-                    ->orWhere('chemical_name_en', 'like', '%' . $search . '%')
-                    ->orWhere('registration_number', 'like', '%' . $search . '%');
+        if ($request->filled('search')) {
+            // Normalize search: trim, remove whitespace, lowercase
+            $rawSearch = (string) $request->input('search');
+            $normalized = mb_strtolower(preg_replace('/\s+/', '', $rawSearch));
+
+            $query->where(function ($q) use ($normalized) {
+                // Use REPLACE to remove spaces from columns and compare lowercase for better matching.
+                $like = '%' . $normalized . '%';
+                $q->whereRaw("REPLACE(LOWER(trade_name), ' ', '') LIKE ?", [$like])
+                    ->orWhereRaw("REPLACE(LOWER(chemical_name_th), ' ', '') LIKE ?", [$like])
+                    ->orWhereRaw("REPLACE(LOWER(chemical_name_en), ' ', '') LIKE ?", [$like])
+                    ->orWhereRaw("REPLACE(LOWER(registration_number), ' ', '') LIKE ?", [$like]);
             });
         }
 
