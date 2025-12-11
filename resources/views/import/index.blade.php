@@ -353,6 +353,17 @@
             const form = document.getElementById("filterForm");
             if (form) {
                 form.addEventListener("submit", () => {
+                    // Disable empty search field so it won't be submitted
+                    const searchInput = form.querySelector('input[name="search"]');
+                    if (searchInput) {
+                        const val = (searchInput.value || '').trim();
+                        if (val === '') {
+                            searchInput.disabled = true;
+                        } else {
+                            searchInput.value = val; // trim surrounding whitespace
+                        }
+                    }
+
                     document.querySelectorAll("#filterForm .date-th").forEach(input => {
                         const v = (input.value || '').trim();
                         const m = v.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
