@@ -37,6 +37,7 @@ class ChemicalRegistrationController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('trade_name', 'like', '%' . $search . '%')
                     ->orWhere('chemical_name_th', 'like', '%' . $search . '%')
+                    ->orWhere('chemical_name_en', 'like', '%' . $search . '%')
                     ->orWhere('registration_number', 'like', '%' . $search . '%');
             });
         }

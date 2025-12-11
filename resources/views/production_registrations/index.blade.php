@@ -79,7 +79,7 @@
                             </svg>
                         </div>
                         <input type="text" id="search_query" name="search"
-                            placeholder="ชื่อวัตถุอันตราย /ผู้ขึ้นทะเบียน /เลขที่ทะเบียน"
+                            placeholder="ชื่อวัตถุอันตราย /เลขที่ทะเบียน /ผู้ขึ้นทะเบียน"
                             value="{{ request('search') }}"
                             class="pl-10 pr-4 py-2 w-[500px] rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-600 transition duration-200 ease-in-out text-gray-700 shadow-sm" />
                     </div>

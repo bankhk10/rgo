@@ -94,7 +94,7 @@
                             </svg>
                         </div>
                         <input type="text" id="search_query" name="search"
-                            placeholder="ชื่อสามัญ /ชื่อการค้า /เลขที่ทะเบียน" value="{{ request('search') }}"
+                            placeholder="ชื่อวัตถุอันตราย /ชื่อการค้า" value="{{ request('search') }}"
                             class="pl-10 pr-4 py-2 w-[500px] rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-600 transition duration-200 ease-in-out text-gray-700 shadow-sm" />
                         {{-- class="pl-10 pr-4 py-2 w-96 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-600 transition duration-200 ease-in-out text-gray-700 shadow-sm" /> --}}
                     </div>
