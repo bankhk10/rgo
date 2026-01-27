@@ -251,7 +251,8 @@
                     </table>
                 </div>
                 <div class="px-8 py-6 bg-white border-t border-gray-100 rounded-b-2xl">
-                    {{ $imports->links() }}
+                    {{-- {{ $imports->links() }} --}}
+                    {{ $imports->appends(request()->query())->links() }}
                 </div>
             </div>
 
