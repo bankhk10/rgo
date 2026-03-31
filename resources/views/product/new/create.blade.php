@@ -1,6 +1,6 @@
 <x-app-layout>
-    <div class="max-w-7xl mx-auto p-8 bg-white shadow-lg rounded-2xl space-y-10 mt-6">
-        <h2 class="text-4xl font-extrabold text-gray-700 mb-8 pb-4 text-center border-b border-gray-300">
+    <div class="p-8 mx-auto mt-6 space-y-10 bg-white shadow-lg max-w-7xl rounded-2xl">
+        <h2 class="pb-4 mb-8 text-4xl font-extrabold text-center text-gray-700 border-b border-gray-300">
             แบบฟอร์มขึ้นทะเบียนใหม่
         </h2>
 
@@ -11,18 +11,18 @@
             {{-- General Information Section --}}
             <div>
                 <h3
-                    class="text-2xl font-semibold text-white bg-gradient-to-r from-blue-400 to-indigo-400 px-4 py-3 rounded-t-md">
+                    class="px-4 py-3 text-2xl font-semibold text-white bg-gradient-to-r from-blue-400 to-indigo-400 rounded-t-md">
                     ข้อมูลทั่วไป
                 </h3>
-                <div class="grid grid-cols-2 md:grid-cols-2 gap-6 mt-4">
+                <div class="grid grid-cols-2 gap-6 mt-4 md:grid-cols-2">
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">บริษัทที่ขึ้นทะเบียน<span
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">บริษัทที่ขึ้นทะเบียน<span
                                 class="text-red-500"> *</span></label>
                         <div class="dropdown" id="registrantDropdown">
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="registrantBtn">--
                                 เลือกบริษัทที่ขึ้นทะเบียน --</div>
                             <div class="dropdown-list" id="registrantList">
-                                <div class="dropdown-item text-gray-500" data-value="">-- เลือกบริษัทที่ขึ้นทะเบียน --
+                                <div class="text-gray-500 dropdown-item" data-value="">-- เลือกบริษัทที่ขึ้นทะเบียน --
                                 </div>
                                 @foreach ($companies as $company)
                                     {{-- @if ($company->id != 4) --}}
@@ -35,64 +35,64 @@
                         </div>
                         <input type="hidden" name="registrant" id="registrantInput" value="{{ old('registrant') }}">
                         @error('registrant')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เปอร์เซ็นต์และสูตร</label>
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">เปอร์เซ็นต์และสูตร</label>
                         <input type="text" name="composition" value="{{ old('composition') }}"
                             placeholder="เปอร์เซ็นต์และสูตร"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('composition')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 
                     {{-- ชื่อวัตถุอันตราย (ไทย) --}}
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">
                             ชื่อวัตถุอันตราย (ไทย) <span class="text-red-500">*</span>
                         </label>
                         <input type="text" name="chemical_name_th" value="{{ old('chemical_name_th') }}"
                             placeholder="ใส่ชื่อวัตถุอันตราย (ไทย)"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('chemical_name_th')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
                     {{-- ชื่อวัตถุอันตราย (อังกฤษ) --}}
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">
                             ชื่อวัตถุอันตราย (อังกฤษ) <span class="text-red-500">*</span>
                         </label>
                         <input type="text" name="chemical_name_en" value="{{ old('chemical_name_en') }}"
                             placeholder="ใส่ชื่อวัตถุอันตราย (อังกฤษ)"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('chemical_name_en')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ผู้ผลิตและแหล่งผลิต <span
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">ผู้ผลิตและแหล่งผลิต <span
                                 class="text-red-500"> *</span></label>
                         <input type="text"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                             name="manufacturer" value="{{ old('manufacturer') }}" placeholder="ผู้ผลิตและแหล่งผลิต" />
                         @error('manufacturer')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ประเภททะเบียน <span
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">ประเภททะเบียน <span
                                 class="text-red-500"> *</span></label>
                         <div class="dropdown" id="registrationTypeDropdown">
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="registrationTypeBtn">--
                                 เลือกประเภททะเบียน --</div>
                             <div class="dropdown-list" id="registrationTypeList">
-                                <div class="dropdown-item text-gray-500" data-value="">-- เลือกประเภททะเบียน --</div>
+                                <div class="text-gray-500 dropdown-item" data-value="">-- เลือกประเภททะเบียน --</div>
                                 <div class="dropdown-item" data-value="T : นำเข้าสารเข้มข้น">T : นำเข้าสารเข้มข้น</div>
                                 <div class="dropdown-item" data-value="I : นำเข้าสำเร็จรูป">I : นำเข้าสำเร็จรูป</div>
                                 <div class="dropdown-item" data-value="F : ผลิตผสมปรุงแต่ง">F : ผลิตผสมปรุงแต่ง</div>
@@ -107,18 +107,18 @@
                         <input type="hidden" name="registration_type" id="registrationTypeInput"
                             value="{{ old('registration_type') }}">
                         @error('registration_type')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อผู้นำเข้า <span
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">ชื่อผู้นำเข้า <span
                                 class="text-red-500"> *</span></label>
                         <div class="dropdown" id="importerDropdown">
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="importerBtn">--
                                 เลือกผู้นำเข้า --</div>
                             <div class="dropdown-list" id="importerList">
-                                <div class="dropdown-item text-gray-500" data-value="">-- เลือกผู้นำเข้า --</div>
+                                <div class="text-gray-500 dropdown-item" data-value="">-- เลือกผู้นำเข้า --</div>
                                 @foreach ($companies as $company)
                                     {{-- @if ($company->id != 4) --}}
                                         <div class="dropdown-item" data-value="{{ $company->full_name }}">
@@ -130,18 +130,18 @@
                         </div>
                         <input type="hidden" name="importer" id="importerInput" value="{{ old('importer') }}">
                         @error('importer')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อผู้จำหน่าย <span
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">ชื่อผู้จำหน่าย <span
                                 class="text-red-500"> *</span></label>
                         <div class="dropdown" id="distributorDropdown">
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="distributorBtn">--
                                 เลือกผู้จำหน่าย --</div>
                             <div class="dropdown-list" id="distributorList">
-                                <div class="dropdown-item text-gray-500" data-value="">-- เลือกผู้จำหน่าย --</div>
+                                <div class="text-gray-500 dropdown-item" data-value="">-- เลือกผู้จำหน่าย --</div>
                                 @foreach ($companies as $company)
                                     <div class="dropdown-item" data-value="{{ $company->full_name }}">
                                         {{ $company->full_name }}
@@ -152,29 +152,29 @@
                         <input type="hidden" name="distributor" id="distributorInput"
                             value="{{ old('distributor') }}">
                         @error('distributor')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อการค้า <span
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">ชื่อการค้า <span
                                 class="text-red-500"> *</span></label>
                         <input type="text"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                             name="trade_name" value="{{ old('trade_name') }}" placeholder="ชื่อการค้า" />
                         @error('trade_name')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อการค้าที่ <span
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">ชื่อการค้าที่ <span
                                 class="text-red-500"> *</span></label>
                         <div class="dropdown" id="namePositionDropdown">
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="namePositionBtn">--
                                 เลือกชื่อการที่ --</div>
                             <div class="dropdown-list" id="namePositionList">
-                                <div class="dropdown-item text-gray-500" data-value="">-- เลือกชื่อการที่ --</div>
+                                <div class="text-gray-500 dropdown-item" data-value="">-- เลือกชื่อการที่ --</div>
                                 <div class="dropdown-item" data-value="T">T</div>
                                 <div class="dropdown-item" data-value="-">-</div>
                                 <div class="dropdown-item" data-value="1">1</div>
@@ -185,18 +185,18 @@
                         <input type="hidden" name="name_position" id="namePositionInput"
                             value="{{ old('name_position') }}">
                         @error('name_position')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชนิดทะเบียน <span
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">ชนิดทะเบียน <span
                                 class="text-red-500"> *</span></label>
                         <div class="dropdown" id="typeRegistrationDropdown">
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="typeRegistrationBtn">--
                                 เลือกชนิดทะเบียน --</div>
                             <div class="dropdown-list" id="typeRegistrationList">
-                                <div class="dropdown-item text-gray-500" data-value="">-- เลือกชนิดทะเบียน --</div>
+                                <div class="text-gray-500 dropdown-item" data-value="">-- เลือกชนิดทะเบียน --</div>
                                 <div class="dropdown-item" data-value="ชนิดที่ 1">ชนิดที่ 1</div>
                                 <div class="dropdown-item" data-value="ชนิดที่ 2">ชนิดที่ 2</div>
                                 <div class="dropdown-item" data-value="ชนิดที่ 3">ชนิดที่ 3</div>
@@ -206,18 +206,18 @@
                         <input type="hidden" name="type_registration" id="typeRegistrationInput"
                             value="{{ old('type_registration') }}">
                         @error('type_registration')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ประเภทของการใช้ <span
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">ประเภทของการใช้ <span
                                 class="text-red-500"> *</span></label>
                         <div class="dropdown" id="typeOfUseDropdown">
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="typeOfUseBtn">--
                                 เลือกประเภทของการใช้ --</div>
                             <div class="dropdown-list" id="typeOfUseList">
-                                <div class="dropdown-item text-gray-500" data-value="">-- เลือกประเภทของการใช้ --
+                                <div class="text-gray-500 dropdown-item" data-value="">-- เลือกประเภทของการใช้ --
                                 </div>
                                 <div class="dropdown-item" data-value="A : Acaricide (สารกำจัดไรศัตรูพืช)">A :
                                     Acaricide (สารกำจัดไรศัตรูพืช)</div>
@@ -241,78 +241,78 @@
                         <input type="hidden" name="type_of_use" id="typeOfUseInput"
                             value="{{ old('type_of_use') }}">
                         @error('type_of_use')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">กลุ่มสาร</label>
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">กลุ่มสาร</label>
                         <input type="text" name="group_of_substances" value="{{ old('group_of_substances') }}"
                             placeholder="ใส่กลุ่มสาร"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('group_of_substances')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">พืช</label>
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">พืช</label>
                         <input type="text" name="plant" value="{{ old('plant') }}" placeholder="ใส่พืช"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('plant')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ศัตรูพืช</label>
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">ศัตรูพืช</label>
                         <input type="text" name="pests" value="{{ old('pests') }}" placeholder="ใส่ศัตรูพืช"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('pests')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 {{-- 
                     <div>
-                        <label for="quantity" class="mx-3 text-base block text-gray-700 mb-1 mt-3">ปริมาณ</label>
+                        <label for="quantity" class="block mx-3 mt-3 mb-1 text-base text-gray-700">ปริมาณ</label>
                         <input type="text" name="quantity" id="quantity" value="{{ old('quantity') }}"
                             placeholder="ใส่ปริมาณ"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('quantity')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div> --}}
 
 
 
                     <div class="md:col-span-2">
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">รายละเอียดขนาดบรรจุ</label>
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">รายละเอียดขนาดบรรจุ</label>
                         <textarea name="packaging_size_details"
                             class="w-full p-3 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500" rows="2">{{ old('packaging_size_details') }}</textarea>
                         @error('packaging_size_details')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <div class="md:col-span-2">
-                        <div class="flex flex-col md:flex-row gap-6">
+                        <div class="flex flex-col gap-6 md:flex-row">
                             {{-- วันที่ยื่นคำขอ --}}
                             <div class="w-full md:w-1/3">
-                                <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันที่ยื่นคำขอ</label>
+                                <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">วันที่ยื่นคำขอ</label>
                                 <input type="text" id="date_submit_request" name="date_submit_request"
-                                    class="date-th w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    class="w-full p-3 border rounded-full date-th focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     placeholder="วว/ดด/ปปปป" value="{{ old('date_submit_request') }}"
                                     autocomplete="off">
                                 @error('date_submit_request')
-                                    <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                    <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                                 @enderror
                             </div>
                             <div class="w-full md:w-1/3">
-                                <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลขที่รับคำขอ</label>
+                                <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">เลขที่รับคำขอ</label>
                                 <input type="text" name="request_number_1" value="{{ old('request_number_1') }}"
                                     class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                 @error('request_number_1')
-                                    <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                    <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                                 @enderror
                             </div>
                             <div class="w-full md:w-1/3">
@@ -321,48 +321,48 @@
                     </div>
 
                     <div class="md:col-span-2">
-                        <div class="flex flex-col md:flex-row gap-6">
+                        <div class="flex flex-col gap-6 md:flex-row">
                             <div class="w-full md:w-1/3">
-                                <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันที่ยื่น Phase
+                                <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">วันที่ยื่น Phase
                                     III</label>
                                 <input type="text" id="date_request_phase_3" name="date_request_phase_3"
                                     autocomplete="off"
-                                    class="date-th w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    class="w-full p-3 border rounded-full date-th focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     placeholder="วว/ดด/ปปปป" value="{{ old('date_request_phase_3') }}">
                                 @error('date_request_phase_3')
-                                    <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                    <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                                 @enderror
 
 
                             </div>
                             <div class="w-full md:w-1/3">
-                                <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลข Phase III</label>
+                                <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">เลข Phase III</label>
                                 <input type="text" value="{{ old('request_number_phase_3') }}"
                                     class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     name="request_number_phase_3" />
                                 @error('request_number_phase_3')
-                                    <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                    <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                                 @enderror
                             </div>
 
                             <div class="w-full md:w-1/3">
-                                <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลข Phase I</label>
+                                <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">เลข Phase I</label>
                                 <input type="text" name="request_number_phase_1"
                                     value="{{ old('request_number_phase_1') }}"
                                     class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                 @error('request_number_phase_1')
-                                    <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                    <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                                 @enderror
                             </div>
                         </div>
                     </div>
 
                     <div class="md:col-span-2">
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">อื่นๆ (ระบุ)</label>
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">อื่นๆ (ระบุ)</label>
                         <textarea name="remarks" class="w-full p-3 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                             rows="2">{{ old('remarks') }}</textarea>
                         @error('remarks')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
                 </div>
@@ -370,11 +370,11 @@
 
             <div class="flex justify-center gap-4 pt-4">
                 <a href="{{ route('newregis.index') }}"
-                    class="bg-gray-500 hover:bg-gray-500 text-white font-bold py-2 px-6 rounded-lg shadow-md flex items-center justify-center">
+                    class="flex items-center justify-center px-6 py-2 font-bold text-white bg-gray-500 rounded-lg shadow-md hover:bg-gray-500">
                     ยกเลิก
                 </a>
                 <button type="submit"
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg shadow-md">
+                    class="px-6 py-2 font-bold text-white bg-blue-500 rounded-lg shadow-md hover:bg-blue-700">
                     บันทึก
                 </button>
             </div>
@@ -445,15 +445,15 @@
             const chemThInput = document.querySelector('input[name="chemical_name_th"]');
             const chemEnInput = document.querySelector('input[name="chemical_name_en"]');
 
-            // ไทย: อักษรไทย, ตัวเลข, - , , . , เว้นวรรค
+            // ไทย: อักษรไทย, ตัวเลข, - , , . , +, เว้นวรรค
             chemThInput?.addEventListener('input', () => {
-                const cleaned = chemThInput.value.replace(/[^ก-๙0-9\-,. ]/g, '');
+                const cleaned = chemThInput.value.replace(/[^ก-๙0-9\-,. +]/g, '');
                 if (cleaned !== chemThInput.value) chemThInput.value = cleaned;
             });
 
-            // อังกฤษ: A-Z a-z, ตัวเลข, - , , . , เว้นวรรค
+            // อังกฤษ: A-Z a-z, ตัวเลข, - , , . , +, เว้นวรรค
             chemEnInput?.addEventListener('input', () => {
-                const cleaned = chemEnInput.value.replace(/[^A-Za-z0-9\-,. ]/g, '');
+                const cleaned = chemEnInput.value.replace(/[^A-Za-z0-9\-,. +]/g, '');
                 if (cleaned !== chemEnInput.value) chemEnInput.value = cleaned;
             });
         });
