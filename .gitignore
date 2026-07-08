@@ -13,6 +13,10 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
+.svn/
 supervisord.log
 supervisord.pid
-
+AGENTS.md
+run-clear-cache.bat
+public/test.php
+public/js/app.js
