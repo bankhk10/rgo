@@ -82,99 +82,98 @@
                                                 @php
                                                     $lastLogin = $user->last_login_at;
 
-                                                    if ($lastLogin) {
-                                                        $hoursSince = (int) $lastLogin->diffInHours(now());
-                                                        $minutesSince = (int) $lastLogin->diffInMinutes(now());
-                                                        $daysSince = (int) $lastLogin->diffInDays(now());
+                                                    $login = [
+                                                        'text' => 'ยังไม่เคยล็อกอิน',
+                                                        'badge' => 'bg-slate-50 text-slate-500 border-slate-200',
+                                                        'dot' => 'bg-slate-300',
+                                                        'status' => 'never',
+                                                    ];
 
-                                                        if ($hoursSince < 1) {
-                                                            $lastLoginText = "เมื่อ {$minutesSince} นาทีที่แล้ว";
-                                                            $style = [
-                                                                'bg-emerald-50 text-emerald-700 border-emerald-200',
-                                                                'bg-emerald-500',
-                                                                'online',
+                                                    if ($lastLogin) {
+                                                        $minutes = $lastLogin->diffInMinutes();
+                                                        $hours = $lastLogin->diffInHours();
+                                                        $days = $lastLogin->diffInDays();
+
+                                                        if ($hours < 1) {
+                                                            $login = [
+                                                                'text' => "เมื่อ {$minutes} นาทีที่แล้ว",
+                                                                'badge' =>
+                                                                    'bg-emerald-50 text-emerald-700 border-emerald-200',
+                                                                'dot' => 'bg-emerald-500',
+                                                                'status' => 'online',
                                                             ];
-                                                        } elseif ($hoursSince <= 6) {
-                                                            $lastLoginText = "เมื่อ {$hoursSince} ชั่วโมงที่แล้ว";
-                                                            $style = [
-                                                                'bg-emerald-50 text-emerald-700 border-emerald-200',
-                                                                'bg-emerald-500',
-                                                                'online',
+                                                        } elseif ($hours <= 6) {
+                                                            $login = [
+                                                                'text' => "เมื่อ {$hours} ชั่วโมงที่แล้ว",
+                                                                'badge' =>
+                                                                    'bg-emerald-50 text-emerald-700 border-emerald-200',
+                                                                'dot' => 'bg-emerald-500',
+                                                                'status' => 'online',
                                                             ];
-                                                        } elseif ($hoursSince <= 24) {
-                                                            $lastLoginText = "เมื่อ {$hoursSince} ชั่วโมงที่แล้ว";
-                                                            $style = [
-                                                                'bg-amber-50 text-amber-700 border-amber-200',
-                                                                'bg-amber-500',
-                                                                'idle',
+                                                        } elseif ($hours <= 24) {
+                                                            $login = [
+                                                                'text' => "เมื่อ {$hours} ชั่วโมงที่แล้ว",
+                                                                'badge' =>
+                                                                    'bg-amber-50 text-amber-700 border-amber-200',
+                                                                'dot' => 'bg-amber-500',
+                                                                'status' => 'idle',
                                                             ];
                                                         } else {
-                                                            $lastLoginText = "เมื่อ {$daysSince} วันที่แล้ว";
-                                                            $style = [
-                                                                'bg-slate-50 text-slate-600 border-slate-200',
-                                                                'bg-slate-400',
-                                                                'offline',
+                                                            $login = [
+                                                                'text' => "เมื่อ {$days} วันที่แล้ว",
+                                                                'badge' =>
+                                                                    'bg-slate-50 text-slate-600 border-slate-200',
+                                                                'dot' => 'bg-slate-400',
+                                                                'status' => 'offline',
                                                             ];
                                                         }
-                                                    } else {
-                                                        $lastLoginText = 'ยังไม่เคยล็อกอิน';
-                                                        $style = [
-                                                            'bg-slate-50 text-slate-500 border-slate-200',
-                                                            'bg-slate-300',
-                                                            'never',
-                                                        ];
                                                     }
-
-                                                    [$badgeClass, $dotClass, $status] = $style;
                                                 @endphp
 
                                                 <div
-                                                    class="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 shadow-sm transition-all hover:shadow-md {{ $badgeClass }}">
-                                                    @if ($status == 'never')
-                                                        <span class="relative flex h-2.5 w-2.5">
-                                                            @if ($status === 'online')
-                                                                <span
-                                                                    class="absolute inline-flex h-full w-full animate-ping rounded-full {{ $dotClass }} opacity-75"></span>
-                                                            @endif
+                                                    class="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 shadow-sm transition hover:shadow-md {{ $login['badge'] }}">
+                                                    <span class="relative flex h-2.5 w-2.5">
+
+                                                        @if ($login['status'] === 'online')
                                                             <span
-                                                                class="relative inline-flex h-2.5 w-2.5 rounded-full {{ $dotClass }}"></span>
-                                                        </span>
-                                                    @endif
-                                                    <span class="text-sm font-semibold">{{ $lastLoginText }}</span>
+                                                                class="absolute inline-flex h-full w-full animate-ping rounded-full {{ $login['dot'] }} opacity-75"></span>
+                                                        @endif
+
+                                                        <span
+                                                            class="relative inline-flex h-2.5 w-2.5 rounded-full {{ $login['dot'] }}"></span>
+
+                                                    </span>
+
+                                                    <span class="text-sm font-semibold">
+                                                        {{ $login['text'] }}
+                                                    </span>
                                                 </div>
                                             </td>
                                             <td class="px-4 py-3 whitespace-nowrap">
                                                 @php
-                                                    $isActive = $user->employment_status == 'active';
+                                                    $isActive = $user->employment_status === 'active';
 
-                                                    $employmentBadge = $isActive
-                                                        ? 'bg-white text-green-700 border border-slate-200'
-                                                        : 'bg-white text-red-700 border border-slate-200';
-
-                                                    $employmentDot = $isActive ? 'bg-green-500' : 'bg-red-500';
-
-                                                    $employmentLabel = $isActive ? 'กำลังใช้งาน' : 'ไม่ใช้งาน';
+                                                    $employment = [
+                                                        'label' => $isActive ? 'ใช้งาน' : 'ไม่ใช้งาน',
+                                                        'badge' => $isActive
+                                                            ? 'bg-green-50 text-green-700 border-green-200'
+                                                            : 'bg-red-50 text-red-700 border-red-200',
+                                                        'dot' => $isActive ? 'bg-green-500' : 'bg-red-500',
+                                                    ];
                                                 @endphp
-
                                                 <span
-                                                    class="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold transition-all duration-200 hover:shadow-sm
-                                                        {{ $isActive
-                                                            ? 'bg-green-50 text-green-700 border border-green-200'
-                                                            : 'bg-red-50 text-red-700 border border-red-200' }}">
-
+                                                    class="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold transition hover:shadow-sm {{ $employment['badge'] }}">
                                                     <span class="relative flex h-2.5 w-2.5">
-                                                        <span
-                                                            class="absolute inline-flex h-full w-full animate-ping rounded-full
-                                                             {{ $isActive ? 'bg-green-500' : 'bg-red-500' }} opacity-40">
-                                                        </span>
 
                                                         <span
-                                                            class="relative inline-flex h-2.5 w-2.5 rounded-full
-                                                                   {{ $isActive ? 'bg-green-500' : 'bg-red-500' }}">
-                                                        </span>
+                                                            class="absolute inline-flex h-full w-full animate-ping rounded-full {{ $employment['dot'] }} opacity-40"></span>
+
+                                                        <span
+                                                            class="relative inline-flex h-2.5 w-2.5 rounded-full {{ $employment['dot'] }}"></span>
+
                                                     </span>
 
-                                                    {{ $isActive ? 'ใช้งาน' : 'ไม่ใช้งาน' }}
+                                                    {{ $employment['label'] }}
                                                 </span>
                                             </td>
                                             <td class="px-4 py-3 text-right">
