@@ -79,24 +79,89 @@
                                                 </div>
                                             </td>
                                             <td class="px-4 py-3 whitespace-nowrap">
-                                                @if ($user->last_login_at)
-                                                    @php
-                                                        $daysSinceLastLogin = $user->last_login_at->diffInDays(now());
-                                                    @endphp
+                                                @php
+                                                    $lastLogin = $user->last_login_at;
+                                                    $hoursSinceLastLogin = $lastLogin
+                                                        ? (int) $lastLogin->diffInHours(now())
+                                                        : null;
+                                                    $minutesSinceLastLogin = $lastLogin
+                                                        ? (int) $lastLogin->diffInMinutes(now())
+                                                        : null;
+                                                    $daysSinceLastLogin = $lastLogin
+                                                        ? (int) $lastLogin->diffInDays(now())
+                                                        : null;
 
-                                                    <div class="text-xs text-gray-500">
-                                                        ผ่านมา {{ $daysSinceLastLogin }} วัน
+                                                    if ($lastLogin) {
+                                                        if ($hoursSinceLastLogin < 1) {
+                                                            $lastLoginText = "เมื่อ {$minutesSinceLastLogin} นาทีที่แล้ว";
+                                                            $lastLoginBadge =
+                                                                'bg-emerald-50 text-emerald-700 border-emerald-200';
+                                                            $lastLoginDot = 'bg-emerald-500';
+                                                        } elseif ($hoursSinceLastLogin <= 6) {
+                                                            $lastLoginText = "เมื่อ {$hoursSinceLastLogin} ชั่วโมงที่แล้ว";
+                                                            $lastLoginBadge =
+                                                                'bg-emerald-50 text-emerald-700 border-emerald-200';
+                                                            $lastLoginDot = 'bg-emerald-500';
+                                                        } elseif ($hoursSinceLastLogin <= 24) {
+                                                            $lastLoginText = "เมื่อ {$hoursSinceLastLogin} ชั่วโมงที่แล้ว";
+                                                            $lastLoginBadge =
+                                                                'bg-amber-50 text-amber-700 border-amber-200';
+                                                            $lastLoginDot = 'bg-amber-500';
+                                                        } else {
+                                                            $lastLoginText = "เมื่อ {$daysSinceLastLogin} วันที่แล้ว";
+                                                            $lastLoginBadge =
+                                                                'bg-slate-50 text-slate-600 border-slate-200';
+                                                            $lastLoginDot = 'bg-slate-400';
+                                                        }
+                                                    } else {
+                                                        $lastLoginText = 'ยังไม่เคยล็อกอิน';
+                                                        $lastLoginSubText = 'ไม่มีข้อมูลล่าสุด';
+                                                        $lastLoginBadge = 'bg-slate-50 text-slate-500 border-slate-200';
+                                                        $lastLoginDot = 'bg-slate-300';
+                                                    }
+                                                @endphp
+
+                                                <div
+                                                    class="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 shadow-sm {{ $lastLoginBadge }}">
+                                                    <span class="h-2.5 w-2.5 rounded-full {{ $lastLoginDot }}"></span>
+                                                    <div class="flex flex-col items-start">
+                                                        <span class="text-sm font-semibold">{{ $lastLoginText }}</span>
                                                     </div>
-                                                    <span
-                                                        class="font-semibold {{ $daysSinceLastLogin > 7 ? 'text-yellow-600' : 'text-green-600' }}">
-                                                        {{ $daysSinceLastLogin > 7 ? 'ไม่ได้ใช้งานเกิน 7 วัน' : '' }}
-                                                    </span>
-                                                @else
-                                                    <span class="font-semibold text-gray-400">-</span>
-                                                @endif
+                                                </div>
                                             </td>
                                             <td class="px-4 py-3 whitespace-nowrap">
-                                                 <span class="font-semibold">{{ $user->employment_status == 'active' ? 'ใช้งาน' : 'ไม่ใช้งาน'}}</span>
+                                                @php
+                                                    $isActive = $user->employment_status == 'active';
+
+                                                    $employmentBadge = $isActive
+                                                        ? 'bg-white text-green-700 border border-slate-200'
+                                                        : 'bg-white text-red-700 border border-slate-200';
+
+                                                    $employmentDot = $isActive ? 'bg-green-500' : 'bg-red-500';
+
+                                                    $employmentLabel = $isActive ? 'กำลังใช้งาน' : 'ไม่ใช้งาน';
+                                                @endphp
+
+                                                <span
+                                                    class="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold transition-all duration-200 hover:shadow-sm
+                                                        {{ $isActive
+                                                            ? 'bg-green-50 text-green-700 border border-green-200'
+                                                            : 'bg-red-50 text-red-700 border border-red-200' }}">
+
+                                                    <span class="relative flex h-2.5 w-2.5">
+                                                        <span
+                                                            class="absolute inline-flex h-full w-full animate-ping rounded-full
+                                                             {{ $isActive ? 'bg-green-500' : 'bg-red-500' }} opacity-40">
+                                                        </span>
+
+                                                        <span
+                                                            class="relative inline-flex h-2.5 w-2.5 rounded-full
+                                                                   {{ $isActive ? 'bg-green-500' : 'bg-red-500' }}">
+                                                        </span>
+                                                    </span>
+
+                                                    {{ $isActive ? 'ใช้งาน' : 'ไม่ใช้งาน' }}
+                                                </span>
                                             </td>
                                             <td class="px-4 py-3 text-right">
                                                 <div class="flex items-center justify-end gap-2">
