@@ -131,19 +131,7 @@
                                                 @endphp
 
                                                 <div
-                                                    class="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 shadow-sm transition hover:shadow-md {{ $login['badge'] }}">
-                                                    <span class="relative flex h-2.5 w-2.5">
-
-                                                        @if ($login['status'] === 'online')
-                                                            <span
-                                                                class="absolute inline-flex h-full w-full animate-ping rounded-full {{ $login['dot'] }} opacity-75"></span>
-                                                        @endif
-
-                                                        <span
-                                                            class="relative inline-flex h-2.5 w-2.5 rounded-full {{ $login['dot'] }}"></span>
-
-                                                    </span>
-
+                                                    class="inline-flex items-center rounded-full border px-3 py-1.5 shadow-sm transition hover:shadow-md {{ $login['badge'] }}">
                                                     <span class="text-sm font-semibold">
                                                         {{ $login['text'] }}
                                                     </span>
