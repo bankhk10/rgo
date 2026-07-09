@@ -130,14 +130,16 @@
 
                                                 <div
                                                     class="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 shadow-sm transition-all hover:shadow-md {{ $badgeClass }}">
-                                                    <span class="relative flex h-2.5 w-2.5">
-                                                        @if ($status === 'online')
+                                                    @if ($status == 'never')
+                                                        <span class="relative flex h-2.5 w-2.5">
+                                                            @if ($status === 'online')
+                                                                <span
+                                                                    class="absolute inline-flex h-full w-full animate-ping rounded-full {{ $dotClass }} opacity-75"></span>
+                                                            @endif
                                                             <span
-                                                                class="absolute inline-flex h-full w-full animate-ping rounded-full {{ $dotClass }} opacity-75"></span>
-                                                        @endif
-                                                        <span
-                                                            class="relative inline-flex h-2.5 w-2.5 rounded-full {{ $dotClass }}"></span>
-                                                    </span>
+                                                                class="relative inline-flex h-2.5 w-2.5 rounded-full {{ $dotClass }}"></span>
+                                                        </span>
+                                                    @endif
                                                     <span class="text-sm font-semibold">{{ $lastLoginText }}</span>
                                                 </div>
                                             </td>
