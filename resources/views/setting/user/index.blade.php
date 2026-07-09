@@ -97,33 +97,29 @@
                                                         if ($hours < 1) {
                                                             $login = [
                                                                 'text' => "เมื่อ {$minutes} นาทีที่แล้ว",
-                                                                'badge' =>
-                                                                    'bg-emerald-50 text-emerald-700 border-emerald-200',
-                                                                'dot' => 'bg-emerald-500',
+                                                                'badge' => 'bg-blue-50 text-blue-600 border-blue-200',
+                                                                'dot' => 'bg-blue-400',
                                                                 'status' => 'online',
                                                             ];
                                                         } elseif ($hours <= 6) {
                                                             $login = [
                                                                 'text' => "เมื่อ {$hours} ชั่วโมงที่แล้ว",
-                                                                'badge' =>
-                                                                    'bg-emerald-50 text-emerald-700 border-emerald-200',
-                                                                'dot' => 'bg-emerald-500',
+                                                                'badge' => 'bg-blue-50 text-blue-600 border-blue-200',
+                                                                'dot' => 'bg-blue-400',
                                                                 'status' => 'online',
                                                             ];
                                                         } elseif ($hours <= 24) {
                                                             $login = [
                                                                 'text' => "เมื่อ {$hours} ชั่วโมงที่แล้ว",
-                                                                'badge' =>
-                                                                    'bg-amber-50 text-amber-700 border-amber-200',
-                                                                'dot' => 'bg-amber-500',
+                                                                'badge' => 'bg-blue-50 text-blue-600 border-blue-200',
+                                                                'dot' => 'bg-blue-400',
                                                                 'status' => 'idle',
                                                             ];
                                                         } else {
                                                             $login = [
                                                                 'text' => "เมื่อ {$days} วันที่แล้ว",
-                                                                'badge' =>
-                                                                    'bg-slate-50 text-slate-600 border-slate-200',
-                                                                'dot' => 'bg-slate-400',
+                                                                'badge' => 'bg-blue-50 text-blue-600 border-blue-200',
+                                                                'dot' => 'bg-blue-400',
                                                                 'status' => 'offline',
                                                             ];
                                                         }
