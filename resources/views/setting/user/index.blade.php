@@ -81,52 +81,64 @@
                                             <td class="px-4 py-3 whitespace-nowrap">
                                                 @php
                                                     $lastLogin = $user->last_login_at;
-                                                    $hoursSinceLastLogin = $lastLogin
-                                                        ? (int) $lastLogin->diffInHours(now())
-                                                        : null;
-                                                    $minutesSinceLastLogin = $lastLogin
-                                                        ? (int) $lastLogin->diffInMinutes(now())
-                                                        : null;
-                                                    $daysSinceLastLogin = $lastLogin
-                                                        ? (int) $lastLogin->diffInDays(now())
-                                                        : null;
 
                                                     if ($lastLogin) {
-                                                        if ($hoursSinceLastLogin < 1) {
-                                                            $lastLoginText = "เมื่อ {$minutesSinceLastLogin} นาทีที่แล้ว";
-                                                            $lastLoginBadge =
-                                                                'bg-emerald-50 text-emerald-700 border-emerald-200';
-                                                            $lastLoginDot = 'bg-emerald-500';
-                                                        } elseif ($hoursSinceLastLogin <= 6) {
-                                                            $lastLoginText = "เมื่อ {$hoursSinceLastLogin} ชั่วโมงที่แล้ว";
-                                                            $lastLoginBadge =
-                                                                'bg-emerald-50 text-emerald-700 border-emerald-200';
-                                                            $lastLoginDot = 'bg-emerald-500';
-                                                        } elseif ($hoursSinceLastLogin <= 24) {
-                                                            $lastLoginText = "เมื่อ {$hoursSinceLastLogin} ชั่วโมงที่แล้ว";
-                                                            $lastLoginBadge =
-                                                                'bg-amber-50 text-amber-700 border-amber-200';
-                                                            $lastLoginDot = 'bg-amber-500';
+                                                        $hoursSince = (int) $lastLogin->diffInHours(now());
+                                                        $minutesSince = (int) $lastLogin->diffInMinutes(now());
+                                                        $daysSince = (int) $lastLogin->diffInDays(now());
+
+                                                        if ($hoursSince < 1) {
+                                                            $lastLoginText = "เมื่อ {$minutesSince} นาทีที่แล้ว";
+                                                            $style = [
+                                                                'bg-emerald-50 text-emerald-700 border-emerald-200',
+                                                                'bg-emerald-500',
+                                                                'online',
+                                                            ];
+                                                        } elseif ($hoursSince <= 6) {
+                                                            $lastLoginText = "เมื่อ {$hoursSince} ชั่วโมงที่แล้ว";
+                                                            $style = [
+                                                                'bg-emerald-50 text-emerald-700 border-emerald-200',
+                                                                'bg-emerald-500',
+                                                                'online',
+                                                            ];
+                                                        } elseif ($hoursSince <= 24) {
+                                                            $lastLoginText = "เมื่อ {$hoursSince} ชั่วโมงที่แล้ว";
+                                                            $style = [
+                                                                'bg-amber-50 text-amber-700 border-amber-200',
+                                                                'bg-amber-500',
+                                                                'idle',
+                                                            ];
                                                         } else {
-                                                            $lastLoginText = "เมื่อ {$daysSinceLastLogin} วันที่แล้ว";
-                                                            $lastLoginBadge =
-                                                                'bg-slate-50 text-slate-600 border-slate-200';
-                                                            $lastLoginDot = 'bg-slate-400';
+                                                            $lastLoginText = "เมื่อ {$daysSince} วันที่แล้ว";
+                                                            $style = [
+                                                                'bg-slate-50 text-slate-600 border-slate-200',
+                                                                'bg-slate-400',
+                                                                'offline',
+                                                            ];
                                                         }
                                                     } else {
                                                         $lastLoginText = 'ยังไม่เคยล็อกอิน';
-                                                        $lastLoginSubText = 'ไม่มีข้อมูลล่าสุด';
-                                                        $lastLoginBadge = 'bg-slate-50 text-slate-500 border-slate-200';
-                                                        $lastLoginDot = 'bg-slate-300';
+                                                        $style = [
+                                                            'bg-slate-50 text-slate-500 border-slate-200',
+                                                            'bg-slate-300',
+                                                            'never',
+                                                        ];
                                                     }
+
+                                                    [$badgeClass, $dotClass, $status] = $style;
                                                 @endphp
 
                                                 <div
-                                                    class="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 shadow-sm {{ $lastLoginBadge }}">
-                                                    <span class="h-2.5 w-2.5 rounded-full {{ $lastLoginDot }}"></span>
-                                                    <div class="flex flex-col items-start">
-                                                        <span class="text-sm font-semibold">{{ $lastLoginText }}</span>
-                                                    </div>
+                                                    class="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 shadow-sm transition-all hover:shadow-md {{ $badgeClass }}">
+                                                    <span class="relative flex h-2.5 w-2.5">
+                                                        @if ($status === 'online')
+                                                            <span
+                                                                class="absolute inline-flex h-full w-full animate-ping rounded-full {{ $dotClass }} opacity-75"></span>
+                                                        @endif
+                                                        <span
+                                                            class="relative inline-flex h-2.5 w-2.5 rounded-full {{ $dotClass }}"></span>
+                                                    </span>
+                                                    <span class="text-sm font-semibold">{{ $lastLoginText }}</span>
                                                 </div>
                                             </td>
                                             <td class="px-4 py-3 whitespace-nowrap">
