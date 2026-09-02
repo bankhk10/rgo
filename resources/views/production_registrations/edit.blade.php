@@ -1,23 +1,23 @@
 <x-app-layout>
-    <div class="max-w-5xl mx-auto p-8 bg-white shadow-lg rounded-2xl space-y-10 mt-6">
-        <h2 class="text-4xl font-extrabold text-gray-700 mb-8 pb-4 text-center border-b border-gray-300">
+    <div class="max-w-5xl p-8 mx-auto mt-6 space-y-10 bg-white shadow-lg rounded-2xl">
+        <h2 class="pb-4 mb-8 text-4xl font-extrabold text-center text-gray-700 border-b border-gray-300">
             แก้ไขข้อมูลทะเบียนผลิต
         </h2>
 
         {{-- The form action now points to the 'update' route and passes the import ID --}}
-        <form method="POST" action="{{ route('createproduct.update', $import->id) }}" class="space-y-10" enctype="multipart/form-data">
+        <form id="editRegisForm" method="POST" action="{{ route('createproduct.update', $import->id) }}" class="space-y-10" enctype="multipart/form-data">
             @csrf
             @method('PUT') {{-- Use PUT method for updating --}}
 
             <div>
                 <h3
-                    class="text-2xl font-semibold text-white bg-gradient-to-r from-blue-400 to-indigo-400 px-4 py-3 rounded-t-md">
+                    class="px-4 py-3 text-2xl font-semibold text-white bg-gradient-to-r from-blue-400 to-indigo-400 rounded-t-md">
                     ข้อมูลการนำเข้าทั่วไป
                 </h3>
-                <div class="grid grid-cols-2 md:grid-cols-2 gap-6 mt-4">
+                <div class="grid grid-cols-2 gap-6 mt-4 md:grid-cols-2">
 
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลขที่ทะเบียนผลิต</label>
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">เลขที่ทะเบียนผลิต</label>
                         <input type="text" id="registration_number" name="registration_number"
                             value="{{ old('registration_number', $import->registration_number) }}"
                             placeholder="เช่น 123-2568"
@@ -26,23 +26,23 @@
                             title="รูปแบบต้องเป็น ตัวเลขใดๆ ตามด้วย - และเลขท้าย 4 หลัก เช่น 123-2568"
                             oninput="filterRegisNo(this)" required />
                         @error('registration_number')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <div class="w-full md:w-1/3">
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันหมดอายุ</label>
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">วันหมดอายุ</label>
                         <input type="text" name="expired_license_date" id="expired_license_date"
-                            class="date-th w-full p-3 pl-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="w-full p-3 pl-2 border rounded-full date-th focus:outline-none focus:ring-2 focus:ring-blue-500"
                             value="{{ old('expired_license_date', $import->expired_license_date ? \Carbon\Carbon::parse($import->expired_license_date)->addYears(543)->format('d/m/Y') : '') }}"
                             placeholder="วว/ดด/ปปปป" autocomplete="off">
                         @error('expired_license_date')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">บริษัทที่ขึ้นทะเบียน
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">บริษัทที่ขึ้นทะเบียน
                             <span class="text-red-500"> *</span>
                         </label>
                         <div class="dropdown" id="companyDropdown">
@@ -55,7 +55,7 @@
                                 {{ $companyName }}
                             </div>
                             <div class="dropdown-list" id="companyList">
-                                <div class="dropdown-item text-gray-500" data-value="">-- เลือก --</div>
+                                <div class="text-gray-500 dropdown-item" data-value="">-- เลือก --</div>
                                 @foreach ($companies as $company)
                                     @if ($company->type == 1)
                                         <div class="dropdown-item" data-value="{{ $company->id }}">
@@ -68,53 +68,53 @@
                         <input type="hidden" name="company_id" id="companyInput"
                             value="{{ old('company_id', $import->company_id) }}">
                         @error('company_id')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">เปอร์เซ็นต์และสูตร</label>
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">เปอร์เซ็นต์และสูตร</label>
                         <input type="text" name="composition" value="{{ old('composition', $import->composition) }}"
                             placeholder="ใส่เปอร์เซ็นต์และสูตร"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('composition')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อวัตถุอันตราย (ไทย)</label>
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">ชื่อวัตถุอันตราย (ไทย)</label>
                         <input type="text" name="chemical_name_th"
                             value="{{ old('chemical_name_th', $import->chemical_name_th) }}"
                             placeholder="ใส่ชื่อวัตถุอันตราย (ไทย)"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('chemical_name_th')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อวัตถุอันตราย (อังกฤษ)</label>
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">ชื่อวัตถุอันตราย (อังกฤษ)</label>
                         <input type="text" name="chemical_name_en"
                             value="{{ old('chemical_name_en', $import->chemical_name_en) }}"
                             placeholder="ใส่ชื่อวัตถุอันตราย (อังกฤษ)"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('chemical_name_en')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ผู้ผลิตและแหล่งผลิต</label>
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">ผู้ผลิตและแหล่งผลิต</label>
                         <input type="text" name="manufacturer"
                             value="{{ old('manufacturer', $import->manufacturer) }}"
                             placeholder="ใส่ผู้ผลิตและแหล่งผลิต"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('manufacturer')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ประเภททะเบียน</label>
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">ประเภททะเบียน</label>
                         <div class="dropdown" id="registrationTypeDropdown">
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="registrationTypeBtn">
                                 @php
@@ -124,7 +124,7 @@
                                 {{ $registrationTypes[$selectedType] ?? '-- เลือก --' }}
                             </div>
                             <div class="dropdown-list" id="registrationTypeList">
-                                <div class="dropdown-item text-gray-500" data-value="">-- เลือกประเภททะเบียน --</div>
+                                <div class="text-gray-500 dropdown-item" data-value="">-- เลือกประเภททะเบียน --</div>
                                 <div class="dropdown-item" data-value="T : นำเข้าสารเข้มข้น">T :
                                     นำเข้าสารเข้มข้น</div>
                                 <div class="dropdown-item" data-value="I : นำเข้าสำเร็จรูป">I :
@@ -143,11 +143,11 @@
                         <input type="hidden" name="registration_type" id="registrationTypeInput"
                             value="{{ old('registration_type', $import->registration_type) }}">
                         @error('registration_type')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อผู้นำเข้า</label>
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">ชื่อผู้นำเข้า</label>
                         <div class="dropdown" id="importerDropdown">
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="importerBtn">
                                 @php
@@ -158,7 +158,7 @@
                                 {{ $importerName }}
                             </div>
                             <div class="dropdown-list" id="importerList">
-                                <div class="dropdown-item text-gray-500" data-value="">-- เลือก --</div>
+                                <div class="text-gray-500 dropdown-item" data-value="">-- เลือก --</div>
                                 @foreach ($companies as $company)
                                     {{-- @if ($company->type == 1) --}}
                                     <div class="dropdown-item" data-value="{{ $company->id }}">
@@ -171,11 +171,11 @@
                         <input type="hidden" name="importer" id="importerInput"
                             value="{{ old('importer', $import->importer) }}">
                         @error('importer')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อผู้จำหน่าย</label>
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">ชื่อผู้จำหน่าย</label>
                         <div class="dropdown" id="distributorDropdown">
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="distributorBtn">
                                 @php
@@ -187,7 +187,7 @@
                                 {{ $distributorName }}
                             </div>
                             <div class="dropdown-list" id="distributorList">
-                                <div class="dropdown-item text-gray-500" data-value="">-- เลือก --</div>
+                                <div class="text-gray-500 dropdown-item" data-value="">-- เลือก --</div>
                                 @foreach ($companies as $company)
                                     <div class="dropdown-item" data-value="{{ $company->id }}">
                                         {{ $company->full_name }}
@@ -198,26 +198,26 @@
                         <input type="hidden" name="distributor" id="distributorInput"
                             value="{{ old('distributor', $import->distributor) }}">
                         @error('distributor')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อการค้า</label>
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">ชื่อการค้า</label>
                         <input type="text" name="trade_name" value="{{ old('trade_name', $import->trade_name) }}"
                             placeholder="ใส่ชื่อการค้า"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('trade_name')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชื่อการค้าที่ <span
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">ชื่อการค้าที่ <span
                                 class="text-red-500"> *</span></label>
                         <div class="dropdown" id="namePositionDropdown">
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="namePositionBtn">--
                                 เลือกชื่อการที่ --</div>
                             <div class="dropdown-list" id="namePositionList">
-                                <div class="dropdown-item text-gray-500" data-value="">-- เลือกชื่การที่
+                                <div class="text-gray-500 dropdown-item" data-value="">-- เลือกชื่การที่
                                     --</div>
                                 <div class="dropdown-item" data-value="T">T</div>
                                 <div class="dropdown-item" data-value="-">-</div>
@@ -229,18 +229,18 @@
                         <input type="hidden" name="trade_name_at" id="namePositionInput"
                             value="{{ old('trade_name_at', $import->trade_name_at) }}">
                         @error('trade_name_at')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ชนิดทะเบียน <span
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">ชนิดทะเบียน <span
                                 class="text-red-500"> *</span></label>
                         <div class="dropdown" id="typeRegistrationDropdown">
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="typeRegistrationBtn">--
                                 เลือกชนิดทะเบียน --</div>
                             <div class="dropdown-list" id="typeRegistrationList">
-                                <div class="dropdown-item text-gray-500" data-value="">--
+                                <div class="text-gray-500 dropdown-item" data-value="">--
                                     เลือกชนิดทะเบียน --</div>
                                 <div class="dropdown-item" data-value="ชนิดที่ 1">ชนิดที่ 1</div>
                                 <div class="dropdown-item" data-value="ชนิดที่ 2">ชนิดที่ 2</div>
@@ -251,19 +251,19 @@
                         <input type="hidden" name="type_production_registration" id="typeRegistrationInput"
                             value="{{ old('type_production_registration', $import->type_production_registration) }}">
                         @error('type_production_registration')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 
 
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ประเภทของการใช้ <span
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">ประเภทของการใช้ <span
                                 class="text-red-500"> *</span></label>
                         <div class="dropdown" id="typeOfUseDropdown">
                             <div style="height: 50px;" class="text-gray-500 dropdown-btn" id="typeOfUseBtn">--
                                 เลือกประเภทของการใช้ --</div>
                             <div class="dropdown-list" id="typeOfUseList">
-                                <div class="dropdown-item text-gray-500" data-value="">--
+                                <div class="text-gray-500 dropdown-item" data-value="">--
                                     เลือกประเภทของการใช้ --</div>
                                 <div class="dropdown-item" data-value="A : Acaricide (สารกำจัดไรศัตรูพืช)">A :
                                     Acaricide (สารกำจัดไรศัตรูพืช)</div>
@@ -288,110 +288,113 @@
                         <input type="hidden" name="usage_production_registration" id="typeOfUseInput"
                             value="{{ old('usage_production_registration', $import->usage_production_registration) }}">
                         @error('usage_production_registration')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">กลุ่มสาร</label>
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">กลุ่มสาร</label>
                         <input type="text" name="group_of_substances"
                             value="{{ old('group_of_substances', $import->group_of_substances) }}"
                             placeholder="ใส่กลุ่มสาร"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('group_of_substances')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">พืช</label>
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">พืช</label>
                         <input type="text" name="plant" value="{{ old('plant', $import->plant) }}"
                             placeholder="ใส่พืช"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('plant')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ศัตรูพืช</label>
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">ศัตรูพืช</label>
                         <input type="text" name="pests" value="{{ old('pests', $import->pests) }}"
                             placeholder="ใส่ศัตรูพืช"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('pests')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
                         <label for="production_license_quantity"
-                            class="mx-3 text-base block text-gray-700 mb-1 mt-3">ปริมาณ</label>
+                            class="block mx-3 mt-3 mb-1 text-base text-gray-700">ปริมาณ</label>
                         <input type="text" name="production_license_quantity" id="production_license_quantity"
                             value="{{ old('production_license_quantity', $import->production_license_quantity) }}"
                             placeholder="ใส่ปริมาณ"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('production_license_quantity')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
                         <label for="registration_number_pass"
-                            class="mx-3 text-base block text-gray-700 mb-1 mt-3">เลขที่ใบอนุญาต</label>
+                            class="block mx-3 mt-3 mb-1 text-base text-gray-700">เลขที่ใบอนุญาต</label>
                         <input type="text" name="registration_number_pass" id="registration_number_pass"
                             value="{{ old('registration_number_pass', $import->registration_number_pass) }}"
                             placeholder="ใส่เลขที่ใบอนุญาต"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('registration_number_pass')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันหมดอายุใบอนุญาต</label>
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">วันหมดอายุใบอนุญาต</label>
                         <input type="text" name="production_license_expiry" id="production_license_expiry"
-                            class="date-th w-full p-3 pl-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="w-full p-3 pl-2 border rounded-full date-th focus:outline-none focus:ring-2 focus:ring-blue-500"
                             value="{{ old('production_license_expiry', $import->production_license_expiry ? \Carbon\Carbon::parse($import->production_license_expiry)->addYears(543)->format('d/m/Y') : '') }}"
                             placeholder="วว/ดด/ปปปป" autocomplete="off">
                         @error('production_license_expiry')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ใบอนุญาตเลขที่เดิม</label>
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">ใบอนุญาตเลขที่เดิม</label>
                         <input type="text" name="production_license_number"
                             value="{{ old('production_license_number', $import->production_license_number) }}"
                             placeholder="ใส่เลขที่ใบอนุญาต"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('production_license_number')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันหมดอายุใบอนุญาตเดิม</label>
-                        <input type="text" name="expired_at" value="{{ old('expired_at', $import->expired_at) }}"
-                            placeholder="ใส่วันหมดอายุใบอนุญาตเดิม"
-                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">วันหมดอายุใบอนุญาตเดิม</label>
+                        <input type="text" name="expired_at"
+                            value="{{ old('expired_at', $import->expired_at ? \Carbon\Carbon::parse($import->expired_at)->addYears(543)->format('d/m/Y') : '') }}"
+                            placeholder="วว/ดด/ปปปป" autocomplete="off" autocorrect="off" autocapitalize="off"
+                            spellcheck="false"
+                            class="w-full p-3 pl-2 border rounded-full date-th focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('expired_at')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ใบแจ้งครอบครอง วอ.2</label>
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">ใบแจ้งครอบครอง วอ.2</label>
                         <input type="text" name="possession_form_wo2"
                             value="{{ old('possession_form_wo2', $import->possession_form_wo2 ?? '') }}"
                             placeholder="ใส่ใบแจ้งครอบครอง วอ.2"
                             class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('possession_form_wo2')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">วันหมดอายุใบแจ้งครอบครอง
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">วันหมดอายุใบแจ้งครอบครอง
                             วอ.2</label>
-                        <input type="text" name="possession_form_expiry" {{-- value="{{ old('possession_form_expiry', $import->possession_form_expiry ? $import->possession_form_expiry->format('Y-m-d') : '-') }}" --}}
-                            value="{{ old('possession_form_expiry', $import->possession_form_expiry ?? '') }}"
-                            placeholder="ใส่วันหมดอายุใบแจ้งครอบครองวอ.2"
-                            class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        <input type="text" name="possession_form_expiry"
+                            value="{{ old('possession_form_expiry', $import->possession_form_expiry ? \Carbon\Carbon::parse($import->possession_form_expiry)->addYears(543)->format('d/m/Y') : '') }}"
+                            placeholder="วว/ดด/ปปปป" autocomplete="off" autocorrect="off" autocapitalize="off"
+                            spellcheck="false"
+                            class="w-full p-3 pl-2 border rounded-full date-th focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         @error('possession_form_expiry')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 
@@ -399,16 +402,16 @@
             </div>
             <div>
                 <h3
-                    class="text-2xl font-semibold text-white bg-gradient-to-r from-blue-400 to-indigo-400 px-4 py-3 rounded-t-md">
+                    class="px-4 py-3 text-2xl font-semibold text-white bg-gradient-to-r from-blue-400 to-indigo-400 rounded-t-md">
                     ข้อมูลอื่นๆ
                 </h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                <div class="grid grid-cols-1 gap-6 mt-4 md:grid-cols-2">
                     <div class="md:col-span-2">
-                        <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">รายละเอียดขนาดบรรจุ</label>
+                        <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">รายละเอียดขนาดบรรจุ</label>
                         <textarea name="packaging_size_details" placeholder="ใส่รายละเอียดขนาดบรรจุ"
                             class="w-full p-3 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500" rows="2">{{ old('packaging_size_details', $import->packaging_size_details) }}</textarea>
                         @error('packaging_size_details')
-                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 
@@ -430,12 +433,12 @@
             </div>
              <div>
                 <h3
-                    class="text-2xl font-semibold text-white bg-gradient-to-r from-blue-400 to-indigo-400 px-4 py-3 rounded-t-md">
-                    อัพโหลดเอกสารเพิ่มเติม (ถ้ามี) <span class="text-gray-500 text-sm">(เช่น ไฟล์ PDF)</span>
+                    class="px-4 py-3 text-2xl font-semibold text-white bg-gradient-to-r from-blue-400 to-indigo-400 rounded-t-md">
+                    อัพโหลดเอกสารเพิ่มเติม (ถ้ามี) <span class="text-sm text-gray-500">(เช่น ไฟล์ PDF)</span>
                 </h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                <div class="grid grid-cols-1 gap-6 mt-4 md:grid-cols-2">
                         <div class="md:col-span-2">
-                            <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ไฟล์ทะเบียนผลิต ( PDF ) <span style="font-weight: bold;">สูงสุด 3 ไฟล์</span></label>
+                            <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">ไฟล์ทะเบียนผลิต ( PDF ) <span style="font-weight: bold;">สูงสุด 3 ไฟล์</span></label>
                             @canany('import_data_manufacture create')
                                 <input type="file" name="production_registration_documents[]" id="production_registration_documents" accept=".pdf,application/pdf" multiple
                                 class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
@@ -443,12 +446,12 @@
                                 <input type="file" name="import_approval_documents[]" id="import_approval_documents" accept=".pdf,application/pdf"
                                 class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" disabled />
                             @endcanany
-                            <p class="text-gray-500 text-sm mt-1">รองรับไฟล์ PDF เท่านั้น</p>
+                            <p class="mt-1 text-sm text-gray-500">รองรับไฟล์ PDF เท่านั้น</p>
                             @error('production_registration_documents')
-                                <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                             @enderror
                             @error('production_registration_documents.*')
-                                <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                             @enderror
                             @php
                                 $productionFiles = $import->files ?? collect();
@@ -471,14 +474,14 @@
                             @endphp
                             @if ($registrationFiles->isNotEmpty())
                                 <div class="mt-4 space-y-2">
-                                    <p class="text-gray-600 text-sm font-semibold">ไฟล์ทะเบียนผลิต: {{ $registrationFiles->count() }} ไฟล์</p>
+                                    <p class="text-sm font-semibold text-gray-600">ไฟล์ทะเบียนผลิต: {{ $registrationFiles->count() }} ไฟล์</p>
                                     @foreach ($registrationFiles as $file)
-                                        <div class="flex items-center justify-between gap-3 rounded-lg border border-gray-200 bg-gray-50 px-4 py-3">
-                                            <div class="min-w-0 flex items-center gap-3">
+                                        <div class="flex items-center justify-between gap-3 px-4 py-3 border border-gray-200 rounded-lg bg-gray-50">
+                                            <div class="flex items-center min-w-0 gap-3">
                                                 @canany('import_data_manufacture delete')
                                                 <button type="button"
                                                     data-delete-file-url="{{ route('createproduct.file.destroy', [$import, $file]) }}"
-                                                    class="shrink-0 inline-flex h-9 w-9 items-center justify-center rounded-full bg-red-500 text-white shadow-sm transition hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
+                                                    class="inline-flex items-center justify-center text-white transition bg-red-500 rounded-full shadow-sm shrink-0 h-9 w-9 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
                                                     title="ลบเอกสาร" aria-label="ลบเอกสาร">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
                                                         viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -492,7 +495,7 @@
                                                 </button>
                                                 @endcanany
                                                 <div class="min-w-0">
-                                                    <p class="truncate text-gray-700 font-medium">{{ $file->original_name ?: basename($file->file_path) }}</p>
+                                                    <p class="font-medium text-gray-700 truncate">{{ $file->original_name ?: basename($file->file_path) }}</p>
                                                     <p class="text-xs text-gray-500">
                                                         {{ optional($file->created_at)->format('d/m/Y H:i') }}
                                                         @if ($file->file_size)
@@ -505,13 +508,13 @@
                                             <button type="button"
                                                 data-file-url="{{ route('createproduct.file', [$import, $file]) }}#toolbar=0&navpanes=0&scrollbar=0"
                                                 data-file-name="{{ $file->original_name ?: basename($file->file_path) }}"
-                                                class="shrink-0 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-blue-600 text-white shadow-md ring-1 ring-blue-700/20 transition hover:bg-blue-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+                                                class="inline-flex items-center justify-center w-12 h-12 text-white transition bg-blue-600 rounded-lg shadow-md shrink-0 ring-1 ring-blue-700/20 hover:bg-blue-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
                                                 title="ดูเอกสาร" aria-label="ดูเอกสาร">
                                                 @include('components.document-pdf-icon')
                                             </button>
                                             @else
                                             <button type="button"
-                                                class="shrink-0 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-gray-400 text-white shadow-md ring-1 ring-gray-500/20 cursor-not-allowed"
+                                                class="inline-flex items-center justify-center w-12 h-12 text-white bg-gray-400 rounded-lg shadow-md cursor-not-allowed shrink-0 ring-1 ring-gray-500/20"
                                                 title="ไม่มีสิทธิ์ดูเอกสาร" aria-label="ไม่มีสิทธิ์ดูเอกสาร" disabled>
                                                 @include('components.document-pdf-icon')
                                             </button>
@@ -520,7 +523,7 @@
                                     @endforeach
                                 </div>
                             @endif
-                            <label class="mx-3 text-base block text-gray-700 mb-1 mt-3">ไฟล์ใบอนุญาตผลิต ( PDF ) <span style="font-weight: bold;">สูงสุด 3 ไฟล์</span></label>
+                            <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">ไฟล์ใบอนุญาตผลิต ( PDF ) <span style="font-weight: bold;">สูงสุด 3 ไฟล์</span></label>
                                 @canany('import_data_manufacture create')
                             <input type="file" name="production_approval_documents[]" id="production_approval_documents" accept=".pdf,application/pdf" multiple
                                 class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
@@ -528,23 +531,23 @@
                             <input type="file" name="production_approval_documents[]" id="production_approval_documents" accept=".pdf,application/pdf"
                                 class="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" disabled />
                             @endcanany
-                            <p class="text-gray-500 text-sm mt-1">รองรับไฟล์ PDF เท่านั้น</p>
+                            <p class="mt-1 text-sm text-gray-500">รองรับไฟล์ PDF เท่านั้น</p>
                             @error('production_approval_documents')
-                                <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                             @enderror
                             @error('production_approval_documents.*')
-                                <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                             @enderror
                             @if ($approvalFiles->isNotEmpty())
                                 <div class="mt-4 space-y-2">
-                                    <p class="text-gray-600 text-sm font-semibold">ไฟล์ใบอนุญาตผลิต: {{ $approvalFiles->count() }} ไฟล์</p>
+                                    <p class="text-sm font-semibold text-gray-600">ไฟล์ใบอนุญาตผลิต: {{ $approvalFiles->count() }} ไฟล์</p>
                                     @foreach ($approvalFiles as $file)
-                                        <div class="flex items-center justify-between gap-3 rounded-lg border border-gray-200 bg-gray-50 px-4 py-3">
-                                            <div class="min-w-0 flex items-center gap-3">
+                                        <div class="flex items-center justify-between gap-3 px-4 py-3 border border-gray-200 rounded-lg bg-gray-50">
+                                            <div class="flex items-center min-w-0 gap-3">
                                                 @canany('import_data_manufacture delete')
                                                 <button type="button"
                                                     data-delete-file-url="{{ route('createproduct.file.destroy', [$import, $file]) }}"
-                                                    class="shrink-0 inline-flex h-9 w-9 items-center justify-center rounded-full bg-red-500 text-white shadow-sm transition hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
+                                                    class="inline-flex items-center justify-center text-white transition bg-red-500 rounded-full shadow-sm shrink-0 h-9 w-9 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
                                                     title="ลบเอกสาร" aria-label="ลบเอกสาร">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
                                                         viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -558,7 +561,7 @@
                                                 </button>
                                                 @endcanany
                                                 <div class="min-w-0">
-                                                    <p class="truncate text-gray-700 font-medium">{{ $file->original_name ?: basename($file->file_path) }}</p>
+                                                    <p class="font-medium text-gray-700 truncate">{{ $file->original_name ?: basename($file->file_path) }}</p>
                                                     <p class="text-xs text-gray-500">
                                                         {{ optional($file->created_at)->format('d/m/Y H:i') }}
                                                         @if ($file->file_size)
@@ -571,13 +574,13 @@
                                             <button type="button"
                                                 data-file-url="{{ route('createproduct.file', [$import, $file]) }}#toolbar=0&navpanes=0&scrollbar=0"
                                                 data-file-name="{{ $file->original_name ?: basename($file->file_path) }}"
-                                                class="shrink-0 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-blue-600 text-white shadow-md ring-1 ring-blue-700/20 transition hover:bg-blue-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+                                                class="inline-flex items-center justify-center w-12 h-12 text-white transition bg-blue-600 rounded-lg shadow-md shrink-0 ring-1 ring-blue-700/20 hover:bg-blue-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
                                                 title="ดูเอกสาร" aria-label="ดูเอกสาร">
                                                 @include('components.document-pdf-icon')
                                             </button>
                                             @else
                                             <button type="button"
-                                                class="shrink-0 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-gray-400 text-white shadow-md ring-1 ring-gray-500/20 cursor-not-allowed"
+                                                class="inline-flex items-center justify-center w-12 h-12 text-white bg-gray-400 rounded-lg shadow-md cursor-not-allowed shrink-0 ring-1 ring-gray-500/20"
                                                 title="ไม่มีสิทธิ์ดูเอกสาร" aria-label="ไม่มีสิทธิ์ดูเอกสาร" disabled>
                                                 @include('components.document-pdf-icon')
                                             </button>
@@ -592,15 +595,15 @@
                                     $additionalDocumentViewerUrl = $additionalDocumentUrl . '#toolbar=0&navpanes=0&scrollbar=0';
                                     $additionalDocumentName = $import->additional_document ? ($import->document ?: basename($import->additional_document)) : basename($import->document);
                                 @endphp
-                                <p class="text-gray-500 text-sm mt-1">ไฟล์ปัจจุบัน: {{ $additionalDocumentName }}</p>
+                                <p class="mt-1 text-sm text-gray-500">ไฟล์ปัจจุบัน: {{ $additionalDocumentName }}</p>
                                 <!-- <button type="button" id="openAdditionalDocumentModal"
-                                    class="text-blue-500 hover:underline text-sm mt-1">
+                                    class="mt-1 text-sm text-blue-500 hover:underline">
                                     ดูเอกสารเพิ่มเติม
                                 </button> -->
 
                                 <div class="pt-4">
                                     <button type="button" id="openAdditionalDocumentModal"
-                                        class="group inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-5 rounded-lg shadow-md transition">
+                                        class="inline-flex items-center gap-2 px-5 py-2 font-semibold text-white transition bg-blue-500 rounded-lg shadow-md group hover:bg-blue-700">
 
                                         <!-- PDF Icon -->
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
@@ -620,7 +623,7 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                            class="lucide lucide-square-arrow-out-up-right transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
+                                            class="transition-transform lucide lucide-square-arrow-out-up-right group-hover:translate-x-1 group-hover:-translate-y-1">
                                             <path d="M21 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h6"/>
                                             <path d="m21 3-9 9"/>
                                             <path d="M15 3h6v6"/>
@@ -636,11 +639,11 @@
             <div class="flex justify-center gap-4 pt-4">
                 {{-- Cancel button now links to the index page --}}
                 <a href="{{ route('createproduct.index') }}"
-                    class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-6 rounded-lg shadow-md flex items-center justify-center">
+                    class="flex items-center justify-center px-6 py-2 font-bold text-white bg-gray-500 rounded-lg shadow-md hover:bg-gray-700">
                     ยกเลิก
                 </a>
                 <button type="submit"
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg shadow-md">
+                    class="px-6 py-2 font-bold text-white bg-blue-500 rounded-lg shadow-md hover:bg-blue-700">
                     บันทึกการเปลี่ยนแปลง
                 </button>
             </div>
@@ -649,14 +652,14 @@
 
     {{-- Custom Message Box and Scripts remain largely the same, but JS is updated --}}
     <div id="customMessageBox"
-        class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+        class="fixed inset-0 z-50 hidden w-full h-full overflow-y-auto bg-gray-600 bg-opacity-50">
         {{-- ... content of message box ... --}}
     </div>
 {{-- Modal for Additional Document popup --}}
        @if (false)
 <div class="pt-4">
     <button type="button" id="openAdditionalDocumentModal"
-        class="group inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-5 rounded-lg shadow-md transition">
+        class="inline-flex items-center gap-2 px-5 py-2 font-semibold text-white transition bg-blue-500 rounded-lg shadow-md group hover:bg-blue-700">
 
         <!-- PDF Icon -->
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
@@ -676,7 +679,7 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
             viewBox="0 0 24 24" fill="none" stroke="currentColor"
             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="lucide lucide-square-arrow-out-up-right transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
+            class="transition-transform lucide lucide-square-arrow-out-up-right group-hover:translate-x-1 group-hover:-translate-y-1">
             <path d="M21 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h6"/>
             <path d="m21 3-9 9"/>
             <path d="M15 3h6v6"/>
@@ -688,14 +691,14 @@
 
     @if ($productionFiles->isEmpty() && $currentDocumentPath && $currentDocumentExists)
         <div id="additionalDocumentModal"
-            class="hidden fixed inset-0 bg-gray-900 bg-opacity-60 z-50 px-4 py-6">
-            <div class="bg-white max-w-5xl mx-auto h-full rounded-lg shadow-lg flex flex-col overflow-hidden">
+            class="fixed inset-0 z-50 hidden px-4 py-6 bg-gray-900 bg-opacity-60">
+            <div class="flex flex-col h-full max-w-5xl mx-auto overflow-hidden bg-white rounded-lg shadow-lg">
                 <div class="flex items-center justify-between gap-4 px-5 py-4 border-b">
                     <h3 class="text-lg font-semibold text-gray-700 truncate">
                         {{ $additionalDocumentName }}
                     </h3>
                     <button type="button" id="closeAdditionalDocumentModal"
-                        class="text-gray-500 hover:text-gray-800 text-2xl leading-none">
+                        class="text-2xl leading-none text-gray-500 hover:text-gray-800">
                         &times;
                     </button>
                 </div>
@@ -708,19 +711,19 @@
     @endif
 
     <div id="productionFileModal"
-        class="hidden fixed inset-0 bg-gray-900 bg-opacity-60 z-50 px-4 py-6">
-        <div class="bg-white max-w-5xl mx-auto h-full rounded-lg shadow-lg flex flex-col overflow-hidden">
+        class="fixed inset-0 z-50 hidden px-4 py-6 bg-gray-900 bg-opacity-60">
+        <div class="flex flex-col h-full max-w-5xl mx-auto overflow-hidden bg-white rounded-lg shadow-lg">
             <div class="flex items-center justify-between gap-4 px-5 py-4 border-b">
                 <h3 id="productionFileModalTitle" class="text-lg font-semibold text-gray-700 truncate">
                     เอกสาร
                 </h3>
                 <button type="button" id="closeProductionFileModal"
-                    class="text-gray-500 hover:text-gray-800 text-2xl leading-none">
+                    class="text-2xl leading-none text-gray-500 hover:text-gray-800">
                     &times;
                 </button>
             </div>
             <div id="productionFileViewer"
-                class="flex-1 bg-gray-100 overflow-auto p-4 flex flex-col items-center gap-4"
+                class="flex flex-col items-center flex-1 gap-4 p-4 overflow-auto bg-gray-100"
                 oncontextmenu="return false;">
             </div>
         </div>
@@ -814,10 +817,10 @@
 
             async function renderPdf(url) {
                 const token = ++renderToken;
-                viewer.innerHTML = '<p class="text-gray-500 py-8">กำลังโหลดเอกสาร...</p>';
+                viewer.innerHTML = '<p class="py-8 text-gray-500">กำลังโหลดเอกสาร...</p>';
 
                 if (!window.pdfjsLib) {
-                    viewer.innerHTML = '<p class="text-red-500 py-8">ไม่สามารถโหลดตัวอ่าน PDF ได้</p>';
+                    viewer.innerHTML = '<p class="py-8 text-red-500">ไม่สามารถโหลดตัวอ่าน PDF ได้</p>';
                     return;
                 }
 
@@ -842,7 +845,7 @@
                     }
                 } catch (error) {
                     if (token === renderToken) {
-                        viewer.innerHTML = '<p class="text-red-500 py-8">ไม่สามารถแสดงเอกสารนี้ได้</p>';
+                        viewer.innerHTML = '<p class="py-8 text-red-500">ไม่สามารถแสดงเอกสารนี้ได้</p>';
                     }
                 }
             }
