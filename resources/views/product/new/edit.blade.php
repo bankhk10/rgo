@@ -186,11 +186,17 @@
                                             <div class="text-gray-500 dropdown-item" data-value="">-- เลือกผู้นำเข้า
                                                 --</div>
                                             @foreach ($companies as $company)
-                                                {{-- @if ($company->id != 4) --}}
+                                                          @if (
+                                        $company->name == 'IC' ||
+                                            $company->name == 'AI' ||
+                                            $company->name == 'UP' ||
+                                            $company->name == 'UPI' ||
+                                            $company->name == 'UP+AI' ||
+                                            $company->name == 'AI+UP')
                                                 <div class="dropdown-item" data-value="{{ $company->full_name }}">
                                                     {{ $company->full_name }}
                                                 </div>
-                                                {{-- @endif --}}
+                                                @endif
                                             @endforeach
                                         </div>
                                     </div>

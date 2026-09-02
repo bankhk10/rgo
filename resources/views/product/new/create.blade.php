@@ -26,9 +26,9 @@
                                 </div>
                                 @foreach ($companies as $company)
                                     {{-- @if ($company->id != 4) --}}
-                                        <div class="dropdown-item" data-value="{{ $company->full_name }}">
-                                            {{ $company->full_name }}
-                                        </div>
+                                    <div class="dropdown-item" data-value="{{ $company->full_name }}">
+                                        {{ $company->full_name }}
+                                    </div>
                                     {{-- @endif --}}
                                 @endforeach
                             </div>
@@ -120,11 +120,17 @@
                             <div class="dropdown-list" id="importerList">
                                 <div class="text-gray-500 dropdown-item" data-value="">-- เลือกผู้นำเข้า --</div>
                                 @foreach ($companies as $company)
-                                    {{-- @if ($company->id != 4) --}}
+                                    @if (
+                                        $company->name == 'IC' ||
+                                            $company->name == 'AI' ||
+                                            $company->name == 'UP' ||
+                                            $company->name == 'UPI' ||
+                                            $company->name == 'UP+AI' ||
+                                            $company->name == 'AI+UP')
                                         <div class="dropdown-item" data-value="{{ $company->full_name }}">
                                             {{ $company->full_name }}
                                         </div>
-                                    {{-- @endif --}}
+                                    @endif
                                 @endforeach
                             </div>
                         </div>
@@ -272,7 +278,7 @@
                             <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
-{{-- 
+                    {{-- 
                     <div>
                         <label for="quantity" class="block mx-3 mt-3 mb-1 text-base text-gray-700">ปริมาณ</label>
                         <input type="text" name="quantity" id="quantity" value="{{ old('quantity') }}"
