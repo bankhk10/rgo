@@ -45,6 +45,14 @@ class ProductionRegistrationController extends Controller
             });
         }
 
+        if ($request->filled('trade_name_search')) {
+            $rawTradeNameSearch = (string) $request->input('trade_name_search');
+            $normalizedTradeName = mb_strtolower(preg_replace('/\s+/', '', $rawTradeNameSearch));
+            $tradeNameLike = '%' . $normalizedTradeName . '%';
+
+            $query->whereRaw("REPLACE(LOWER(trade_name), ' ', '') LIKE ?", [$tradeNameLike]);
+        }
+
         // ส่วนของการกรองตามช่วงวันหมดอายุ (expiry_date_from/to) ยังคงเดิม
         if ($request->filled('expiry_date_from') && $request->filled('expiry_date_to')) {
             $query->whereBetween('expired_license_date', [
