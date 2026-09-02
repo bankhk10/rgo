@@ -1270,10 +1270,10 @@
                 icon: 'success',
                 title: 'บันทึกสำเร็จ!',
                 confirmButtonColor: '#3085d6',
-                confirmButtonText: 'ตกลง'   
+                confirmButtonText: 'ตกลง'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = "{{ route('newregis.index') }}";
+                    window.location.reload();
                 }
             });
         </script>
