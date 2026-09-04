@@ -55,12 +55,10 @@ class ProductionRegistrationImport implements ToModel, WithHeadingRow
                 'production_license_expiry'   => $parseDate($row['production_license_expiry'] ?? null), // วันหมดอายุใบอนุญาต
                 'production_license_quantity' => $row['production_license_quantity'] ?? null, // ปริมาณ
                 'possession_form_wo2'         => $row['possession_form_wo2'] ?? null, // ใบแจ้งครอบครอง วอ.2
-                'possession_form_expiry'         => $row['possession_form_expiry'] ?? null, // วันหมดอายุใบแจ้งครอบครอง วอ.2
-                // 'possession_form_expiry'      => $parseDate($row['possession_form_expiry'] ?? null), // วันหมดอายุใบแจ้งครอบครอง วอ.2
+                'possession_form_expiry'         => $parseDate($row['possession_form_expiry'] ?? null), // วันหมดอายุใบแจ้งครอบครอง วอ.2
                 'packaging_size_details'      => $row['packaging_size_details'] ?? null, // รายละเอียดขนาดบรรจุ
                 'production_license_number'   => $row['production_license_number'] ?? null, // ใบอนุญาตเลขที่เดิม
-                'expired_at'   => $row['expired_at'] ?? null, // วันหมดอายุใบอนุญาตเดิม
-                // 'expired_at'                  => $parseDate($row['expired_at'] ?? null), // วันหมดอายุใบอนุญาตเดิม
+                'expired_at'                  => $parseDate($row['expired_at'] ?? null), // วันหมดอายุใบอนุญาตเดิม
         ]);
     }
 

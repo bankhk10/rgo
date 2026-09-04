@@ -1,4 +1,23 @@
 <x-app-layout>
+    @php
+        $formatThaiDate = function ($dateValue) {
+            if ($dateValue === null || $dateValue === '') {
+                return '';
+            }
+
+            try {
+                if (is_numeric($dateValue) && $dateValue > 0) {
+                    return \Carbon\Carbon::createFromTimestamp(
+                        \PhpOffice\PhpSpreadsheet\Shared\Date::excelToTimestamp($dateValue)
+                    )->addYears(543)->format('d/m/Y');
+                }
+
+                return \Carbon\Carbon::parse($dateValue)->addYears(543)->format('d/m/Y');
+            } catch (\Throwable $exception) {
+                return (string) $dateValue;
+            }
+        };
+    @endphp
     <div class="max-w-5xl p-8 mx-auto mt-6 space-y-10 bg-white shadow-lg rounded-2xl">
         <h2 class="pb-4 mb-8 text-4xl font-extrabold text-center text-gray-700 border-b border-gray-300">
             แก้ไขข้อมูลทะเบียนผลิต
@@ -34,7 +53,7 @@
                         <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">วันหมดอายุ</label>
                         <input type="text" name="expired_license_date" id="expired_license_date"
                             class="w-full p-3 pl-2 border rounded-full date-th focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            value="{{ old('expired_license_date', $import->expired_license_date ? \Carbon\Carbon::parse($import->expired_license_date)->addYears(543)->format('d/m/Y') : '') }}"
+                            value="{{ old('expired_license_date', $formatThaiDate($import->expired_license_date)) }}"
                             placeholder="วว/ดด/ปปปป" autocomplete="off">
                         @error('expired_license_date')
                             <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
@@ -346,7 +365,7 @@
                         <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">วันหมดอายุใบอนุญาต</label>
                         <input type="text" name="production_license_expiry" id="production_license_expiry"
                             class="w-full p-3 pl-2 border rounded-full date-th focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            value="{{ old('production_license_expiry', $import->production_license_expiry ? \Carbon\Carbon::parse($import->production_license_expiry)->addYears(543)->format('d/m/Y') : '') }}"
+                            value="{{ old('production_license_expiry', $formatThaiDate($import->production_license_expiry)) }}"
                             placeholder="วว/ดด/ปปปป" autocomplete="off">
                         @error('production_license_expiry')
                             <p class="mt-1 text-xs italic text-red-500">{{ $message }}</p>
@@ -366,7 +385,7 @@
                     <div>
                         <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">วันหมดอายุใบอนุญาตเดิม</label>
                         <input type="text" name="expired_at"
-                            value="{{ old('expired_at', $import->expired_at ? \Carbon\Carbon::parse($import->expired_at)->addYears(543)->format('d/m/Y') : '') }}"
+                            value="{{ old('expired_at', $formatThaiDate($import->expired_at)) }}"
                             placeholder="วว/ดด/ปปปป" autocomplete="off" autocorrect="off" autocapitalize="off"
                             spellcheck="false"
                             class="w-full p-3 pl-2 border rounded-full date-th focus:outline-none focus:ring-2 focus:ring-blue-500" />
@@ -389,7 +408,7 @@
                         <label class="block mx-3 mt-3 mb-1 text-base text-gray-700">วันหมดอายุใบแจ้งครอบครอง
                             วอ.2</label>
                         <input type="text" name="possession_form_expiry"
-                            value="{{ old('possession_form_expiry', $import->possession_form_expiry ? \Carbon\Carbon::parse($import->possession_form_expiry)->addYears(543)->format('d/m/Y') : '') }}"
+                            value="{{ old('possession_form_expiry', $formatThaiDate($import->possession_form_expiry)) }}"
                             placeholder="วว/ดด/ปปปป" autocomplete="off" autocorrect="off" autocapitalize="off"
                             spellcheck="false"
                             class="w-full p-3 pl-2 border rounded-full date-th focus:outline-none focus:ring-2 focus:ring-blue-500" />
