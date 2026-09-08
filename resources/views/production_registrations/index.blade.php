@@ -409,8 +409,8 @@
                                 <th class="px-4 py-4 text-center rounded-tl-2xl">ลำดับ</th>
                                 {{-- <th class="px-6 py-4">ชื่อการค้า</th> --}}
                                 <th class="px-4 py-4">ชื่อวัตถุอันตราย (ไทย)</th>
+                                       <th class="px-6 py-4">ชื่อการค้า</th>
                                 <th class="px-4 py-4">ชื่อวัตถุอันตราย (อังกฤษ) </th>
-                                {{-- <th class="px-6 py-4">ชื่อวัตถุอันตราย (อังกฤษ)</th> --}}
                                 <th class="px-4 py-4">ผู้ขึ้นทะเบียน</th>
                                 <th class="px-4 py-4">ผู้จำหน่าย</th>
                                 {{-- <th class="px-6 py-4 text-center">ตัวย่อ</th> --}}
@@ -428,7 +428,14 @@
                                             {{ $loop->iteration + ($imports->currentPage() - 1) * $imports->perPage() }}
                                         </td>
                                         {{-- <td class="px-6 py-4">{{ $import->trade_name ?? '' }}</td> --}}
-                                        <td class="px-6 py-4 break-words">{{ $import->chemical_name_th ?? '' }}</td>
+                                        <td class="px-6 py-4 break-words">
+                                            <div>{{ $import->chemical_name_th ?? '' }}</div>
+                                            {{-- <div class="mt-1 text-sm text-gray-500">ชื่อการค้า: {{ $import->trade_name ?? '-' }}</div> --}}
+                                        </td>
+                                                <td class="px-6 py-4 break-words">
+                                            <div>{{ $import->trade_name ?? '' }}</div>
+                                            {{-- <div class="mt-1 text-sm text-gray-500">ชื่อการค้า: {{ $import->trade_name ?? '-' }}</div> --}}
+                                        </td>
                                         <td class="px-6 py-4 break-words">{{ $import->chemical_name_en ?? '' }}</td>
                                         {{-- <td class="px-6 py-4 text-center">{{ $import->Companes->full_name ?? '' }}</td> --}}
                                         <td class="px-4 py-4 break-words">{{ $import->company->full_name ?? '' }}</td>
@@ -633,6 +640,9 @@
                                     <h3 class="text-base font-bold leading-snug text-gray-800 line-clamp-2">
                                         {{ $import->chemical_name_th ?: '-' }}
                                     </h3>
+                                    <p class="mt-1 text-sm text-gray-500 line-clamp-1">
+                                        ชื่อการค้า: {{ $import->trade_name ?: '-' }}
+                                    </p>
                                     <p class="mt-1 text-sm text-gray-500 line-clamp-1">
                                         {{ $import->chemical_name_en ?: '-' }}
                                     </p>
