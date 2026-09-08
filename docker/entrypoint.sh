@@ -2,7 +2,7 @@
 set -e
 
 echo ">> Syncing source code..."
-rsync -a --delete /app-src/ /var/www/html/
+rsync -a --delete --exclude='.env' --exclude='.git' --exclude='.gitignore' /app-src/ /var/www/html/
 
 echo ">> Setting permissions..."
 chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
@@ -17,5 +17,5 @@ php artisan view:cache || true
 echo ">> Running migrations..."
 php artisan migrate --force || true
 
-echo ">> Ready, starting php-fpm"
+echo ">> Ready, starting Laravel server"
 exec "$@"

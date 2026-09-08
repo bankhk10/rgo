@@ -54,6 +54,6 @@ RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # โฟลเดอร์รันจริง (จะ sync โค้ดลง volume นี้)
 WORKDIR /var/www/html
-EXPOSE 9000
+EXPOSE 8000
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-CMD ["php-fpm", "-F"]
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
